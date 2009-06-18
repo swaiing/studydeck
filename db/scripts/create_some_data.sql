@@ -1,12 +1,12 @@
 -- create users
-INSERT INTO users (email, password, user_name) VALUES ("steve@studydeck.com", "password", "steve");
-INSERT INTO users (email, password, user_name) VALUES ("scott@studydeck.com", "password", "scott");
-INSERT INTO users (email, password, user_name) VALUES ("nicolo@studydeck.com", "password", "nicolo");
+INSERT INTO users (email, password, username) VALUES ("steve@studydeck.com", "password", "steve");
+INSERT INTO users (email, password, username) VALUES ("scott@studydeck.com", "password", "scott");
+INSERT INTO users (email, password, username) VALUES ("nicolo@studydeck.com", "password", "nicolo");
 
 -- create deck
-INSERT INTO decks (deck_name, privacy, view_count, usercreated_id) VALUES ("SAT Words", 1, 0, 1);
-INSERT INTO decks (deck_name, privacy, view_count, usercreated_id) VALUES ("State Capitals", 1, 0, 2);
-INSERT INTO decks (deck_name, privacy, view_count, usercreated_id) VALUES ("World Capitals", 1, 0, 3);
+INSERT INTO decks (deck_name, privacy, view_count, user_id) VALUES ("SAT Words", 1, 0, 1);
+INSERT INTO decks (deck_name, privacy, view_count, user_id) VALUES ("State Capitals", 1, 0, 2);
+INSERT INTO decks (deck_name, privacy, view_count, user_id) VALUES ("World Capitals", 1, 0, 3);
 
 -- create cards
 INSERT INTO cards (question, answer, deck_id) VALUES ("abbess", "(n.) The lady superior of a nunnery", 1);
