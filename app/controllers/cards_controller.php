@@ -25,7 +25,7 @@ class CardsController extends AppController {
 			//pulls tag value from form
 			$tag_value = $this->data['DeckTag']['tag_id'];
 			//$tag_value = $this->DeckTag->tag_id;
-			//$this->Session->setFlash($tag_value);
+			//$this->Session->setFlash($this->processCSV("test.tmp"));
 			//finds if the tag if it  exists
 			$tempTag = $this->Tag->find('first',array('conditions' => array('Tag.tag' => $tag_value)),array('fields' => 'Tag.id'));
 			//does action based on whether a new tag or not
@@ -71,6 +71,22 @@ class CardsController extends AppController {
 	       }      
 
 
+      }
+      function processCSV()
+      {
+	if(!empty($this->data) && is_uploaded_file($this->data['Card']['CSVFile']['tmp_name'])){
+		$myFileInfo = $this->data['Card']['CSVFile'];	       
+		$this->set('fname', $myFileInfo['name']);
+		$this->set('fsize', $myFileInfo['size']);
+		$this->Session->setFlash($myFileInfo['tmp_name']);
+		$myFile = $myFileInfo['tmp_name'];
+		$fh = fopen($myFile,'r');
+		//$fdata= fread($fh,filesize($myFile));
+		$this->set('csvArray', fgetcsv($fh));
+		fclose($fh);
+		
+	}
+		
       }
 
 
