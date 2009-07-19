@@ -2,6 +2,10 @@
 
 <?php
 echo $javascript->link('createdeck');
+echo $form->create('Card', array('action' => 'processCSV', 'type' => 'file'));
+echo $form->file('CSVFile');
+echo $form->submit('Upload');
+echo $form->end();
 echo $form->create('Card', array('action' => 'addDeckPlusCards'));
 echo $form->input('Deck.deck_name',array('label'=>'Title'));
 echo $form->input('DeckTag.tag_id',array('label' => 'Category'));
