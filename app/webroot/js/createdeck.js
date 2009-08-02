@@ -1,7 +1,7 @@
 function addCardRows(numRows){
 	
     //gets main form element
-	var objform = document.getElementById("CardAddDeckPlusCardsForm");
+	var objform = document.getElementById("DeckCreateForm");
 	
 	var nextSib = objform.firstChild;
 	var prevSib = objform.firstChild;

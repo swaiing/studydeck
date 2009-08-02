@@ -1,12 +1,11 @@
 <?php
 class CardsController extends AppController {
       var $name = 'Cards';
+      var $scaffold;
       var $uses = array('Card','Deck','Tag','MyDeck','DeckTag');
       var $helpers = array('Html','Javascript');
 
-      function index(){
-      	       $this->set('cards', $this->Card->find('all'));
-      }
+     
       function addDeckPlusCards(){
       	       $this->pageTitle = 'Create and Edit Decks!';
 	       $this->layout='create_edit';
