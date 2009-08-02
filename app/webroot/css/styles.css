@@ -1,0 +1,192 @@
+body {
+  font-family: trebuchet, verdana, sans-serif;
+  font-size: 11px;
+  margin: 0;
+  padding: 0;
+}
+
+/*****  top-level divs *****/
+
+div#top_bar {
+  height: 50px;
+  width: 700px;
+  margin: 0 auto 0 auto;
+  padding: 0;
+}
+
+div#middle_wrapper {
+  background-color: #EBEBEB;
+  border-bottom: 1px solid #cecece;
+  border-top: 1px solid #cecece;
+}
+
+div#middle_wrapper_content {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #cecece;
+  border-top: 1px solid #cecece;
+}
+
+div#middle_bar {
+  width: 700px;
+  margin: 0 auto 0 auto;
+  padding: 0;
+}
+
+div#footer {
+  width: 700px;
+  margin: 10px auto 0 auto;
+  padding: 0;
+}
+
+div.left {
+  float: left;
+}
+
+div.right {
+  float: right;
+  clear: right;
+}
+
+ul.inline_list, ul.inline_list li {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+div.clear_div {
+  clear: left;
+}
+
+/*****  top_bar *****/
+
+div#top_nav {
+  float: left;
+  margin: 10px 0 0 0;
+  padding: 0;
+}
+
+#top_logo {
+  margin: 0;
+  padding: 0;
+  float: left;
+}
+
+div#top_logo h1 {
+  font-size: 24px;
+  margin: 10px 0 0 0 0;
+  padding: 0;
+}
+
+div#top_logo h1 a {
+  color: #004D99;
+  text-decoration: none;
+}
+
+ul#main_nav.inline_list, ul#main_nav.inline_list li {
+  display: inline;
+  margin: 0 0 0 20px;
+  padding: 0;
+}
+ul#register_nav.inline_list, ul#register_nav.inline_list li {
+  display: inline;
+  margin: 0 0 0 20px;
+  padding: 0;
+}
+
+#main_nav a, #register_nav a {
+  color: #000000;
+  text-decoration: none;
+}
+#main_nav a:hover, #register_nav a:hover {
+  color: #004D99;
+  text-decoration: underline;
+}
+
+/*****  middle_bar *****/
+div.howto_box {
+  float: left;
+  margin: 10px;
+  padding: 10px 0 0 10px;
+  border: 1px solid #000000;
+  height: 200px;
+  width: 200px;
+}
+
+div.howto_box h3 {
+  font-family: georgia, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  padding: 0;
+}
+
+div.howto_box a {
+  color: #004D99;
+  text-decoration: none;
+}
+
+div.howto_box a:hover {
+  color: #004D99;
+  text-decoration: underline;
+}
+
+div#middle_bar h2 {
+  font-size: 16px;
+  border-bottom: 1px solid #cecece;
+}
+
+/*****  footer *****/
+
+#footer_nav a {
+  color: #000000;
+  text-decoration: none;
+}
+
+#footer_nav a:hover {
+  color: #004D99;
+  text-decoration: underline;
+}
+
+
+/*****  create a deck form  *****/
+
+form#create_deck_form div#left_col {
+  width: 50%;
+  float: left;
+  clear: none;
+  padding: 0;
+  margin: 0;
+}
+
+form#create_deck_form div#right_col {
+  float: left;
+  clear: right;
+  padding: 0 10px 0 10px;
+  margin: 0;
+}
+
+form#create_deck_form div#terms_box {
+  clear: both;
+  margin: 10px 0 20px 0;
+  padding: 0;
+}
+
+form#create_deck_form label {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 10px 0 10px 0;
+  border-bottom: 1px solid #cecece;
+  padding: 0;
+}
+
+form#create_deck_form table#term_table {
+  width: 100%;
+}
+
+form#create_deck_form input.row_term {
+  width: 30%;
+}
+form#create_deck_form input.row_defn {
+  width: 70%;
+}

@@ -1,0 +1,159 @@
+/******* view_deck.css *********/
+
+div#view_deck_wrap h1 {
+  font-size: 16px;
+  margin: 10px;
+  padding: 0;
+}
+
+div#view_deck_wrap {
+  background: #FFFFFF;
+  width: 600px;
+  margin: 20px auto 50px auto;
+  padding: 10px;
+  border: 1px solid #cecece;
+}
+
+/**** next/prev styles ****/
+/* 
+ * Big side buttons
+div#next_card {
+  width: 70px;
+  height: 200px;
+  float: left;
+  margin: 0;
+  padding: 90px 0 0 0;
+  text-align: center;
+}
+div#prev_card {
+  width: 70px;
+  height: 200px;
+  float: left;
+  margin: 0;
+  padding: 90px 0 0 0;
+  text-align: center;
+}
+*/
+
+/**** additional-bar styles ****/
+
+div#additional {
+  width: 550px;
+  padding: 0;
+  margin: 0 auto 0 auto;
+  border: 1px solid #d2d2d2;
+}
+
+div#prev_card {
+  float: left;
+  clear: left;
+  padding: 0;
+  margin: 10px;
+  border: 1px solid #d2d2d2;
+  text-align: center;
+  text-decoration: none;
+  color: #000000;
+}
+
+div#prev_card a, div#next_card a {
+  width: 50px;
+  text-decoration: none;
+  color: #000000;
+  display: block;
+  padding: 10px;
+}
+div#prev_card a:hover, div#next_card a:hover {
+  background: #B3ECFF;
+  text-decoration: none;
+}
+
+div#next_card {
+  float: right;
+  clear: right;
+  padding: 0;
+  margin: 10px;
+  border: 1px solid #d2d2d2;
+  text-align: center;
+}
+
+div#center_items {
+  width: 320px;
+  margin: 0 auto 0 auto;
+  padding: 0;
+  clear: none;
+}
+
+div#additional div.widget_item {
+  float: left;
+  padding: 0;
+  margin: 10px;
+  font-weight: bold;
+}
+
+/*
+div.widget_item div#rating {
+  float: left;
+}
+*/
+
+/**** card styles ****/
+div#card_wrap {
+  width: 620px;
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+div.card {
+  width: 500px;
+  height: 200px;
+  margin: 10px auto 20px auto;
+  padding: 10px;
+  cursor: pointer;
+}
+
+div.card p { 
+  font-size: 24px;
+  text-align: center;
+}
+
+div.card p.term {
+  font-weight: bold;
+}
+
+div.card p.defn {}
+
+/**** evaluation selector card styles ****/
+
+div#view_deck_wrap div#eval {
+  width: 180px;
+  margin: 0 auto 0 auto;
+}
+
+div#view_deck_wrap #eval ul {
+  font-size: 14px;
+  padding: 5px 0;
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+}
+
+div#view_deck_wrap #eval li {
+  display: inline;
+  padding: 5px 0;
+  margin: 0;
+}
+
+div#view_deck_wrap #eval li a {
+  text-decoration: none;
+  color: #000000;
+  padding: 5px 15px;
+  margin: 0;
+  width: 100%;
+  border: 1px solid #d2d2d2;
+}
+
+div#view_deck_wrap #eval li a:hover {
+  background: #B3ECFF; 
+  text-decoration: none;
+}
