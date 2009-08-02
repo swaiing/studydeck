@@ -11,7 +11,11 @@
 	<?php foreach ($decks as $deck): ?>
 	<tr>
 		<td><?php echo $deck['Deck']['id']; ?> </td>
-		<td><?php echo $deck['Deck']['deck_name']; ?> </td>
+		<td>
+		<?php
+		  echo $html->link($deck['Deck']['deck_name'],"/decks/view/".$deck['Deck']['id']);
+		?>
+		</td>
 		<td><?php echo $deck['Deck']['description']; ?> </td>
 		<td><?php echo $deck['Deck']['privacy']; ?> </td>
 		<td><?php echo $deck['Deck']['view_count']; ?> </td>
