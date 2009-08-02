@@ -5,5 +5,5 @@ class CardsController extends AppController {
       //var $uses = array('Card','Deck','Tag','MyDeck','DeckTag');
       //var $helpers = array('Html','Javascript');
 
-     
+}     
 ?>

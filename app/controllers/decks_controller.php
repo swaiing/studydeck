@@ -7,7 +7,7 @@ class DecksController extends AppController {
       var $components = array('Auth');
 function create(){
       	       $this->pageTitle = 'Create and Edit Decks!';
-	       $this->layout='create_edit';
+	       //$this->layout='create_edit';
 	       $this->set('activeUser', $this->Auth->user('username'));
 	       //creates tag dropdown
 	      // $tag_array = $this->Tag->find('list',array('fields'=>'Tag.tag'));
