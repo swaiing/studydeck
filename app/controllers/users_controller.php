@@ -3,7 +3,7 @@ class UsersController extends AppController {
       var $name = 'Users';
       var $scaffold;
       var $components =array('Auth');
-      
+      var $uses = array('User','MyDeck','Deck');
       function beforeFilter(){
       
       $this->Auth->allow('register','view');
@@ -28,6 +28,42 @@ class UsersController extends AppController {
 	}
 	function view(){
 		 $this->set('userView', $this->User->find('first', array('conditions' => array('username' => $this->Auth->user('username')))));
+	}
+
+	function dashboard(){
+		 $publicDecks=array();
+		 $userCreatedDecks=array();
+		 
+		 
+		 
+		 $this->set('activeUser', $this->Auth->user('username'));
+		 $currentUserId = $this->Auth->user('id');
+		 $allMyDecks = $this->MyDeck->find ('all', array('conditions' => array('MyDeck.user_id' => $currentUserId)));
+		
+		 foreach ($allMyDecks as $myDeck){
+		 	 $tempDeck = $this->Deck->find('first',array('conditions' => array('Deck.id' => $myDeck['MyDeck']['deck_id'])));
+			 //$tempStudyCount = array();
+			 if ($myDeck['MyDeck']['study_count'] == 0){
+			    $tempStudyCount = array($myDeck['MyDeck']['study_count'],"");			 				     
+			 }
+			 else
+			 {
+				$tempStudyCount = array($myDeck['MyDeck']['study_count'],$myDeck['MyDeck']['modified']);
+			 }
+			 $deck = array_merge($tempDeck, $tempStudyCount);
+		 	 if($deck['Deck']['user_id'] == $currentUserId)	{     
+				array_push($userCreatedDecks, $deck);		
+								
+			 }
+			 else {
+				array_push($publicDecks, $deck);
+			 }
+			 
+		 }
+		 $this->set('userCreatedDecks', $userCreatedDecks);
+		 $this->set('publicDecks', $publicDecks);
+		 $this->set('numDecksStudied', count($allMyDecks));
+		 
 	}
 
 }
