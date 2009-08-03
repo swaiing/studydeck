@@ -1,11 +1,13 @@
 <?php
 class DecksController extends AppController {
+
       var $name = 'Decks';
       var $scaffold;
       var $uses = array('Deck','Card','Tag','MyDeck','DeckTag');
       var $helpers = array('Html','Javascript');
       var $components = array('Auth');
-function create(){
+
+      function create(){
       	       $this->pageTitle = 'Create and Edit Decks!';
 	       //$this->layout='create_edit';
 	       $this->set('activeUser', $this->Auth->user('username'));
@@ -71,6 +73,37 @@ function create(){
 	       } 
      
 
-}
+      }
+
+      function explore() {
+               $this->set('decks', $this->Deck->find('all'));
+      }
+
+      function view($id = null) {
+                // Set deck meta info
+                $this->Deck->id = $id;
+                $this->set('deckInfo', $this->Deck->read());
+
+                // Retrieve cards in deck by deck_id
+                $findParams = array(
+                                'conditions' => array('Card.deck_id' => $this->Deck->id),
+                                'fields' => array('Card.question', 'Card.answer')
+                              );
+                $this->set('deck', $this->Card->find('all',$findParams));
+      }
+
+      function study($id = null){
+                // Set deck meta info
+                $this->Deck->id = $id;
+                $this->set('deckInfo', $this->Deck->read());
+
+                // Retrieve cards in deck by deck_id
+                $findParams = array(
+                                'conditions' => array('Card.deck_id' => $this->Deck->id),
+                                'fields' => array('Card.question', 'Card.answer')
+                              );
+                $this->set('deck', $this->Card->find('all',$findParams));
+      }
+
 }
 ?>
