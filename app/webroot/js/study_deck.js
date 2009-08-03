@@ -1,5 +1,5 @@
 /**
- * view_deck.js
+ * study_deck.js
  */
 
   // custom
@@ -39,17 +39,10 @@
   }
 
   Deck.prototype.init = function() {
-      // TODO: read cards from metadata
-      // setup some cards
-      this.cards.push(new FlashCard("recalcitrant", "disobedient"));
-      this.cards.push(new FlashCard("repudiate", "disown refuse to accept or pay"));
-      this.cards.push(new FlashCard("evince", "to show clearly to indicate"));
-      this.cards.push(new FlashCard("impugned", "challenged to be doubted"));
-      this.cards.push(new FlashCard("impiety", "having sudden energy impulsive thrusting ahead forceful"));
-      this.cards.push(new FlashCard("fanny pack", "simply described as 'gay'"));
-      this.cards.push(new FlashCard("antemeridian", "before noon"));
-      this.cards.push(new FlashCard("ascetic", "adj. Given to severe self-denial and practicing excessive abstinence and devotion"));
-      this.cards.push(new FlashCard("bedlam", "noun 1. a scene or state of wild uproar and confusion. 2. Archaic. an insane asylum or madhouse. Origin: a popular name for the Hospital of St. Mary of Bethlehem in London, which served as a lunatic asylum from ca. 1400; cf. ME Bedleem, Bethleem, OE Betleem Bethlehem Synonyms: 1. disorder, tumult, chaos, clamor, turmoil, commotion, pandemonium."));
+      // Read cards from JSON object deckData
+      for (var i=0; i<deckData.length; i++) {
+        this.cards.push(new FlashCard(deckData[i].Card.question,deckData[i].Card.answer));
+      }
       return;
   }
 
