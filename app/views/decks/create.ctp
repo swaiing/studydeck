@@ -1,3 +1,8 @@
+<!-- /app/views/decks/create.ctp -->
+
+<div id="middle_wrapper_content">
+<div id="middle_bar">
+
 <h1>Add Deck and cards</h1>
 <p>Current User: <?php echo $activeUser; ?> <p> <br/>
 <?php
@@ -23,3 +28,6 @@ echo $form->button('Add 10 Cards',array('onClick'=>'addCardRows(10)'));
 echo $form->end('Save Deck');
 ?>
 
+</div> <!-- end middle_bar -->
+</div> <!-- end middle_wrapper -->
+<div class="clear_div">&nbsp;</div>

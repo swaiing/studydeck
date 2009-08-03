@@ -1,24 +1,76 @@
 <!-- File: /app/views/decks/study.ctp -->
 
-<h2>Study</h2>
+<?php echo $javascript->link('jquery-1.2.6.min'); ?>
+<?php echo $javascript->link('study_deck'); ?>
 
-<h3><?php echo $deckInfo['Deck']['deck_name'] ?></h3>
-<p>Created: <?php echo $deckInfo['Deck']['created'] ?></p>
-<p>View Count: <?php echo $deckInfo['Deck']['view_count'] ?></p>
-<p>Description: <?php echo $deckInfo['Deck']['description'] ?></p>
+<!-- Pass card data -->
+<script type="text/javascript">
+<?php echo "var deckData = " . $javascript->object($deck); ?>
+</script>
 
-<table border='1'>
-<tr>
-  <td>Term</td>
-  <td>Definition</td>
-</tr>
-<?php
-  //print_r($deck);
-  foreach ($deck as $card) {
-	echo "<tr>";
-	echo "<td>" . $card['Card']['question'] . "</td>";
-	echo "<td>" . $card['Card']['answer'] . "</td>";
-	echo "</tr>";
-  }
-?>
-</table>
+<div id="middle_wrapper_content">
+
+  <div id="view_deck_wrap">
+
+        <h1 class="title"><?php echo $deckInfo['Deck']['deck_name'] ?></h1>
+
+        <!--<div id="prev_card">Previous</div>-->
+
+        <div id="card_wrap">
+
+          <div id="additional">
+
+                <div id="prev_card"><a href="#" class="prev">Previous</a></div>
+                <div id="center_items">
+
+                <div class="widget_item">
+                  <span>Show first:</span>
+                  <select name="show_first">
+                    <option value="">Term</option>
+                    <option value="">Definition</option>
+                  </select>
+                </div>
+
+                <div class="widget_item">
+                  <span>Rating:</span>
+                  <select name="rating">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                  </select>
+                  <!--<div id="rating">
+                    <img src="img/star_on.png"/>
+                    <img src="img/star_on.png"/>
+                    <img src="img/star_on.png"/>
+                    <img src="img/star_on.png"/>
+                  </div>-->
+                </div>
+
+                </div> <!-- end center_items -->
+
+                <div id="next_card"><a href="#" class="next">Next</a></div>
+
+                <div class="clear_div"></div>
+          </div> <!-- end additional -->
+
+          <div class="card">
+                <p class="term"></p>
+                <p class="defn"></p>
+
+                <div id="eval">
+                   <ul>
+                     <li><a href="#" class="correct">correct</a></li>
+                     <li><a href="#" class="incorrect">incorrect</a></li>
+                   </ul>
+                </div>
+          </div>
+
+        </div> <!-- end card_wrap -->
+
+        <!--<div id="next_card">Next</div>-->
+
+        <div class="clear_div">&nbsp;</div>
+  </div> <!-- end view_deck_wrap -->
+
+</div>
+
