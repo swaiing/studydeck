@@ -6,6 +6,9 @@
 #
 # Prerequisite: $GROUP_OWNER group must have Apache as a member.
 # So that /app/tmp and /app/tmp/cache directories are writeable.
+#
+# Example: Builds project for Steve.
+# ./build.sh /var/www/html -s
 
 BUILD_DIR=$1
 CUST_CONFIG=$2
