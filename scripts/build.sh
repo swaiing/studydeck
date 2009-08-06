@@ -15,7 +15,7 @@ CUST_CONFIG=$2
 
 APP_ROOT="../app"
 CAKE_BUILD=cake_1.2.3.8166
-PROJECT_BUILD=studydeck_beta
+PROJECT_BUILD=studydeck
 CAKE_INSTALL="../media/${CAKE_BUILD}.tar.gz"
 DATE=`date`
 CAKE_ROOT=$BUILD_DIR/$PROJECT_BUILD
