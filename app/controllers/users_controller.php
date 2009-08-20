@@ -38,19 +38,21 @@ class UsersController extends AppController {
 		 
 		 $this->set('activeUser', $this->Auth->user('username'));
 		 $currentUserId = $this->Auth->user('id');
-		 $allMyDecks = $this->MyDeck->find ('all', array('conditions' => array('MyDeck.user_id' => $currentUserId)));
-		
+		 $allMyDecks = $this->MyDeck->find ('all', array('conditions' => array('MyDeck.user_id' => $currentUserId),'order'=>array('MyDeck.study_count DESC')));
+		 $favouriteDecks=array();
 		 foreach ($allMyDecks as $myDeck){
 		 	 $tempDeck = $this->Deck->find('first',array('conditions' => array('Deck.id' => $myDeck['MyDeck']['deck_id'])));
-			 //$tempStudyCount = array();
+			 array_push($favouriteDecks,$tempDeck);
+			 $tempStudyCount = $myDeck['MyDeck']['study_count'];
+
 			 if ($myDeck['MyDeck']['study_count'] == 0){
-			    $tempStudyCount = array($myDeck['MyDeck']['study_count'],"");			 				     
+			    $tempStudyCountArray = array($tempStudyCount,"");			 				     
 			 }
 			 else
 			 {
-				$tempStudyCount = array($myDeck['MyDeck']['study_count'],$myDeck['MyDeck']['modified']);
+				$tempStudyCountArray = array($tempStudyCount,$myDeck['MyDeck']['modified']);
 			 }
-			 $deck = array_merge($tempDeck, $tempStudyCount);
+			 $deck = array_merge($tempDeck, $tempStudyCountArray);
 		 	 if($deck['Deck']['user_id'] == $currentUserId)	{     
 				array_push($userCreatedDecks, $deck);		
 								
@@ -63,6 +65,7 @@ class UsersController extends AppController {
 		 $this->set('userCreatedDecks', $userCreatedDecks);
 		 $this->set('publicDecks', $publicDecks);
 		 $this->set('numDecksStudied', count($allMyDecks));
+		 $this->set('favDecks',$favouriteDecks);
 		 
 	}
 
