@@ -332,6 +332,22 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`deck_tags` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `flashcards`.`search_index`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `flashcards`.`search_index` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `association_key` INT(11) NOT NULL ,
+  `model` VARCHAR(128) NOT NULL ,
+  `data` LONGTEXT NOT NULL ,
+  `created` DATETIME NOT NULL ,
+  `modified` DATETIME NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
