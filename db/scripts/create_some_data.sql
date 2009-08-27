@@ -1,7 +1,7 @@
 -- create users
-INSERT INTO users (email, password, username) VALUES ("steve@studydeck.com", "password", "steve");
-INSERT INTO users (email, password, username) VALUES ("scott@studydeck.com", "password", "scott");
-INSERT INTO users (email, password, username) VALUES ("nicolo@studydeck.com", "password", "nicolo");
+INSERT INTO users (email, password, username) VALUES ("steve@studydeck.com", "5911211b41ad0fc56b09e05fe73ee5cedd42ca23", "steve");
+INSERT INTO users (email, password, username) VALUES ("scott@studydeck.com", "5911211b41ad0fc56b09e05fe73ee5cedd42ca23", "scott");
+INSERT INTO users (email, password, username) VALUES ("nicolo@studydeck.com", "5911211b41ad0fc56b09e05fe73ee5cedd42ca23", "nicolo");
 
 -- create deck
 INSERT INTO decks (deck_name, privacy, view_count, user_id) VALUES ("SAT Words", 1, 0, 1);
