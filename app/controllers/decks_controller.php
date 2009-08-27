@@ -6,6 +6,13 @@ class DecksController extends AppController {
       var $uses = array('Deck','Card','Tag','MyDeck','DeckTag');
       var $helpers = array('Html','Javascript');
       var $components = array('Auth');
+     
+
+      function beforeFilter(){
+      
+      $this->Auth->allow('explore');
+      
+      } 
 
       function create(){
       	       $this->pageTitle = 'Create and Edit Decks!';
@@ -75,8 +82,39 @@ class DecksController extends AppController {
 
       }
 
-      function explore() {
-               $this->set('decks', $this->Deck->find('all'));
+      function explore($sortBy = null,$page = null) {
+      	       $this->set('sort', $sortBy);
+      	       
+      	       if($sortBy == 'recent'){
+	       	      $sortBy = 'Deck.created DESC';
+	       }
+	       elseif ($sortBy == 'popular') {
+	       	      $sortBy = 'Deck.view_count DESC';
+	       }
+	       elseif ($sortBy == 'alphabetical'){
+	       	      $sortBy = 'Deck.deck_name ASC';
+	       }
+	       else {
+	       	      $this->set('sort', 'recent');
+		      $sortBy = 'Deck.created DESC';
+		      
+	       }
+	      
+
+	       if ($page == null){
+ 	       	      $page = 1;
+	       }
+	       if($this->data['Deck']['searchQuery'] ==null){
+	       		$exploreDecks = $this->Deck->find('all',array('limit' => 20,'page' => $page,'order'=> $sortBy));
+	       		$this->set('decks',$exploreDecks);
+	       		$this->set('pages', ceil($this->Deck->find('count')/20));
+	       }
+	       else {
+			$this->set('decks',$this->Deck->search($this->data['Deck']['searchQuery'])); 
+	       		$this->set('pages',0);
+	       }	       
+	       
+	      // $this->set('temp', $sortBy);
       }
 
       function view($id = null) {
@@ -104,6 +142,18 @@ class DecksController extends AppController {
                               );
                 $this->set('deck', $this->Card->find('all',$findParams));
       }
+      
+
+      function delete($deckId = null){
+      	       if($deckId != null){
+      	       		  $this->Deck->delete($deckId, false);
+	       }
+	       $this->autoRender=false;
+	       $this->redirect('/users/dashboard',null,true);
+
+
+      }
+      
 
 }
 ?>
