@@ -9,12 +9,12 @@
 	</tr>
 	<tr>
 		<td>Favourite Decks: </td>
-		<td><a href="/studydeck/decks/study/<?php if(count($favDecks)>0) echo $favDecks['0']['Deck']['id']; ?> "> <?php if(count($favDecks)> 0) echo $favDecks['0']['Deck']['deck_name']; ?></a></td>
-		<td><a href="/studydeck/decks/study/<?php if(count($favDecks)>1) echo $favDecks['1']['Deck']['id'];?> "><?php if(count($favDecks)>1) echo $favDecks['1']['Deck']['deck_name']; ?></a></td>
+		<td> <?php if($favDeck1 != null){ echo $html->link($favDeck1['Deck']['deck_name'],"/studydeck/decks/study/".$favDeck1['Deck']['id']); } ?> </td>
+		<td> <?php if($favDeck2 != null){echo $html->link($favDeck2['Deck']['deck_name'],"/studydeck/decks/study/".$favDeck2['Deck']['id']); } ?> </td>
 	</tr>
 </table>
 
-
+<div>Sort Decks By: <a href="/studydeck/users/dashboard"> Recently Used </a> &nbsp <a href="/studydeck/users/dashboard/bycount"> Times Studied </a></div>
 <p>Public Decks</p>
 <table>
 	<tr>
