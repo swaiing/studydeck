@@ -6,9 +6,6 @@
 
     // CSS includes
     echo $html->css('deck_create',null,null,false);
-
-    // Nicolo's old functions
-    //echo $javascript->link('createdeck',false);
 ?>
 
 <div id="middle_wrapper_content">
@@ -28,63 +25,56 @@
     $definitionFieldSize = 50;
     $cardTermOptions = array('type'=>'text','label'=>false,'size'=>$termFieldSize);
     $cardDefinitionOptions = array('type'=>'text','label'=>false,'size'=>$definitionFieldSize);
+    $defaultNumCards = 5;
 
     echo $form->create('Deck', array('action' => 'create'));
+
+    // Deck detail fields
     echo "<fieldset>\n";
     echo "<legend>Details</legend>\n";
     echo "<ol>\n";
+
+    // Title
     echo "<li>" . $form->input('Deck.deck_name',array('label'=>'Title:','size'=>$detailFieldSize)) . "</li>\n";
+
+    // Tags/Categories
     echo "<li>" . $form->input('DeckTag.tag_id',array('label' => 'Tags:','size'=>$detailFieldSize)) . "</li>\n";
 
+    // Privacy radio
     echo "<li class=\"privacyOptions\">" . $form->radio('privacy',$privacyOptions,$privacyAttributes);
     //echo "<li>" . $form->input('Deck.privacy',array('label'=>'Privacy:','size'=>$detailFieldSize)) . "</li>\n";
 
+    // Description
     echo "<li>" . $form->input('Deck.description',array('label'=>'Description:','size'=>$detailFieldSize)) . "</li>\n";
     echo "</ol>\n";
     echo "</fieldset>\n";
 
+    // Card inputs
     echo "<fieldset id=\"cards\">\n";
     echo "<legend>Cards</legend>\n";
     echo "<ol id=\"card_list\">\n";
 
+    // Row header
     echo "<li>";
     echo "<div id=\"term_header\">Term</div>";
     echo "<div id=\"definition_header\">Definition</div>";
     echo "</li>";
 
-    echo "<li>";
-    echo $form->input('Card.0.question',array('type'=>'text','label'=>'1','size'=>$termFieldSize));
-    echo $form->input('Card.0.answer',$cardDefinitionOptions);
-    echo "</li>\n";
-
-    echo "<li>";
-    echo $form->input('Card.1.question',array('type'=>'text','label'=>'2','size'=>$termFieldSize));
-    echo $form->input('Card.1.answer',$cardDefinitionOptions);
-    echo "</li>\n";
-
-    echo "<li>";
-    echo $form->input('Card.2.question',array('type'=>'text','label'=>'3','size'=>$termFieldSize));
-    echo $form->input('Card.2.answer',$cardDefinitionOptions);
-    echo "</li>\n";
-
-    echo "<li>";
-    echo $form->input('Card.3.question',array('type'=>'text','label'=>'4','size'=>$termFieldSize));
-    echo $form->input('Card.3.answer',$cardDefinitionOptions);
-    echo "</li>\n";
-
-    echo "<li>";
-    echo $form->input('Card.4.question',array('type'=>'text','label'=>'5','size'=>$termFieldSize));
-    echo $form->input('Card.4.answer',$cardDefinitionOptions);
-    echo "</li>\n";
+    // List card rows
+    for($i=0; $i<$defaultNumCards; $i++) {
+        $card = "Card." . $i;
+        echo "<li>";
+        echo $form->input($card.".question",array('type'=>'text','label'=>$i+1,'size'=>$termFieldSize));
+        echo $form->input($card.".answer",$cardDefinitionOptions);
+        echo "</li>\n";
+    }
 
     echo "</ol>\n";
     echo "</fieldset>\n";
-
-    //echo $form->button('Add a Card',array('onClick'=>'addCardRows(1)'));
-    //echo $form->button('Add 5 Cards',array('onClick'=>'addCardRows(5)'));
-    //echo $form->button('Add 10 Cards',array('onClick'=>'addCardRows(10)'));
-
-    echo $form->end('Create Deck');
+    echo "<div id=\"submit_deck\">";
+    echo $form->button('Create Deck', array('type'=>'submit'));
+    echo "</div>";
+    echo $form->end();
 ?>
 
 </legend>
