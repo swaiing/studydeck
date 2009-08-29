@@ -3,7 +3,7 @@
 <div id="middle_wrapper_content">
 <div id="middle_bar">
 
-<h1>Register</h1>
+<h1>Create a new account</h1>
 <?php
       echo $form->create('User', array('action' => 'register'));
       echo $form->input('username');

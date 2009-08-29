@@ -5,10 +5,12 @@
   <title><?php echo $title_for_layout?></title>
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <!-- Include external files and scripts here (See HTML helper for more info.) -->
-  <?php echo $scripts_for_layout ?>
-  <link rel="stylesheet" type="text/css" media="screen" href="/studydeck/css/styles.css" />
-  <link rel="stylesheet" type="text/css" media="screen" href="/studydeck/css/view_deck.css" />
+  <?php
+    // Include default styles
+    echo $html->css('styles');
+    // Include scripts and CSS from inner view
+    echo $scripts_for_layout;
+  ?>
 </head>
 <body>
 <div id="top_bar">

@@ -135,6 +135,16 @@ div#middle_bar h2 {
   border-bottom: 1px solid #cecece;
 }
 
+/*****  middle_bar generic *****/
+div#middle_bar h1 {
+  font-family: verdana, georgia, sans-serif;
+  font-size: 18px; 
+  font-weight: bold;
+  padding: 0;
+}
+
+
+
 /*****  footer *****/
 
 #footer_nav a {
@@ -189,4 +199,30 @@ form#create_deck_form input.row_term {
 }
 form#create_deck_form input.row_defn {
   width: 70%;
+}
+
+/** for debug table **/
+table tr td {
+        background: #fff;
+        border-right: 1px solid #ccc;
+        padding: 4px;
+        text-align: center;
+        vertical-align: top;
+}
+table tr.altrow td {
+        background: #f4f4f4;
+}
+td.actions {
+        text-align: center;
+        white-space: nowrap;
+}
+td.actions a {
+        margin: 0px 6px;
+}
+.cake-sql-log table {
+        background: #f4f4f4;
+}
+.cake-sql-log td {
+        padding: 4px 8px;
+        text-align: left;
 }

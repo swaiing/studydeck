@@ -1,7 +1,10 @@
 <!-- File: /app/views/decks/study.ctp -->
 
-<?php echo $javascript->link('jquery-1.2.6.min'); ?>
-<?php echo $javascript->link('study_deck'); ?>
+<?php
+    echo $javascript->link('jquery-1.2.6.min',false) . "\n";
+    echo $javascript->link('study_deck',false) . "\n";;
+    echo $html->css('view_deck',null,null,false) . "\n";
+?>
 
 <!-- Pass card data -->
 <script type="text/javascript">
