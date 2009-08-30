@@ -1,3 +1,8 @@
+<!-- /app/views/users/dashboard.ctp -->
+
+<div id="middle_wrapper_content">
+<div id="middle_bar">
+
 <h3> User Dashboard </h3>
 
 <h1>Welcome <?php echo $activeUser; ?> </h1>
@@ -58,3 +63,7 @@
 <?php endforeach; ?>
 
 </table>
+
+</div> <!-- end middle_bar -->
+</div> <!-- end middle_wrapper -->
+<div class="clear_div">&nbsp;</div>
