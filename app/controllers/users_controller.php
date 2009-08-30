@@ -23,7 +23,7 @@ class UsersController extends AppController {
       	       if (!empty($this->data)) {
 	                   if ($this->data['User']['password'] == $this->Auth->password($this->data['User']['password_confirm'])) {
                 	   $this->User->save($this->data);
-               		  // $this->redirect(array('action' => 'index'));
+               		  $this->redirect(array('action' => 'login'));
             		  }
 
       		}

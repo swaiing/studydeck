@@ -7,6 +7,14 @@ class DecksController extends AppController {
     var $helpers = array('Html','Javascript');
     var $components = array('Auth');
 
+
+    
+    function beforeFilter(){
+      
+      $this->Auth->allow('explore');
+      
+    } 
+
     function create(){
         $this->pageTitle = 'Create a Deck';
         //$this->layout='create_edit';
@@ -81,10 +89,81 @@ class DecksController extends AppController {
 
     }
 
-    function explore() {
-        $this->set('decks', $this->Deck->find('all'));
-    }
+    function explore($sortBy = null,$page = null,$query = null) {
+      	        $this->DeckTag->recursive=1;
+	       
+	       $this->set('sort', $sortBy);
+      	       
+      	       if($sortBy == 'recent'){
+	       	      $sortBy = 'Deck.created DESC';
+	       }
+	       elseif ($sortBy == 'popular') {
+	       	      $sortBy = 'Deck.view_count DESC';
+	       }
+	       elseif ($sortBy == 'alphabetical'){
+	       	      $sortBy = 'Deck.deck_name ASC';
+	       }
+	       else {
+	       	      $this->set('sort', 'recent');
+		      $sortBy = 'Deck.created DESC';
+		      
+	       }
+	      
 
+	       if ($page == null){
+ 	       	      $page = 1;
+	       }
+	       $queryString = $this->data['Deck']['searchQuery'];
+	       if ($query != null){
+	       	  $queryString = $query;
+	       }
+	          
+	       $exploreDecks = array();
+
+	       if($queryString == null){
+	       		$exploreDecks = $this->Deck->find('all',array('limit' => 20,'page' => $page,'order'=> $sortBy));
+	       		$this->set('decks',$exploreDecks);
+	       		$this->set('pages', ceil($this->Deck->find('count')/20));
+	       }
+	       else {
+			$deckQuery = $this->Deck->search($queryString);
+			$queryResults = $deckQuery;
+			$arrayOfDeckIds = array();
+			foreach ($queryResults as $result){
+			    array_push($arrayOfDeckIds, $result['Deck']['id']);
+			    
+			}
+			$exploreDecks = $this->Deck->find('all',array('limit' => 20,'page' => $page,'conditions'=> array('Deck.id' => $arrayOfDeckIds),'order'=> $sortBy));
+			$this->set('decks',$exploreDecks); 
+	       		$this->set('pages', ceil(count($exploreDecks)/20));
+	       }
+	       
+	       $tagArray = array();
+	       foreach($exploreDecks as $eDeck){
+	       	     $tempTagArray = $eDeck['DeckTag'];
+		     
+		     foreach ($tempTagArray as $tempTag){
+		     	     $tempTagId = $tempTag['tag_id'];
+			     if(! isset($tagArray[$tempTagId])){
+			     	$tag =$this->Tag->find('first',array('conditions'=> array('Tag.id' => $tempTagId)));
+				//$this->set('temp', $tag);
+				$tagArray[$tempTagId]=$tag['Tag']['tag'];
+			     }
+
+		     }
+		     
+
+	       }
+	       	    
+	       $this->set('queryString',$queryString);
+	       $this->data['Deck']['searchQuery'] = $queryString;
+
+	       $this->set('tagArray',$tagArray);
+	       
+	      
+      }
+
+   
     function view($id = null) {
         // Set deck meta info
         $this->Deck->id = $id;
