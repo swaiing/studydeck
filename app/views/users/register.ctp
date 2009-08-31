@@ -3,15 +3,20 @@
 <div id="middle_wrapper_content">
 <div id="middle_bar">
 
-<h1>Create a new account</h1>
 <?php
-      echo $form->create('User', array('action' => 'register'));
-      echo $form->input('username');
-      echo $form->input('email');
-      echo $form->input('password');
-      echo $form->input('password_confirm', array('type' => 'password'));
-      echo $form->submit();
-      echo $form->end();
+    // Field attributes
+    $FIELD_SIZE = 25;
+
+    echo $form->create('User', array('action' => 'register'));
+    echo "<fieldset class=\"small\">\n";
+    echo "<h1>Register</h1>\n";
+    echo "<ol>\n";
+    echo "<li>" . $form->input('username',array('label'=>'Username:','size'=>$FIELD_SIZE)) . "</li>\n";
+    echo "<li>" . $form->input('email',array('label'=>'Email:','size'=>$FIELD_SIZE)) . "</li>\n";
+    echo "<li>" . $form->input('password',array('label'=>'Password:','size'=>$FIELD_SIZE)) . "</li>\n";
+    echo "<li>" . $form->input('password_confirm', array('type' => 'password','label'=>'Repeat:','size'=>$FIELD_SIZE)) . "</li>\n";
+    echo $form->end('Create my account');
+    echo "</fieldset>\n";
 ?>
 
 </div> <!-- end middle_bar -->

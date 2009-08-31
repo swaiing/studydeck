@@ -137,13 +137,49 @@ div#middle_bar h2 {
 
 /*****  middle_bar generic *****/
 div#middle_bar h1 {
+  color: #003366;
   font-family: verdana, georgia, sans-serif;
-  font-size: 18px; 
-  font-weight: bold;
+  font-size: 16px; 
   padding: 0;
 }
 
+fieldset.small {
+    width: 300px;
+    margin: 10px auto 10px auto;
+    padding: 10px;
+    border: 1px solid #cecece;
+}
 
+fieldset.small ol {
+    padding: 1em 1em 0 1em;
+    list-style: none;
+}
+
+fieldset.small li {
+    padding-bottom: 1em;
+}
+
+fieldset.small label {
+    float: left;
+    width: 7em;
+    margin-right: 1em;
+    text-align: right;
+}
+
+fieldset.small div.submit {
+    float: right;
+    clear: left;
+    padding: 0;
+    margin: 0 1em 0 0;
+}
+
+div#authMessage {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 1em 0 1em 0;
+    padding: 0;
+    text-align: center;
+}
 
 /*****  footer *****/
 
@@ -155,50 +191,6 @@ div#middle_bar h1 {
 #footer_nav a:hover {
   color: #004D99;
   text-decoration: underline;
-}
-
-
-/*****  create a deck form  *****/
-
-form#create_deck_form div#left_col {
-  width: 50%;
-  float: left;
-  clear: none;
-  padding: 0;
-  margin: 0;
-}
-
-form#create_deck_form div#right_col {
-  float: left;
-  clear: right;
-  padding: 0 10px 0 10px;
-  margin: 0;
-}
-
-form#create_deck_form div#terms_box {
-  clear: both;
-  margin: 10px 0 20px 0;
-  padding: 0;
-}
-
-form#create_deck_form label {
-  display: block;
-  font-size: 12px;
-  font-weight: bold;
-  margin: 10px 0 10px 0;
-  border-bottom: 1px solid #cecece;
-  padding: 0;
-}
-
-form#create_deck_form table#term_table {
-  width: 100%;
-}
-
-form#create_deck_form input.row_term {
-  width: 30%;
-}
-form#create_deck_form input.row_defn {
-  width: 70%;
 }
 
 /** for debug table **/

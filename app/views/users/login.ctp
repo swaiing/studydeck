@@ -3,13 +3,21 @@
 <div id="middle_wrapper_content">
 <div id="middle_bar">
 
-<h1>Login</h1>
+
 <?php
-        $session->flash('auth');
-        echo $form->create('User',array('action'=> 'login'));
-        echo $form->input('username');
-        echo $form->input('password');
-        echo $form->end('Login');
+    // Field attributes
+    $FIELD_SIZE = 25;
+
+    $session->flash('auth');
+
+    echo $form->create('User',array('action'=> 'login'));
+    echo "<fieldset class=\"small\">\n";
+    echo "<h1>Login</h1>\n";
+    echo "<ol>\n";
+    echo "<li>" . $form->input('username',array('label'=>'Username:','size'=>$FIELD_SIZE)) . "</li>\n";
+    echo "<li>" . $form->input('password',array('label'=>'Password:','size'=>$FIELD_SIZE)) . "</li>\n";
+    echo $form->end('Login');
+    echo "</fieldset>\n";
 ?>
 
 </div> <!-- end middle_bar -->

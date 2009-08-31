@@ -8,7 +8,6 @@
   </div>
   <div class="howto_box">
     <h3>Study a Deck</h3>
-    <p>View a <a href="#">sample deck</a>.</p>
   </div>
   <div class="howto_box">
     <h3>Explore Decks</h3>

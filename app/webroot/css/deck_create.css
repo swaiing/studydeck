@@ -3,6 +3,7 @@
 fieldset {
     margin: 10px 0 0 0;
     padding: 0;
+    border: 1px solid #cecece;
 }
 
 fieldset ol {
@@ -49,7 +50,8 @@ fieldset#cards {
 }
 
 fieldset#cards input {
-    float: left
+    float: left;
+    margin-right: 1em;
 }
 
 fieldset#cards #term_header {

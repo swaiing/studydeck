@@ -27,7 +27,7 @@
 
   <div class="right">
     <ul class="inline_list" id="register_nav">
-      <li><a href="/studydeck/users/register">Register for free</a></li>
+      <li><a href="/studydeck/users/register">Register</a></li>
       <li><a href="/studydeck/users/login">Login</a></li>
       <li><a href="/studydeck/users/logout">Logout</a></li>
     </ul>
@@ -48,7 +48,7 @@
       <li><a href="/studydeck/">Home</a> | </li>
       <li><a href="#">About</a> | </li>
       <li><a href="#">Terms of Use</a> | </li>
-      <li><a href="#">Contact Us</a></li>
+      <li><a href="#">Contact</a></li>
     </ul>
   </div>
 </div> <!-- end footer -->
