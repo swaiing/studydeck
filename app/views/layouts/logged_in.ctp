@@ -28,14 +28,12 @@
 
         // For a logged in user,
         // There are links for: 'Dashboard' | 'Explore Decks' | 'Create Deck' | 'Help'
-        if(isset($activeUser)) {
-            echo "<li>" . $html->link('Dashboard',array('controller'=>'users','action'=>'dashboard')) . $LINE_SEP . "</li>";
-        }
+        echo "<li>" . $html->link('Dashboard',array('controller'=>'users','action'=>'dashboard')) . $LINE_SEP .  "</li>";
 
         // For an anonymous user,
         // There are links for: 'Explore Decks' | 'Create Deck' | 'Help'
-        echo "<li>" . $html->link('Explore Decks',array('controller'=>'decks','action'=>'explore')) . $LINE_SEP . "</li>";
-        echo "<li>" . $html->link('Create Deck',array('controller'=>'decks','action'=>'create')) . $LINE_SEP . "</li>";
+        echo "<li>" . $html->link('Explore Decks',array('controller'=>'decks','action'=>'explore')) . $LINE_SEP .  "</li>";
+        echo "<li>" . $html->link('Create Deck',array('controller'=>'decks','action'=>'create')) . $LINE_SEP .  "</li>";
     ?>
         <li><a href="#">Help</a></li>
     </ul>
@@ -44,19 +42,15 @@
 <div id="nav_right_login">
     <ul id="list_nav_login">
     <?php
+        // For an anonymous user,
+        // There are links for: 'Register' | 'Login'
+        //echo "<li>" . $html->link('Register',array('controller'=>'users','action'=>'register')) . $LINE_SEP . "</li>";
+        //echo "<li>" . $html->link('Login',array('controller'=>'users','action'=>'login')) . "</li>";
 
        // For a logged in user,
        // The current user logged in is displayed: Hello steve | 'Logout'
-       if(isset($activeUser)) {
-            echo "<li>" . $activeUser . $LINE_SEP . "</li>";
-            echo "<li>" . $html->link('Logout',array('controller'=>'users','action'=>'logout')) . "</li>";
-        }
-        else {        
-            // For an anonymous user,
-            // There are links for: 'Register' | 'Login'
-            echo "<li>" . $html->link('Register',array('controller'=>'users','action'=>'register')) . $LINE_SEP . "</li>";
-            echo "<li>" . $html->link('Login',array('controller'=>'users','action'=>'login')) . "</li>";
-        }
+       echo "<li>" . "hello " . $activeUser . "</li>";
+       echo "<li>" . $html->link('Logout',array('controller'=>'users','action'=>'logout')) . "</li>";
     ?>
     </ul>
 </div>

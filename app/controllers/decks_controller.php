@@ -90,7 +90,8 @@ class DecksController extends AppController {
     }
 
     function explore($sortBy = null,$page = null,$query = null) {
-      	        $this->DeckTag->recursive=1;
+        $this->set('activeUser', $this->Auth->user('username'));
+      	$this->DeckTag->recursive=1;
 	       
 	       $this->set('sort', $sortBy);
       	       

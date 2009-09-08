@@ -47,12 +47,6 @@ div.right {
   clear: right;
 }
 
-ul.inline_list, ul.inline_list li {
-  display: inline;
-  margin: 0;
-  padding: 0;
-}
-
 div.clear_div {
   clear: left;
 }
@@ -60,12 +54,14 @@ div.clear_div {
 /*****  top_bar *****/
 
 div#top_nav {
-  float: left;
-  margin: 10px 0 0 0;
-  padding: 0;
+    float: left;
+    clear: none;
+    width: 500px;
+    margin: 10px 0 0 0;
+    padding-top: 15px;
 }
 
-#top_logo {
+div#top_logo {
   margin: 0;
   padding: 0;
   float: left;
@@ -82,22 +78,42 @@ div#top_logo h1 a {
   text-decoration: none;
 }
 
-ul#main_nav.inline_list, ul#main_nav.inline_list li {
-  display: inline;
-  margin: 0 0 0 20px;
-  padding: 0;
+div#nav_left_links {
+    float: left;
+    clear: left;
 }
-ul#register_nav.inline_list, ul#register_nav.inline_list li {
+
+div#nav_right_login {
+    float: right;
+    clear: right;
+}
+
+ul#list_nav_main {
+    margin: 0 0 0 20px;
+    padding: 0;
+}
+
+ul#list_nav_login {
+    margin: 0;
+    padding: 0;
+}
+
+ul#list_nav_footer {
+    margin: 0;
+    padding: 0;
+}
+
+ul#list_nav_footer li, ul#list_nav_main li, ul#list_nav_login li {
   display: inline;
-  margin: 0 0 0 20px;
+  margin: 0;
   padding: 0;
 }
 
-#main_nav a, #register_nav a {
+#top_nav a {
   color: #000000;
   text-decoration: none;
 }
-#main_nav a:hover, #register_nav a:hover {
+#top_nav a:hover {
   color: #004D99;
   text-decoration: underline;
 }
@@ -182,6 +198,20 @@ div#authMessage {
 }
 
 /*****  footer *****/
+
+div#footer {
+    text-align: center;
+}
+
+div#footer_copyright {
+    margin: 0;
+    padding: 0;
+}
+
+div#footer_nav {
+    margin: 0;
+    padding: 0;
+}
 
 #footer_nav a {
   color: #000000;
