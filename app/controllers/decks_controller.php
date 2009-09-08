@@ -8,11 +8,13 @@ class DecksController extends AppController {
     var $components = array('Auth');
 
 
-    
     function beforeFilter(){
+
+        // Call AppConroller::beforeFilter()
+        parent::beforeFilter();
       
-      $this->Auth->allow('explore');
-      
+        $this->Auth->allow('explore');
+
     } 
 
     function create(){

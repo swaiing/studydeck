@@ -4,21 +4,29 @@ class UsersController extends AppController {
       var $scaffold;
       var $components =array('Auth');
       var $uses = array('User','MyDeck','Deck','Rating');
+
       function beforeFilter(){
       
-      $this->Auth->allow('register','view');
-      $this->Auth->fields = array('username'=>'username', 'password'=>'password');
-      //this sets the page they were coming from to null so redirect takes them to dashboard
-      $this->Session->write('Auth.redirect', null);
+        // Call AppConroller::beforeFilter()
+        parent::beforeFilter();
+
+        $this->Auth->allow('register','view');
+        $this->Auth->fields = array('username'=>'username', 'password'=>'password');
+
+        //this sets the page they were coming from to null so redirect takes them to dashboard
+        $this->Session->write('Auth.redirect', null);
       
-       $this->Auth->loginRedirect=array('controller'=> 'users','action'=>'dashboard'); 
+        $this->Auth->loginRedirect=array('controller'=> 'users','action'=>'dashboard'); 
       }     
+
       function login(){
-      	    
+        // Intentionally blank
       }
+
       function logout() {
-      	       $this->redirect($this->Auth->logout());
+        $this->redirect($this->Auth->logout());
       }
+
       function register(){
       	       if (!empty($this->data)) {
 	                   if ($this->data['User']['password'] == $this->Auth->password($this->data['User']['password_confirm'])) {
