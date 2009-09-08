@@ -18,7 +18,6 @@ class DecksController extends AppController {
     function create(){
         $this->pageTitle = 'Create a Deck';
         //$this->layout='create_edit';
-        $this->set('activeUser', $this->Auth->user('username'));
         //creates tag dropdown
         // $tag_array = $this->Tag->find('list',array('fields'=>'Tag.tag'));
         // array_push($tag_array, "---Select Category---");
@@ -90,26 +89,24 @@ class DecksController extends AppController {
     }
 
     function explore($sortBy = null,$page = null,$query = null) {
-        $this->set('activeUser', $this->Auth->user('username'));
-      	$this->DeckTag->recursive=1;
+
+        $this->DeckTag->recursive = 1;
 	       
-	       $this->set('sort', $sortBy);
+	    $this->set('sort', $sortBy);
       	       
-      	       if($sortBy == 'recent'){
-	       	      $sortBy = 'Deck.created DESC';
-	       }
-	       elseif ($sortBy == 'popular') {
-	       	      $sortBy = 'Deck.view_count DESC';
-	       }
-	       elseif ($sortBy == 'alphabetical'){
-	       	      $sortBy = 'Deck.deck_name ASC';
-	       }
-	       else {
-	       	      $this->set('sort', 'recent');
-		      $sortBy = 'Deck.created DESC';
-		      
-	       }
-	      
+      	if($sortBy == 'recent'){
+	        $sortBy = 'Deck.created DESC';
+	    }
+	    elseif ($sortBy == 'popular') {
+	        $sortBy = 'Deck.view_count DESC';
+	    }
+	    elseif ($sortBy == 'alphabetical'){
+	        $sortBy = 'Deck.deck_name ASC';
+	    }
+	    else {
+	        $this->set('sort', 'recent');
+		    $sortBy = 'Deck.created DESC';
+	    }
 
 	       if ($page == null){
  	       	      $page = 1;
@@ -160,12 +157,10 @@ class DecksController extends AppController {
 	       $this->data['Deck']['searchQuery'] = $queryString;
 
 	       $this->set('tagArray',$tagArray);
-	       
-	      
       }
-
    
-    function view($id = null) {
+    function view($id = null)
+    {
         // Set deck meta info
         $this->Deck->id = $id;
         $this->set('deckInfo', $this->Deck->read());
@@ -177,7 +172,8 @@ class DecksController extends AppController {
         $this->set('deck', $this->Card->find('all',$findParams));
     }
 
-    function study($id = null){
+    function study($id = null)
+    {
         // Set deck meta info
         $this->Deck->id = $id;
         $this->set('deckInfo', $this->Deck->read());
@@ -187,7 +183,7 @@ class DecksController extends AppController {
                             'conditions' => array('Card.deck_id' => $this->Deck->id),
                             'fields' => array('Card.question', 'Card.answer'));
         $this->set('deck', $this->Card->find('all',$findParams));
-      }
+    }
 
       function delete($deckId = null){
         if($deckId != null){

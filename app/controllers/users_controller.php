@@ -46,10 +46,9 @@ class UsersController extends AppController {
 		 $favDeck1 = null;
 		 $favDeck2 = null;
 		 
-		 //sets the activeUser variable to username of current user
-		 $this->set('activeUser', $this->Auth->user('username'));
 		 //pulls the current user id
 		 $currentUserId = $this->Auth->user('id');
+
 		 //pulls all decks the user has in the mydecks table
 		 if($sortBy == 'bycount'){
 		 	    $allMyDecks = $this->MyDeck->find ('all', array('conditions' => array('MyDeck.user_id' => $currentUserId),'order'=>array('MyDeck.study_count DESC')));
