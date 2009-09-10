@@ -121,21 +121,33 @@ class DecksController extends AppController {
 	       $exploreDecks = array();
 
 	       if($queryString == null){
-	       		$exploreDecks = $this->Deck->find('all',array('limit' => 20,'page' => $page,'order'=> $sortBy));
+	       		$exploreDecks = $this->Deck->find('all',array('conditions'=> array('Deck.privacy'=> 2),'limit' => 20,'page' => $page,'order'=> $sortBy));
 	       		$this->set('decks',$exploreDecks);
-	       		$this->set('pages', ceil($this->Deck->find('count')/20));
+	       		$this->set('pages', ceil(count($exploreDecks)/20));
 	       }
 	       else {
 			$deckQuery = $this->Deck->search($queryString);
-			$queryResults = $deckQuery;
+			
 			$arrayOfDeckIds = array();
-			foreach ($queryResults as $result){
+			foreach ($deckQuery as $result){
 			    array_push($arrayOfDeckIds, $result['Deck']['id']);
 			    
 			}
-			$exploreDecks = $this->Deck->find('all',array('limit' => 20,'page' => $page,'conditions'=> array('Deck.id' => $arrayOfDeckIds),'order'=> $sortBy));
+
+			$arrayOfTagIds = array();
+			$tagQuery = $this->Tag->search($queryString);
+			foreach($tagQuery as $tagResult){
+				array_push($arrayOfTagIds, $tagResult['Tag']['id']);
+			}
+			$arrayOfDeckTags = $this->DeckTag->find('all',array('conditions'=> array('DeckTag.tag_id' => $arrayOfTagIds)));
+			foreach ($arrayOfDeckTags as $deckTags){
+				array_push($arrayOfDeckIds, $deckTags['DeckTag']['deck_id']);
+			}
+			
+			$exploreDecks = $this->Deck->find('all',array('limit' => 20,'page' => $page,'conditions'=> array('Deck.id' => $arrayOfDeckIds,'Deck.privacy' => 2),'order'=> $sortBy));
 			$this->set('decks',$exploreDecks); 
 	       		$this->set('pages', ceil(count($exploreDecks)/20));
+			
 	       }
 	       
 	       $tagArray = array();
@@ -159,6 +171,7 @@ class DecksController extends AppController {
 	       $this->data['Deck']['searchQuery'] = $queryString;
 
 	       $this->set('tagArray',$tagArray);
+	       $this->set('page', $page);
       }
    
     function view($id = null)

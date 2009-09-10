@@ -18,26 +18,34 @@
 <div><a href="/studydeck/decks/explore">All Decks </a> </div>
 
 <div>Sort By: <?php echo $html->link("Most Viewed","/decks/explore/popular/1/".$queryString);echo '&nbsp;'; echo $html->link("Alphabetical","/decks/explore/alphabetical/1/".$queryString);echo '&nbsp;'; echo $html->link("Recently Added","/decks/explore/recent/1/".$queryString) ?></div>
+
+<?php 
+$itemCount = ($page - 1)*20;
+
+?>
 <table>
 	<tr>
-		
-		<th>Deck Name (cards)</th>
+
+		<th></th>
+		<th>Deck Name</th>
+		<th># of Cards</th>
 		<th>Description</th>
 		<th>Tags</th>
 		<th>User</th>
 		<th>Added On</th>
-		<th>Privacy</th>
 		<th>View Count</th>
 		<th>Study</th>
 	</tr>
 	<?php foreach ($decks as $deck): ?>
 	<tr>
-		
+		<?php $itemCount ++; ?>
+		<td><?php echo $itemCount; ?> </td>
 		<td>
 		<?php
-		  echo $html->link($deck['Deck']['deck_name']." (".count($deck['Card']).")","/decks/view/".$deck['Deck']['id']);
+		  echo $html->link($deck['Deck']['deck_name'],"/decks/view/".$deck['Deck']['id']);
 		?>
 		</td>
+		<td><?php echo count($deck['Card']) ?></td>
 		<td><?php echo $deck['Deck']['description']; ?> </td>
 		<td><?php 
 			  foreach ($deck['DeckTag'] as $tag){
@@ -53,7 +61,6 @@
 		 </td>
 		<td><?php echo $deck['User']['username']; ?> </td>
 		<td><?php echo $deck['Deck']['created']; ?></td>
-		<td><?php echo $deck['Deck']['privacy']; ?> </td>
 		<td><?php echo $deck['Deck']['view_count']; ?> </td>
 		<td>
 		<?php
