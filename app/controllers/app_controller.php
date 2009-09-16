@@ -7,7 +7,7 @@ class AppController extends Controller {
     var $components = array('Auth');
     
     function beforeFilter() {
-
+    	//$this->set('lastPage',$this->Session->read('Auth.redirect'));    
         // Allow index root to be displayed
         $this->Auth->allow('display');
 

@@ -9,18 +9,52 @@ class UsersController extends AppController {
       
         // Call AppConroller::beforeFilter()
         parent::beforeFilter();
+	//$this->Auth->fields = array('username'=>'id', 'password'=>'password');
+        $this->Auth->allow('register','view','customLogin');
+       
 
-        $this->Auth->allow('register','view');
-        $this->Auth->fields = array('username'=>'username', 'password'=>'password');
+        //this logic directs the user to the proper url after login 
+	//if its from home or null site it sends the user to the dashboard
+	//else it takes them to the page they were going to
+        $this->set('prevURL', $this->Session->read('Auth.redirect'));
+	if($this->Session->read('Auth.redirect') == '/' || $this->Session->read('Auth.redirect') == ''){
+	   $this->Session->write('Auth.redirect', null);					 					 
+	}
 
-        //this sets the page they were coming from to null so redirect takes them to dashboard
-        $this->Session->write('Auth.redirect', null);
-      
         $this->Auth->loginRedirect=array('controller'=> 'users','action'=>'dashboard'); 
       }     
-
       function login(){
-        // Intentionally blank
+      	  // Intentionally blank
+      
+      }
+
+      function customLogin($redirect = null){
+       
+	if(!empty($this->data)){
+		
+		if($this->Auth->login($this->data['User'])){
+			$this->redirect('/users/dashboard');
+
+		}
+		$findUser = $this->User->find('first', array('conditions' => array('User.email' => $this->data['User']['username'])));
+		
+		if ($findUser != null){
+		   $this->data['User']['username'] = $findUser['User']['username'];
+		   $this->data['User']['email'] = $findUser['User']['email'];
+		   if($this->Auth->login($this->data['User'])){
+			$this->redirect('/users/dashboard');
+		   }
+
+		}
+			
+			$this->Session->setFlash("Username or Passowrd is incorrect");		
+			$this->redirect('/users/login');
+		
+			
+		
+	
+	}
+	
       }
 
       function logout() {
