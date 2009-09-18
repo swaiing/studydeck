@@ -1,4 +1,7 @@
 <?php
+
+include 'sd_global.php';
+
 class DecksController extends AppController {
 
     var $name = 'Decks';
@@ -124,7 +127,7 @@ class DecksController extends AppController {
 	       $exploreDecks = array();
 	       //pulls first 20 decks of proper order if no query given
 	       if($queryString == null){
-	       		$exploreDecks = $this->Deck->find('all',array('conditions'=> array('Deck.privacy'=> 2),'limit' => 20,'page' => $page,'order'=> $sortBy));
+	       		$exploreDecks = $this->Deck->find('all',array('conditions'=> array('Deck.privacy'=> SD_Global::$PUBLIC_DECK),'limit' => 20,'page' => $page,'order'=> $sortBy));
 	       		$this->set('decks',$exploreDecks);
 			//sets the pages count, 20 results per page
 	       		$this->set('pages', ceil(count($exploreDecks)/20));
@@ -155,7 +158,7 @@ class DecksController extends AppController {
 			}
 			
 			//takes all the deck ids gathered pulls the decks
-			$exploreDecks = $this->Deck->find('all',array('limit' => 20,'page' => $page,'conditions'=> array('Deck.id' => $arrayOfDeckIds,'Deck.privacy' => 2),'order'=> $sortBy));
+			$exploreDecks = $this->Deck->find('all',array('limit' => 20,'page' => $page,'conditions'=> array('Deck.id' => $arrayOfDeckIds,'Deck.privacy' => SD_Global::$PUBLIC_DECK),'order'=> $sortBy));
 			$this->set('decks',$exploreDecks); 
 	       		$this->set('pages', ceil(count($exploreDecks)/20));
 			
@@ -207,8 +210,9 @@ class DecksController extends AppController {
 
         // Retrieve cards in deck by deck_id
         $findParams = array(
-                            'conditions' => array('Card.deck_id' => $this->Deck->id),
-                            'fields' => array('Card.question', 'Card.answer'));
+                            'conditions' => array('Card.deck_id' => $this->Deck->id));
+                            //'conditions' => array('Card.deck_id' => $this->Deck->id),
+                            //'fields' => array('Card.question', 'Card.answer'));
         $this->set('deck', $this->Card->find('all',$findParams));
     }
 
