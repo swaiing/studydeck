@@ -9,19 +9,12 @@ class UsersController extends AppController {
       
         // Call AppConroller::beforeFilter()
         parent::beforeFilter();
-	//$this->Auth->fields = array('username'=>'id', 'password'=>'password');
-        $this->Auth->allow('register','view','customLogin');
-       
-
-        //this logic directs the user to the proper url after login 
-	//if its from home or null site it sends the user to the dashboard
-	//else it takes them to the page they were going to
+	$this->Auth->allow('register','view','customLogin');
+        	       
         $this->set('prevURL', $this->Session->read('Auth.redirect'));
-	if($this->Session->read('Auth.redirect') == '/' || $this->Session->read('Auth.redirect') == ''){
-	   $this->Session->write('Auth.redirect', null);					 					 
-	}
+	
 
-        $this->Auth->loginRedirect=array('controller'=> 'users','action'=>'dashboard'); 
+        
       }     
       function login(){
       	  // Intentionally blank
@@ -29,20 +22,31 @@ class UsersController extends AppController {
       }
 
       function customLogin($redirect = null){
-       
+      
+         $modedURL = str_replace('_','/',$redirect);
 	if(!empty($this->data)){
 		
-		if($this->Auth->login($this->data['User'])){
-			$this->redirect('/users/dashboard');
+	   if($this->Auth->login($this->data['User'])){
+		if($modedURL == "" || $modedURL =="/"){
+                 	     $this->redirect('/users/dashboard');
+            	}
+            	else{
+                 $this->redirect($modedURL);
+             	 }
 
-		}
+            }
 		$findUser = $this->User->find('first', array('conditions' => array('User.email' => $this->data['User']['username'])));
 		
 		if ($findUser != null){
 		   $this->data['User']['username'] = $findUser['User']['username'];
 		   $this->data['User']['email'] = $findUser['User']['email'];
 		   if($this->Auth->login($this->data['User'])){
-			$this->redirect('/users/dashboard');
+		     if($modedURL == ""|| $modedURL =="/"){
+                     		  $this->redirect('/users/dashboard');
+            	      }
+            	      else{
+			$this->redirect($modedURL);
+             		}
 		   }
 
 		}
@@ -58,7 +62,8 @@ class UsersController extends AppController {
       }
 
       function logout() {
-        $this->redirect($this->Auth->logout());
+      	        $this->Auth->logout();
+		$this->redirect("/");
       }
 
       function register(){

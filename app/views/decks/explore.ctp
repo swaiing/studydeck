@@ -49,7 +49,7 @@ $itemCount = ($page - 1)*20;
 		<td><?php echo $deck['Deck']['description']; ?> </td>
 		<td><?php 
 			  foreach ($deck['DeckTag'] as $tag){
-			  //print_r($tagArray);
+			  
 			  if(isset($tagArray[$tag['tag_id']])){
 			  	   echo $tagArray[$tag['tag_id']]." ";
 			  }
