@@ -348,6 +348,22 @@ DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
 
 
+-- -----------------------------------------------------
+-- Table `flashcards`.`temp_users`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `flashcards`.`temp_users` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `email` VARCHAR(127) NOT NULL ,
+  `password` VARCHAR(45) NOT NULL ,
+  `created` DATETIME NOT NULL ,
+  `username` VARCHAR(45) NOT NULL ,
+  `modified` DATETIME NOT NULL ,
+  `list_of_fears` VARCHAR(255) NULL ,
+  `confirmation_code` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
