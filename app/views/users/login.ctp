@@ -9,9 +9,12 @@
     $FIELD_SIZE = 25;
 
     $session->flash('auth');
-     $modedURL = str_replace('/','_',$prevURL);
-     echo "Moded URL: ".$modedURL;
-   //echo $form->create('User',array('action'=> 'login'));
+    $modedURL = str_replace('/','_',$prevURL);
+   
+    if(strpos($modedURL,'users_confirmation')){
+	$modedURL ='';
+    } 
+    echo "Moded URL: ".$modedURL;   
     echo $form->create('User',array('action'=> 'customLogin/'.$modedURL));
     echo "<fieldset class=\"small\">\n";
     echo "<h1>Login</h1>\n";

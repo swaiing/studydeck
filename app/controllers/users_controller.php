@@ -2,14 +2,14 @@
 class UsersController extends AppController {
       var $name = 'Users';
       var $scaffold;
-      var $components =array('Auth');
-      var $uses = array('User','MyDeck','Deck','Rating');
+      var $components =array('Auth','SwiftMailer');
+      var $uses = array('User','MyDeck','Deck','Rating','TempUser');
 
       function beforeFilter(){
       
         // Call AppConroller::beforeFilter()
         parent::beforeFilter();
-	$this->Auth->allow('register','view','customLogin');
+	$this->Auth->allow('register','view','customLogin','confirmation');
         	       
         $this->set('prevURL', $this->Session->read('Auth.redirect'));
 	
@@ -65,16 +65,103 @@ class UsersController extends AppController {
       	        $this->Auth->logout();
 		$this->redirect("/");
       }
-
       function register(){
+      	       //declares validationError variable for view
+      	       $this->set('validationError','');
+      	       
       	       if (!empty($this->data)) {
-	                   if ($this->data['User']['password'] == $this->Auth->password($this->data['User']['password_confirm'])) {
-                	   $this->User->save($this->data);
-               		  $this->redirect(array('action' => 'login'));
-            		  }
+	       	  	   //checks to see if the password and password confirmation match		
+	                   if ($this->data['TempUser']['password'] == $this->data['TempUser']['password_confirm']) {  
+			      
+			      //checks to see if username is in use			      
+			      $existingUser = $this->User->find('first', array('conditions' => array('User.username' => $this->data['TempUser']['username'])));
+			      if($existingUser != null){
+			      	$this->set('validationError','Username is already in use!');
+				       
+			      }
+			      else{
+				//checks to see if email is in use
+			      	$existingUser = $this->User->find('first', array('conditions' => array('User.email' => $this->data['TempUser']['email'])));
+			      	if($existingUser != null){
+			      		$this->set('validationError','Email address is already in use!');
+					       
+			        }
+				else{
+					//generates a confirmation code
+			      		$confirmationCode =  substr(md5(rand()),0,44);
+					//encrypts the password
+			      		$this->data['TempUser']['password'] = $this->Auth->password($this->data['TempUser']['password']);
+			      		$this->data['TempUser']['confirmation_code'] = $confirmationCode;
+					//creates the user in the temp user table
+                	      		$this->TempUser->save($this->data);
+
+			      		//email confirmationCode
+			       		$this->SwiftMailer->smtpType = 'tls';
+               		       		$this->SwiftMailer->smtpHost = 'smtp.gmail.com';
+               		       		$this->SwiftMailer->smtpPort = 465;
+               		       		$this->SwiftMailer->smtpUsername = 'noreply@studydeck.com';
+               		       		$this->SwiftMailer->smtpPassword = 'GoGate7';
+ 				        $this->SwiftMailer->sendAs = 'html';
+               		       		$this->SwiftMailer->from = 'noreply@studydeck.com';
+               		       		//$this->SwiftMailer->fromName = 'noreply';
+               		       		$this->SwiftMailer->to = $this->data['TempUser']['email'];
+               		       		//set variables to template as usual
+               		       		$this->set('confirmationLink', 'http://192.168.1.101/studydeck/users/confirmation/'.$confirmationCode);
+        
+					try {
+					    if(!$this->SwiftMailer->send('confirmation', 'StudyDeck Confirmation')) {
+                    		     		$this->log("Error sending email");
+            	    				}
+        				}
+        				catch(Exception $e) {
+              						$this->log("Failed to send email: ".$e->getMessage());
+	      		
+					}
+        	
+
+					//directs them to a page where alerting them that the email has been sent
+					$this->redirect(array('action' => '/confirmation/registered'));
+				 }
+               		       }
+            		   }
+			   else{
+				$this->set('validationError','Passwords do not match!');
+			   }
 
       		}
 
+	}
+
+
+	function confirmation($confirmationCode = null){
+		 $this->set('confirmationError','');
+		 $this->set('justRegistered','');
+		 if($confirmationCode == null){
+		 	$this->set('confirmationError','No Confirmation Code Provided');	      
+		 }
+		 else if($confirmationCode == 'registered'){
+		      	$this->set('justRegistered','You will receive an email with a link. \n Please follow the link to confirm  your registration.');	   
+		 }
+		 else{
+			$findUser = $this->TempUser->find('first', array('conditions' => array('TempUser.confirmation_code' => $confirmationCode)));
+			if($findUser == null){
+				     $this->set('confirmationError','No user exists with this code');	     
+			}
+			else{
+				$this->data['User']['username'] = $findUser['TempUser']['username'];
+		   		$this->data['User']['email'] = $findUser['TempUser']['email'];
+				$this->data['User']['password'] = $findUser['TempUser']['password'];
+				$this->User->save($this->data);
+				$this->set('foundUser',$findUser);
+				$this->TempUser->delete($findUser['TempUser']['id'], false);     
+			}				
+				
+
+			
+
+		 }
+	
+	 
 	}
 	function view(){
 		 $this->set('userView', $this->User->find('first', array('conditions' => array('username' => $this->Auth->user('username')))));
@@ -192,5 +279,4 @@ class UsersController extends AppController {
 	}
 
 }
-
 ?>
