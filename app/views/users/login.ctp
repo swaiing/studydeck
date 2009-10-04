@@ -14,7 +14,7 @@
     if(strpos($modedURL,'users_confirmation')){
 	$modedURL ='';
     } 
-    echo "Moded URL: ".$modedURL;   
+   // echo "Moded URL: ".$modedURL;   
     echo $form->create('User',array('action'=> 'customLogin/'.$modedURL));
     echo "<fieldset class=\"small\">\n";
     echo "<h1>Login</h1>\n";
