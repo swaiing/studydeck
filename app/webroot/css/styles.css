@@ -197,6 +197,11 @@ div#authMessage {
     text-align: center;
 }
 
+table {
+    border: 1px solid #CECECE;
+    border-spacing: 5px;
+}
+
 /*****  footer *****/
 
 div#footer {

@@ -82,26 +82,24 @@ var VERACITY_MAP = new Array("incorrect","correct");
 
         // Set properties of new card
         var newCard = new Card(i,deckData[i].Card.question,deckData[i].Card.answer);
-        newCard.setRating(deckData[i].Rating[0].rating);
-        newCard.totalCorrect = deckData[i].Result[0].total_correct;
-        newCard.totalIncorrect = deckData[i].Result[0].total_incorrect;
+
+        // Check for Rating object
+        if(deckData[i].Rating.length > 0) {
+            newCard.setRating(deckData[i].Rating[0].rating);
+        }
+
+        // Check for Result object
+        if(deckData[i].Result.length > 0) {
+            newCard.totalCorrect = deckData[i].Result[0].total_correct;
+            newCard.totalIncorrect = deckData[i].Result[0].total_incorrect;
+        }
 
         // Add card to deck
         this.unviewedCards.push(newCard);
     }
 
-
-    // dummy data
-/*
-    this.unviewedCards.push(new Card(1,"Lun Masking","Restricts volume access to specific hosts and/or host clusters."));
-    this.unviewedCards.push(new Card(2,"Zoning","A switch function that allows the nodes within the fabric to be logically segmented into groups that can communicate with each other."));
-    this.unviewedCards.push(new Card(3,"Core-Edge Fabric","In this topology several switches are connected in a 'hub and spoke' configuration."));
-    this.unviewedCards.push(new Card(4,"Mesh Fabric","Can be partial or full mesh.  All switches are connected to one another in full."));
-    this.unviewedCards.push(new Card(5,"Inter-Switch Links","Switches are connected to each other in a fabric using ISLs")); 
-
+    // Set the number of total cards
     this.numTotalCards = this.unviewedCards.length;
-*/
-
 
   } // end function Deck(name,userId, deckData)
 
