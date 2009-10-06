@@ -1,7 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
 
-my $wordList = "./sat_word_list.txt";
+#my $wordList = "./sat_word_list.txt";
+my $wordList = "./state_capitals.list";
 open(FILE,$wordList);
 while(<FILE>) {
   chomp();
