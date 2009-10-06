@@ -25,7 +25,7 @@ MYSQL_DB=studydeckdev
 MYSQL_EXEC="mysql -u $MYSQL_USER -p${MYSQL_PASSWORD}" 
 
 TMP_DATA_SQL=/tmp/populate_data.sql
-DATA_1_SQL=create_some_data.sql
+DATA_1_SQL=create_data.sql
 
 
 drop_recreate() {
