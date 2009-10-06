@@ -2,78 +2,73 @@
 
 <?php
     echo $javascript->link('jquery-1.2.6.min',false) . "\n";
-    echo $javascript->link('study_deck',false) . "\n";;
-    echo $html->css('view_deck',null,null,false) . "\n";
+    echo $javascript->link('deck_study',false) . "\n";;
+    echo $html->css('deck_study',null,null,false) . "\n";
 ?>
 
 <!-- Pass card data -->
 <script type="text/javascript">
-<?php echo "var deckData = " . $javascript->object($deck); ?>
+<?php
+    echo "var deckData = " . $javascript->object($deck) . ";\n";
+    echo "var deckName  = \"" . $deckInfo['Deck']['deck_name'] . "\";\n";
+    echo "var deckUser = \"stan\";\n";
+?>
 </script>
 
 <div id="middle_wrapper_content">
 
-  <div id="view_deck_wrap">
+<h1 class="title"><?php echo $deckInfo['Deck']['deck_name'] ?></h1>
 
-        <h1 class="title"><?php echo $deckInfo['Deck']['deck_name'] ?></h1>
-
-        <!--<div id="prev_card">Previous</div>-->
-
-        <div id="card_wrap">
-
-          <div id="additional">
-
-                <div id="prev_card"><a href="#" class="prev">Previous</a></div>
-                <div id="center_items">
-
-                <div class="widget_item">
-                  <span>Show first:</span>
-                  <select name="show_first">
-                    <option value="">Term</option>
-                    <option value="">Definition</option>
-                  </select>
-                </div>
-
-                <div class="widget_item">
-                  <span>Rating:</span>
-                  <select name="rating">
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="Hard">Hard</option>
-                  </select>
-                  <!--<div id="rating">
-                    <img src="img/star_on.png"/>
-                    <img src="img/star_on.png"/>
-                    <img src="img/star_on.png"/>
-                    <img src="img/star_on.png"/>
-                  </div>-->
-                </div>
-
-                </div> <!-- end center_items -->
-
-                <div id="next_card"><a href="#" class="next">Next</a></div>
-
-                <div class="clear_div"></div>
-          </div> <!-- end additional -->
-
-          <div class="card">
-                <p class="term"></p>
-                <p class="defn"></p>
-
-                <div id="eval">
-                   <ul>
-                     <li><a href="#" class="correct">correct</a></li>
-                     <li><a href="#" class="incorrect">incorrect</a></li>
-                   </ul>
-                </div>
-          </div>
-
-        </div> <!-- end card_wrap -->
-
-        <!--<div id="next_card">Next</div>-->
-
-        <div class="clear_div">&nbsp;</div>
-  </div> <!-- end view_deck_wrap -->
-
+<div id="left_margin_wrap">
+    <div class="margin_box">
+        <span class="title">Card Quiz History</span>
+        <table class="quiz_history">
+            <tr>
+                <td># Times Correct</td>
+                <td id="card_total_correct"></td>
+            </tr>
+            <tr>
+                <td># Times Incorrect</td>
+                <td id="card_total_incorrect"></td>
+            </tr>
+            <tr>
+                <td>Last Answer</td>
+                <td id="card_last_answer"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="margin_box">
+        <span class="title">Options</span>
+        <label for="show_answer_checkbox">Show Answer?</label>
+        <input type="checkbox" id="show_answer_checkbox" name="show_answer" value="show_answer" />
+    </div>
 </div>
 
+<div id="right_margin_wrap">
+</div>
+
+<div id="card_wrap">
+
+    <div id="row_top">
+        <div id="prev_button" class="left_button">previous</div>
+        <div id="next_button" class="right_button">next</div>
+        <div class="middle_button" id="card_rating">asdf</div>
+    </div> <!-- end row_top -->
+
+    <div id="row_question">
+        <span id="card_question"></span>
+    </div>
+
+    <div id="row_answer">
+        <span id="card_answer"></span>
+    </div>
+
+    <div id="row_bottom">
+        <div id="incorrect_button" class="left_button">incorrect</div>
+        <div id="correct_button" class="right_button">correct</div>
+        <div class="middle_button" id="deck_progress">5/7</div>
+    </div> <!-- end row_bottom -->
+
+</div> <!-- end #card_wrap -->
+
+</div> <!-- end #middle_wrapper_content -->

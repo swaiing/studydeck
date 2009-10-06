@@ -1,9 +1,6 @@
 <?php
 class User extends AppModel{
       var $name = 'User';
-      var $hasMany = array('Deck','MyDeck','Rating');
-
-
+      var $hasMany = array('Deck','MyDeck','Rating','Result');
 }
-
 ?>

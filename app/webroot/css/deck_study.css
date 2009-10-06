@@ -1,0 +1,115 @@
+/****** deck_study.css ******/
+
+h1.title {
+    font-size: 20px;
+    text-align: center;
+}
+
+/****** card viewer styles ******/
+
+div#card_wrap {
+    min-height: 300px;
+    border: 1px solid #000000;
+    padding: 0;
+    margin: 10px 25% 10px 25%;
+    cursor: pointer;
+}
+
+div#row_top {
+    border-bottom: 1px solid #000000;
+}
+
+div.middle_button {
+    text-align: center;
+    height: 10%;
+    margin: 0 25% 0 25%;
+    padding: 10px;
+    clear: none;
+}
+
+div.left_button {
+    text-align: center;
+    width: 20%;
+    background-color: red;
+    border-right: 1px solid #000000;
+    float: left;
+    clear: left;
+    margin: 0;
+    padding: 10px;
+}
+
+div.right_button {
+    text-align: center;
+    width: 20%;
+    background-color: red;
+    border-left: 1px solid #000000;
+    float: right;
+    clear: right;
+    margin: 0;
+    padding: 10px;
+}
+
+div#prev_button, div#next_button { background-color: #B8CEE0 }
+div#correct_button { background-color: green }
+div#incorrect_button { background-color: red }
+
+div#row_question {
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid #000000;
+    margin: 10px;
+    padding: 10px;
+}
+
+div#row_answer {
+    font-size: 12px;
+    min-height: 150px;
+    border: 1px solid #000000;
+    margin: 10px;
+    padding: 10px;
+}
+
+div#row_bottom {
+    border-top: 1px solid #000000;
+}
+
+/****** generic margin box styles ******/
+
+div#left_margin_wrap {
+    position: absolute;
+    right: 77%;
+    width: 18%;
+    min-height: 100px; 
+}
+
+div#right_margin_wrap {
+    position: absolute;
+    left: 77%;
+    width: 18%;
+    min-height: 100px; 
+}
+
+div.margin_box {
+    border: 1px solid #000000;
+    margin: 0 0 10px 0;
+    padding: 10px;
+}
+
+div.margin_box span.title {
+    font-weight: bold;
+    display: block;
+}
+
+/****** margin box content-specific styles ******/
+
+div.margin_box table.quiz_history {
+
+}
+
+
+div.margin_box label {
+}
+
+div.margin_box input.show_answer_checkbox {
+    
+}

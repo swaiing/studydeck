@@ -224,27 +224,7 @@ div#footer_nav {
 }
 
 /** for debug table **/
-table tr td {
-        background: #fff;
-        border-right: 1px solid #ccc;
-        padding: 4px;
-        text-align: center;
-        vertical-align: top;
-}
-table tr.altrow td {
-        background: #f4f4f4;
-}
-td.actions {
-        text-align: center;
-        white-space: nowrap;
-}
-td.actions a {
-        margin: 0px 6px;
-}
-.cake-sql-log table {
-        background: #f4f4f4;
-}
-.cake-sql-log td {
-        padding: 4px 8px;
-        text-align: left;
+table.cake-sql-log { 
+    margin-top: 10px;
+    border-top: 1px dashed black;
 }

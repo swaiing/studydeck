@@ -6,9 +6,9 @@ class DecksController extends AppController {
 
     var $name = 'Decks';
     var $scaffold;
-    var $uses = array('Deck','Card','Tag','MyDeck','DeckTag');
+    var $uses = array('Deck','Card','Tag','MyDeck','DeckTag','Rating','Result');
     var $helpers = array('Html','Javascript');
-    var $components = array('Auth');
+    var $components = array('Auth','RequestHandler');
 
 
     function beforeFilter(){
@@ -204,16 +204,36 @@ class DecksController extends AppController {
 
     function study($id = null)
     {
+        // Set deck recursion to 0, so that deck associations aren't traversed
+        $this->Deck->recursive = 0;    
+        $this->Card->recursive = 1;
+
         // Set deck meta info
         $this->Deck->id = $id;
         $this->set('deckInfo', $this->Deck->read());
 
         // Retrieve cards in deck by deck_id
-        $findParams = array(
-                            'conditions' => array('Card.deck_id' => $this->Deck->id));
-                            //'conditions' => array('Card.deck_id' => $this->Deck->id),
-                            //'fields' => array('Card.question', 'Card.answer'));
-        $this->set('deck', $this->Card->find('all',$findParams));
+        $findCardsParams = array(
+                            'conditions' => array('Card.deck_id' => $this->Deck->id),
+                            'fields' => array('Card.question','Card.answer'));
+        $this->set('deck', $this->Card->find('all',$findCardsParams));
+
+    }
+
+    function updateDeckData()
+    {
+        // Set layout to blank
+        $this->layout = "";
+
+        // Use RequestHandler
+        $isAjax = $this->RequestHandler->isAjax();
+
+        // grab data from url params
+        $url = $this->params['url']['url'];;
+        $id = $this->params['url']['id'];;
+        $rating = $this->params['url']['rating'];;
+        $responseStr = "the rating is: " . $rating;
+        $this->set('response', $responseStr);
     }
 
       function delete($deckId = null){
