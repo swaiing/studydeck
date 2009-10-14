@@ -107,7 +107,7 @@ class UsersController extends AppController {
                		       		$this->SwiftMailer->smtpPassword = 'GoGate7';
  				        $this->SwiftMailer->sendAs = 'html';
                		       		$this->SwiftMailer->from = 'noreply@studydeck.com';
-               		       		//$this->SwiftMailer->fromName = 'noreply';
+               		       		//$this->SwiftMailer->fromName = 'Welcome To StudyDeck!';
                		       		$this->SwiftMailer->to = $this->data['TempUser']['email'];
                		       		//set variables to template as usual
                		       		$this->set('confirmationLink', 'http://192.168.1.101/studydeck/users/confirmation/'.$confirmationCode);
@@ -142,9 +142,11 @@ class UsersController extends AppController {
 	function confirmation($confirmationCode = null){
 		 $this->set('confirmationError','');
 		 $this->set('justRegistered','');
+		 //check to see if user came to page without a code
 		 if($confirmationCode == null){
 		 	$this->set('confirmationError','No Confirmation Code Provided');	      
 		 }
+		 //if user has just registered they will be taken here
 		 else if($confirmationCode == 'registered'){
 		      	$this->set('justRegistered','You will receive an email with a link. \n Please follow the link to confirm  your registration.');	   
 		 }
@@ -164,7 +166,9 @@ class UsersController extends AppController {
 				$this->data['User']['password'] = $findUser['TempUser']['password'];
 				$this->User->save($this->data);
 				$this->set('foundUser',$findUser);
-				$this->TempUser->delete($findUser['TempUser']['id'], false);     
+				$this->TempUser->delete($findUser['TempUser']['id'], false);
+				//this is to fix a bug where the confirmation error was being magically sent
+				$this->set('confirmationError','');     
 			}				
 				
 
@@ -235,6 +239,52 @@ class UsersController extends AppController {
 			}
 		     
 		  }
+
+	}
+
+	function changePassword(){
+		  //declares validationError variable for view
+      	       	  $this->set('validationError','');
+		  $validationError='';
+		  //sets the success variable to false to prompt user for email in view
+		  $this->set('success',false);
+		 if (!empty($this->data)) {
+		    //checks to make sure fields are not left empty
+		    if($this->data['User']['password'] != null && $this->data['User']['new_password'] != null && $this->data['User']['new_password_confirmation']!= null){
+		    		$currentPassword = $this->Auth->password($this->data['User']['password']);
+		    		$newPassword = $this->Auth->password($this->data['User']['new_password']);
+		    		//variety of checks to validate the data
+		   		if(strlen($this->data['User']['new_password']) < 6){
+		    		 	$validationError = 'Passwords must be at least 6 characters long';		   
+		    		}
+		    		else if($this->data['User']['new_password'] != $this->data['User']['new_password_confirmation']){
+		    		     	$validationError = 'New Passwords Do Not Match!';
+		    		}
+				$this->data = $this->User->read(null,$this->Auth->user('id'));
+		    		if($this->data['User']['password'] != $currentPassword){
+		    	 	     	$validationError ='Current Password Incorrect!';
+
+		    		}
+		    }
+		    else{
+			$validationError = 'Form Not Complete!';
+		    
+		    }
+		    //if all the validation checks out this changes the password
+		    if($validationError == ''){			
+			$this->data['User']['password'] = $newPassword;
+		    	$this->User->save($this->data);
+			$this->set('success',true);
+		    }
+		    else{
+			$this->data['User']['password']="";
+			$this->set('validationError',$validationError);
+		    		
+		    }
+		    
+					
+		    
+		 }
 
 	}
 	function view(){

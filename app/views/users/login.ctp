@@ -21,6 +21,7 @@
     echo "<ol>\n";
     echo "<li>" . $form->input('username',array('label'=>'Username:','size'=>$FIELD_SIZE)) . "</li>\n";
     echo "<li>" . $form->input('password',array('label'=>'Password:','size'=>$FIELD_SIZE)) . "</li>\n";
+    echo  $html->link("forgot your password?","/users/forgotPassword");
     echo $form->end('Login');
     echo "</fieldset>\n";
 ?>
