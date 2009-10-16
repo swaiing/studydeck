@@ -7,7 +7,7 @@
 <?php
     // Field attributes
     $FIELD_SIZE = 25;
-
+    $session->flash();
     $session->flash('auth');
     $modedURL = str_replace('/','_',$prevURL);
    

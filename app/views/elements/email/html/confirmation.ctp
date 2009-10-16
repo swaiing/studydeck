@@ -1,4 +1,6 @@
-<div>Welcome to StudyDeck</div>
-<div>Please follow this link to confirm your account creation</div>
+<?php
+echo "<div>Welcome to StudyDeck, ".$userName."</div>";
+echo "<div>Please follow this link to confirm your account creation</div>";
+echo "<div>".$confirmationLink."</div>";
 
-<div><?php echo $confirmationLink ?></div>
+?>

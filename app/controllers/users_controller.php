@@ -51,7 +51,7 @@ class UsersController extends AppController {
 
 		}
 			
-			$this->Session->setFlash("Username or Passowrd is incorrect");		
+			$this->Session->setFlash("Username and/or Passowrd incorrect");		
 			$this->redirect('/users/login');
 		
 			
@@ -111,7 +111,7 @@ class UsersController extends AppController {
                		       		$this->SwiftMailer->to = $this->data['TempUser']['email'];
                		       		//set variables to template as usual
                		       		$this->set('confirmationLink', 'http://192.168.1.101/studydeck/users/confirmation/'.$confirmationCode);
-        
+        				$this->set('userName',$this->data['TempUser']['username']);
 					try {
 					    if(!$this->SwiftMailer->send('confirmation', 'StudyDeck Confirmation')) {
                     		     	    $this->log("Error sending email");
