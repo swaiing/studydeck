@@ -1,4 +1,9 @@
 <!-- /app/views/users/dashboard.ctp -->
+<?php
+ // Javascript includes
+    echo $javascript->link('jquery-1.2.6.min',false);
+    echo $javascript->link('user_dashboard',false);
+?>
 
 <div id="middle_wrapper_content">
 <div id="middle_bar">
@@ -30,9 +35,12 @@
 		<th>Last Studied</th>
 		<th>Difficulty</th>
 	</tr>
-<?php foreach ($publicDecks as $pDeck): ?>
-      <tr>
-		<td><?php echo $html->link("x","/MyDecks/delete/".$pDeck['Deck']['id']);?> </td>
+<?php foreach ($publicDecks as $pDeck):
+      echo "<tr id=\"publicDeckRow".$pDeck['Deck']['id']."\">";
+
+?>
+      
+		<td><?php echo $html->link("x","#",array('onclick' => "deletePublicDeck(".$pDeck['Deck']['id'].")"));?> </td>
 		<td><a href="/studydeck/decks/study/<?php echo $pDeck['Deck']['id']; ?> "> <?php echo $pDeck['Deck']['deck_name']; ?></a> </td> 
 		<td> <?php echo $pDeck['Deck']['description']; ?> </td>
 		<td> <?php echo $pDeck['0']; ?> </td><td> <?php echo $pDeck['1']; ?> </td>
@@ -52,9 +60,12 @@
 		<th>Last Studied</th>
 		<th>Difficulty</th>
 	</tr>
-<?php foreach ($userCreatedDecks as $ucDeck): ?>
-        <tr>
-		<td><?php echo $html->link("x","/decks/fail/".$ucDeck['Deck']['id']);?> </td>
+<?php foreach ($userCreatedDecks as $ucDeck):
+     echo "<tr id= \"userDeckRow".$ucDeck['Deck']['id']."\">";
+
+?>
+
+		<td><?php echo $html->link("x","#",array('onclick' => "deleteUserDeck(".$ucDeck['Deck']['id'].")"));?> </td>
 		<td><a href="/studydeck/decks/study/<?php echo $ucDeck['Deck']['id']; ?> "> <?php echo $ucDeck['Deck']['deck_name']; ?></a> <a href="/studydeck/decks/edit/<?php echo $ucDeck['Deck']['id']; ?>">[edit]</a> </td> 
 		<td> <?php echo $ucDeck['Deck']['description']; ?> </td>
 		<td> <?php echo $ucDeck['0']; ?> </td><td> <?php echo $ucDeck['1']; ?> </td>
