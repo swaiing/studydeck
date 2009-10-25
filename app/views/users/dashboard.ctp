@@ -7,7 +7,7 @@
 
 <div id="middle_wrapper_content">
 <div id="middle_bar">
-
+<?php $session->flash(); ?>
 <h3> User Dashboard </h3>
 
 <h1>Welcome <?php echo $activeUser; ?> </h1>

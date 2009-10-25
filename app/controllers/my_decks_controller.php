@@ -6,8 +6,8 @@ class MyDecksController extends AppController{
       var $components = array('Auth','RequestHandler');
 
       function delete(){
-
-      	        $this->autoRender=false;
+			
+      	       $this->autoRender=false;
       	       if($this->RequestHandler->isAjax()){
       	       		$myDeckToRemove = $this->MyDeck->find('first', array('conditions' => array('AND'=> array('MyDeck.deck_id' => $this->params['form']['id']),array('MyDeck.user_id' => $this->Auth->user('id')))));
 

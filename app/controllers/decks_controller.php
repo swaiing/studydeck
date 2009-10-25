@@ -309,13 +309,20 @@ class DecksController extends AppController {
         $this->set('response', $tempStr);
     }
 
-    function delete($deckId = null)
-    {
-        if($deckId != null){
-            $this->Deck->delete($deckId, false);
-         }
-         $this->autoRender=false;
-         $this->redirect('/users/dashboard',null,true);
+    
+    function delete(){
+			
+     	$this->autoRender=false;
+      	if($this->RequestHandler->isAjax()){
+      	       $deckToRemove = $this->Deck->find('first', array('conditions' =>  array('Deck.id' => $this->params['form']['id'])));
+	
+		if($deckToRemove['Deck']['user_id'] == $this->Auth->user('id')){
+			$this->Session->setFlash("go this ".$deckToRemove['Deck']['id']);	
+			$this->Deck->delete($this->params['form']['id'],true);
+		}
+	}
+	      
+	      
     }
 }
 
