@@ -6,6 +6,7 @@
 // Constants
 var RATING_MAP = new Array("no rating","easy","medium","hard");
 var VERACITY_MAP = new Array("incorrect","correct");
+var NULL_ID = "null";
 
   /***
    *
@@ -20,15 +21,17 @@ var VERACITY_MAP = new Array("incorrect","correct");
     this.answer = answer;
 
     // Results table fields
+    this.resultId = NULL_ID;
     this.totalCorrect = 0;
     this.totalIncorrect = 0;
     this.lastAnswer = 0;
 
     // Rating table fields
+    this.ratingId = NULL_ID;
     this.rating = 0;
 
     // JS event-handler fields
-    this.correct = 0;
+    this.correct = NULL_ID;
   }
 
   /***
@@ -36,14 +39,6 @@ var VERACITY_MAP = new Array("incorrect","correct");
    * Card methods
    *
    */
-
-  Card.prototype.setQuestion = function(question) {
-    this.question = question;
-  }
-
-  Card.prototype.setAnswer = function() {
-    this.correct = answer;
-  }
 
   Card.prototype.setCorrect = function() {
     this.correct = 1;
@@ -53,8 +48,16 @@ var VERACITY_MAP = new Array("incorrect","correct");
     this.correct = 0;
   }
 
+  Card.prototype.setResultsId = function(id) {
+    this.resultsId = id;
+  }
+
   Card.prototype.setRating = function(rating) {
     this.rating = rating;
+  }
+
+  Card.prototype.setRatingId = function(id) {
+    this.ratingId = id;
   }
 
   Card.prototype.setLastAnswer = function(lastAnswer) {
@@ -81,15 +84,18 @@ var VERACITY_MAP = new Array("incorrect","correct");
     for (var i=0; i<deckData.length; i++) {
 
         // Set properties of new card
-        var newCard = new Card(i,deckData[i].Card.question,deckData[i].Card.answer);
+        var newCard = new Card(deckData[i].Card.id,deckData[i].Card.question,deckData[i].Card.answer);
 
         // Check for Rating object
         if(deckData[i].Rating.length > 0) {
+            newCard.setRatingId(deckData[i].Rating[0].id);
             newCard.setRating(deckData[i].Rating[0].rating);
         }
 
         // Check for Result object
         if(deckData[i].Result.length > 0) {
+            newCard.setRatingId(deckData[i].Result[0].id);
+            newCard.setLastAnswer(deckData[i].Result[0].last_guess);
             newCard.totalCorrect = deckData[i].Result[0].total_correct;
             newCard.totalIncorrect = deckData[i].Result[0].total_incorrect;
         }
@@ -97,6 +103,9 @@ var VERACITY_MAP = new Array("incorrect","correct");
         // Add card to deck
         this.unviewedCards.push(newCard);
     }
+
+    // Reverse order
+    this.unviewedCards.reverse();
 
     // Set the number of total cards
     this.numTotalCards = this.unviewedCards.length;
@@ -112,9 +121,41 @@ var VERACITY_MAP = new Array("incorrect","correct");
     return this.curCard;
   }
 
+  Deck.prototype.sendUpdate = function(card) {
+
+    if(!card) {
+        alert("sendUpdate: card is null");
+        return;
+    }
+
+    // Build url data string
+    var dataStr = "cid=" + card.id;
+    dataStr += "&rid=" + card.ratingId;
+    dataStr += "&sid=" + card.resultId;
+    dataStr += "&rating=" + card.rating;
+    dataStr += "&correct=" + card.correct;
+    alert(dataStr);
+
+    // Debug window
+    var newWindow = window.open('','mywin','height=500,width=600');
+
+    $.ajax({
+        type: "GET",
+        url: "/studydeck/decks/update",
+        data: dataStr,
+        success: function(msg) {
+            newWindow.document.write(msg);
+            //alert("SUCCESS: " + msg);
+        }
+    });
+  }
+
   Deck.prototype.getNextCard = function() {
     if(this.unviewedCards.length > 0) {
         if(this.curCard) {
+            // Update DB with card info
+            this.sendUpdate(this.curCard);
+            // Push card on viewed cards stack
             this.viewedCards.push(this.curCard);
         }
         this.curCard = this.unviewedCards.pop();
@@ -125,6 +166,9 @@ var VERACITY_MAP = new Array("incorrect","correct");
   Deck.prototype.getPreviousCard = function() {
     if(this.viewedCards.length > 0) {
         if(this.curCard) {
+            // Update DB with card info
+            this.sendUpdate(this.curCard);
+            // Push card on viewed cards stack
             this.unviewedCards.push(this.curCard);
         }
         this.curCard = this.viewedCards.pop();

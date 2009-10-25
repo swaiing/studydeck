@@ -4,10 +4,10 @@ class Card extends AppModel {
     var $belongsTo = array('Deck');
     var $hasMany = array(
         'Rating' => array(
-            'fields' => array('rating')
+            'fields' => array('id','rating')
         ),
         'Result' => array(
-            'fields' => array('last_guess','total_correct','total_incorrect')
+            'fields' => array('id','last_guess','total_correct','total_incorrect')
         )
     );
 }

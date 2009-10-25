@@ -13,5 +13,7 @@ class SD_Global
     // Constants for the last guessed answer for a card
     public static $INCORRECT_RESULT = 0;
     public static $CORRECT_RESULT = 1;
+
+    public static $NULL_STR = "null";
 }
 ?>

@@ -220,29 +220,103 @@ class DecksController extends AppController {
 
     }
 
-    function updateDeckData()
+    /*
+     * Called using AJAX to update card/deck data
+     *
+     */
+    function update()
     {
         // Set layout to blank
         $this->layout = "";
 
-        // Use RequestHandler
-        $isAjax = $this->RequestHandler->isAjax();
+        // Set user ID
+        $userId = $this->Auth->user('id');
 
-        // grab data from url params
-        $url = $this->params['url']['url'];;
-        $id = $this->params['url']['id'];;
-        $rating = $this->params['url']['rating'];;
-        $responseStr = "the rating is: " . $rating;
-        $this->set('response', $responseStr);
+        // Grab data from url, params and sanitize input
+        App::import('Sanitize');
+        $cardId = Sanitize::paranoid($this->params['url']['cid']);
+        $ratingId = Sanitize::paranoid($this->params['url']['rid']);
+        $resultId = Sanitize::paranoid($this->params['url']['sid']);
+        $rating = Sanitize::paranoid($this->params['url']['rating']);
+        $correct = Sanitize::paranoid($this->params['url']['correct']);
+
+        // DEBUG
+        $url = $this->params['url']['url'];
+        $tempStr = "url: " . $url . "<br/>cardId: " . $cardId . "<br/>ratingId: " . $ratingId . "<br/>resultId: " . $resultId . "<br/> rating: " . $rating . "<br/> correct: " . $correct . "\n";
+
+        // Set primary key of card model
+        $this->Card->id = $cardId;
+
+        /**
+         * Update rating model
+         * Create new/Update rating record
+         *
+         */
+        // Validate $rating is easy (1), medium (2), hard(3)
+        if(preg_match("/[1-3]/",$rating)) {
+
+            // Create new record if ratingId is null
+            if(strcmp($ratingId,SD_Global::$NULL_STR) == 0) {
+                $this->Card->Rating->create(array('card_id'=>$cardId,'user_id'=>$userId));
+            }
+            else {
+                $this->Card->Rating->id = $ratingId;
+            }
+            $this->Card->Rating->set('rating',$rating);
+            $this->Card->Rating->save();
+        }
+
+        /**
+         * Update result model
+         * Create new/Update result record
+         *
+         */
+        // Validate $correct is 1 or 0
+        if(preg_match("/[0|1]/",$correct)) {
+
+            // Create new record if resultId is null
+            if(strcmp($resultId,SD_Global::$NULL_STR) == 0) {
+                $this->Card->Result->create(array('card_id'=>$cardId,'user_id'=>$userId));
+
+                // Set counter
+                if($correct) {
+                    $this->Card->Result->set('total_correct',1);
+                }
+                else {
+                    $this->Card->Result->set('total_incorrect',1);
+                }
+
+            }
+            else {
+                $this->Card->Result->id = $resultId;
+
+                // Retrieve totals to update
+                if($correct) {
+                    $totalCorrect = $this->Card->Result->total_correct + 1;
+                    $this->Card->Result->set('total_correct',$totalCorrect);
+                }
+                else {
+                    $totalIncorrect = $this->Card->Result->total_incorrect + 1;
+                    $this->Card->Result->set('total_incorrect',$totalIncorrect);
+                }
+
+            }
+            $this->Card->Result->set('last_guess',$correct);
+            $this->Card->Result->save();
+        }
+    
+        // Send a response back
+        $this->set('response', $tempStr);
     }
 
-      function delete($deckId = null){
+    function delete($deckId = null)
+    {
         if($deckId != null){
             $this->Deck->delete($deckId, false);
          }
          $this->autoRender=false;
          $this->redirect('/users/dashboard',null,true);
-      }
+    }
 }
 
 ?>

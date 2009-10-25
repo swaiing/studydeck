@@ -30,28 +30,34 @@ div.middle_button {
 div.left_button {
     text-align: center;
     width: 20%;
-    background-color: red;
     border-right: 1px solid #000000;
     float: left;
     clear: left;
     margin: 0;
-    padding: 10px;
+    padding: 0;
 }
 
 div.right_button {
     text-align: center;
     width: 20%;
-    background-color: red;
     border-left: 1px solid #000000;
     float: right;
     clear: right;
     margin: 0;
-    padding: 10px;
+    padding: 0;
 }
 
-div#prev_button, div#next_button { background-color: #B8CEE0 }
-div#correct_button { background-color: green }
-div#incorrect_button { background-color: red }
+div#prev_button, div#next_button {
+    background-color: #B8CEE0;
+}
+div#correct_button {
+    background-color: green;
+    padding: 10px;
+}
+div#incorrect_button {
+    background-color: red;
+    padding: 10px;
+}
 
 div#row_question {
     font-size: 16px;

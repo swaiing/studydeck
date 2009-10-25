@@ -50,9 +50,13 @@
 <div id="card_wrap">
 
     <div id="row_top">
-        <div id="prev_button" class="left_button">previous</div>
-        <div id="next_button" class="right_button">next</div>
-        <div class="middle_button" id="card_rating">asdf</div>
+        <div id="prev_button" class="left_button">
+            <?php echo $html->image('arrow_left.png',array('alt'=>'Previous')); ?>
+        </div>
+        <div id="next_button" class="right_button">
+            <?php echo $html->image('arrow_right.png',array('alt'=>'Next')); ?>
+        </div>
+        <div class="middle_button" id="card_rating"></div>
     </div> <!-- end row_top -->
 
     <div id="row_question">
