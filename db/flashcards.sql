@@ -63,7 +63,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`deck_comments` (
   CONSTRAINT `deck_id_dc`
     FOREIGN KEY (`deck_id` )
     REFERENCES `flashcards`.`decks` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -89,7 +89,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`my_decks` (
   CONSTRAINT `deck_id_md`
     FOREIGN KEY (`deck_id` )
     REFERENCES `flashcards`.`decks` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -109,7 +109,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`cards` (
   CONSTRAINT `deck_id_c`
     FOREIGN KEY (`deck_id` )
     REFERENCES `flashcards`.`decks` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -135,7 +135,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`ratings` (
   CONSTRAINT `card_id_r`
     FOREIGN KEY (`card_id` )
     REFERENCES `flashcards`.`cards` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -181,7 +181,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`group_decks` (
   CONSTRAINT `deck_id_gd`
     FOREIGN KEY (`deck_id` )
     REFERENCES `flashcards`.`decks` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `user_id_gd`
     FOREIGN KEY (`user_id` )
@@ -236,7 +236,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`hints` (
   CONSTRAINT `card_id_h`
     FOREIGN KEY (`card_id` )
     REFERENCES `flashcards`.`cards` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -264,7 +264,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`results` (
   CONSTRAINT `card_id_rs`
     FOREIGN KEY (`card_id` )
     REFERENCES `flashcards`.`cards` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -290,7 +290,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`my_answers` (
   CONSTRAINT `card_id_ma`
     FOREIGN KEY (`card_id` )
     REFERENCES `flashcards`.`cards` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -322,7 +322,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`deck_tags` (
   CONSTRAINT `deck_id_dt`
     FOREIGN KEY (`deck_id` )
     REFERENCES `flashcards`.`decks` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `tag_id_dt`
     FOREIGN KEY (`tag_id` )
