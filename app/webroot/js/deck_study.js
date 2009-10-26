@@ -21,7 +21,7 @@ var NULL_ID = "null";
     this.answer = answer;
 
     // Results table fields
-    this.resultId = NULL_ID;
+    this.resultsId = NULL_ID;
     this.totalCorrect = 0;
     this.totalIncorrect = 0;
     this.lastAnswer = 0;
@@ -94,7 +94,7 @@ var NULL_ID = "null";
 
         // Check for Result object
         if(deckData[i].Result.length > 0) {
-            newCard.setRatingId(deckData[i].Result[0].id);
+            newCard.setResultsId(deckData[i].Result[0].id);
             newCard.setLastAnswer(deckData[i].Result[0].last_guess);
             newCard.totalCorrect = deckData[i].Result[0].total_correct;
             newCard.totalIncorrect = deckData[i].Result[0].total_incorrect;
@@ -131,20 +131,20 @@ var NULL_ID = "null";
     // Build url data string
     var dataStr = "cid=" + card.id;
     dataStr += "&rid=" + card.ratingId;
-    dataStr += "&sid=" + card.resultId;
+    dataStr += "&sid=" + card.resultsId;
     dataStr += "&rating=" + card.rating;
     dataStr += "&correct=" + card.correct;
-    alert(dataStr);
+    //alert(dataStr);
 
     // Debug window
-    var newWindow = window.open('','mywin','height=500,width=600');
+    //var newWindow = window.open('','mywin','height=500,width=600,scrollbars=yes');
 
     $.ajax({
         type: "GET",
         url: "/studydeck/decks/update",
         data: dataStr,
         success: function(msg) {
-            newWindow.document.write(msg);
+            //newWindow.document.write(msg);
             //alert("SUCCESS: " + msg);
         }
     });

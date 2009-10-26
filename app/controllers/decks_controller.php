@@ -205,17 +205,20 @@ class DecksController extends AppController {
     function study($id = null)
     {
         // Set deck recursion to 0, so that deck associations aren't traversed
-        $this->Deck->recursive = 0;    
         $this->Card->recursive = 1;
 
         // Set deck meta info
         $this->Deck->id = $id;
         $this->set('deckInfo', $this->Deck->read());
 
+        // Set user id
+        $userId = $this->Auth->user('id');
+
         // Retrieve cards in deck by deck_id
         $findCardsParams = array(
                             'conditions' => array('Card.deck_id' => $this->Deck->id),
-                            'fields' => array('Card.question','Card.answer'));
+                            'fields' => array('Card.question','Card.answer')
+        );
         $this->set('deck', $this->Card->find('all',$findCardsParams));
 
     }
@@ -241,8 +244,8 @@ class DecksController extends AppController {
         $correct = Sanitize::paranoid($this->params['url']['correct']);
 
         // DEBUG
-        $url = $this->params['url']['url'];
-        $tempStr = "url: " . $url . "<br/>cardId: " . $cardId . "<br/>ratingId: " . $ratingId . "<br/>resultId: " . $resultId . "<br/> rating: " . $rating . "<br/> correct: " . $correct . "\n";
+        //$url = $this->params['url']['url'];
+        $tempStr = "cardId: " . $cardId . "<br/>ratingId: " . $ratingId . "<br/>resultId: " . $resultId . "<br/> rating: " . $rating . "<br/> correct: " . $correct . "\n";
 
         // Set primary key of card model
         $this->Card->id = $cardId;
@@ -252,19 +255,47 @@ class DecksController extends AppController {
          * Create new/Update rating record
          *
          */
-        // Validate $rating is easy (1), medium (2), hard(3)
-        if(preg_match("/[1-3]/",$rating)) {
+        // Must be valid rating (0-3)
+        if(preg_match("/[0-3]/",$rating)) {
+            
+            $recordAlreadyExists = 1;
 
-            // Create new record if ratingId is null
+            // There is no passed ratingId, check to see if one was created
+            // during this session.  If not, then create a new rating record.
             if(strcmp($ratingId,SD_Global::$NULL_STR) == 0) {
-                $this->Card->Rating->create(array('card_id'=>$cardId,'user_id'=>$userId));
+
+                // Check if record was created in this session first
+                $ratingParams = array(
+                                    'fields' => array('Rating.id'),
+                                    'conditions' => array('Rating.card_id' => $cardId,'Rating.user_id' => $userId)
+                );
+                $this->Card->Rating->recursive = -1;
+                $ratingRecord = $this->Card->Rating->find('first',$ratingParams);
+
+                // Debug
+                $this->set('debug',$ratingRecord);
+
+                // Set id if record was retrieved
+                if($ratingRecord['Rating']['id']) {
+                    $ratingId = $ratingRecord['Rating']['id'];
+                }
+                else {
+                    // Create new record
+                    $this->Card->Rating->create(array('card_id' => $cardId,'user_id' => $userId));
+                    $recordAlreadyExists = 0;
+                }
             }
-            else {
+
+            // Set and save
+            if($recordAlreadyExists) {
                 $this->Card->Rating->id = $ratingId;
             }
             $this->Card->Rating->set('rating',$rating);
             $this->Card->Rating->save();
         }
+        /**
+         * End Update rating model
+         */
 
         /**
          * Update result model
@@ -274,11 +305,57 @@ class DecksController extends AppController {
         // Validate $correct is 1 or 0
         if(preg_match("/[0|1]/",$correct)) {
 
+            $recordAlreadyExists = 1;
+
             // Create new record if resultId is null
             if(strcmp($resultId,SD_Global::$NULL_STR) == 0) {
-                $this->Card->Result->create(array('card_id'=>$cardId,'user_id'=>$userId));
 
-                // Set counter
+                // Check if record was created in this session first
+                $resultsParams = array(
+                                    'fields' => array('Result.id'),
+                                    'conditions' => array('Result.card_id' => $cardId,'Result.user_id' => $userId)
+                );
+                $this->Card->Result->recursive = -1;
+                $resultRecord = $this->Card->Result->find('first',$resultsParams);
+
+                // Debug
+                $this->set('debug2',$resultRecord);
+                    
+                // Set id if record was retrieved
+                if($resultRecord['Result']['id']) {
+                    $resultId = $resultRecord['Result']['id'];
+                }
+                else {
+                    // Create new record
+                    $this->Card->Result->create(array('card_id'=>$cardId,'user_id'=>$userId));
+                    $recordAlreadyExists = 0;
+                }
+            }
+
+            // Update total correct/incorrect history
+            // Update existing totals
+            if($recordAlreadyExists){
+
+                // Set resultId
+                $this->Card->Result->id = $resultId;
+
+                // Retrieve totals to update
+                if($correct) {
+                    $tmpTot = $this->Card->Result->read('total_correct');
+                    $totalCorrect = $tmpTot['Result']['total_correct'] + 1;
+                    $this->Card->Result->set('total_correct',$totalCorrect);
+                }
+                else {
+                    $tmpTot = $this->Card->Result->read('total_incorrect');
+                    $totalIncorrect = $tmpTot['Result']['total_incorrect'] + 1;
+                    $this->Card->Result->set('total_incorrect',$totalIncorrect);
+                }
+
+            }
+            // Set new record total to 1
+            else {
+
+                // Increment count to 1
                 if($correct) {
                     $this->Card->Result->set('total_correct',1);
                 }
@@ -287,26 +364,15 @@ class DecksController extends AppController {
                 }
 
             }
-            else {
-                $this->Card->Result->id = $resultId;
-
-                // Retrieve totals to update
-                if($correct) {
-                    $totalCorrect = $this->Card->Result->total_correct + 1;
-                    $this->Card->Result->set('total_correct',$totalCorrect);
-                }
-                else {
-                    $totalIncorrect = $this->Card->Result->total_incorrect + 1;
-                    $this->Card->Result->set('total_incorrect',$totalIncorrect);
-                }
-
-            }
             $this->Card->Result->set('last_guess',$correct);
             $this->Card->Result->save();
         }
+        /**
+         * End update result model
+         */
     
         // Send a response back
-        $this->set('response', $tempStr);
+        $this->set('response',$tempStr);
     }
 
     

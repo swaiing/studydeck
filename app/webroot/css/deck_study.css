@@ -48,6 +48,7 @@ div.right_button {
 }
 
 div#prev_button, div#next_button {
+    padding: 10px;
     background-color: #B8CEE0;
 }
 div#correct_button {
