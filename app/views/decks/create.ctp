@@ -15,6 +15,7 @@
 
 <?php
 
+    $session->flash();
     // Deck detail attributes
     $detailFieldSize = 45;
     $privacyOptions = array(1=>'Private',2=>'Public');
@@ -47,6 +48,20 @@
     // Description
     echo "<li>" . $form->input('Deck.description',array('label'=>'Description:','size'=>$detailFieldSize)) . "</li>\n";
     echo "</ol>\n";
+    echo "</fieldset>\n";
+
+    
+    // CSV upload
+    echo "<fieldset id=\"CSV Upload\">\n";
+    echo "<legend>CSV Upload</legend>\n";
+    $form->create('Deck', array('name'=>'uploadCSVForm','id'=>'upload_csv','type'=>'file','action'=>'uploadCSV'));
+    echo "<ol>\n";
+    echo "<li>". $form->input('csv_file', array('label'=> 'Upload CSV File', 'type' =>'file'));  
+    echo "</li>";
+    echo "<li>";
+    echo $form->button('Upload File', array('onClick'=>'uploadCSV()'));
+    echo "</li>";
+    $form->end();
     echo "</fieldset>\n";
 
     // Card inputs

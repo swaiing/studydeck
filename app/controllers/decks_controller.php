@@ -7,7 +7,7 @@ class DecksController extends AppController {
     var $name = 'Decks';
     var $scaffold;
     var $uses = array('Deck','Card','Tag','MyDeck','DeckTag','Rating','Result');
-    var $helpers = array('Html','Javascript');
+    var $helpers = array('Html','Javascript','Form');
     var $components = array('Auth','RequestHandler');
 
 
@@ -92,6 +92,28 @@ class DecksController extends AppController {
         } // end if(!empty($this->data))
 
     }
+
+
+
+    //deletes a deck and all related cards
+    function delete(){
+	//disable need for a view		
+     	$this->autoRender=false;
+	//checks to see if this is ajax request
+      	if($this->RequestHandler->isAjax()){
+	       //finds the deck whose id is passed in by ajax parameter
+      	       $deckToRemove = $this->Deck->find('first', array('conditions' =>  array('Deck.id' => $this->params['form']['id'])));
+	       	//confirms that the login user is the owner of hte deck	     
+		if($deckToRemove['Deck']['user_id'] == $this->Auth->user('id')){
+			//actually deletes the deck			    
+			$this->Deck->delete($this->params['form']['id'],true);
+		}
+	}
+	      
+	      
+    }
+
+
 
     function explore($sortBy = null,$page = null,$query = null) {
 
@@ -375,21 +397,17 @@ class DecksController extends AppController {
         $this->set('response',$tempStr);
     }
 
-    
-    function delete(){
-			
+    function uploadCSV(){
+    	//disable need for a view		
      	$this->autoRender=false;
-      	if($this->RequestHandler->isAjax()){
-      	       $deckToRemove = $this->Deck->find('first', array('conditions' =>  array('Deck.id' => $this->params['form']['id'])));
+
+	$this->Session->setFlash("upload".$this->data['Deck']['csv_file']['tmp_name']);	
+	//checks to see if this is ajax request
+	if($this->RequestHandler->isAjax()){     
 	
-		if($deckToRemove['Deck']['user_id'] == $this->Auth->user('id')){
-			$this->Session->setFlash("go this ".$deckToRemove['Deck']['id']);	
-			$this->Deck->delete($this->params['form']['id'],true);
-		}
 	}
-	      
-	      
     }
+
 }
 
 ?>

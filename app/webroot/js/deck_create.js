@@ -70,3 +70,9 @@ function incrementNumInString(str) {
     var tail = temp.substr(lastNumIndex);
     return head + num + tail;
 }
+
+//uploads CSV into create deck form
+function uploadCSV(){
+    alert('hi' + $("#DeckCsvFile").val());
+    $.post("/studydeck/decks/uploadCSV",{},function(){ alert('success');});
+}
