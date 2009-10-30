@@ -233,7 +233,8 @@ class UsersController extends AppController {
 				    } 
         			}
         			catch(Exception $e) {
-              				$this->log("Failed to send email: ".$e->getMessage());
+              				//$this->log("Failed to send email: ".$e->getMessage());
+					$this->Session->setFlash("Failed to send email: ".$e->getMessage());	
 	      		
 				}
         	

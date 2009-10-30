@@ -74,5 +74,13 @@ function incrementNumInString(str) {
 //uploads CSV into create deck form
 function uploadCSV(){
     alert('hi' + $("#DeckCsvFile").val());
-    $.post("/studydeck/decks/uploadCSV",{},function(){ alert('success');});
+    //$.post("/studydeck/decks/uploadCSV",{},function(){ alert('success');});
+    $('#uploadCSVForm').ajaxSubmit({dataType: 'json', success: csvToForm}); 
+
+}
+
+function csvToForm(res){
+
+    alert(res.one.q);
+
 }

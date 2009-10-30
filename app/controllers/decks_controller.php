@@ -398,14 +398,20 @@ class DecksController extends AppController {
     }
 
     function uploadCSV(){
+    	    
     	//disable need for a view		
      	$this->autoRender=false;
-
-	$this->Session->setFlash("upload".$this->data['Deck']['csv_file']['tmp_name']);	
-	//checks to see if this is ajax request
-	if($this->RequestHandler->isAjax()){     
+	//$this->Session->setFlash("temp name:".$this->data['Deck']['csv_file']['tmp_name']." type:".$this->data['Deck']['csv_file']['type']);
 	
-	}
+	$file = new File($this->data['Deck']['csv_file']['tmp_name']);
+	$data = h($file->read()); //read file contents and pass through htmlspecialchars function
+	$file->close();	
+	$this->Session->setFlash("temp name:".$data);
+	$csvReturn['one']['q'] = "question 1";
+	$csvReturn['one']['a'] = "answer 1";
+	$result = json_encode($csvReturn);
+	
+	$this->set('result',$result);
     }
 
 }

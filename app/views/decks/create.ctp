@@ -2,6 +2,7 @@
 <?php
     // Javascript includes
     echo $javascript->link('jquery-1.2.6.min',false);
+    echo $javascript->link('jquery.form',false);
     echo $javascript->link('deck_create',false);
 
     // CSS includes
@@ -27,6 +28,19 @@
     $cardTermOptions = array('type'=>'text','label'=>false,'size'=>$termFieldSize);
     $cardDefinitionOptions = array('type'=>'text','label'=>false,'size'=>$definitionFieldSize);
     $defaultNumCards = 5;
+     ;
+     // CSV upload
+    echo "<fieldset id=\"CSV Upload\">\n";
+    echo "<legend>CSV Upload</legend>\n";
+    echo $form->create('Deck', array('name'=>'uploadCSVForm','id'=>'uploadCSVForm','type'=>'file','action'=>'uploadCSV'));
+    echo "<ol>\n";
+    echo "<li>". $form->input('csv_file', array('label'=> 'Upload CSV File', 'type' =>'file'));  
+    echo "</li>";
+    echo "<li>";
+    echo $form->button('Upload File', array('onClick'=>'uploadCSV()'));
+    echo "</li>";
+    echo $form->end();
+    echo "</fieldset>\n";
 
     echo $form->create('Deck', array('action' => 'create'));
 
@@ -51,18 +65,7 @@
     echo "</fieldset>\n";
 
     
-    // CSV upload
-    echo "<fieldset id=\"CSV Upload\">\n";
-    echo "<legend>CSV Upload</legend>\n";
-    $form->create('Deck', array('name'=>'uploadCSVForm','id'=>'upload_csv','type'=>'file','action'=>'uploadCSV'));
-    echo "<ol>\n";
-    echo "<li>". $form->input('csv_file', array('label'=> 'Upload CSV File', 'type' =>'file'));  
-    echo "</li>";
-    echo "<li>";
-    echo $form->button('Upload File', array('onClick'=>'uploadCSV()'));
-    echo "</li>";
-    $form->end();
-    echo "</fieldset>\n";
+   
 
     // Card inputs
     echo "<fieldset id=\"cards\">\n";

@@ -4,6 +4,8 @@
 <div id="middle_bar">
 
 <?php
+
+    $session->flash();
     // Field attributes
     $FIELD_SIZE = 25;
     echo "<fieldset class=\"small\">\n";
