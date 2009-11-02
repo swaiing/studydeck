@@ -9,15 +9,18 @@
 <!-- Pass card data -->
 <script type="text/javascript">
 <?php
-    echo "var deckData = " . $javascript->object($deck) . ";\n";
-    echo "var deckName  = \"" . $deckInfo['Deck']['deck_name'] . "\";\n";
-    echo "var deckUser = \"stan\";\n";
+    echo "var deckData = " . $javascript->object($deckData) . ";\n";
+    echo "var cardData = " . $javascript->object($cards) . ";\n";
+    echo "var cardRatingsData = " . $javascript->object($cardsRatings) . ";\n";
+    echo "var cardResultsData = " . $javascript->object($cardsResults) . ";\n";
 ?>
 </script>
 
+<!-- <pre><?php //print_r($debug); ?></pre> -->
+
 <div id="middle_wrapper_content">
 
-<h1 class="title"><?php echo $deckInfo['Deck']['deck_name'] ?></h1>
+<h1 class="title"></h1>
 
 <div id="left_margin_wrap">
     <div class="margin_box">

@@ -69,35 +69,41 @@ var NULL_ID = "null";
    * Deck class
    *
    */
-  function Deck(name,userId,deckData) {
+  function Deck(deckData,cardData,cardRatingsData,cardResultsData) {
 
     // Deck DB fields
-    this.deckName = name;
-    this.userId = userId;
+    this.deckName = '';
+    this.userId = '';
 
     this.curCard = null;
     this.viewedCards = new Array();
     this.unviewedCards = new Array();
     this.numTotalCards = 0;
 
-    // Read cards from JSON object deckData
-    for (var i=0; i<deckData.length; i++) {
+    // Set deck meta fields
+    if(deckData.Deck) {
+        this.deckName = deckData.Deck.deck_name;
+        this.userId = deckData.Deck.user_id;
+    }
+
+    // Read cards from JSON object cardData
+    for (var i=0; i<cardData.length; i++) {
 
         // Set properties of new card
-        var newCard = new Card(deckData[i].Card.id,deckData[i].Card.question,deckData[i].Card.answer);
+        var newCard = new Card(cardData[i].Card.id,cardData[i].Card.question,cardData[i].Card.answer);
 
-        // Check for Rating object
-        if(deckData[i].Rating.length > 0) {
-            newCard.setRatingId(deckData[i].Rating[0].id);
-            newCard.setRating(deckData[i].Rating[0].rating);
+        // Check for rating in cardRatingsData
+        if(cardRatingsData[newCard.id]) {
+            newCard.setRatingId(cardRatingsData[newCard.id].id);
+            newCard.setRating(cardRatingsData[newCard.id].rating);
         }
 
-        // Check for Result object
-        if(deckData[i].Result.length > 0) {
-            newCard.setResultsId(deckData[i].Result[0].id);
-            newCard.setLastAnswer(deckData[i].Result[0].last_guess);
-            newCard.totalCorrect = deckData[i].Result[0].total_correct;
-            newCard.totalIncorrect = deckData[i].Result[0].total_incorrect;
+        // Check for result in cardResultsData
+        if(cardResultsData[newCard.id]) {
+            newCard.setResultsId(cardResultsData[newCard.id].id);
+            newCard.setLastAnswer(cardResultsData[newCard.id].last_guess);
+            newCard.totalCorrect = cardResultsData[newCard.id].total_correct;
+            newCard.totalIncorrect = cardResultsData[newCard.id].total_incorrect;
         }
 
         // Add card to deck
@@ -203,7 +209,10 @@ var NULL_ID = "null";
         //this.deck = new Deck("SAN Vocab", 1);
 
         // Pass global deck JSON data
-        this.deck = new Deck(deckName,deckUser,deckData);
+        this.deck = new Deck(deckData,cardData,cardRatingsData,cardResultsData);
+
+        // Set the title
+        $("h1.title").text(this.deck.deckName);
 
         // Reset form items
         $("#show_answer_checkbox").attr('checked',false);

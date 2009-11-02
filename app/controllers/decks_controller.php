@@ -226,23 +226,75 @@ class DecksController extends AppController {
 
     function study($id = null)
     {
-        // Set deck recursion to 0, so that deck associations aren't traversed
-        $this->Card->recursive = 1;
+        // Prevent Deck associations from recursing
+        $this->Deck->recursive = -1;
+        $this->Deck->Card->recursive = -1;
+        $this->Deck->Card->Rating->recursive = -1;
+        $this->Deck->Card->Results->recursive = -1;
 
-        // Set deck meta info
+        // Set $deckRecord
         $this->Deck->id = $id;
-        $this->set('deckInfo', $this->Deck->read());
+        $deckRecord = $this->Deck->read();
 
         // Set user id
         $userId = $this->Auth->user('id');
 
-        // Retrieve cards in deck by deck_id
-        $findCardsParams = array(
+        // Retrieve Card model data for deck
+        $cardsParams = array(
                             'conditions' => array('Card.deck_id' => $this->Deck->id),
-                            'fields' => array('Card.question','Card.answer')
+                            'fields' => array('Card.id','Card.question','Card.answer')
         );
-        $this->set('deck', $this->Card->find('all',$findCardsParams));
+        $cardRecords = $this->Deck->Card->find('all',$cardsParams);
 
+        // Store card IDs in array for use ratings/results queries
+        $cardIds = array();
+        foreach($cardRecords as $card) {
+           array_push($cardIds,$card['Card']['id']); 
+        }
+
+        // Retrieve ratings by card_id and user_id
+        $ratingParams = array(
+                            'conditions' => array('Rating.user_id' => $userId,
+                                                  'Rating.card_id' => $cardIds),
+                            'fields' => array('Rating.id','Rating.card_id','Rating.rating')
+        );
+        $ratingRecords = $this->Deck->Card->Rating->find('all',$ratingParams);
+
+        // Index ratings by card_id
+        $ratingMap = array();
+        foreach($ratingRecords as $rating) {
+           $ratingMap[$rating['Rating']['card_id']] = array('id' => $rating['Rating']['id'],
+                                                            'rating' => $rating['Rating']['rating']);
+                                                            
+        }
+
+        // Retrieve results by card_id and user_id
+        $resultParams = array(
+                            'conditions' => array('Result.user_id' => $userId,
+                                                  'Result.card_id' => $cardIds),
+                            'fields' => array('Result.id','Result.card_id','Result.last_guess',
+                                              'Result.total_correct','Result.total_incorrect')
+        );
+        $resultRecords = $this->Deck->Card->Result->find('all',$resultParams);
+
+        // Index results by card_id
+        $resultMap = array();
+        foreach($resultRecords as $result) {
+           $resultMap[$result['Result']['card_id']] = array('id' => $result['Result']['id'],
+                                                            'last_guess' => $result['Result']['last_guess'],
+                                                            'total_correct' => $result['Result']['total_correct'],
+                                                            'total_incorrect' => $result['Result']['total_incorrect']);
+        }
+
+        // debug
+        //$this->set('debug',$resultMap);
+        //$this->set('debug',$ratingMap);
+
+        // Set variables for view
+        $this->set('deckData',$deckRecord);
+        $this->set('cards',$cardRecords);
+        $this->set('cardsRatings',$ratingMap);
+        $this->set('cardsResults',$resultMap);
     }
 
     /*
