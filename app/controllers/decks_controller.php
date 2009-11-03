@@ -453,17 +453,38 @@ class DecksController extends AppController {
     	    
     	//disable need for a view		
      	$this->autoRender=false;
-	//$this->Session->setFlash("temp name:".$this->data['Deck']['csv_file']['tmp_name']." type:".$this->data['Deck']['csv_file']['type']);
+
 	
 	$file = new File($this->data['Deck']['csv_file']['tmp_name']);
-	$data = h($file->read()); //read file contents and pass through htmlspecialchars function
-	$file->close();	
-	$this->Session->setFlash("temp name:".$data);
-	$csvReturn['one']['q'] = "question 1";
-	$csvReturn['one']['a'] = "answer 1";
+	
+	//$data = h($file->read()); //read file contents and pass through htmlspecialchars function
+	Configure::write ('debug',0);
+	$row = 1;
+	$handle=fopen($this->data['Deck']['csv_file']['tmp_name'],"r");
+	$csvReturn=array();
+	while($fileContents = fgetcsv($handle)){
+		$csvReturn[$row]['q'] = $fileContents[0];
+		$csvReturn[$row]['a'] = $fileContents[1];
+		$row++;
+	}
+	fclose($handle);
+	//$file->close();	
+	//$this->Session->setFlash("temp name:".$data);
+
+	//$this->Session->setFlash("temp name:".$this->data['Deck']['csv_file']['tmp_name']." type:".$this->data['Deck']['csv_file']['type']." Extention: ".$ext);
+
+	/*
+	$csvReturn[1]['q'] = "question 1";
+	$csvReturn[1]['a'] = "answer 1";
+	$csvReturn[2]['q'] = "question 2";
+	$csvReturn[2]['a'] = "answer 2";
+
+	*/
+	$csvReturn['totalCount'] = count($csvReturn);
 	$result = json_encode($csvReturn);
 	
-	$this->set('result',$result);
+	
+	echo $result;
     }
 
 }
