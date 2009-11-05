@@ -118,8 +118,8 @@ class DecksController extends AppController {
     function explore($sortBy = null,$page = null,$query = null) {
 
         
-	    //sets sort variable for view   
-	    $this->set('sort', $sortBy);
+	//sets sort variable for view   
+	$this->set('sort', $sortBy);
 
       	//sets sql sort based on sort parameter       
       	if($sortBy == 'recent'){
@@ -152,7 +152,7 @@ class DecksController extends AppController {
 	       		$exploreDecks = $this->Deck->find('all',array('conditions'=> array('Deck.privacy'=> SD_Global::$PUBLIC_DECK),'limit' => 20,'page' => $page,'order'=> $sortBy));
 	       		$this->set('decks',$exploreDecks);
 			//sets the pages count, 20 results per page
-	       		$this->set('pages', ceil(count($exploreDecks)/20));
+	       		$this->set('pages', ceil($this->Deck->find('count',array('conditions'=> array('Deck.privacy'=> SD_Global::$PUBLIC_DECK)))/20));
 	       }
 	       else {
 			//queries the decks
@@ -182,7 +182,7 @@ class DecksController extends AppController {
 			//takes all the deck ids gathered pulls the decks
 			$exploreDecks = $this->Deck->find('all',array('limit' => 20,'page' => $page,'conditions'=> array('Deck.id' => $arrayOfDeckIds,'Deck.privacy' => SD_Global::$PUBLIC_DECK),'order'=> $sortBy));
 			$this->set('decks',$exploreDecks); 
-	       		$this->set('pages', ceil(count($exploreDecks)/20));
+	       		$this->set('pages', ceil($this->Deck->find('count',array('conditions'=> array('Deck.id' => $arrayOfDeckIds,'Deck.privacy' => SD_Global::$PUBLIC_DECK)))/20));
 			
 	       }
 	       

@@ -73,6 +73,7 @@ function incrementNumInString(str) {
 
 //uploads CSV into create deck form
 function uploadCSV(){
+   
     $('#uploadCSVForm').ajaxSubmit({dataType: 'json', success: csvToForm});
     //$('#uploadCSVForm').ajaxSubmit({success: csvToForm});
    
@@ -80,15 +81,13 @@ function uploadCSV(){
 
 function csvToForm(res){
 
-    //alert(res.totalCount);
-    //alert(res[2]["q"]);
-    //alert(res);
+     
     var x =1;
     for (x=1;x<= res.totalCount;x++){
 
 	var questionID = "#Card"+(x-1)+"Question";
 	var anwserID = "#Card"+(x-1)+"Answer";
-	//alert(questionID);
+	
 	if(!$(questionID).length){
 	    addCardRow();	    
 	}
