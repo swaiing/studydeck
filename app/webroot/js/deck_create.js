@@ -72,27 +72,28 @@ function incrementNumInString(str) {
 }
 
 //uploads CSV into create deck form
-function uploadCSV(){
+function uploadCsv(){
    
-    $('#uploadCSVForm').ajaxSubmit({dataType: 'json', success: csvToForm});
-    //$('#uploadCSVForm').ajaxSubmit({success: csvToForm});
+	$('#upload_csv_form').ajaxSubmit({dataType: 'json', success: csvToForm});
+    
    
 }
 
+//called after successful upload
+//converts returned JSON data into the question and answer form
 function csvToForm(res){
+ 
+	var cardNum;
+	for (cardNum = 1; cardNum <= res.totalCount; cardNum++){
+		var questionID = "#Card" + (cardNum - 1) + "Question";
+		var anwserID = "#Card" + (cardNum - 1) + "Answer";
+		if(!$(questionID).length){
+	    	addCardRow();	    
+		}
 
-     
-    var x =1;
-    for (x=1;x<= res.totalCount;x++){
+		$(questionID).val(res[cardNum]["q"]);
+		$(anwserID).val(res[cardNum]["a"]);
 
-	var questionID = "#Card"+(x-1)+"Question";
-	var anwserID = "#Card"+(x-1)+"Answer";
-	
-	if(!$(questionID).length){
-	    addCardRow();	    
-	}
-	$(questionID).val(res[x]["q"]);
-	$(anwserID).val(res[x]["a"]);
     }
 
 }

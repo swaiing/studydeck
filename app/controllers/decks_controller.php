@@ -20,7 +20,7 @@ class DecksController extends AppController {
 
     } 
 
-    function create(){
+	function create(){
         $this->pageTitle = 'Create a Deck';
         //$this->layout='create_edit';
         //creates tag dropdown
@@ -211,18 +211,7 @@ class DecksController extends AppController {
 	       $this->set('page', $page);
       }
    
-    function view($id = null)
-    {
-        // Set deck meta info
-        $this->Deck->id = $id;
-        $this->set('deckInfo', $this->Deck->read());
-
-        // Retrieve cards in deck by deck_id
-        $findParams = array(
-                            'conditions' => array('Card.deck_id' => $this->Deck->id),
-                            'fields' => array('Card.question', 'Card.answer'));
-        $this->set('deck', $this->Card->find('all',$findParams));
-    }
+   
 
     function study($id = null)
     {
@@ -485,6 +474,19 @@ class DecksController extends AppController {
 	
 	
 	echo $result;
+    }
+
+	function view($id = null)
+    {
+        // Set deck meta info
+        $this->Deck->id = $id;
+        $this->set('deckInfo', $this->Deck->read());
+
+        // Retrieve cards in deck by deck_id
+        $findParams = array(
+                            'conditions' => array('Card.deck_id' => $this->Deck->id),
+                            'fields' => array('Card.question', 'Card.answer'));
+        $this->set('deck', $this->Card->find('all',$findParams));
     }
 
 }

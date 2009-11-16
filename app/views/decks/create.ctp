@@ -81,14 +81,14 @@
     echo "</div>";
     echo $form->end();
   // CSV upload
-    echo "<fieldset id=\"CSV Upload\">\n";
+    echo "<fieldset id=\"csv_upload\">\n";
     echo "<legend>CSV Upload</legend>\n";
-    echo $form->create('Deck', array('name'=>'uploadCSVForm','id'=>'uploadCSVForm','type'=>'file','action'=>'uploadCSV'));
+    echo $form->create('Deck', array('name'=>'uploadCSVForm','id'=>'upload_csv_form','type'=>'file','action'=>'uploadCSV'));
     echo "<ol>\n";
     echo "<li>". $form->input('csv_file', array('label'=> 'Upload CSV File', 'type' =>'file'));  
     echo "</li>";
     echo "<li>";
-    echo $form->button('Upload File', array('onClick'=>'uploadCSV()'));
+    echo $form->button('Upload File', array('onClick'=>'uploadCsv()'));
     echo "</li>";
     echo $form->end();
     echo "</fieldset>\n";

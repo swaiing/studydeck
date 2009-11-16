@@ -10,26 +10,25 @@
     echo "<h1>Change Your Password:</h1>";
     
     
-    if($validationError != ''){
+	if($validationError != '') {
     	  echo "<br/><div>Error: ".$validationError."</div>\n";
 	  	
     }
-   if($success == true){
+	
+	if($success == true) {
     	echo "<div>Your password has been changed!</div>";
     }
-    else{
-	echo $form->create('User', array('action' => 'changePassword'));
+    else {
+
+		echo $form->create('User', array('action' => 'changePassword'));
     	echo "<ol>\n";
     	echo "<li>" . $form->input('User.password',array('label'=>'Current Password:','size'=>$FIELD_SIZE)) . "</li>\n";
-	echo "<li>" . $form->input('User.new_password',array('type'=>'password','label'=>'New Password:','size'=>$FIELD_SIZE)) . "</li>\n";
-	echo "<li>" . $form->input('User.new_password_confirmation',array('type'=>'password','label'=>'Confrim New Password:','size'=>$FIELD_SIZE)) . "</li>\n";
-	
-     	echo $form->end('Change Password');
-     }
-	  	
-	
-    
-     echo "</fieldset>\n";
+		echo "<li>" . $form->input('User.new_password',array('type'=>'password','label'=>'New Password:','size'=>$FIELD_SIZE)) . "</li>\n";
+		echo "<li>" . $form->input('User.new_password_confirmation',array('type'=>'password','label'=>'Confrim New Password:','size'=>$FIELD_SIZE)) . "</li>\n";
+	   	echo $form->end('Change Password');
+   	}
+	   
+    echo "</fieldset>\n";
 ?>
 
 </div> <!-- end middle_bar -->
