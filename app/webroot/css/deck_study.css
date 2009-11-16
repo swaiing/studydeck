@@ -113,10 +113,20 @@ div.margin_box table.quiz_history {
 
 }
 
-
 div.margin_box label {
+
 }
 
 div.margin_box input.show_answer_checkbox {
     
+}
+
+div.margin_box#quit_wrap {
+  border: 0;
+}
+
+div.margin_box input#quit_session {
+    width: 100%;
+    margin: 0 auto 0 auto;
+    padding: 0;
 }

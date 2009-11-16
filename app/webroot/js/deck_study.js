@@ -6,6 +6,7 @@
 // Constants
 var RATING_MAP = new Array("no rating","easy","medium","hard");
 var VERACITY_MAP = new Array("incorrect","correct");
+var MODE_MAP = new Array("study","quiz");
 var NULL_ID = "null";
 
   /***
@@ -46,6 +47,13 @@ var NULL_ID = "null";
 
   Card.prototype.setIncorrect = function() {
     this.correct = 0;
+  }
+
+  Card.prototype.updateTotal = function() {
+    if(this.correct != NULL_ID) {
+        if(this.correct) this.totalCorrect++; 
+        else this.totalIncorrect++;
+    }
   }
 
   Card.prototype.setResultsId = function(id) {
@@ -159,8 +167,12 @@ var NULL_ID = "null";
   Deck.prototype.getNextCard = function() {
     if(this.unviewedCards.length > 0) {
         if(this.curCard) {
+            // Update JS object totals
+            this.curCard.updateTotal();
+
             // Update DB with card info
             this.sendUpdate(this.curCard);
+
             // Push card on viewed cards stack
             this.viewedCards.push(this.curCard);
         }
@@ -172,8 +184,12 @@ var NULL_ID = "null";
   Deck.prototype.getPreviousCard = function() {
     if(this.viewedCards.length > 0) {
         if(this.curCard) {
+            // Update JS object totals
+            this.curCard.updateTotal();
+
             // Update DB with card info
             this.sendUpdate(this.curCard);
+
             // Push card on viewed cards stack
             this.unviewedCards.push(this.curCard);
         }
@@ -205,6 +221,17 @@ var NULL_ID = "null";
 
     // Bootstrap intialize function
     'init':function() {
+
+        // Call build UI functions
+        var MODE = "study";
+        //var MODE = "quiz";
+        if(MODE == MODE_MAP[0]) {
+          this.renderStudyWindows();
+        }
+        else if(MODE == MODE_MAP[1]) {
+          this.renderQuizButtons();
+        }
+
         // dummy data
         //this.deck = new Deck("SAN Vocab", 1);
 
@@ -221,6 +248,32 @@ var NULL_ID = "null";
         this.showCard(this.deck.getNextCard());
     },
 
+    // Builds UI
+    'renderQuizButtons':function() {
+        $("#row_bottom").prepend("<div id=\"incorrect_button\" class=\"left_button\">incorrect</div>");
+        $("#row_bottom").prepend("<div id=\"correct_button\" class=\"right_button\">correct</div>");
+    },
+
+    'renderStudyWindows':function() {
+
+      var optionsBox = $('<div class=\"margin_box\"></div>')
+                        .append("<span class=\"title\">Options</span>")
+                        .append("<label for=\"show_answer_checkbox\">Show Answer?</label>")
+                        .append("<input type=\"checkbox\" id=\"show_answer_checkbox\" name=\"show_answer\" value=\"show_answer\" />")
+                        .prependTo('#left_margin_wrap');
+
+      var statsTable = $("<table class=\"quiz_history\">")
+                        .append("<tr><td># Times Correct</td><td id=\"card_total_correct\"></td></tr>")
+                        .append("<tr><td># Times Incorrect</td><td id=\"card_total_incorrect\"></td></tr>")
+                        .append("<tr><td>Last Answer</td><td id=\"card_last_answer\"></td></tr>");
+
+      var cardHistoryBox = $('<div class=\"margin_box\"></div>')
+                        .append("<span class=\"title\">Card Quiz History</span>") 
+                        .append(statsTable)
+                        .prependTo('#left_margin_wrap');
+
+    },
+    
     // Helper functions
     'showCard':function(card) {
         if(!card) {
@@ -310,8 +363,11 @@ var NULL_ID = "null";
         this.deck.getCard().setCorrect();
 
         // Change style of correct button
-        this.resetButtons();
-        $("#correct_button").css("background","#B3ECFF");
+        //this.resetButtons();
+        //$("#correct_button").css("background","#B3ECFF");
+
+        // Advance to next card
+        this.next();
     },
 
     'incorrect':function() {
@@ -320,9 +376,11 @@ var NULL_ID = "null";
         this.deck.getCard().setIncorrect();
         
         // Change style of incorrect button
-        this.resetButtons();
-        $("#incorrect_button").css("background","#B3ECFF");
+        //this.resetButtons();
+        //$("#incorrect_button").css("background","#B3ECFF");
 
+        // Advance to next card
+        this.next();
     },
 
     'showAnswerToggle':function() {
@@ -343,6 +401,9 @@ var NULL_ID = "null";
 
   // jQuery document onload
   $(document).ready(function() {
+
+    // Start
+    DeckViewerUI.init();
 
     /**
      *  Bind event handlers
@@ -369,7 +430,5 @@ var NULL_ID = "null";
     // Set incorrect button
     $("#show_answer_checkbox").click(function(event) { DeckViewerUI.showAnswerToggle(); });
 
-    // Start
-    DeckViewerUI.init();
 
   });  // end $(document).ready(function()
