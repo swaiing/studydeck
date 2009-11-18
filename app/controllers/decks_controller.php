@@ -286,6 +286,11 @@ class DecksController extends AppController {
         $this->set('cardsResults',$resultMap);
     }
 
+    function quiz($id = null)
+    {
+      $this->study($id);
+    }
+
     /*
      * Called using AJAX to update card/deck data
      *

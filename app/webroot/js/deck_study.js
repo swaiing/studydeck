@@ -6,7 +6,8 @@
 // Constants
 var RATING_MAP = new Array("no rating","easy","medium","hard");
 var VERACITY_MAP = new Array("incorrect","correct");
-var MODE_MAP = new Array("study","quiz");
+var MODE_STUDY = "study";
+var MODE_QUIZ = "quiz";
 var NULL_ID = "null";
 
   /***
@@ -222,13 +223,14 @@ var NULL_ID = "null";
     // Bootstrap intialize function
     'init':function() {
 
-        // Call build UI functions
-        var MODE = "study";
+        //var MODE = "study";
         //var MODE = "quiz";
-        if(MODE == MODE_MAP[0]) {
+
+        // Call build UI functions
+        if(MODE == MODE_STUDY) {
           this.renderStudyWindows();
         }
-        else if(MODE == MODE_MAP[1]) {
+        else if(MODE == MODE_QUIZ) {
           this.renderQuizButtons();
         }
 

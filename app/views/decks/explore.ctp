@@ -35,6 +35,7 @@ $itemCount = ($page - 1)*20;
 		<th>Added On</th>
 		<th>View Count</th>
 		<th>Study</th>
+		<th>Quiz</th>
 	</tr>
 	<?php foreach ($decks as $deck): ?>
 	<tr>
@@ -67,6 +68,11 @@ $itemCount = ($page - 1)*20;
 		  echo $html->link("Study","/decks/study/".$deck['Deck']['id']);
 		?>
 		</td>
+		<td>
+		<?php
+		  echo $html->link("Quiz","/decks/quiz/".$deck['Deck']['id']);
+		?>
+    </td>
 		
 	</tr>
 	<?php endforeach; ?>
