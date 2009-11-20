@@ -6,11 +6,15 @@
 # auto-populate with data.
 #
 # Prerequisite: $MYSQL_USER must exist so script can login and create database.
+# This user must have privileges on $MYSQL_DB.
 # To create $MYSQL_USER in mysql, login as the root user ($ mysql -u root -p) and run:
 # 
 # mysql> CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+# mysql> GRANT ALL PRIVILEGES ON 'mysqldv'.* to 'username'@"localhost" IDENTIFIED BY 'username';
+# 
 # Example for this script:
 # mysql> CREATE USER 'mysqldev'@'localhost' IDENTIFIED BY 'mysqldev';
+# mysql> GRANT ALL PRIVILEGES ON studydeckdev.* to mysqldev@"localhost" IDENTIFIED BY 'mysqldev';
 #
 # Example usage: 
 # ./build-db.sh 
