@@ -288,154 +288,154 @@ class UsersController extends AppController {
 	}
 
 
-	function forgotPassword(){
-		  //declares validationError variable for view
-      	       	  $this->set('validationError','');
+	function forgotPassword() {
+		//declares validationError variable for view
+      	$this->set('validationError','');
 
+		//sets the success variable to false to prompt user for email in view
+		$this->set('success',false);
 
-		  //sets the success variable to false to prompt user for email in view
-		  $this->set('success',false);
-
-		  if (!empty($this->data)) {
-		     	$existingUser = $this->User->find('first', array('conditions' => array('User.email' => $this->data['User']['email'])));
-			if($existingUser == null){
-			  	$this->set('validationError','There is no user associated with that email');		 
+		if (!empty($this->data)) {
+			$exsitingUserParams = array('conditions' => array('User.email' => $this->data['User']['email']));
+			$existingUser = $this->User->find('first',$existingUserParams);
+			if($existingUser == null) {
+				$this->set('validationError','There is no user associated with that email');		 
 
 			}
-			else{
+			else {
 				//generates a new password
-			      	$tempPassword  =  substr(md5(rand()),0,8);
-				
-				
-				//encrypts the password
-			      	
-			      	
+			    $tempPassword  =  substr(md5(rand()),0,8);
+						      	
 				//email tempPassword
-			       	$this->SwiftMailer->smtpType = 'tls';
-               		       	$this->SwiftMailer->smtpHost = 'smtp.gmail.com';
-               		       	$this->SwiftMailer->smtpPort = 465;
-               		       	$this->SwiftMailer->smtpUsername = 'noreply@studydeck.com';
-               		       	$this->SwiftMailer->smtpPassword = 'GoGate7';
+			    $this->SwiftMailer->smtpType = 'tls';
+               	$this->SwiftMailer->smtpHost = 'smtp.gmail.com';
+               	$this->SwiftMailer->smtpPort = 465;
+               	$this->SwiftMailer->smtpUsername = 'noreply@studydeck.com';
+                $this->SwiftMailer->smtpPassword = 'GoGate7';
  				$this->SwiftMailer->sendAs = 'html';
-               		       	$this->SwiftMailer->from = 'noreply@studydeck.com';
-               		        $this->SwiftMailer->to = $existingUser['User']['email'];
-               		       	//set variables to template as usual
-               		       	$this->set('tempPassword', $tempPassword);
+               	$this->SwiftMailer->from = 'noreply@studydeck.com';
+               	$this->SwiftMailer->to = $existingUser['User']['email'];
+               	//set variables to template as usual
+               	$this->set('tempPassword', $tempPassword);
 				$this->set('loginLink','http://192.168.1.101/studydeck/users/login');
 				try {
-				    if(!$this->SwiftMailer->send('forgotPassword', 'StudyDeck')) {
-                    		    	    $this->log("Error sending email");
-            	    		    }
-				    else{
+					if(!$this->SwiftMailer->send('forgotPassword', 'StudyDeck')) {
+                    	$this->log("Error sending email");
+            	    }
+				    else {
 
-					//if email was sent succefully reset password
-					$this->data = $this->User->read(null,$existingUser['User']['id']);
-					$this->data['User']['password'] = $this->Auth->password($tempPassword);
-					$this->User->save($this->data);
-					//gives use the success message in view
-					$this->set('success',true);
+						//if email was sent succefully reset password
+						$this->data = $this->User->read(null,$existingUser['User']['id']);
+						//encrypts the password
+						$this->data['User']['password'] = $this->Auth->password($tempPassword);
+						$this->User->save($this->data);
+						//gives use the success message in view
+						$this->set('success',true);
 					
 					
 					
 				    } 
-        			}
-        			catch(Exception $e) {
-              				//$this->log("Failed to send email: ".$e->getMessage());
+        		}
+        		catch(Exception $e) {
+              		//$this->log("Failed to send email: ".$e->getMessage());
 					$this->Session->setFlash("Failed to send email: ".$e->getMessage());	
 	      		
 				}
         	
 			}
 		     
-		  }
+		}
 
 	}
+
 	function login(){
       	  // Intentionally blank
       
     }
 
 	function logout() {
-      	        $this->Auth->logout();
+      	$this->Auth->logout();
 		$this->redirect("/");
     }
 	
-	function register(){
-      	       //declares validationError variable for view
-      	       $this->set('validationError','');
+	function register() {
+    	//declares validationError variable for view
+      	$this->set('validationError','');
       	       
-      	       if (!empty($this->data)) {
-	       	  $this->TempUser->set($this->data);
-	       	  if($this->TempUser->validates()){
-	       	  	   //checks to see if the password and password confirmation match		
-	                   if ($this->data['TempUser']['password'] == $this->data['TempUser']['password_confirm']) {  
+      	if (!empty($this->data)) {
+	    	$this->TempUser->set($this->data);
+	       	if ($this->TempUser->validates()) {
+	       		//checks to see if the password and password confirmation match		
+	            if ($this->data['TempUser']['password'] == $this->data['TempUser']['password_confirm']) {  
 			      
-			      //checks to see if username is in use			      
-			      $existingUser = $this->User->find('first', array('conditions' => array('User.username' => $this->data['TempUser']['username'])));
-			      if($existingUser != null){
-			      	$this->set('validationError','Username is already in use!');
-				       
-			      }
-			      else{
-				//checks to see if email is in use
-			      	$existingUser = $this->User->find('first', array('conditions' => array('User.email' => $this->data['TempUser']['email'])));
-			      	if($existingUser != null){
-			      		$this->set('validationError','Email address is already in use!');
-					       
-			        }
-				else{
-					//generates a confirmation code
-			      		$confirmationCode =  substr(md5(rand()),0,44);
-					//encrypts the password
-			      		$this->data['TempUser']['password'] = $this->Auth->password($this->data['TempUser']['password']);
-			      		$this->data['TempUser']['confirmation_code'] = $confirmationCode;
-					
-					//creates the user in the temp user table
-					//skips validation because it should already be done
-                	      		$this->TempUser->save($this->data,array('validate' =>false));
+			    	//checks to see if username is in use
+					$existingUserParams = array('conditions' => array('User.username' => $this->data['TempUser']['username']));			      
+			      	$existingUser = $this->User->find('first',$existingUserParams);
 
-					//email confirmationCode
-			       		$this->SwiftMailer->smtpType = 'tls';
-               		       		$this->SwiftMailer->smtpHost = 'smtp.gmail.com';
-               		       		$this->SwiftMailer->smtpPort = 465;
-               		       		$this->SwiftMailer->smtpUsername = 'noreply@studydeck.com';
-               		       		$this->SwiftMailer->smtpPassword = 'GoGate7';
- 				        $this->SwiftMailer->sendAs = 'html';
-               		       		$this->SwiftMailer->from = 'noreply@studydeck.com';
-               		       		//$this->SwiftMailer->fromName = 'Welcome To StudyDeck!';
-               		       		$this->SwiftMailer->to = $this->data['TempUser']['email'];
-               		       		//set variables to template as usual
-               		       		$this->set('confirmationLink', 'http://192.168.1.101/studydeck/users/confirmation/'.$confirmationCode);
-        				$this->set('userName',$this->data['TempUser']['username']);
-					try {
-					    if(!$this->SwiftMailer->send('confirmation', 'StudyDeck Confirmation')) {
-                    		     	    $this->log("Error sending email");
-            	    			    }
-        				}
-        				catch(Exception $e) {
+			      	if ($existingUser != null) {
+			      		$this->set('validationError','Username is already in use!');   
+			      	}
+			      	else {
+						//checks to see if email is in use
+						$existingUserParams = array('conditions' => array('User.email' => $this->data['TempUser']['email']));
+			      		$existingUser = $this->User->find('first',$existingUserParams);
+			      		if ($existingUser != null) {
+			      			$this->set('validationError','Email address is already in use!');
+					       
+			        	}
+						else {
+							//generates a confirmation code
+			      			$confirmationCode =  substr(md5(rand()),0,44);
+							//encrypts the password
+			      			$this->data['TempUser']['password'] = $this->Auth->password($this->data['TempUser']['password']);
+			      			$this->data['TempUser']['confirmation_code'] = $confirmationCode;
+					
+							//creates the user in the temp user table
+							//skips validation because it should already be done
+                	    	$this->TempUser->save($this->data,array('validate' =>false));
+
+							//email confirmationCode
+			       			$this->SwiftMailer->smtpType = 'tls';
+               		    	$this->SwiftMailer->smtpHost = 'smtp.gmail.com';
+               		    	$this->SwiftMailer->smtpPort = 465;
+               		    	$this->SwiftMailer->smtpUsername = 'noreply@studydeck.com';
+               		    	$this->SwiftMailer->smtpPassword = 'GoGate7';
+ 				        	$this->SwiftMailer->sendAs = 'html';
+               		    	$this->SwiftMailer->from = 'noreply@studydeck.com';
+               		    	//$this->SwiftMailer->fromName = 'Welcome To StudyDeck!';
+               		    	$this->SwiftMailer->to = $this->data['TempUser']['email'];
+               		    	//set variables to template as usual
+               		    	$this->set('confirmationLink', 'http://192.168.1.101/studydeck/users/confirmation/'.$confirmationCode);
+        					$this->set('userName',$this->data['TempUser']['username']);
+							try {
+					    		if(!$this->SwiftMailer->send('confirmation', 'StudyDeck Confirmation')) {
+                    				$this->log("Error sending email");
+            	    			}
+        					}
+        					catch(Exception $e) {
               					$this->log("Failed to send email: ".$e->getMessage());
 	      		
-					}
+							}
         	
 
-					//directs them to a page where alerting them that the email has been sent
-					$this->redirect(array('action' => '/confirmation/registered'));
+							//directs them to a page where alerting them that the email has been sent
+							$this->redirect(array('action' => '/confirmation/registered'));
 					
-				 }
-               		       }
-            		   }
-			   else{
-				$this->set('validationError','Passwords do not match!');
-			   }
+				 		}
+               		}
+            	}
+				else {
+					$this->set('validationError','Passwords do not match!');
+				}
 			}
 
-      		}
+		}
 
 	}
 
-
-	function view(){
-		 $this->set('userView', $this->User->find('first', array('conditions' => array('username' => $this->Auth->user('username')))));
+	//function for debuging probably should be removed eventually
+	function view() {
+		$this->set('userView', $this->User->find('first', array('conditions' => array('username' => $this->Auth->user('username')))));
 	}
 
 

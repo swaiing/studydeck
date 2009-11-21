@@ -11,6 +11,7 @@
 		<h3> User Dashboard </h3>
 
 		<h1>Welcome <?php echo $activeUser; ?> </h1>
+		<?php echo $html->link('change password',"/users/changePassword"); ?>
 		<p>User Stats</p>
 		<table>
 			<tr>
