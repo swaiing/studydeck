@@ -21,6 +21,8 @@ DATE=`date`
 CAKE_ROOT=$BUILD_DIR/$PROJECT_BUILD
 CAKE_TMP=$BUILD_DIR/$PROJECT_BUILD/app/tmp
 CAKE_CACHE=$BUILD_DIR/$PROJECT_BUILD/app/tmp/cache
+CAKE_LOGS=$BUILD_DIR/$PROJECT_BUILD/app/tmp/logs
+CAKE_SESSIONS=$BUILD_DIR/$PROJECT_BUILD/app/tmp/sessions
 CAKE_CONFIG=$BUILD_DIR/$PROJECT_BUILD/app/config
 
 # ----Apache user must be in this group!
@@ -73,10 +75,12 @@ build() {
 
   # Change group owner on /app/tmp 
   # Make /app/tmp and /app/tmp/cache group writeable
-  echo "  Changing group owner and permissions on app/tmp directory"
+  echo "  Changing group owner and permissions for app/tmp directory"
   chgrp -R $GROUP_OWNER $CAKE_TMP
   chmod g+rwx $CAKE_TMP
   chmod g+rwx $CAKE_CACHE
+  chmod g+rwx $CAKE_LOGS
+  chmod g+rwx $CAKE_SESSIONS
 
   # Remove unpacked install
   echo "  Cleaning staged install"
