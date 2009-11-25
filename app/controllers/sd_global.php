@@ -15,5 +15,10 @@ class SD_Global
     public static $CORRECT_RESULT = 1;
 
     public static $NULL_STR = "null";
+
+	// Constants for TempUser Clean Up
+	//delete any temp accounts older than $DAYS_TO_KEEP
+	public static $DAYS_TO_KEEP = 14;
+	
 }
 ?>
