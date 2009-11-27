@@ -19,6 +19,8 @@ PROJECT_BUILD=studydeck
 CAKE_INSTALL="../media/${CAKE_BUILD}.tar.gz"
 DATE=`date`
 CAKE_ROOT=$BUILD_DIR/$PROJECT_BUILD
+CAKE_LAYOUT=$BUILD_DIR/$PROJECT_BUILD/app/views/layouts/default.ctp
+BUILD_NUM_STR="[BUILD_NUM]"
 CAKE_TMP=$BUILD_DIR/$PROJECT_BUILD/app/tmp
 CAKE_CACHE=$BUILD_DIR/$PROJECT_BUILD/app/tmp/cache
 CAKE_LOGS=$BUILD_DIR/$PROJECT_BUILD/app/tmp/logs
@@ -85,6 +87,12 @@ build() {
   # Remove unpacked install
   echo "  Cleaning staged install"
   rm -r $CAKE_BUILD
+
+  # Insert SVN revision number
+  revision=`svnversion`
+  tmp_file=/var/tmp/layout.tmp
+  sed s/${BUILD_NUM_STR}/${revision}/g ${CAKE_LAYOUT} > $tmp_file
+  cp $tmp_file ${CAKE_LAYOUT}
 }
 
 copy_shw_config() {
