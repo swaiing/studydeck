@@ -1,4 +1,4 @@
-<!-- File: /app/views/views/study.ctp -->
+<!-- File: /app/views/decks/study.ctp -->
 
 <?php
     echo $javascript->link('jquery-1.2.6.min',false) . "\n";
@@ -14,7 +14,7 @@
     echo "var cardResultsData = " . $javascript->object($cardsResults) . ";\n";
 
     // Set variable to set study mode
-    echo "var MODE = MODE_STUDY\n";
+    echo "var MODE = MODE_STUDY;\n";
 ?>
 </script>
 

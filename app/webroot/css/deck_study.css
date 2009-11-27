@@ -9,8 +9,15 @@ h1.title {
 }
 
 div#title_wrap {
+    text-align: right; 
     padding: 0;
     margin: 10px 25% 10px 25%;
+}
+
+div#title_wrap a.top_link {
+    color: #304251;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 /****** card viewer styles ******/

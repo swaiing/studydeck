@@ -16,9 +16,28 @@ class SD_Global
 
     public static $NULL_STR = "null";
 
-	// Constants for TempUser Clean Up
-	//delete any temp accounts older than $DAYS_TO_KEEP
-	public static $DAYS_TO_KEEP = 14;
-	
+    // Constants for session arrays
+    public static $SESSION_USERS_KEY = 'Users';
+    public static $SESSION_RATING_KEY = 'Rating';
+    public static $SESSION_RESULT_KEY = 'Result';
+    public static $SESSION_ID_KEY = 'id';
+    public static $SESSION_RATING_VAL_KEY = 'rating';
+    public static $SESSION_RESULT_VAL_KEY = 'last_guess';
+
+    // Constants for Model field names
+    public static $MODEL_ID = 'id';
+    public static $MODEL_CARD_ID = 'card_id';
+    public static $MODEL_CARD = 'Card';
+    public static $MODEL_USER_ID = 'user_id';
+    public static $MODEL_RATING_RATING = 'rating';
+    public static $MODEL_RESULT = 'Result';
+    public static $MODEL_RESULT_LAST_GUESS = 'last_guess';
+    public static $MODEL_RESULT_TOT_CORRECT = 'total_correct';
+    public static $MODEL_RESULT_TOT_INCORRECT = 'total_incorrect';
+
+    // Constants for TempUser Clean Up
+    //delete any temp accounts older than $DAYS_TO_KEEP
+    public static $DAYS_TO_KEEP = 14;
+
 }
 ?>

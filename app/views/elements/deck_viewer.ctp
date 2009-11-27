@@ -5,6 +5,11 @@
 <!-- JS rendered title -->
 <div id="title_wrap">
   <h1 class="title"></h1>
+  <?php
+        echo $html->link('Quit Session',
+                          array('controller'=>'decks','action'=>'quit',$deckId),
+                          array('class'=>'top_link'));
+  ?>
 </div>
 
 <!-- JS-rendered left-margin elements -->

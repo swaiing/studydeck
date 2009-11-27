@@ -81,6 +81,7 @@ var NULL_ID = "null";
   function Deck(deckData,cardData,cardRatingsData,cardResultsData) {
 
     // Deck DB fields
+    this.id = NULL_ID;
     this.deckName = '';
     this.userId = '';
 
@@ -91,6 +92,7 @@ var NULL_ID = "null";
 
     // Set deck meta fields
     if(deckData.Deck) {
+        this.id = deckData.Deck.id;
         this.deckName = deckData.Deck.deck_name;
         this.userId = deckData.Deck.user_id;
     }
@@ -144,7 +146,8 @@ var NULL_ID = "null";
     }
 
     // Build url data string
-    var dataStr = "cid=" + card.id;
+    var dataStr = "did=" + this.id;
+    dataStr += "&cid=" + card.id;
     dataStr += "&rid=" + card.ratingId;
     dataStr += "&sid=" + card.resultsId;
     dataStr += "&rating=" + card.rating;

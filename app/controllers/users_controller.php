@@ -354,9 +354,10 @@ class UsersController extends AppController {
     }
 
 	function logout() {
-      	$this->Auth->logout();
-		$this->redirect("/");
-    }
+    $this->Auth->logout();
+    $this->Session->destroy();
+    $this->redirect("/");
+  }
 	
 	function register() {
     	//declares validationError variable for view

@@ -14,7 +14,7 @@
     echo "var cardResultsData = " . $javascript->object($cardsResults) . ";\n";
 
     // Set variable to set study mode
-    echo "var MODE = MODE_QUIZ\n";
+    echo "var MODE = MODE_QUIZ;\n";
 ?>
 </script>
 
