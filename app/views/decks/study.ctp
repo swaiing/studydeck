@@ -20,5 +20,17 @@
 
 <!-- <pre><?php //print_r($debug); ?></pre> -->
 
+<div id="middle_wrapper_content">
+
+<!-- JS rendered title -->
+<div id="title_wrap">
+  <h1 class="title"></h1>
+  <?php
+        echo $html->link('Stop Learning',
+                          array('controller'=>'decks','action'=>'quitStudy',$deckId),
+                          array('class'=>'top_link'));
+  ?>
+</div>
+
 <!-- Insert deck_viewer presentation -->
 <?php echo $this->element('deck_viewer'); ?>

@@ -215,69 +215,131 @@ class DecksController extends AppController {
 	    $this->set('page', $page);
 	}
    
-   
+  /*
+   * Helper which returns cards given a deck.
+   *
+   */
+  function getCards($deckId)
+  {
+    if(!isset($deckId)) {
+      $this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "deckId is null.");
+      return null;
+    }
+    $this->Deck->recursive = -1;
+    $this->Deck->Card->recursive = -1;
+
+    // Set user id
+    $userId = $this->Auth->user('id');
+
+    // Retrieve Card model data for deck
+    $cardsParams = array(
+                        'conditions' => array('Card.deck_id' => $deckId),
+                        'fields' => array('Card.id','Card.question','Card.answer')
+    );
+    $cardRecords = $this->Deck->Card->find('all',$cardsParams);
+    return $cardRecords;
+  }
+
+  /*
+   * Helper which returns an array of cards' IDs
+   *
+   */
+  function getCardIds($cardRecords)
+  {
+    // Store card IDs in array for use ratings/results queries
+    $cardIds = array();
+    foreach($cardRecords as $card) {
+       array_push($cardIds,$card['Card']['id']); 
+    }
+    return $cardIds;
+  }
+
+  /*
+   * Helper which returns cards' ratings given an array of card IDs.
+   * 
+   */
+  function getRatings($cardIds)
+  {
+    if(!isset($cardIds)) {
+      $this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "cardIds is null.");
+      return null;
+    }
+    $this->Deck->recursive = -1;
+    $this->Deck->Card->Rating->recursive = -1;
+
+    // Set user id
+    $userId = $this->Auth->user('id');
+
+    // Retrieve ratings by card_id and user_id
+    $ratingParams = array(
+                          'conditions' => array('Rating.user_id' => $userId,
+                                                'Rating.card_id' => $cardIds),
+                          'fields' => array('Rating.id','Rating.card_id','Rating.rating')
+    );
+    $ratingRecords = $this->Deck->Card->Rating->find('all',$ratingParams);
+      
+    // Index ratings into array by card ID.
+    $ratingMap = array();
+    foreach($ratingRecords as $rating) {
+       $ratingMap[$rating['Rating']['card_id']] = array('id' => $rating['Rating']['id'],
+                                                        'rating' => $rating['Rating']['rating']);
+    }
+
+    return $ratingMap;
+  }
+
+  /*
+   * Helper which returns cards' results given an array of card IDs.
+   *
+   */
+  function getResults($cardIds)
+  {
+    if(!isset($cardIds)) {
+      $this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "cardIds is null.");
+      return null;
+    }
+    $this->Deck->recursive = -1;
+    $this->Deck->Card->Results->recursive = -1;
+
+    // Set user id
+    $userId = $this->Auth->user('id');
+
+    // Retrieve results by card_id and user_id
+    $resultParams = array(
+                          'conditions' => array('Result.user_id' => $userId,
+                                                'Result.card_id' => $cardIds),
+                          'fields' => array('Result.id','Result.card_id','Result.last_guess',
+                                            'Result.total_correct','Result.total_incorrect')
+    );
+    $resultRecords = $this->Deck->Card->Result->find('all',$resultParams);
+
+    // Index results into array by card ID
+    $resultMap = array();
+    foreach($resultRecords as $result) {
+       $resultMap[$result['Result']['card_id']] = array('id' => $result['Result']['id'],
+                                                        'last_guess' => $result['Result']['last_guess'],
+                                                        'total_correct' => $result['Result']['total_correct'],
+                                                        'total_incorrect' => $result['Result']['total_incorrect']);
+    }
+
+    return $resultMap;
+}
 
     function study($id = null)
     {
-        // Prevent Deck associations from recursing
-        $this->Deck->recursive = -1;
-        $this->Deck->Card->recursive = -1;
-        $this->Deck->Card->Rating->recursive = -1;
-        $this->Deck->Card->Results->recursive = -1;
-
         // Set $deckRecord
         $this->Deck->id = $id;
         $deckRecord = $this->Deck->read();
 
-        // Set user id
-        $userId = $this->Auth->user('id');
+        // Call helper to retrieve array of cards
+        $cardRecords = $this->getCards($id);
+        $cardIds = $this->getCardIds($cardRecords);
 
-        // Retrieve Card model data for deck
-        $cardsParams = array(
-                            'conditions' => array('Card.deck_id' => $this->Deck->id),
-                            'fields' => array('Card.id','Card.question','Card.answer')
-        );
-        $cardRecords = $this->Deck->Card->find('all',$cardsParams);
+        // Call helper to retrieve ratings
+        $ratingMap = $this->getRatings($cardIds);
 
-        // Store card IDs in array for use ratings/results queries
-        $cardIds = array();
-        foreach($cardRecords as $card) {
-           array_push($cardIds,$card['Card']['id']); 
-        }
-
-        // Retrieve ratings by card_id and user_id
-        $ratingParams = array(
-                            'conditions' => array('Rating.user_id' => $userId,
-                                                  'Rating.card_id' => $cardIds),
-                            'fields' => array('Rating.id','Rating.card_id','Rating.rating')
-        );
-        $ratingRecords = $this->Deck->Card->Rating->find('all',$ratingParams);
-
-        // Index ratings by card_id
-        $ratingMap = array();
-        foreach($ratingRecords as $rating) {
-           $ratingMap[$rating['Rating']['card_id']] = array('id' => $rating['Rating']['id'],
-                                                            'rating' => $rating['Rating']['rating']);
-                                                            
-        }
-
-        // Retrieve results by card_id and user_id
-        $resultParams = array(
-                            'conditions' => array('Result.user_id' => $userId,
-                                                  'Result.card_id' => $cardIds),
-                            'fields' => array('Result.id','Result.card_id','Result.last_guess',
-                                              'Result.total_correct','Result.total_incorrect')
-        );
-        $resultRecords = $this->Deck->Card->Result->find('all',$resultParams);
-
-        // Index results by card_id
-        $resultMap = array();
-        foreach($resultRecords as $result) {
-           $resultMap[$result['Result']['card_id']] = array('id' => $result['Result']['id'],
-                                                            'last_guess' => $result['Result']['last_guess'],
-                                                            'total_correct' => $result['Result']['total_correct'],
-                                                            'total_incorrect' => $result['Result']['total_incorrect']);
-        }
+        // Call helper to retrieve results
+        $resultMap = $this->getResults($cardIds);
 
         // debug
         //$this->set('debug',$resultMap);
@@ -327,12 +389,12 @@ class DecksController extends AppController {
 
         // Validate rating
         if(!preg_match("/[0-3]/",$rating)) {
-          $this->log($LOG_PREFIX . "Rating is an invalid value: " . $rating);
+          //$this->log($LOG_PREFIX . "Rating is an invalid value: " . $rating,LOG_DEBUG);
         }
   
         // Validate result
         if(!preg_match("/[0|1]/",$correct)) {
-          $this->log($LOG_PREFIX . "Result is an invalid value: " . $correct);
+          //$this->log($LOG_PREFIX . "Result is an invalid value: " . $correct,LOG_DEBUG);
         }
 
         // Debug
@@ -524,19 +586,44 @@ class DecksController extends AppController {
       return True;
     }
 
-    /*
-     * Ends a study/quiz session.
-     * Responsible for writing user session data to the database.
-     *
-     */
-    function quit($deckId)
+    function quitSession($deckId)
     {
-  
       // Store userId
       $userId = $this->Auth->user('id');
 
       // Call writeSession to commit to model
+      $success = False;
       $success = $this->writeSession($userId,$deckId);
+
+      return $success;
+    }
+
+    /*
+     * Ends a study session, writes ratings to DB.
+     *
+     */
+    function quitStudy($deckId)
+    {
+      // Write session data, which consists of ratings
+      $success = $this->quitSession($deckId);
+
+      // Redirect to appropriate page
+      if($success) {
+        $this->redirect(array('controller'=>'decks','action'=>'view',$deckId));
+      }
+      else {
+        $this->redirect(array('controller'=>'decks','action'=>'failure'));
+      }
+    }
+
+    /*
+     * Ends a quiz session, writes results to DB.
+     *
+     */
+    function quitQuiz($deckId)
+    {
+      // Write session data, which consists of results
+      $success = $this->quitSession($deckId);
 
       // Redirect to review page
       if($success) {
@@ -563,17 +650,21 @@ class DecksController extends AppController {
       $sessionData = $this->Session->read(SD_Global::$SESSION_USERS_KEY);
       $deckSessionData = $sessionData[$userId][$deckId];
 
-      // Query card question/answers for view
-      $this->Deck->Card->recursive = -1;
-      $cardsParams = array(
-                          'conditions' => array('Card.deck_id' => $deckId),
-                          'fields' => array('Card.id','Card.question','Card.answer')
-      );
-      $cardRecords = $this->Deck->Card->find('all',$cardsParams);
+      // Retrieve card question/answers for view
+      $cardRecords = $this->getCards($deckId);
+
+      // Generate array of cardIds to pass to getRatings & getResults
+      $cardIds = $this->getCardIds($cardRecords);
+
+      // Retrieve card ratings/results for view
+      $ratingMap = $this->getRatings($cardIds);
+      $resultMap = $this->getResults($cardIds);
 
       // Bind data to view
-      $this->set('deck',$cardRecords);
       $this->set('quizResults',$deckSessionData);
+      $this->set('cards',$cardRecords);
+      $this->set('cardsRatings',$ratingMap);
+      $this->set('cardsResults',$resultMap);
 
       // Clear session
       $sessionToClear = SD_Global::$SESSION_USERS_KEY . "." . $userId . "." . $deckId;
@@ -582,10 +673,10 @@ class DecksController extends AppController {
     }
 
     /*
-     * When bad things happen.
+     * Called when writeSession fails.
+     *
      */
     function failure() {
-
 
     }
 

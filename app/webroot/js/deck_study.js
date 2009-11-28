@@ -222,6 +222,7 @@ var NULL_ID = "null";
     // Instance variables
     deck:null,
     isShowingAnswer:0,
+    mode:MODE_STUDY,
 
     // Bootstrap intialize function
     'init':function() {
@@ -231,9 +232,11 @@ var NULL_ID = "null";
 
         // Call build UI functions
         if(MODE == MODE_STUDY) {
+          this.mode = MODE_STUDY;
           this.renderStudyWindows();
         }
         else if(MODE == MODE_QUIZ) {
+          this.mode = MODE_QUIZ;
           this.renderQuizButtons();
         }
 
@@ -421,7 +424,9 @@ var NULL_ID = "null";
     $("#next_button").click(function(event) { DeckViewerUI.next(); });
 
     // Change rating button
-    $("#card_rating").click(function(event) { DeckViewerUI.toggleRating(); });
+    if(DeckViewerUI.mode == MODE_STUDY) {
+      $("#card_rating").click(function(event) { DeckViewerUI.toggleRating(); });
+    }
 
     // Reveal answer click
     $("#row_answer").click(function(event) { DeckViewerUI.showAnswer(); });

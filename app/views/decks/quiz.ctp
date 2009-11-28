@@ -1,4 +1,4 @@
-<!-- File: /app/views/views/study.ctp -->
+<!-- File: /app/views/views/quiz.ctp -->
 
 <?php
     echo $javascript->link('jquery-1.2.6.min',false) . "\n";
@@ -19,6 +19,18 @@
 </script>
 
 <!-- <pre><?php //print_r($debug); ?></pre> -->
+
+<div id="middle_wrapper_content">
+
+<!-- JS rendered title -->
+<div id="title_wrap">
+  <h1 class="title"></h1>
+  <?php
+        echo $html->link('End Quiz',
+                          array('controller'=>'decks','action'=>'quitQuiz',$deckId),
+                          array('class'=>'top_link'));
+  ?>
+</div>
 
 <!-- Insert deck_viewer presentation -->
 <?php echo $this->element('deck_viewer'); ?>

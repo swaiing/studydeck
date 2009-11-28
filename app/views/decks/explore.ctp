@@ -37,7 +37,7 @@
 			<th>User</th>
 			<th>Added On</th>
 			<th>View Count</th>
-			<th>Study</th>
+			<th>Learn</th>
 			<th>Quiz</th>
 		</tr>
 		<?php foreach ($decks as $deck): ?>
@@ -67,7 +67,7 @@
 			<td><?php echo $deck['Deck']['view_count']; ?> </td>
 			<td>
 			<?php
-		  		echo $html->link("Study","/decks/study/".$deck['Deck']['id']);
+		  		echo $html->link("Learn","/decks/study/".$deck['Deck']['id']);
 			?>
 			</td>
 			<td>
