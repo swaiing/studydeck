@@ -18,27 +18,26 @@
 				<td>Number of Decks Studied: </td>
 				<td><?php echo $numDecksStudied ?></td>
 			</tr>
-			<tr>
-				<td>Favourite Decks: </td>
-				<td> 
-					<?php 
-						if($favDeck1 != null) { 
-							echo $html->link($favDeck1['Deck']['deck_name'],"/studydeck/decks/study/".$favDeck1['Deck']['id']); 
-						} 
-					?> 
-				</td>
-				<td> 
-					<?php 
-						if($favDeck2 != null) {
-							echo $html->link($favDeck2['Deck']['deck_name'],"/studydeck/decks/study/".$favDeck2['Deck']['id']); }
-					 ?> 
-				</td>
-			</tr>
+			<?php 
+			if($favDeck1 != null) { 
+				echo "<tr>";
+				echo "<td>Favourite Decks: </td>";
+				echo "<td>"; 
+				echo $html->link($favDeck1['Deck']['deck_name'],"/studydeck/decks/study/".$favDeck1['Deck']['id']); 
+				echo "</td>";
+				echo "<td>";					
+				if($favDeck2 != null) {
+					echo $html->link($favDeck2['Deck']['deck_name'],"/studydeck/decks/study/".$favDeck2['Deck']['id']); 
+				}
+				echo "</td>";
+				echo "</tr>";
+			} ?> 
 		</table>
 
 		<div>Sort Decks By: <a href="/studydeck/users/dashboard"> Recently Used </a> &nbsp <a href="/studydeck/users/dashboard/bycount"> Times Studied </a>
 		</div>
 		<p>Public Decks</p>
+		<?php if(count($publicDecks)) { ?>
 		<table>
 			<tr>
 				<th>Remove Deck</th>
@@ -70,8 +69,13 @@
 			<?php endforeach; ?>
 
 		</table>
-
+		<?php }
+		else {
+			echo "<div class=\"nodecks\">No Public Decks in Dashboard</div>";
+		}
+		?>
 		<p>User Created Decks </p>
+		<?php if(count($userCreatedDecks)) { ?>
 		<table>
 			<tr>
 				<th>Remove Deck</th>
@@ -95,7 +99,11 @@
 			<?php endforeach; ?>
 
 		</table>
-
+		<?php }
+		else {
+			echo "<div class=\"nodecks\">No User Created Decks in Dashboard</div>";
+		}
+		?>
 		</div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->
 <div class="clear_div">&nbsp;</div>
