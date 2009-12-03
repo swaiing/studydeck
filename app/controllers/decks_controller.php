@@ -30,13 +30,32 @@ class DecksController extends AppController {
         //$this->set('tagdata',$tag_array);
 
         if(!empty($this->data)){
-
+			//sanitize the input data
+			App::import('Sanitize');
+			$this->data = Sanitize::clean($this->data);	
+			
+			//gets authenticated user Id
+			$authUserId = $this->Auth->user('id');
+			
+			
             // add user id into deck
-            $this->data['Deck']['user_id']= $this->Auth->user('id');
+            $this->data['Deck']['user_id']= $authUserId; 
 
-            //save the deck
-            $deck = $this->Deck->save($this->data);
+            
+			//finds the number of cards being entered
+            $num = count($this->data['Card']);
 
+            //traverses the cards being entered and sets their deck id to the new deck id
+            for($x = 0; $x < $num; $x ++){
+				//remove empty cards from creating
+				if($this->data['Card'][$x]['question'] == '' && $this->data['Card'][$x]['answer'] == '') {
+					unset($this->data['Card'][$x]);
+				}
+				else {
+					//$this->data['Card'][$x]['deck_id'] = $theDeckId;
+				}
+			}
+			/*
             //moves forward if the deck did save
             if(!empty($deck)){
 
@@ -48,7 +67,7 @@ class DecksController extends AppController {
                 $tempTag = $this->Tag->find('first',array('conditions' => array('Tag.tag' => $tag_value)),array('fields' => 'Tag.id'));
                 //does action based on whether a new tag or not
 
-                if($tempTag != NULL){
+                if($tempTag != NULL){ 
 
                     //if tag exists sets the decktag.tag_id to the tags id
                     $this->data['DeckTag']['tag_id'] = $tempTag['Tag']['id'];
@@ -60,8 +79,9 @@ class DecksController extends AppController {
                     //sets new tag entry id to decktag.tag_id
                     $this->data['DeckTag']['tag_id'] = $this->Tag->id;
                 }
+				
 
-                $theDeckId = $this->Deck->id;
+               // $theDeckId = $this->Deck->id;
                 //set decktag.deck_id to id of newly created deck
 
                 $this->data['DeckTag']['deck_id'] = $theDeckId;
@@ -69,26 +89,17 @@ class DecksController extends AppController {
 
                 $decktag = $this->DeckTag->save($this->data);
             }       
-
-			if(!empty($deck)){
-
-                //finds the number of cards being entered
-                $num = count($this->data['Card']);
-
-                //traverses the cards being entered and sets their deck id to the new deck id
-                for($x = 0; $x < $num; $x ++){
-                    $this->data['Card'][$x]['deck_id'] = $theDeckId;
-                }
-                //saves all the cards
-                $this->Card->saveAll($this->data['Card'], array('validate' => 'first'));
+			*/
+			if($this->Deck->saveAll($this->data,array('validate' => 'only'))) { 
+				$deck = $this->Deck->saveAll($this->data,array('validate' => 'false'));
 			}
-			
+			/*
 			if(!empty($deck)){
-				$this->data['MyDeck']['deck_id']=$theDeckId;
-				$this->data['MyDeck']['user_id']= $this->data['Deck']['user_id'];
-				$this->MyDeck->save($this->data);
+				$this->data['MyDeck']['deck_id'] = $this->Deck->id;
+				$this->data['MyDeck']['user_id'] = $this->data['Deck']['user_id'];
+				$this->MyDeck->save($this->data); 
 			}			
-
+			*/
         } // end if(!empty($this->data))
 
     }

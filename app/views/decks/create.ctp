@@ -20,7 +20,7 @@
     // Deck detail attributes
     $detailFieldSize = 45;
     $privacyOptions = array(1=>'Private',2=>'Public');
-    $privacyAttributes = array('legend'=>false,'label'=>'Privacy:');
+    $privacyAttributes = array('legend'=>false,'label'=>'Privacy:','default' => 2);
 
     // Card input attributes
     $termFieldSize = 25;
@@ -41,7 +41,7 @@
     echo "<li>" . $form->input('Deck.deck_name',array('label'=>'Title:','size'=>$detailFieldSize)) . "</li>\n";
 
     // Tags/Categories
-    echo "<li>" . $form->input('DeckTag.tag_id',array('label' => 'Tags:','size'=>$detailFieldSize)) . "</li>\n";
+    //echo "<li>" . $form->input('DeckTag.tag_id',array('label' => 'Tags:','size'=>$detailFieldSize)) . "</li>\n";
 
     // Privacy radio
     echo "<li class=\"privacyOptions\">" . $form->radio('privacy',$privacyOptions,$privacyAttributes);
@@ -71,6 +71,8 @@
         echo "<li>";
         echo $form->input($card.".question",array('type'=>'text','label'=>$i+1,'size'=>$termFieldSize));
         echo $form->input($card.".answer",$cardDefinitionOptions);
+		echo "<div class = \"plus\">+</div>";
+		echo "<div class = \"minus\">-</div>";
         echo "</li>\n";
     }
 
