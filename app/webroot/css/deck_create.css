@@ -68,6 +68,15 @@ fieldset#cards #definition_header {
     width: 20em;
 }
 
+div.plus, div.minus {
+  float: left;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 2px 0 2px;
+  margin-right: 5px;
+  border: 1px solid #cecece;
+}
+
 div#submit_deck {
     padding: 1em 0 1em 0;
 }
