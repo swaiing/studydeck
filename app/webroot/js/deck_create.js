@@ -5,6 +5,7 @@ $(document).ready(function(){
     // Event handler for last input box
     $("ol#card_list li:last input:last").blur(function(event) {
         addCardRow(event);
+        //addRow(event);
     });
 	
 	$("div.plus").click(function(event) { addRow(event); });
@@ -12,6 +13,11 @@ $(document).ready(function(){
 
 });
 
+
+/*
+ * Event handler when '+' is clicked
+ *
+ */
 function addRow(event) {
 
 	var parent = $(event.target).parent();
@@ -19,116 +25,139 @@ function addRow(event) {
 	
 	// Call changeRowNumbering to set attributes of newRow
 	var isIncreasing = true;
-	changeRowNumbering(newRow, isIncreasing);
+	changeRowNumbering(newRow, isIncreasing, true);
 
 	// Prepend row to bottom
-    newRow.insertAfter(parent);
+  newRow.insertAfter(parent);
 	
-	//adds the click event to all the plus and minus buttons
+	// Adds the click event to all the plus and minus buttons
 	//TODO: make this so it only adds click to newly added plus and minus  
 	$("div.plus").click(function(event) { addRow(event); });
 	$("div.minus").click(function(event) { subtractRow(event); });
 	
+  // Re-number the rest of the rows 
 	var increaseNumbering = true;
 	adjustNumbering(newRow, increaseNumbering);
-	
 }
 
+/*
+ * Event handler when '-' is clicked
+ *
+ */
 function subtractRow(event) {
 	var parent = $(event.target).parent();
 	var prevSibling = parent.prev();
+
+  // Remove row
 	parent.remove();
 	
+  // Re-number the rest of the rows
 	var increaseNumbering = false;
 	adjustNumbering(prevSibling, increaseNumbering);
-
 }
 
-function changeRowNumbering(row, isIncreasing) {
-	// Change row label contents
-	var rowLabelElt = row.find("label");
-	var curRowNum = rowLabelElt.html();
-	var rowQstIdAttr = rowLabelElt.attr("for");
-
-	// Update row label
-	if(isIncreasing) {
-		curRowNum++;
-	}
-	else {
-		curRowNum--;
-	}
-	
-	rowLabelElt.html(curRowNum);
-	
-	// Update question input
-	var rowQstInputElt = row.find("input#"+rowQstIdAttr);
-	var increaseNumbering = true;
-	var newRowQstIdAttr = changeNumInString(rowQstIdAttr, increaseNumbering);
-	var newRowQstNameAttr = changeNumInString(rowQstInputElt.attr("name"), increaseNumbering);
-	rowLabelElt.attr("for",newRowQstIdAttr);
-	rowQstInputElt.attr("id",newRowQstIdAttr);
-	rowQstInputElt.attr("name",newRowQstNameAttr);
-	rowQstInputElt.attr("value","");
-
-	// Update answer input
-	var rowAnsInputElt = row.find("input:last");
-	var newRowIdAttr = changeNumInString(rowAnsInputElt.attr("id"), increaseNumbering);
-	var newRowNameAttr = changeNumInString(rowAnsInputElt.attr("name"), increaseNumbering);
-	rowAnsInputElt.attr("id",newRowIdAttr);
-	rowAnsInputElt.attr("name",newRowNameAttr);
-	rowAnsInputElt.attr("value","");
-
-}
-
+/*
+ * Called by addRow/subtractRow to increment/decrement numbering
+ *
+ */
 function adjustNumbering(newRow, isIncreasing) {
+
 	var currentRow = newRow.next();
 	
 	while(currentRow != null) {
 		// Call changeRowNumbering to set attributes of currentRow
-		changeRowNumbering(currentRow, isIncreasing);
+		changeRowNumbering(currentRow, isIncreasing, false);
 		currentRow = currentRow.next();
-	
 	}
+}
 
+/*
+ * Takes a row element and changes the values of it's attributes.
+ *
+ */
+function changeRowNumbering(row, isIncreasing, creatingNewRow) {
+
+  // Change row label contents
+  var rowLabelElt = row.find("label");
+  var curRowNum = rowLabelElt.html();
+  var rowQstIdAttr = rowLabelElt.attr("for");
+
+  // Update row label
+  if(isIncreasing) {
+    curRowNum++;
+  }
+  else {
+    curRowNum--;
+  }
+  rowLabelElt.html(curRowNum);
+
+  // Update question input
+  var rowQstInputElt = row.find("input#"+rowQstIdAttr);
+  var increaseNumbering = true;
+  var newRowQstIdAttr = changeNumInString(rowQstIdAttr, increaseNumbering);
+  var newRowQstNameAttr = changeNumInString(rowQstInputElt.attr("name"), increaseNumbering);
+  rowLabelElt.attr("for",newRowQstIdAttr);
+  rowQstInputElt.attr("id",newRowQstIdAttr);
+  rowQstInputElt.attr("name",newRowQstNameAttr);
+
+  // Update answer input
+  var rowAnsInputElt = row.find("input:last");
+  var newRowIdAttr = changeNumInString(rowAnsInputElt.attr("id"), increaseNumbering);
+  var newRowNameAttr = changeNumInString(rowAnsInputElt.attr("name"), increaseNumbering);
+  rowAnsInputElt.attr("id",newRowIdAttr);
+  rowAnsInputElt.attr("name",newRowNameAttr);
+
+  // Clear the field values if row is new
+  if(creatingNewRow) {
+    rowQstInputElt.attr("value","");
+    rowAnsInputElt.attr("value","");
+  }
 }
 
 
-// Add new row when last row definition input box loses focus
+/*
+ * Event handler for when the last text box loses focus.
+ * i.e. intended for tabbing in last box, to create new 
+ * row.
+ *
+ */
 function addCardRow(event) {
 
-    // Clone new row
-    var newRow = $("ol#card_list li:last").clone();
+  // Clone new row
+  var newRow = $("ol#card_list li:last").clone();
 	
-	// Call changeRowNumbering to set attributes of newRow
-	var isIncreasing = true;
-    changeRowNumbering(newRow, isIncreasing);
+  // Call changeRowNumbering to set attributes of newRow
+  var isIncreasing = true;
+  changeRowNumbering(newRow, isIncreasing, true);
 
-    // Remove event handler
-    $("ol#card_list li:last input:last").unbind("blur");
+  // Remove event handler
+  $("ol#card_list li:last input:last").unbind("blur");
 
-    
-    // Prepend row to bottom
-    newRow.appendTo("ol#card_list");
+  // Prepend row to bottom
+  newRow.appendTo("ol#card_list");
 
-    // Add event handler 
-    $("ol#card_list li:last input:last").blur(function(event) { addCardRow(event); });
+  // Add event handler 
+  $("ol#card_list li:last input:last").blur(function(event) { addCardRow(event); });
 
-    // Set focus on next input box
-    rowQstInputElt.focus();
+  // Set focus on next input box
+  var inputToFocus = newRow.find("input:first");
+  inputToFocus.focus();
 }
 
-// Finds the first instance of a number in a string,
-// increments it and returns the string.
+/*
+ * Finds the first instance of a number in a string,
+ * increments it and returns the string.
+ */
 function changeNumInString(str, isIncreasing) {
 	
 	var firstNumIndex = str.search(/\d/g);
-    if(firstNumIndex == -1) {
-        return str;
-    }
-    var head = str.substr(0,firstNumIndex);
-    var temp = str.substr(firstNumIndex);
-    var lastNumIndex = temp.search(/\D/g);
-    var num = temp.substr(0,lastNumIndex);
+  if(firstNumIndex == -1) {
+      return str;
+  }
+  var head = str.substr(0,firstNumIndex);
+  var temp = str.substr(firstNumIndex);
+  var lastNumIndex = temp.search(/\D/g);
+  var num = temp.substr(0,lastNumIndex);
 	
 	if(isIncreasing) {
 		num++;
@@ -137,8 +166,9 @@ function changeNumInString(str, isIncreasing) {
 		num--;
 	}
 	
-    var tail = temp.substr(lastNumIndex);
-    return head + num + tail;
+  var tail = temp.substr(lastNumIndex);
+  var reformedStr = head + num + tail;
+  return reformedStr;
 }
 
 //uploads CSV into create deck form

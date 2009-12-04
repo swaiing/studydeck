@@ -16,15 +16,18 @@
 
 <?php
 
-    $session->flash();
-    // Deck detail attributes
+    // Default attributes
     $detailFieldSize = 45;
-    $privacyOptions = array(1=>'Private',2=>'Public');
-    $privacyAttributes = array('legend'=>false,'label'=>'Privacy:','default' => 2);
-
-    // Card input attributes
     $termFieldSize = 25;
     $definitionFieldSize = 50;
+    $privateFlag = 0;
+    $publicFlag = 1;
+
+    $session->flash();
+    $privacyOptions = array($privateFlag=>'Private',$publicFlag=>'Public');
+    $privacyAttributes = array('legend'=>false,'label'=>'Privacy:','default' => $publicFlag);
+
+
     $cardTermOptions = array('type'=>'text','label'=>false,'size'=>$termFieldSize);
     $cardDefinitionOptions = array('type'=>'text','label'=>false,'size'=>$definitionFieldSize);
     $defaultNumCards = 5;
