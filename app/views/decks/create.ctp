@@ -74,8 +74,8 @@
         echo "<li>";
         echo $form->input($card.".question",array('type'=>'text','label'=>$i+1,'size'=>$termFieldSize));
         echo $form->input($card.".answer",$cardDefinitionOptions);
-		echo "<div class = \"plus\">+</div>";
-		echo "<div class = \"minus\">-</div>";
+		echo "<div class = \"plus\"></div>";
+		echo "<div class = \"minus\"></div>";
         echo "</li>\n";
     }
 

@@ -2,15 +2,14 @@
 
 $(document).ready(function(){
 
-    // Event handler for last input box
-    $("ol#card_list li:last input:last").blur(function(event) {
-        addCardRow(event);
-        //addRow(event);
-    });
+  // Event handler for last input box
+  $("ol#card_list li:last input:last").blur(function(event) {
+    addRow(event);
+  });
 	
+  // Event handler for +/- buttons
 	$("div.plus").click(function(event) { addRow(event); });
 	$("div.minus").click(function(event) { subtractRow(event); });
-
 });
 
 
@@ -20,24 +19,48 @@ $(document).ready(function(){
  */
 function addRow(event) {
 
+  // Get the parent of the element invoking function
 	var parent = $(event.target).parent();
+  if($(parent).length < 1) {
+    return;
+  }
+
+  // Find <li> element
+  while($(parent)[0].tagName.toLowerCase() != "li") {
+    parent = $(parent).parent();
+  }
+
+  // Clone this parent row
 	var newRow = parent.clone();
-	
+
 	// Call changeRowNumbering to set attributes of newRow
 	var isIncreasing = true;
 	changeRowNumbering(newRow, isIncreasing, true);
 
+  // Remove event handler
+  $("ol#card_list li:last input:last").unbind("blur");
+
 	// Prepend row to bottom
+  newRow.hide();
   newRow.insertAfter(parent);
-	
-	// Adds the click event to all the plus and minus buttons
-	//TODO: make this so it only adds click to newly added plus and minus  
-	$("div.plus").click(function(event) { addRow(event); });
-	$("div.minus").click(function(event) { subtractRow(event); });
-	
+
+  // Run fade effect
+  newRow.fadeIn("fast");
+
   // Re-number the rest of the rows 
 	var increaseNumbering = true;
-	adjustNumbering(newRow, increaseNumbering);
+	renumberRemainingRows(newRow, increaseNumbering);
+
+  // Change focus to new row added
+  var inputToFocus = newRow.find("input:first");
+  inputToFocus.focus();
+
+  // Add +/- event handlers to plus/minus buttons
+  $(newRow).find("div.plus").click(function(event) { addRow(event); });
+  $(newRow).find("div.minus").click(function(event) { subtractRow(event); });
+
+  // Add event handler to last input box
+  $("ol#card_list li:last input:last").blur(function(event) { addRow(event); });
 }
 
 /*
@@ -48,26 +71,32 @@ function subtractRow(event) {
 	var parent = $(event.target).parent();
 	var prevSibling = parent.prev();
 
-  // Remove row
-	parent.remove();
-	
-  // Re-number the rest of the rows
-	var increaseNumbering = false;
-	adjustNumbering(prevSibling, increaseNumbering);
+  // Remove the row if there's more than one left
+  if($(parent).siblings().size() > 1) {
+
+    // Run fade effect
+    $(parent).fadeOut("fast", function() { $(this).remove(); });
+
+    // Re-number the rest of the rows
+	  var increaseNumbering = false;
+	  renumberRemainingRows(prevSibling, increaseNumbering);
+
+    // Add event handler to last input box
+    $("ol#card_list li:last input:last").blur(function(event) { addRow(event); });
+  }
 }
 
 /*
  * Called by addRow/subtractRow to increment/decrement numbering
  *
  */
-function adjustNumbering(newRow, isIncreasing) {
+function renumberRemainingRows(newRow, isIncreasing) {
 
-	var currentRow = newRow.next();
-	
-	while(currentRow != null) {
+	var currentRow = $(newRow).next();
+	while($(currentRow).html() != null) {
 		// Call changeRowNumbering to set attributes of currentRow
 		changeRowNumbering(currentRow, isIncreasing, false);
-		currentRow = currentRow.next();
+	  currentRow = $(currentRow).next();
 	}
 }
 
@@ -114,36 +143,6 @@ function changeRowNumbering(row, isIncreasing, creatingNewRow) {
   }
 }
 
-
-/*
- * Event handler for when the last text box loses focus.
- * i.e. intended for tabbing in last box, to create new 
- * row.
- *
- */
-function addCardRow(event) {
-
-  // Clone new row
-  var newRow = $("ol#card_list li:last").clone();
-	
-  // Call changeRowNumbering to set attributes of newRow
-  var isIncreasing = true;
-  changeRowNumbering(newRow, isIncreasing, true);
-
-  // Remove event handler
-  $("ol#card_list li:last input:last").unbind("blur");
-
-  // Prepend row to bottom
-  newRow.appendTo("ol#card_list");
-
-  // Add event handler 
-  $("ol#card_list li:last input:last").blur(function(event) { addCardRow(event); });
-
-  // Set focus on next input box
-  var inputToFocus = newRow.find("input:first");
-  inputToFocus.focus();
-}
-
 /*
  * Finds the first instance of a number in a string,
  * increments it and returns the string.
@@ -171,11 +170,10 @@ function changeNumInString(str, isIncreasing) {
   return reformedStr;
 }
 
-//uploads CSV into create deck form
+// Uploads CSV into create deck form
 function uploadCsv(){
    
-	$('#upload_csv_form').ajaxSubmit({dataType: 'json', success: csvToForm});
-    
+  $('#upload_csv_form').ajaxSubmit({dataType: 'json', success: csvToForm});
    
 }
 
@@ -195,5 +193,4 @@ function csvToForm(res){
 		$(anwserID).val(res[cardNum]["a"]);
 
     }
-
 }
