@@ -19,33 +19,50 @@ $(document).ready(function(){
  */
 function addRow(event) {
 
-  // Get the parent of the element invoking function
-	var parent = $(event.target).parent();
-  if($(parent).length < 1) {
-    return;
-  }
+    var parent;
+    var newRow;
+    //if event is null just add row to last line
+	if(event == null) { 
+        parent = $("ol#card_list li:last");
+        
+	}
+    else {
+        parent = $(event.target).parent();
+        // Get the parent of the element invoking function
+        if($(parent).length < 1) {
+            return;
+        }
 
-  // Find <li> element
-  while($(parent)[0].tagName.toLowerCase() != "li") {
-    parent = $(parent).parent();
-  }
-
-  // Clone this parent row
-	var newRow = parent.clone();
-
-	// Call changeRowNumbering to set attributes of newRow
+        // Find <li> element
+        while($(parent)[0].tagName.toLowerCase() != "li") {
+            parent = $(parent).parent();
+        }
+    
+       
+        
+    }
+   
+    // Clone this parent row
+    newRow = parent.clone();
+    
+    // Call changeRowNumbering to set attributes of newRow
 	var isIncreasing = true;
 	changeRowNumbering(newRow, isIncreasing, true);
 
-  // Remove event handler
-  $("ol#card_list li:last input:last").unbind("blur");
+    // Remove event handler
+    $("ol#card_list li:last input:last").unbind("blur");
 
 	// Prepend row to bottom
-  newRow.hide();
-  newRow.insertAfter(parent);
+    //skip hide if event is null because this breaks the CSV upload
+    if(event != null){
+        newRow.hide();
+    }
+    newRow.insertAfter(parent);
 
-  // Run fade effect
-  newRow.fadeIn("fast");
+    // Run fade effect
+    newRow.fadeIn("fast");
+    
+   
 
   // Re-number the rest of the rows 
 	var increaseNumbering = true;
@@ -61,6 +78,8 @@ function addRow(event) {
 
   // Add event handler to last input box
   $("ol#card_list li:last input:last").blur(function(event) { addRow(event); });
+  
+
 }
 
 /*
@@ -186,7 +205,7 @@ function csvToForm(res){
 		var questionID = "#Card" + (cardNum - 1) + "Question";
 		var anwserID = "#Card" + (cardNum - 1) + "Answer";
 		if(!$(questionID).length){
-	    	addCardRow();	    
+	    	addRow(null);	    
 		}
 
 		$(questionID).val(res[cardNum]["q"]);
