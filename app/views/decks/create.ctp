@@ -44,7 +44,7 @@
     echo "<li>" . $form->input('Deck.deck_name',array('label'=>'Title:','size'=>$detailFieldSize)) . "</li>\n";
 
     // Tags/Categories
-    //echo "<li>" . $form->input('DeckTag.tag_id',array('label' => 'Tags:','size'=>$detailFieldSize)) . "</li>\n";
+    echo "<li>" . $form->input('Deck.tag_list',array('label' => 'Tags:','size'=>$detailFieldSize)) . "</li>\n";
 
     // Privacy radio
     echo "<li class=\"privacyOptions\">" . $form->radio('privacy',$privacyOptions,$privacyAttributes);

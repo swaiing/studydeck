@@ -51,47 +51,53 @@ class DecksController extends AppController {
 				if($this->data['Card'][$x]['question'] == '' && $this->data['Card'][$x]['answer'] == '') {
 					unset($this->data['Card'][$x]);
 				}
-				else {
-					//$this->data['Card'][$x]['deck_id'] = $theDeckId;
-				}
+				
 			}
-			/*
-            //moves forward if the deck did save
-            if(!empty($deck)){
-
-                //pulls tag value from form
-                $tag_value = $this->data['DeckTag']['tag_id'];
-                //$tag_value = $this->DeckTag->tag_id;
 			
-                //finds if the tag if it  exists
-                $tempTag = $this->Tag->find('first',array('conditions' => array('Tag.tag' => $tag_value)),array('fields' => 'Tag.id'));
-                //does action based on whether a new tag or not
-
-                if($tempTag != NULL){ 
-
-                    //if tag exists sets the decktag.tag_id to the tags id
-                    $this->data['DeckTag']['tag_id'] = $tempTag['Tag']['id'];
+            $tagList = $this->data['Deck']['tag_list'];
+            $debugMsg ="";
+            $newTagArray = array();
+            $existingTagArray = array();
+            
+            if($tagList != "") {
+                $tagListArray = explode(",", $tagList);
+                $tagListArrayLength = count($tagListArray);
+               
+                for( $tagIndex = 0; $tagIndex < $tagListArrayLength; $tagIndex ++) {            
+                    //$debugMsg = $debugMsg." ".trim($tagListArray[$tagIndex]); 
+                    $tag = trim($tagListArray[$tagIndex]);
+                    $tempTag = $this->Tag->find('first',array('conditions' => array('Tag.tag' => $tag)),array('fields' => 'Tag.id'));
+                    if($tempTag != NULL) { 
+                        $existingTagArray['DeckTag']['tag_id'] = $tempTag['Tag']['id'];      
+                        $debugMsg = $debugMsg." existing tag: ".$tempTag['Tag']['id']; 
+                    }
+                    else {
+                        if($tag != "") {
+                            $newTagArray['Tag']['tag'] = $tag;
+                            $debugMsg = $debugMsg." new tag: ".$tag;
+                        }                        
+                    }
+                }
+                
+                /*
+                if($this->Tag->save($newTagArray, array('validate' => 'only'))) {
+                    $this->log("[" . get_class($this) . "-> create] " . $debugMsg, LOG_DEBUG);
+                
                 }
                 else {
-                    // if tag doesn't exist save it to the tag table as a new entry
-                    $newTag['Tag']['tag'] = $tag_value;
-                    $this->Tag->save($newTag);
-                    //sets new tag entry id to decktag.tag_id
-                    $this->data['DeckTag']['tag_id'] = $this->Tag->id;
+                    $this->log("[" . get_class($this) . "-> createfail] " . $debugMsg, LOG_DEBUG);
                 }
-				
-
-               // $theDeckId = $this->Deck->id;
-                //set decktag.deck_id to id of newly created deck
-
-                $this->data['DeckTag']['deck_id'] = $theDeckId;
-                //saves to decktag table
-
-                $decktag = $this->DeckTag->save($this->data);
-            }       
-			*/
-			if($this->Deck->saveAll($this->data,array('validate' => 'only'))) { 
-				$deck = $this->Deck->saveAll($this->data,array('validate' => 'false'));
+                */
+            
+            }
+            
+            
+            
+            
+            
+			if($this->Deck->saveAll($this->data,array('validate' => 'only'))) {
+                
+				//$deck = $this->Deck->saveAll($this->data,array('validate' => 'false'));
 			}
 			/*
 			if(!empty($deck)){

@@ -8,7 +8,7 @@ class Deck extends AppModel {
 			'deck_name' => array(
 				'between' => array(
 					'rule' => array('between', 3, 127),
-					'message' => 'Deck title be between 3 to 127 characters'
+					'message' => 'Deck title must be between 3 to 127 characters'
 				)
 			),
 			'description' => array(
