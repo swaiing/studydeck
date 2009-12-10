@@ -22,33 +22,26 @@ class DecksController extends AppController {
 
 	function create(){
         $this->pageTitle = 'Create a Deck';
-        //$this->layout='create_edit';
-        //creates tag dropdown
-        // $tag_array = $this->Tag->find('list',array('fields'=>'Tag.tag'));
-        // array_push($tag_array, "---Select Category---");
-        //sort($tag_array);
-        //$this->set('tagdata',$tag_array);
-
         if(!empty($this->data)){
 			//sanitize the input data
-			App::import('Sanitize');
-			$this->data = Sanitize::clean($this->data);	
+            App::import('Sanitize');
+            $this->data = Sanitize::clean($this->data);	
 			
 			//gets authenticated user Id
-			$authUserId = $this->Auth->user('id');
+			$userId = $this->Auth->user('id');
 			
 			
             // add user id into deck
-            $this->data['Deck']['user_id']= $authUserId; 
+            $this->data['Deck']['user_id']= $userId; 
 
             
 			//finds the number of cards being entered
             $num = count($this->data['Card']);
 
-            //traverses the cards being entered and sets their deck id to the new deck id
-            for($x = 0; $x < $num; $x ++){
+            //traverses the cards and unsets empty card rows
+            for($x = 0; $x < $num; $x ++) {
 				//remove empty cards from creating
-				if($this->data['Card'][$x]['question'] == '' && $this->data['Card'][$x]['answer'] == '') {
+				if(empty($this->data['Card'][$x]['question']) && empty($this->data['Card'][$x]['answer'])) {
 					unset($this->data['Card'][$x]);
 				}
 				
@@ -58,53 +51,55 @@ class DecksController extends AppController {
             
             
 			if($this->Deck->saveAll($this->data,array('validate' => 'only'))) {
-                
-                
+
                 $this->Deck->saveAll($this->data,array('validate' => 'false'));
                 
                 $deckId = $this->Deck->id;
                 $tagList = $this->data['Tag']['tag'];
                 //$debugMsg ="";
                 $newTagArray = array();
-                $existingTagArray = array();
+                $deckTagArray = array();
                 
                 
-                $tagListArray = explode(",", $tagList);
+                $tagListArray = explode(" ", $tagList);
                 $tagListArrayLength = count($tagListArray);
                    
-                for( $tagIndex = 0; $tagIndex < $tagListArrayLength; $tagIndex ++) {            
+                for($tagIndex = 0; $tagIndex < $tagListArrayLength; $tagIndex ++) {            
                     //$debugMsg = $debugMsg." ".trim($tagListArray[$tagIndex]); 
                    
                     $tag = trim($tagListArray[$tagIndex]);
                     $tempTag = $this->Tag->find('first',array('conditions' => array('Tag.tag' => $tag)),array('fields' => 'Tag.id'));
-                    if($tag != "") {
-                        if($tempTag == NULL) { 
+                    if(!empty($tag)) {
+                        if($tempTag == null) { 
                             $newTagArray['Tag']['tag'] = $tag;
+                            //print_r($newTagArray);
+                            $this->Tag->create();
                             $this->Tag->save($newTagArray, array('validate' => 'false'));
-                            $existingTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->Tag->id; 
+                            $deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->Tag->id; 
                             //$debugMsg = $debugMsg." new tag: ".$tag." id: ".$this->Tag->id;
+                            
                         }
                         else {                
-                            $existingTagArray['DeckTag'][$tagIndex]['tag_id'] = $tempTag['Tag']['id']; 
+                            $deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $tempTag['Tag']['id']; 
                             //$debugMsg = $debugMsg." existing tag: ".$tempTag['Tag']['id']; 
                         }                                                          
-                        $existingTagArray['DeckTag'][$tagIndex]['deck_id'] = $deckId;                             
+                        $deckTagArray['DeckTag'][$tagIndex]['deck_id'] = $deckId;                             
                     }
                 }
                                     
-                if($existingTagArray != null) {
-                    $debugMsg = $debugMsg." reached here"; 
-                    print_r($existingTagArray);
-                    $this->DeckTag->saveAll($existingTagArray['DeckTag']);
+                if($deckTagArray != null) {
+                    //$debugMsg = $debugMsg." reached here"; 
+                    //print_r($deckTagArray);
+                    $this->DeckTag->saveAll($deckTagArray['DeckTag']);
+                    //$this->log("[" . get_class($this) . "-> create] " . $debugMsg, LOG_DEBUG);
                     
                 }
                                     
-                    
-
                 $this->data['MyDeck']['deck_id'] = $deckId;
-                $this->data['MyDeck']['user_id'] = $this->data['Deck']['user_id'];
+                $this->data['MyDeck']['user_id'] = $userId;
                 $this->MyDeck->save($this->data); 
                 
+                $this->redirect(array('controller'=>'decks','action'=>'view',$deckId));
                         
 			}
 			

@@ -2,7 +2,7 @@
 class Tag extends AppModel {
     var $name = 'Tag';
     var $hasMany = 'DeckTag';
-    var $actsAs = array ('Searchable');
+    //var $actsAs = array ('Searchable');
     var $validate = array(
         'tag' => array(
             'rule' => array('maxLength', 127),
