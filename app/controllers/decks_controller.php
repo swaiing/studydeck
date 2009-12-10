@@ -53,59 +53,63 @@ class DecksController extends AppController {
 				}
 				
 			}
-			
-            $tagList = $this->data['Deck']['tag_list'];
-            $debugMsg ="";
-            $newTagArray = array();
-            $existingTagArray = array();
             
-            if($tagList != "") {
-                $tagListArray = explode(",", $tagList);
-                $tagListArrayLength = count($tagListArray);
-               
-                for( $tagIndex = 0; $tagIndex < $tagListArrayLength; $tagIndex ++) {            
-                    //$debugMsg = $debugMsg." ".trim($tagListArray[$tagIndex]); 
-                    $tag = trim($tagListArray[$tagIndex]);
-                    $tempTag = $this->Tag->find('first',array('conditions' => array('Tag.tag' => $tag)),array('fields' => 'Tag.id'));
-                    if($tempTag != NULL) { 
-                        $existingTagArray['DeckTag']['tag_id'] = $tempTag['Tag']['id'];      
-                        $debugMsg = $debugMsg." existing tag: ".$tempTag['Tag']['id']; 
-                    }
-                    else {
-                        if($tag != "") {
-                            $newTagArray['Tag']['tag'] = $tag;
-                            $debugMsg = $debugMsg." new tag: ".$tag;
-                        }                        
-                    }
-                }
-                
-                /*
-                if($this->Tag->save($newTagArray, array('validate' => 'only'))) {
-                    $this->log("[" . get_class($this) . "-> create] " . $debugMsg, LOG_DEBUG);
-                
-                }
-                else {
-                    $this->log("[" . get_class($this) . "-> createfail] " . $debugMsg, LOG_DEBUG);
-                }
-                */
-            
-            }
-            
-            
-            
+            //$this->log("[" . get_class($this) . "-> create] " . $debugMsg, LOG_DEBUG);
             
             
 			if($this->Deck->saveAll($this->data,array('validate' => 'only'))) {
                 
-				//$deck = $this->Deck->saveAll($this->data,array('validate' => 'false'));
+                
+                $this->Deck->saveAll($this->data,array('validate' => 'false'));
+                
+                $deckId = $this->Deck->id;
+                $tagList = $this->data['Tag']['tag'];
+                //$debugMsg ="";
+                $newTagArray = array();
+                $existingTagArray = array();
+                
+                
+                $tagListArray = explode(",", $tagList);
+                $tagListArrayLength = count($tagListArray);
+                   
+                for( $tagIndex = 0; $tagIndex < $tagListArrayLength; $tagIndex ++) {            
+                    //$debugMsg = $debugMsg." ".trim($tagListArray[$tagIndex]); 
+                   
+                    $tag = trim($tagListArray[$tagIndex]);
+                    $tempTag = $this->Tag->find('first',array('conditions' => array('Tag.tag' => $tag)),array('fields' => 'Tag.id'));
+                    if($tag != "") {
+                        if($tempTag == NULL) { 
+                            $newTagArray['Tag']['tag'] = $tag;
+                            $this->Tag->save($newTagArray, array('validate' => 'false'));
+                            $existingTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->Tag->id; 
+                            //$debugMsg = $debugMsg." new tag: ".$tag." id: ".$this->Tag->id;
+                        }
+                        else {                
+                            $existingTagArray['DeckTag'][$tagIndex]['tag_id'] = $tempTag['Tag']['id']; 
+                            //$debugMsg = $debugMsg." existing tag: ".$tempTag['Tag']['id']; 
+                        }                                                          
+                        $existingTagArray['DeckTag'][$tagIndex]['deck_id'] = $deckId;                             
+                    }
+                }
+                                    
+                if($existingTagArray != null) {
+                    $debugMsg = $debugMsg." reached here"; 
+                    print_r($existingTagArray);
+                    $this->DeckTag->saveAll($existingTagArray['DeckTag']);
+                    
+                }
+                                    
+                    
+
+                $this->data['MyDeck']['deck_id'] = $deckId;
+                $this->data['MyDeck']['user_id'] = $this->data['Deck']['user_id'];
+                $this->MyDeck->save($this->data); 
+                
+                        
 			}
-			/*
-			if(!empty($deck)){
-				$this->data['MyDeck']['deck_id'] = $this->Deck->id;
-				$this->data['MyDeck']['user_id'] = $this->data['Deck']['user_id'];
-				$this->MyDeck->save($this->data); 
-			}			
-			*/
+			
+					
+			
         } // end if(!empty($this->data))
 
     }
