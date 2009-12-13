@@ -23,29 +23,29 @@ class DecksController extends AppController {
 	function create(){
         $this->pageTitle = 'Create a Deck';
         if(!empty($this->data)){
-			//sanitize the input data
+            //sanitize the input data
             App::import('Sanitize');
             $this->data = Sanitize::clean($this->data);	
 			
-			//gets authenticated user Id
-			$userId = $this->Auth->user('id');
+            //gets authenticated user Id
+            $userId = $this->Auth->user('id');
 			
 			
             // add user id into deck
             $this->data['Deck']['user_id']= $userId; 
 
             
-			//finds the number of cards being entered
+            //finds the number of cards being entered
             $num = count($this->data['Card']);
 
             //traverses the cards and unsets empty card rows
             for($x = 0; $x < $num; $x ++) {
-				//remove empty cards from creating
-				if(empty($this->data['Card'][$x]['question']) && empty($this->data['Card'][$x]['answer'])) {
-					unset($this->data['Card'][$x]);
-				}
+                //remove empty cards from creating
+                if(empty($this->data['Card'][$x]['question']) && empty($this->data['Card'][$x]['answer'])) {
+                    unset($this->data['Card'][$x]);
+                }
 				
-			}
+            }
             
             //$this->log("[" . get_class($this) . "-> create] " . $debugMsg, LOG_DEBUG);
             
@@ -99,16 +99,13 @@ class DecksController extends AppController {
                 $this->data['MyDeck']['user_id'] = $userId;
                 $this->MyDeck->save($this->data); 
                 
-                $this->redirect(array('controller'=>'decks','action'=>'view',$deckId));
+                $this->redirect(array('controller'=>'decks','action'=>'info',$deckId));
                         
 			}
-			
-					
 			
         } // end if(!empty($this->data))
 
     }
-
 
 
     //deletes a deck and all related cards
@@ -339,7 +336,17 @@ class DecksController extends AppController {
     }
 
     return $resultMap;
-}
+  }
+
+  /*
+   * Deck landing page
+   *
+   */
+    function info($id)
+    {
+        $this->study($id);
+    }
+
 
     function study($id = null)
     {

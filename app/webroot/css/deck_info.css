@@ -1,0 +1,68 @@
+/**** deck_info.js ****/
+
+div#heading {
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #cecece;
+}
+
+div#heading h1 {
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    clear: left;
+}
+
+div#heading p {
+    font-size: 14px;
+    margin: 0;
+    padding: 0 0 10px 0;
+}
+
+div#middle {
+    font-size: 12px;
+    border-bottom: 1px solid #cecece;
+}
+
+div#middle input {
+    float: left;
+    clear: left;
+}
+
+div#middle label {
+    float: left;
+    clear: right;
+}
+
+div#category_select {
+    width: 50%;
+    margin: 10px 0 10px 0;
+    padding: 0;
+    float: left;
+    clear: left;
+}
+
+div#category_select p {
+    margin-left: 20px;
+}
+
+div#category_select input {
+    margin-left: 40px;
+}
+
+div#mode_select {
+    width: 50%;
+    margin: 10px 0 10px 0;
+    padding: 0;
+    float: left;
+    clear: right;
+}
+    
+div#mode_select input {
+   width: 100px;
+   height: 30px;
+   margin: 0 20px 0 0 ;
+   padding: 0;
+   float: left;
+   clear: none;
+}

@@ -46,7 +46,7 @@
 			<td><?php echo $itemCount; ?> </td>
 			<td>
 			<?php
-		  		echo $html->link($deck['Deck']['deck_name'],"/decks/view/".$deck['Deck']['id']);
+		  		echo $html->link($deck['Deck']['deck_name'],"/decks/info/".$deck['Deck']['id']);
 			?>
 			</td>
 			<td><?php echo count($deck['Card']) ?></td>
