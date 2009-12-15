@@ -2,8 +2,8 @@
 class SearchIndexController extends AppController
  {
 	var $name = 'SearchIndex';
-	//var $uses = array('SearchIndex');
-	var $searchableModels = array('Tag');
+	var $uses = array('SearchIndex');
+	var $searchableModels = array('Tag','Deck');
 
 	
 	function init() {

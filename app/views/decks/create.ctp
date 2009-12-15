@@ -4,6 +4,7 @@
     echo $javascript->link('jquery-1.2.6.min',false);
     echo $javascript->link('jquery.form',false);
     echo $javascript->link('deck_create',false);
+    echo $javascript->link('jquery.autocomplete.min.js', false);
 
     // CSS includes
     echo $html->css('deck_create',null,null,false);
@@ -44,8 +45,8 @@
     echo "<li>" . $form->input('Deck.deck_name',array('label'=>'Title:','size'=>$detailFieldSize)) . "</li>\n";
 
     // Tags/Categories
-    echo "<li>" . $form->input('Tag.tag',array('label' => 'Tags:','size'=>$detailFieldSize)) . "</li>\n";
-
+    echo "<li>" . $form->input('Tag.tag',array('label' => 'Tags:','size'=>$detailFieldSize, 'id' => 'autoComplete')) . "</li>\n";
+ 
     // Privacy radio
     echo "<li class=\"privacyOptions\">" . $form->radio('privacy',$privacyOptions,$privacyAttributes);
     //echo "<li>" . $form->input('Deck.privacy',array('label'=>'Privacy:','size'=>$detailFieldSize)) . "</li>\n";
