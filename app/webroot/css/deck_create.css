@@ -1,17 +1,16 @@
 /****** deck_create.css ******/
 
-fieldset {
+div#deck_inputs {
     margin: 10px 0 0 0;
     padding: 0;
-    border: 1px solid #cecece;
 }
 
-fieldset ol {
+div#deck_inputs ol {
     padding: 1em 1em 0 1em;
     list-style: none;
 }
 
-fieldset li {
+div#deck_inputs li {
     padding-bottom: 1em;
 }
 
@@ -23,12 +22,12 @@ legend {
 
 label {
     float: left;
-    width: 7em;
+    width: 6em;
     margin-right: 1em;
-    text-align: right;
+    text-align: left;
 }
 
-fieldset li {
+div#deck_inputs li {
     float: left;
     clear: left;
     width: 100%;
@@ -36,7 +35,7 @@ fieldset li {
 }
 
 li.privacyOptions {
-    margin-left: 7em;
+    margin-left: 6em;
 }
 
 li.privacyOptions label {
@@ -44,17 +43,17 @@ li.privacyOptions label {
     margin-left: 1em;
 }
 
-fieldset#cards {
+div#card_inputs {
     margin: 0;
     padding-bottom: 1em;
 }
 
-fieldset#cards input {
+div#card_inputs input {
     float: left;
     margin-right: 1em;
 }
 
-fieldset#cards #term_header {
+div#card_inputs #term_header {
     font-weight: bold;
     float: left;
     clear: left;
@@ -62,7 +61,7 @@ fieldset#cards #term_header {
     margin-left: 8em;
 }
 
-fieldset#cards #definition_header {
+div#card_inputs #definition_header {
     font-weight: bold;
     float: left;
     width: 20em;
@@ -89,6 +88,14 @@ div#submit_deck {
 }
 
 div#submit_deck input {
+}
+
+input#upload_button {
+}
+div#upload_box {
+    margin: 0 0 10px 0;
+    padding: 10px;
+    border: 1px solid #cecece;
 }
 
 /*** auto complete CSS ***/
