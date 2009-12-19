@@ -222,11 +222,13 @@ class UsersController extends AppController {
 			     		$hardR ++;
 			     	}
 			    }
+                else {
+                    //if no rating default as hard
+                    $hardR ++;
+                }
 			 }
 
-			 $unclassifiedR =$totalCards - $easyR - $mediumR - $hardR;
-			 
-			 
+			 			 
 			 //hold study count of deck
 			 $tempStudyCount = $myDeck['MyDeck']['study_count'];
 			 //Find favorite decks
@@ -250,7 +252,7 @@ class UsersController extends AppController {
 				$tempStudyCountArray = array($tempStudyCount,$myDeck['MyDeck']['modified']);
 			 }
 
-			 $deck = array_merge($tempDeck, $tempStudyCountArray,array("All"=> $totalCards,"Easy"=>$easyR,"Medium" => $mediumR, "Hard"=>$hardR, "Unclassified" => $unclassifiedR));
+			 $deck = array_merge($tempDeck, $tempStudyCountArray,array("All"=> $totalCards,"Easy"=>$easyR,"Medium" => $mediumR, "Hard"=>$hardR));
 
 			 //splits decks between user decks and private decks
 		 	 if($deck['Deck']['user_id'] == $currentUserId)	{ 

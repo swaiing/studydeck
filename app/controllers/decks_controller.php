@@ -52,9 +52,10 @@ class DecksController extends AppController {
             
 			if($this->Deck->saveAll($this->data,array('validate' => 'only'))) {
 
-                $this->Deck->saveAll($this->data,array('validate' => 'false'));
+               $this->Deck->saveAll($this->data,array('validate' => 'false'));
                 
                 $deckId = $this->Deck->id;
+                //$deckId =155;
                 $tagList = $this->data['Tag']['tag'];
                 //$debugMsg ="";
                 $newTagArray = array();
@@ -63,7 +64,7 @@ class DecksController extends AppController {
                 
                 $tagListArray = explode(" ", $tagList);
                 $tagListArrayLength = count($tagListArray);
-                   
+                  
                 for($tagIndex = 0; $tagIndex < $tagListArrayLength; $tagIndex ++) {            
                     //$debugMsg = $debugMsg." ".trim($tagListArray[$tagIndex]); 
                    
@@ -74,8 +75,9 @@ class DecksController extends AppController {
                             $newTagArray['Tag']['tag'] = $tag;
                             //print_r($newTagArray);
                             $this->Tag->create();
-                            $this->Tag->save($newTagArray, array('validate' => 'false'));
-                            $deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->Tag->id; 
+                            $this->Tag->save($this->data, array('validate' => 'false'));
+                            $deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->Tag->id;
+                            //$deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->requestAction('/tags/sTag/'.$newTagArray);
                             //$debugMsg = $debugMsg." new tag: ".$tag." id: ".$this->Tag->id;
                             
                         }
@@ -86,7 +88,7 @@ class DecksController extends AppController {
                         $deckTagArray['DeckTag'][$tagIndex]['deck_id'] = $deckId;                             
                     }
                 }
-                                    
+                                   
                 if($deckTagArray != null) {
                     //$debugMsg = $debugMsg." reached here"; 
                     //print_r($deckTagArray);

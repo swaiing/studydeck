@@ -2,6 +2,7 @@
 class TagsController extends AppController {
     var $name = 'Tags';
     var $helpers = array('Html','Javascript','Form','Ajax');
+    var $uses = array('Tag','SearchIndex');
     var $scaffold;
     
     
@@ -28,6 +29,19 @@ class TagsController extends AppController {
         
         $this->set('tags', $this->Tag->find('all', $tagParams));
         
+    }
+    
+    function sTag($tag = null) {
+        //disable need for a view	
+        $tag = array();
+        $tag['Tag']['tag'] = "gi22";
+     	$this->autoRender=false;
+        //$this->SearchIndex->create();
+        //$this->Tag->Setup();
+        $this->Tag->create();
+        $this->Tag->save($tag, array('validate' => 'false'));
+        
+        return $this->Tag->id; 
     }
 
      

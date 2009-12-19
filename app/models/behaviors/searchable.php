@@ -15,7 +15,8 @@ class SearchableBehavior extends ModelBehavior {
 		$settings = array_merge($this->_defaults, $settings);	
 		$this->settings[$model->name] = $settings;
 		$this->model = &$model;
-	}
+       
+    }
 	
 	function _indexData() {
 		if (method_exists($this->model, 'indexData')) {
@@ -74,7 +75,14 @@ class SearchableBehavior extends ModelBehavior {
 	
 	function _index() {
 		$index = array();
-		$data = $this->model->data[$this->model->name];
+        $data = $this->model->data[$this->model->name];
+        $this->log("[" . get_class($this) . "-> index] ".$this->model->name, LOG_DEBUG);
+        if($data == null) {
+            $this->log("[" . get_class($this) . "-> index] data is null ", LOG_DEBUG);
+            print_r($this->model->data);
+            //$data = $this->model->data['Tag'];
+        }
+        
 		foreach ($data as $key => $value) {
 			if (is_string($value)) {
 				$columns = $this->model->getColumnTypes();

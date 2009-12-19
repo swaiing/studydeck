@@ -63,8 +63,7 @@
 				<td><?php echo $pDeck['Deck']['description']; ?></td>
 				<td><?php echo $pDeck['0']; ?></td>
 				<td> <?php echo $pDeck['1']; ?> </td>
-				<td>All <?php echo $pDeck['All']; ?> Easy <?php echo $pDeck['Easy']; ?> Medium <?php echo $pDeck['Medium'] ?> Hard <?php echo $pDeck['Hard']; ?> Unclassified <?php echo $pDeck['Unclassified']; ?>  
-				</td>
+				<td>All <?php echo $pDeck['All']; ?> Easy <?php echo $pDeck['Easy']; ?> Medium <?php echo $pDeck['Medium'] ?> Hard <?php echo $pDeck['Hard']; ?> </td>
      		</tr>
 			<?php endforeach; ?>
 
@@ -94,7 +93,7 @@
 				<td><a href="/studydeck/decks/study/<?php echo $ucDeck['Deck']['id']; ?> "> <?php echo $ucDeck['Deck']['deck_name']; ?></a> <a href="/studydeck/decks/edit/<?php echo $ucDeck['Deck']['id']; ?>">[edit]</a> </td> 
 				<td> <?php echo $ucDeck['Deck']['description']; ?> </td>
 				<td> <?php echo $ucDeck['0']; ?> </td><td> <?php echo $ucDeck['1']; ?> </td>
-				<td>All <?php echo $ucDeck['All']; ?> Easy <?php echo $ucDeck['Easy']; ?> Medium <?php echo $ucDeck['Medium'] ?> Hard <?php echo $ucDeck['Hard']; ?> Unclassified <?php echo $ucDeck['Unclassified']; ?>  </td>
+				<td>All <?php echo $ucDeck['All']; ?> Easy <?php echo $ucDeck['Easy']; ?> Medium <?php echo $ucDeck['Medium'] ?> Hard <?php echo $ucDeck['Hard']; ?></td>
 			</tr>
 			<?php endforeach; ?>
 
