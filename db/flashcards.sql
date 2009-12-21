@@ -78,6 +78,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`my_decks` (
   `created` DATETIME NOT NULL ,
   `modified` DATETIME NOT NULL ,
   `study_count` INT NOT NULL ,
+  `type` INT NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `user_id_md` (`user_id` ASC) ,
   INDEX `deck_id_md` (`deck_id` ASC) ,
