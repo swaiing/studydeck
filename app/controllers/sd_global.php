@@ -38,6 +38,11 @@ class SD_Global
     // Constants for TempUser Clean Up
     //delete any temp accounts older than $DAYS_TO_KEEP
     public static $DAYS_TO_KEEP = 14;
+    
+    // Constants for My_Deck Types
+    public static $RECENTLY_VIEWED_DECK = 1;
+    public static $USER_CREATED = 2;
+    public static $USER_SAVED = 3;
 
 }
 ?>
