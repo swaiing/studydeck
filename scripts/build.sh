@@ -7,20 +7,33 @@
 # Prerequisite: $GROUP_OWNER group must have Apache as a member.
 # So that /app/tmp and /app/tmp/cache directories are writeable.
 #
-# Example: Builds project for Steve.
-# ./build.sh /var/www/html -s
+# Examples:
+#
+# 1)  Builds database and entire project minus .svn dirs.
+# ./build.sh -t all
+#
+# 2) Builds project and copies over Steve's config with .svn directories
+# ./build.sh -s -t all -c steve
 
-BUILD_DIR=$1
-CUST_CONFIG=$2
 
-APP_ROOT="../app"
+TARGET_STR="----> TARGET:"
+DATE=`date`
+ROOT_DIR=`dirname $0`
+BUILD_DIR=/var/www/html
+
+EXPORT_SVN=true
+APP_REPOS=svn+ssh://wais@studydeck.hopto.org/home/svn/studydeck/trunk/app
+APP_TMP=/tmp/app
+APP_REPOS_OUT=/tmp/app_repos.svn
+
+BUILD_NUM_STR="BUILD_NUM"
+DB_SCRIPT=$ROOT_DIR/../db/scripts/build-db.sh
 CAKE_BUILD=cake_1.2.3.8166
 PROJECT_BUILD=studydeck
-CAKE_INSTALL="../media/${CAKE_BUILD}.tar.gz"
-DATE=`date`
+CAKE_INSTALL=$ROOT_DIR/../media/${CAKE_BUILD}.tar.gz
+
 CAKE_ROOT=$BUILD_DIR/$PROJECT_BUILD
 CAKE_LAYOUT=$BUILD_DIR/$PROJECT_BUILD/app/views/layouts/default.ctp
-BUILD_NUM_STR="BUILD_NUM"
 CAKE_TMP=$BUILD_DIR/$PROJECT_BUILD/app/tmp
 CAKE_CACHE=$BUILD_DIR/$PROJECT_BUILD/app/tmp/cache
 CAKE_LOGS=$BUILD_DIR/$PROJECT_BUILD/app/tmp/logs
@@ -30,21 +43,36 @@ CAKE_CONFIG=$BUILD_DIR/$PROJECT_BUILD/app/config
 # ----Apache user must be in this group!
 GROUP_OWNER=webadm
 
+# ----Production config
+DB_CFG=$ROOT_DIR/database.php
+CORE_CFG=$ROOT_DIR/core.php
+
 # ----Steve's config
-DB_CFG_SHW=database.php.shw
-CORE_CFG_SHW=core.php.shw
+DB_CFG_SHW=$ROOT_DIR/database.php.shw
+CORE_CFG_SHW=$ROOT_DIR/core.php.shw
 
 # ----Nicolo's config
-DB_CFG_NHG=database.php.nhg
-CORE_CFG_NHG=core.php.nhg
+DB_CFG_NHG=$ROOT_DIR/database.php.nhg
+CORE_CFG_NHG=$ROOT_DIR/core.php.nhg
 
 usage() {
-  echo "Usage:$0: [build to directory] -[s|n]"
-  echo " -s  Copy Steve's config"
-  echo " -n  Copy Nicolo's config"
+  echo ""
+  echo "Usage: `basename $0` [-s] -t [build_db|clean|build] [-c [nicolo|steve]]"
+  echo ""
+}
+
+clean() {
+  echo ""
+  echo "  $TARGET_STR clean"
+  if [ -d $CAKE_ROOT ]; then
+    echo "  Removing $CAKE_ROOT"
+    rm -rf $CAKE_ROOT
+  fi
 }
 
 build() {
+  echo ""
+  echo "  $TARGET_STR build"
   echo "  Starting Build $DATE"
 
   # Check if $BUILD_DIR is writeable
@@ -68,12 +96,19 @@ build() {
 
   # Unpack cake tarball, rename and move to BUILD_DIR
   echo "  Unpacking $CAKE_INSTALL and moving to $BUILD_DIR"
+  cd /tmp
   zcat $CAKE_INSTALL | tar xf -
   cp -r $CAKE_BUILD $BUILD_DIR/$PROJECT_BUILD
 
   # Copy /app over cake install
-  echo "  Copying source /app root to $CAKE_ROOT"
-  cp -r $APP_ROOT $CAKE_ROOT
+  echo "  Exporting source /app root to $CAKE_ROOT"
+  if [ "$EXPORT_SVN" = "true" ]; then
+    svn export --force $APP_REPOS $APP_TMP > $APP_REPOS_OUT
+  else
+    svn checkout $APP_REPOS $APP_TMP > $APP_REPOS_OUT
+  fi
+  echo "  Copying $APP_TMP to $CAKE_ROOT"
+  cp -r $APP_TMP $CAKE_ROOT
 
   # Change group owner on /app/tmp 
   # Make /app/tmp and /app/tmp/cache group writeable
@@ -84,16 +119,27 @@ build() {
   chmod g+rwx $CAKE_LOGS
   chmod g+rwx $CAKE_SESSIONS
 
+  # Insert SVN revision number
+  if [ "$EXPORT_SVN" = "true" ]; then
+    echo "  Inserting build revision"
+    tmp_file=/tmp/layout.tmp
+    revision=`tail -1 $APP_REPOS_OUT | sed "s/\(Exported revision \)\([0-9]*\)/\2/" | cut -d . -f1`
+    sed s/${BUILD_NUM_STR}/${revision}/g ${CAKE_LAYOUT} > $tmp_file
+    cp $tmp_file ${CAKE_LAYOUT}
+  fi
+
   # Remove unpacked install
   echo "  Cleaning staged install"
-  rm -r $CAKE_BUILD
+  rm -rf /tmp/$CAKE_BUILD
+  rm -rf $APP_TMP
+  rm -rf $APP_REPOS_OUT
+}
 
-  # Insert SVN revision number
-  echo "  Inserting build revision"
-  revision=`svnversion`
-  tmp_file=/var/tmp/layout.tmp
-  sed s/${BUILD_NUM_STR}/${revision}/g ${CAKE_LAYOUT} > $tmp_file
-  cp $tmp_file ${CAKE_LAYOUT}
+copy_prd_config() {
+  # Copy production config files
+  echo "  Copying production config files"
+  cp $DB_CFG $CAKE_CONFIG/database.php
+  cp $CORE_CFG $CAKE_CONFIG/core.php
 }
 
 copy_shw_config() {
@@ -110,30 +156,61 @@ copy_nhg_config() {
   cp $CORE_CFG_NHG $CAKE_CONFIG/core.php
 }
 
-# Check for empty arg
-if [ -z "$BUILD_DIR" ]; then
-  usage
-  exit 1
-fi
+build_db() {
+  # Run build-db.sh script
+  echo ""
+  echo "  $TARGET_STR build_db"
+  $DB_SCRIPT
+}
 
-# Run build
-build
+# Get options
+while getopts "st:c:" opt; do
+  case $opt in
+    s)
+      EXPORT_SVN=false 
+    ;;
+    t)
+      if [ "$OPTARG" = "clean" ]; then
+        clean
+        exit 0
 
-# Copy config files
-if [ -z "$CUST_CONFIG" ]; then
-  # Inform user to copy/configure config.php, core.php
-  echo "  *** Please copy over config.php and database.php to $CAKE_ROOT/app/config"
+      elif [ "$OPTARG" = "build" ]; then
+        build
+        exit 0
+      
+      elif [ "$OPTARG" = "build_db" ]; then
+        build_db
+        exit 0
 
-else
-  # Copy Steve's config
-  if [ "$CUST_CONFIG" = "-s" ]; then
-    copy_shw_config
-  fi
+      elif [ "$OPTARG" = "all" ]; then
+        build_db
+        clean
+        build
+        copy_prd_config
+        exit 0
 
-  # Copy Nicolo's config
-  if [ "$CUST_CONFIG" = "-n" ]; then
-    copy_nhg_config
-  fi
-  
-fi
+      else
+        echo "  Invalid target: $OPTARG"
+        exit 1
+      fi
+    ;;
+    c)
+      if [ "$OPTARG" = "steve" ]; then
+        copy_shw_config
+      elif [ "$OPTARG" = "nicolo" ]; then
+        copy_nhg_config
+      else
+        echo "  Invalid config: $OPTARG"
+        exit 1
+      fi
+    ;;
+    :)
+
+      echo "  Option -$OPTARG requires and argument."
+      usage
+      exit 1    
+    ;;
+  esac
+done
+
 exit 0

@@ -10,7 +10,7 @@
 # To create $MYSQL_USER in mysql, login as the root user ($ mysql -u root -p) and run:
 # 
 # mysql> CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
-# mysql> GRANT ALL PRIVILEGES ON 'mysqldv'.* to 'username'@"localhost" IDENTIFIED BY 'username';
+# mysql> GRANT ALL PRIVILEGES ON 'database_name'.* to 'username'@"localhost" IDENTIFIED BY 'username';
 # 
 # Example for this script:
 # mysql> CREATE USER 'mysqldev'@'localhost' IDENTIFIED BY 'mysqldev';
@@ -19,7 +19,8 @@
 # Example usage: 
 # ./build-db.sh 
 
-SCHEMA_SQL_ORIG=../flashcards.sql
+ROOTDIR=`dirname $0`
+SCHEMA_SQL_ORIG=$ROOTDIR/../flashcards.sql
 SCHEMA_DB_ORIG_NAME=flashcards
 SCHEMA_SQL=/tmp/studydeck.sql
 
@@ -29,7 +30,7 @@ MYSQL_DB=studydeckdev
 MYSQL_EXEC="mysql -u $MYSQL_USER -p${MYSQL_PASSWORD}" 
 
 TMP_DATA_SQL=/tmp/populate_data.sql
-DATA_1_SQL=create_data.sql
+DATA_1_SQL=$ROOTDIR/create_data.sql
 
 
 drop_recreate() {
@@ -71,4 +72,3 @@ drop_recreate
 rename_schema
 create_schema
 populate
-
