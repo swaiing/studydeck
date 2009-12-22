@@ -1,8 +1,11 @@
 <!-- /app/views/users/dashboard.ctp -->
 <?php
 	// Javascript includes
-    echo $javascript->link('jquery-1.2.6.min',false);
+    //echo $javascript->link('jquery-1.2.6.min',false);
+    echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
+    echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js',false);
     echo $javascript->link('user_dashboard',false);
+    echo $html->css('jquery-ui-1.7.2.custom',null,null,false);
 ?>
 
 <div id="middle_wrapper_content">
@@ -64,11 +67,7 @@
                 <td><?php echo $pDeck['Easy']; ?></td>
                 <td><?php echo $pDeck['Medium'] ?></td>
 				<td><?php echo $pDeck['Hard']; ?></td>
-                <td>
-					<?php 
-						echo $html->link("x","#",array('onclick' => "deletePublicDeck(".$pDeck['Deck']['id'].")"));
-					?> 
-				</td>            
+                <td><?php echo $html->link("x","#",array('onclick' => "publicDeleteDialog(".$pDeck['Deck']['id'].")"));?></td>            
             </tr>
 			<?php endforeach; ?>
 
@@ -104,7 +103,8 @@
                 <td><?php echo $ucDeck['Easy']; ?></td>
                 <td><?php echo $ucDeck['Medium'] ?></td>
                 <td><?php echo $ucDeck['Hard']; ?></td>
-                <td><?php echo $html->link("x","#",array('onclick' => "deleteUserDeck(".$ucDeck['Deck']['id'].")"));?> </td>
+                <td><?php echo $html->link("x","#",array('onclick' => "userDeleteDialog(".$ucDeck['Deck']['id'].")"));?></td>
+                 
             </tr>
 			<?php endforeach; ?>
 
@@ -114,6 +114,11 @@
 			echo "<div class=\"nodecks\">No User Created Decks in Dashboard</div>";
 		}
 		?>
+        <div id="publicDeleteDialog" title="Remove From Dashboard">
+            <p>Are you sure you want to delete this deck from your dashboard?</p>
+        </div>
+        <div id="userDeleteDialog" title="Remove Your Deck"></div>
+
 		</div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->
 <div class="clear_div">&nbsp;</div>
