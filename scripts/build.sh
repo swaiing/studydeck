@@ -62,7 +62,7 @@ CORE_CFG_NHG=$ROOT_DIR/core.php.nhg
 
 usage() {
   echo ""
-  echo "Usage: `basename $0` [-s] -t [build_db|clean|build|all] [-c [nicolo|steve]]"
+  echo "Usage: `basename $0` [-s] -t [build_db|build_app|clean|build|all] [-c [nicolo|steve]]"
   echo ""
 }
 
@@ -187,6 +187,12 @@ while getopts "st:c:" opt; do
       
       elif [ "$OPTARG" = "build_db" ]; then
         build_db
+        exit 0
+
+      elif [ "$OPTARG" = "build_app" ]; then
+	clean
+        build
+	copy_prd_config
         exit 0
 
       elif [ "$OPTARG" = "all" ]; then
