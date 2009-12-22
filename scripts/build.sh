@@ -22,15 +22,20 @@ ROOT_DIR=`dirname $0`
 BUILD_DIR=/var/www/html
 
 EXPORT_SVN=true
-APP_REPOS=svn+ssh://wais@studydeck.hopto.org/home/svn/studydeck/trunk/app
+SVN_USER=webadm
+APP_REPOS=svn+ssh://${SVN_USER}@studydeck.hopto.org/home/svn/studydeck/trunk/app
 APP_TMP=/tmp/app
 APP_REPOS_OUT=/tmp/app_repos.svn
+LAYOUT_TMP=/tmp/layout.tmp.`whoami`
 
 BUILD_NUM_STR="BUILD_NUM"
 DB_SCRIPT=$ROOT_DIR/../db/scripts/build-db.sh
 CAKE_BUILD=cake_1.2.3.8166
 PROJECT_BUILD=studydeck
 CAKE_INSTALL=$ROOT_DIR/../media/${CAKE_BUILD}.tar.gz
+TMP=/tmp
+CAKE_INSTALL_TMP=${TMP}/${CAKE_BUILD}.tar.gz
+CAKE_BUILD_TMP=${TMP}/${CAKE_BUILD}
 
 CAKE_ROOT=$BUILD_DIR/$PROJECT_BUILD
 CAKE_LAYOUT=$BUILD_DIR/$PROJECT_BUILD/app/views/layouts/default.ctp
@@ -57,7 +62,7 @@ CORE_CFG_NHG=$ROOT_DIR/core.php.nhg
 
 usage() {
   echo ""
-  echo "Usage: `basename $0` [-s] -t [build_db|clean|build] [-c [nicolo|steve]]"
+  echo "Usage: `basename $0` [-s] -t [build_db|clean|build|all] [-c [nicolo|steve]]"
   echo ""
 }
 
@@ -95,10 +100,11 @@ build() {
   fi
 
   # Unpack cake tarball, rename and move to BUILD_DIR
-  echo "  Unpacking $CAKE_INSTALL and moving to $BUILD_DIR"
-  cd /tmp
-  zcat $CAKE_INSTALL | tar xf -
-  cp -r $CAKE_BUILD $BUILD_DIR/$PROJECT_BUILD
+  #echo "  Unpacking $CAKE_INSTALL and moving to $BUILD_DIR"
+  echo "  Unpacking $CAKE_INSTALL and moving to $CAKE_INSTALL_TMP"
+  cp -p $CAKE_INSTALL $CAKE_INSTALL_TMP
+  zcat $CAKE_INSTALL_TMP | tar -C $TMP -xf -
+  cp -r $CAKE_BUILD_TMP $BUILD_DIR/$PROJECT_BUILD
 
   # Copy /app over cake install
   echo "  Exporting source /app root to $CAKE_ROOT"
@@ -122,17 +128,18 @@ build() {
   # Insert SVN revision number
   if [ "$EXPORT_SVN" = "true" ]; then
     echo "  Inserting build revision"
-    tmp_file=/tmp/layout.tmp
     revision=`tail -1 $APP_REPOS_OUT | sed "s/\(Exported revision \)\([0-9]*\)/\2/" | cut -d . -f1`
-    sed s/${BUILD_NUM_STR}/${revision}/g ${CAKE_LAYOUT} > $tmp_file
-    cp $tmp_file ${CAKE_LAYOUT}
+    sed s/${BUILD_NUM_STR}/${revision}/g ${CAKE_LAYOUT} > $LAYOUT_TMP
+    cp $LAYOUT_TMP $CAKE_LAYOUT
   fi
 
   # Remove unpacked install
   echo "  Cleaning staged install"
-  rm -rf /tmp/$CAKE_BUILD
+  rm -rf $CAKE_INSTALL_TMP
+  rm -rf $CAKE_BUILD_TMP
   rm -rf $APP_TMP
   rm -rf $APP_REPOS_OUT
+  rm -rf $LAYOUT_TMP
 }
 
 copy_prd_config() {
@@ -213,4 +220,5 @@ while getopts "st:c:" opt; do
   esac
 done
 
+usage
 exit 0

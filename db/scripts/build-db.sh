@@ -22,7 +22,7 @@
 ROOTDIR=`dirname $0`
 SCHEMA_SQL_ORIG=$ROOTDIR/../flashcards.sql
 SCHEMA_DB_ORIG_NAME=flashcards
-SCHEMA_SQL=/tmp/studydeck.sql
+SCHEMA_SQL_TMP=/tmp/studydeck.sql
 
 MYSQL_USER=mysqldev
 MYSQL_PASSWORD=mysqldev
@@ -49,13 +49,13 @@ drop_recreate() {
 rename_schema() {
     # Rename instances of $SCHEMA_DB_ORIG_NAME in $SCHEMA_SQL_ORIG file
     echo "  Modifying DB name to $MYSQL_DB in $SCHEMA_SQL_ORIG"
-    sed "s/${SCHEMA_DB_ORIG_NAME}/${MYSQL_DB}/" $SCHEMA_SQL_ORIG > $SCHEMA_SQL
+    sed "s/${SCHEMA_DB_ORIG_NAME}/${MYSQL_DB}/" $SCHEMA_SQL_ORIG > $SCHEMA_SQL_TMP
 }
 
 create_schema() { 
     # Run mysqldump to setup empty tables
     echo "  Creating schema"
-    $MYSQL_EXEC < $SCHEMA_SQL
+    $MYSQL_EXEC < $SCHEMA_SQL_TMP
 } 
 
 populate() {
@@ -67,8 +67,16 @@ populate() {
     $MYSQL_EXEC < $TMP_DATA_SQL
 }
 
+cleanup() {
+  # Clean tmp files
+  echo "  Cleaning temporary files"
+  rm $SCHEMA_SQL_TMP
+  rm $TMP_DATA_SQL
+}
+
 # Main
 drop_recreate
 rename_schema
 create_schema
 populate
+cleanup
