@@ -40,31 +40,36 @@
 		<?php if(count($publicDecks)) { ?>
 		<table>
 			<tr>
-				<th>Remove Deck</th>
 				<th>Title</th>
 				<th>Description</th>
 				<th>Times Studied</th>
 				<th>Last Studied</th>
-				<th>Difficulty</th>
+				<th>Total Cards</th>
+                <th>Easy</th>
+                <th>Medium</th>
+                <th>Hard</th>
+                <th>Remove</th>
 			</tr>
 			<?php 
 				foreach ($publicDecks as $pDeck):
       				echo "<tr id=\"publicDeckRow".$pDeck['Deck']['id']."\">";
 
 			?>
-      
-				<td>
-					<?php 
-						echo $html->link("x","#",array('onclick' => "deletePublicDeck(".$pDeck['Deck']['id'].")"));
-					?> 
-				</td>
-				<td><a href="/studydeck/decks/study/<?php echo $pDeck['Deck']['id']; ?> "> <?php echo $pDeck['Deck']['deck_name']; ?></a> 
+				<td><a href="/studydeck/decks/info/<?php echo $pDeck['Deck']['id']; ?> "> <?php echo $pDeck['Deck']['deck_name']; ?></a> 
 				</td> 
 				<td><?php echo $pDeck['Deck']['description']; ?></td>
 				<td><?php echo $pDeck['0']; ?></td>
 				<td> <?php echo $pDeck['1']; ?> </td>
-				<td>All <?php echo $pDeck['All']; ?> Easy <?php echo $pDeck['Easy']; ?> Medium <?php echo $pDeck['Medium'] ?> Hard <?php echo $pDeck['Hard']; ?> </td>
-     		</tr>
+                <td><?php echo $pDeck['All']; ?></td>
+                <td><?php echo $pDeck['Easy']; ?></td>
+                <td><?php echo $pDeck['Medium'] ?></td>
+				<td><?php echo $pDeck['Hard']; ?></td>
+                <td>
+					<?php 
+						echo $html->link("x","#",array('onclick' => "deletePublicDeck(".$pDeck['Deck']['id'].")"));
+					?> 
+				</td>            
+            </tr>
 			<?php endforeach; ?>
 
 		</table>
@@ -77,24 +82,30 @@
 		<?php if(count($userCreatedDecks)) { ?>
 		<table>
 			<tr>
-				<th>Remove Deck</th>
 				<th>Title</th>
 				<th>Description</th>
 				<th>Times Studied</th>
 				<th>Last Studied</th>
-				<th>Difficulty</th>
+				<th>Total Cards</th>
+                <th>Easy</th>
+                <th>Medium</th>
+                <th>Hard</th>
+                <th>Remove</th>
 			</tr>
 			<?php foreach ($userCreatedDecks as $ucDeck):
      		echo "<tr id= \"userDeckRow".$ucDeck['Deck']['id']."\">";
 
 			?>
 
-				<td><?php echo $html->link("x","#",array('onclick' => "deleteUserDeck(".$ucDeck['Deck']['id'].")"));?> </td>
-				<td><a href="/studydeck/decks/study/<?php echo $ucDeck['Deck']['id']; ?> "> <?php echo $ucDeck['Deck']['deck_name']; ?></a> <a href="/studydeck/decks/edit/<?php echo $ucDeck['Deck']['id']; ?>">[edit]</a> </td> 
+				<td><a href="/studydeck/decks/info/<?php echo $ucDeck['Deck']['id']; ?> "> <?php echo $ucDeck['Deck']['deck_name']; ?></a></td> 
 				<td> <?php echo $ucDeck['Deck']['description']; ?> </td>
 				<td> <?php echo $ucDeck['0']; ?> </td><td> <?php echo $ucDeck['1']; ?> </td>
-				<td>All <?php echo $ucDeck['All']; ?> Easy <?php echo $ucDeck['Easy']; ?> Medium <?php echo $ucDeck['Medium'] ?> Hard <?php echo $ucDeck['Hard']; ?></td>
-			</tr>
+				<td><?php echo $ucDeck['All']; ?></td>
+                <td><?php echo $ucDeck['Easy']; ?></td>
+                <td><?php echo $ucDeck['Medium'] ?></td>
+                <td><?php echo $ucDeck['Hard']; ?></td>
+                <td><?php echo $html->link("x","#",array('onclick' => "deleteUserDeck(".$ucDeck['Deck']['id'].")"));?> </td>
+            </tr>
 			<?php endforeach; ?>
 
 		</table>
