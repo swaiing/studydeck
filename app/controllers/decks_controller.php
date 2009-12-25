@@ -16,12 +16,13 @@ class DecksController extends AppController {
     	// Call AppConroller::beforeFilter()
         parent::beforeFilter();
       
+        // Set Auth support
         $this->Auth->allow('explore');
-
+        $this->Auth->authError = "You must login or register to continue";
     } 
 
 	function create(){
-        $this->pageTitle = 'Create a Deck';
+
         if(!empty($this->data)){
             //sanitize the input data
             App::import('Sanitize');

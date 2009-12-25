@@ -118,7 +118,7 @@ ul#list_nav_footer li, ul#list_nav_main li, ul#list_nav_login li {
   text-decoration: underline;
 }
 
-/*****  middle_bar *****/
+/*****  middle_bar generic *****/
 div.howto_box {
   float: left;
   margin: 10px;
@@ -146,55 +146,136 @@ div.howto_box a:hover {
   text-decoration: underline;
 }
 
-div#middle_bar h2 {
-  font-size: 16px;
-  border-bottom: 1px solid #cecece;
-}
+/***** generic headings *****/
 
-/*****  middle_bar generic *****/
 div#middle_bar h1 {
-  color: #003366;
   font-family: verdana, georgia, sans-serif;
-  font-size: 16px; 
+  font-size: 20px; 
+  color: #003366;
   padding: 0;
+  margin: 10px 0 0 0 ;
+  text-align: left;
 }
 
-fieldset.small {
+div#middle_bar h2 {
+  font-family: "Century Gothic", "Apple Gothic", "Lucida Grande", helvetica, arial, sans-serif;
+  font-size: 16px; 
+  color: #003366;
+}
+
+/***** generic links *****/
+
+div#middle_bar a {
+  color: #0066CC;
+  text-decoration: none;
+}
+
+div#middle_bar  a:hover {
+  color: #DB6A00;
+  text-decoration: underline;
+}
+
+/*****  login/register *****/
+
+/** login box **/
+div#login_box {
+    font-size: 12px;
+    float: right;
+    clear: right;
     width: 300px;
-    margin: 10px auto 10px auto;
+    margin: 25px 0 40px 0;
+    padding: 10px;
+    background-color: #cecece;
+}
+
+div#register_ad_box {
+    font-size: 12px;
+    float: left;
+    clear: left;
+    width: 340px;
+    margin: 25px 0 40px 0;
     padding: 10px;
     border: 1px solid #cecece;
 }
 
-fieldset.small ol {
+/** register boxes **/
+div#register_box {
+    font-size: 12px;
+    float: left;
+    clear: left;
+    width: 360px;
+    margin: 25px 0 40px 0;
+    padding: 10px;
+    border: 1px solid #cecece;
+}
+
+div#register_priv_box {
+    font-size: 12px;
+    float: right;
+    clear: right;
+    width: 280px;
+    margin: 25px 0 40px 0;
+    padding: 10px;
+    border: 1px solid #cecece;
+}
+
+/** forgot password **/
+div#forgot_box {
+    font-size: 12px;
+    float: left;
+    clear: left;
+    width: 360px;
+    margin: 25px 0 40px 0;
+    padding: 10px;
+    background-color: #cecece;
+    border: 1px solid #cecece;
+}
+
+/** box list styles **/
+
+div#register_ad_box ul, div#register_priv_box ul {
+    padding: 0;
+    margin: 0 0 10px 20px;
+}
+
+div#register_ad_box li, div#register_priv_box li {
+    padding: 0;
+    margin: 7px 0 0 0;
+}
+
+div.form_box ol {
     padding: 1em 1em 0 1em;
     list-style: none;
 }
 
-fieldset.small li {
+div.form_box li {
     padding-bottom: 1em;
 }
 
-fieldset.small label {
-    float: left;
-    width: 7em;
-    margin-right: 1em;
-    text-align: right;
+div.form_box li.separator {
+    text-align: center;
 }
 
-fieldset.small div.submit {
+div.form_box li.forgot_password {
+   text-align: right; 
+}
+
+div.form_box label {
+    float: left;
+    width: 7em;
+    margin-right: .5em;
+    text-align: left;
+}
+
+div.form_box div.submit {
     float: right;
     clear: left;
     padding: 0;
     margin: 0 1em 0 0;
 }
 
-div#authMessage {
-    font-size: 12px;
+div#flashMessage, div#authMessage {
     font-weight: bold;
-    margin: 1em 0 1em 0;
-    padding: 0;
-    text-align: center;
 }
 
 /*****  footer *****/

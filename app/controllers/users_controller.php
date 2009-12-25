@@ -17,7 +17,6 @@ class UsersController extends AppController {
 		//variable used for handling redirection	       
         $this->set('prevUrl', $this->Session->read('Auth.redirect'));
 	
-        
     }     
      
 	//allows user to change their password
@@ -159,12 +158,8 @@ class UsersController extends AppController {
 
 			}
 			
-			$this->Session->setFlash("Username and/or Passowrd incorrect");		
+			$this->Session->setFlash("The username and/or password you have entered is incorrect");		
 			$this->redirect('/users/login');
-		
-			
-		
-	
 		}
 	
 	}

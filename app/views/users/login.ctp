@@ -1,31 +1,59 @@
 <!-- /app/views/users/login.ctp -->
 
+<?php
+    echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
+    echo $javascript->link('jquery.corner',false);
+    echo $javascript->link('user_login_register',false);
+?>
+
 <div id="middle_wrapper_content">
 	<div id="middle_bar">
 
+    <div id="register_ad_box">
+        <h2>Register with StudyDeck</h2>
+        <p><?php echo $html->link('Sign up, for free!', array('controller'=>'users', 'action'=>'register'));?></p>
+        <p>As as registered user, you can do a lot!</p>
+        <ul>
+            <li>Create your own decks</li>
+            <li>Save public decks to your customized dashboard</li>
+            <li>Track your progress as you study decks</li>
+        </ul>
+    </div>
 
 	<?php
+
     	// Field attributes
     	$FIELD_SIZE = 25;
-    	$session->flash();
-    	$session->flash('auth');
+        $FIELD_LENGTH = 50;
     	$modedUrl = str_replace('/','_',$prevUrl);
    
     	if(strpos($modedUrl,'users_confirmation')) {
 			$modedUrl ='';
     	} 
    		// echo "Moded URL: ".$modedUrl;   
-    	echo $form->create('User',array('action'=> 'customLogin/'.$modedUrl));
-    	echo "<fieldset class=\"small\">\n";
-    	echo "<h1>Login</h1>\n";
-    	echo "<ol>\n";
-    	echo "<li>" . $form->input('username',array('label'=>'Username:','size'=>$FIELD_SIZE)) . "</li>\n";
-    	echo "<li>" . $form->input('password',array('label'=>'Password:','size'=>$FIELD_SIZE)) . "</li>\n";
-    	echo  $html->link("forgot your password?","/users/forgotPassword");
-    	echo $form->end('Login');
-    	echo "</fieldset>\n";
-	?>
 
+        // Start DIV
+    	echo "<div id=\"login_box\" class=\"form_box\">\n";
+    	echo "<h2>Login to your account</h2>\n";
+
+        // Begin form
+    	echo $form->create('User',array('action'=> 'customLogin/'.$modedUrl));
+
+        // Error reporting
+        $session->flash();
+        $session->flash('auth');
+
+    	echo "<ol>\n";
+    	echo "<li>" . $form->input('username',array('label'=>'Username:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
+    	echo "<li>" . $form->input('password',array('label'=>'Password:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
+    	echo "<li class='forgot_password'>" . $html->link('Forgot your password?', array('controller'=>'users','action'=>'forgotPassword')) . "</li>\n";
+
+        echo "</ol>\n";
+    	echo $form->end('Login');
+    	echo "</div>\n";
+    ?>
+
+
+    <div class="clear_div">&nbsp;</div>
 	</div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->
-<div class="clear_div">&nbsp;</div>

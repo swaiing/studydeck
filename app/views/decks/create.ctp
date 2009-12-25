@@ -2,7 +2,8 @@
 
 <?php
     // Javascript includes
-    echo $javascript->link('jquery-1.2.6.min',false);
+    //echo $javascript->link('jquery-1.2.6.min',false);
+    echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
     echo $javascript->link('jquery.form',false);
     echo $javascript->link('deck_create',false);
     echo $javascript->link('jquery.autocomplete.min.js', false);

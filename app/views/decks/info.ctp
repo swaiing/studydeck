@@ -3,6 +3,7 @@
 <?php
     //echo $javascript->link('jquery-1.2.6.min',false) . "\n";
     //echo $javascript->link('deck_study',false) . "\n";;
+    echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
     echo $html->css('deck_info',null,null,false) . "\n";
 ?>
 
