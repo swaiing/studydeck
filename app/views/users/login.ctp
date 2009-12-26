@@ -4,19 +4,21 @@
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
     echo $javascript->link('jquery.corner',false);
     echo $javascript->link('user_login_register',false);
+    echo $html->css('user_login_register',null,null,false);
 ?>
 
 <div id="middle_wrapper_content">
 	<div id="middle_bar">
 
     <div id="register_ad_box">
-        <h2>Register with StudyDeck</h2>
+        <h2>Not a member?</h2>
         <p><?php echo $html->link('Sign up, for free!', array('controller'=>'users', 'action'=>'register'));?></p>
         <p>As as registered user, you can do a lot!</p>
         <ul>
             <li>Create your own decks</li>
             <li>Save public decks to your customized dashboard</li>
-            <li>Track your progress as you study decks</li>
+            <li>Categorize flashcards into easy, medium and hard so you only study the cards you need to</li>
+            <li>Track your progress with quiz results and deck progress summaries</li>
         </ul>
     </div>
 
