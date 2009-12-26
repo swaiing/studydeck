@@ -35,7 +35,11 @@ function deleteUserDeck(deckId, permanently){
 }
 
 //launches the remove public deck dialog box
-function publicDeleteDialog(deckId) {
+function publicDeleteDialog(deckId, deckTitle) {
+    
+    $("#publicDeleteDialog").html("Are you sure you want to delete " + deckTitle + " from your dashboard?");
+    
+    
     $("#publicDeleteDialog").dialog('option','buttons', { 
         No:function(){
             $(this).dialog('close');
@@ -49,7 +53,8 @@ function publicDeleteDialog(deckId) {
 }
 
 //launches the remove user created deck dialog box
-function userDeleteDialog(deckId) {
+function userDeleteDialog(deckId, deckTitle) {
+    $("#userDeleteDialog").html(deckTitle);
     $("#userDeleteDialog").dialog('option','buttons', { 
         Cancel:function(){
             $(this).dialog('close');

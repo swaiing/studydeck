@@ -67,7 +67,7 @@
                 <td><?php echo $pDeck['Easy']; ?></td>
                 <td><?php echo $pDeck['Medium'] ?></td>
 				<td><?php echo $pDeck['Hard']; ?></td>
-                <td><?php echo $html->link("x","#",array('onclick' => "publicDeleteDialog(".$pDeck['Deck']['id'].")"));?></td>            
+                <td><?php echo $html->link("x","#",array('onclick' => "publicDeleteDialog(".$pDeck['Deck']['id'].",\"".$pDeck['Deck']['deck_name']."\")"));?></td>            
             </tr>
 			<?php endforeach; ?>
 
@@ -103,7 +103,7 @@
                 <td><?php echo $ucDeck['Easy']; ?></td>
                 <td><?php echo $ucDeck['Medium'] ?></td>
                 <td><?php echo $ucDeck['Hard']; ?></td>
-                <td><?php echo $html->link("x","#",array('onclick' => "userDeleteDialog(".$ucDeck['Deck']['id'].")"));?></td>
+                <td><?php echo $html->link("x","#",array('onclick' => "userDeleteDialog(".$ucDeck['Deck']['id'].",\"".$ucDeck['Deck']['deck_name']."\")"));?></td>
                  
             </tr>
 			<?php endforeach; ?>
@@ -114,9 +114,7 @@
 			echo "<div class=\"nodecks\">No User Created Decks in Dashboard</div>";
 		}
 		?>
-        <div id="publicDeleteDialog" title="Remove From Dashboard">
-            <p>Are you sure you want to delete this deck from your dashboard?</p>
-        </div>
+        <div id="publicDeleteDialog" title="Remove From Dashboard"></div>
         <div id="userDeleteDialog" title="Remove Your Deck"></div>
 
 		</div> <!-- end middle_bar -->
