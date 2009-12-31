@@ -46,7 +46,7 @@
         $session->flash('auth');
 
     	echo "<ol>\n";
-    	echo "<li>" . $form->input('username',array('label'=>'Username:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
+    	echo "<li>" . $form->input('username',array('label'=>'Username or Email:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
     	echo "<li>" . $form->input('password',array('label'=>'Password:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
     	echo "<li class='forgot_password'>" . $html->link('Forgot your password?', array('controller'=>'users','action'=>'forgotPassword')) . "</li>\n";
 

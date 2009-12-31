@@ -129,7 +129,7 @@ class UsersController extends AppController {
 		
 			//tries to authenticate user assuming username given
 	   		if($this->Auth->login($this->data['User'])) {
-				if($modedURL == "" || $modedURL =="/") {
+				if($modedURL == null || $modedURL =="/") {
             		$this->redirect('/users/dashboard');
             	}
             	else {
@@ -148,7 +148,7 @@ class UsersController extends AppController {
 				$this->data['User']['username'] = $findUser['User']['username'];
 				$this->data['User']['email'] = $findUser['User']['email'];
 				if($this->Auth->login($this->data['User'])) {
-		    		if($modedURL == ""|| $modedURL == "/") {
+		    		if($modedURL == null || $modedURL == "/") {
                 		$this->redirect('/users/dashboard');
             		}
             		else {
@@ -293,7 +293,7 @@ class UsersController extends AppController {
 		$this->set('success',false);
 
 		if (!empty($this->data)) {
-			$exsitingUserParams = array('conditions' => array('User.email' => $this->data['User']['email']));
+			$existingUserParams = array('conditions' => array('User.email' => $this->data['User']['email']));
 			$existingUser = $this->User->find('first',$existingUserParams);
 			if($existingUser == null) {
 				$this->set('validationError','There is no user associated with that email');		 
