@@ -33,9 +33,9 @@ class DecksController extends AppController {
 			
 			
             // add user id into deck
-            $this->data['Deck']['user_id']= $userId; 
+            $this->data['Deck']['user_id'] = $userId; 
 
-            
+                       
             //finds the number of cards being entered
             $num = count($this->data['Card']);
 

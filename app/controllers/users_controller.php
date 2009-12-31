@@ -120,43 +120,52 @@ class UsersController extends AppController {
 	
 	 
 	}
+    
+    //helper function to handle repeat authentication code
+	private function customAuth($user = null, $redirectUrl = null) {
+        //attempts to authenticate the user passed in to the function
+        if($this->Auth->login($user)) {
+            
+            //will direct any links to a study or learn to the deck info page of that deck
+            $redirectUrl = str_replace('learn','info',$redirectUrl);
+            $redirectUrl = str_replace('quiz','info',$redirectUrl);
+            
+            //if going to an info or create page continue through otherwise direct to the dashboard
+            if(strpos($redirectUrl, "info") || strpos($redirectUrl, "create")) {
+                $this->redirect($redirectUrl);
+            }
+            else {
+                $this->redirect('/users/dashboard');
+            }
+            
+            return true;
 
-	
+        }
+        else {
+            return false;
+        }
+    }
+    
 	function customLogin($redirect = null) {
-    	$modedURL = str_replace('_','/',$redirect);
+    	$modedUrl = str_replace('_','/',$redirect);
 		
 		if(!empty($this->data)) {
 		
 			//tries to authenticate user assuming username given
-	   		if($this->Auth->login($this->data['User'])) {
-				if($modedURL == null || $modedURL =="/") {
-            		$this->redirect('/users/dashboard');
-            	}
-            	else {
-            		$this->redirect($modedURL);
-            	}
-
-        	}
+	   		if (!$this->customAuth($this->data['User'], $modedUrl)) {
 			
-			//if authentication fails assume user tried to use email address for login
-			//this finds user associated with email
-			$findUserParams = array('conditions' => array('User.email' => $this->data['User']['username']));
-			$findUser = $this->User->find('first', $findUserParams );
+                //if authentication fails assume user tried to use email address for login
+                //this finds user associated with email
+                $findUserParams = array('conditions' => array('User.email' => $this->data['User']['username']));
+                $findUser = $this->User->find('first', $findUserParams);
 
-			//if email is found try to authenticate user
-			if ($findUser != null) {
-				$this->data['User']['username'] = $findUser['User']['username'];
-				$this->data['User']['email'] = $findUser['User']['email'];
-				if($this->Auth->login($this->data['User'])) {
-		    		if($modedURL == null || $modedURL == "/") {
-                		$this->redirect('/users/dashboard');
-            		}
-            		else {
-						$this->redirect($modedURL);
-             		}
-		   		}
-
-			}
+                //if email is found try to authenticate user
+                if ($findUser != null) {               
+                    $this->data['User']['username'] = $findUser['User']['username'];
+                    $this->data['User']['email'] = $findUser['User']['email'];
+                    $this->customAuth($this->data['User'],$modedUrl);         
+                }
+            }
 			
 			$this->Session->setFlash("The username and/or password you have entered is incorrect");		
 			$this->redirect('/users/login');
