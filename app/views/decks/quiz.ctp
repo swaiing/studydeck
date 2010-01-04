@@ -33,10 +33,5 @@
   ?>
 </div>
 
-<?php
-    echo "<h1>debug</h1>";
-    print_r($debug);
-?>
-
 <!-- Insert deck_viewer presentation -->
 <?php echo $this->element('deck_viewer'); ?>

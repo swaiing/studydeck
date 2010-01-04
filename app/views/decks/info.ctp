@@ -8,12 +8,38 @@
 ?>
 
 <?php
-    // Page global constants
 
+    // Page global constants
     $EASY = 1;
     $MEDIUM = 2;
     $HARD = 3;
     $TOTAL = 99;
+
+    // Labels for checkboxes
+    $easyLabel = "Easy ($cardsRatingsCount[$EASY])";
+    $mediumLabel = "Medium ($cardsRatingsCount[$MEDIUM])";
+    $hardLabel = "Hard ($cardsRatingsCount[$HARD])";
+
+    // Autoselect if only cards of one rating exists
+    // otherwise select 'Hard' cards
+    $hasOneRating = false;
+    $selected = array();
+    if($cardsRatingsCount[$EASY] == $cardsRatingsCount[$TOTAL]) {
+        $selected = array($EASY);
+        $hasOneRating = true;
+    }
+    else if($cardsRatingsCount[$MEDIUM] == $cardsRatingsCount[$TOTAL]) {
+        $selected = array($MEDIUM);
+        $hasOneRating = true;
+    }
+    else if($cardsRatingsCount[$HARD] == $cardsRatingsCount[$TOTAL]) {
+        $selected = array($HARD);
+        $hasOneRating = true;
+    }
+    else {
+        $selected = array($HARD);
+    }
+
 ?>
 
 
@@ -29,27 +55,41 @@
 
     <?php echo $form->create('Deck', array('action' => 'infoSubmit')); ?>
     <div id="category_select">
-        <p>1. Select rating(s):</p>
+        <p>1. Select difficulty:</p>
 
+        <?php
+            echo "<input type=\"checkbox\" id=\"select_all_checkbox\" ";
+            if($hasOneRating) {
+                echo "disabled=\"true\"";
+            }
+            echo ">";
+            echo "<label for=\"select_all_checkbox\" ";
+            if($hasOneRating) {
+                echo "class=\"disabled\"";
+            }
+            echo ">";
+            echo "All (";
+            echo $cardsRatingsCount[$TOTAL];
+            echo ")</label>";
+        ?>
+
+        <!--
         <input type="checkbox" id="select_all_checkbox">
         <label for="select_all_checkbox">All (<?php echo $cardsRatingsCount[$TOTAL]; ?>)</label>
+        -->
 
     <?php
-
-        $easyLabel = "Easy ($cardsRatingsCount[$EASY])";
-        $mediumLabel = "Medium ($cardsRatingsCount[$MEDIUM])";
-        $hardLabel = "Hard ($cardsRatingsCount[$HARD])";
-
         // Create checkbox form item
         $options = array('' => array(
                         $EASY => $easyLabel,
                         $MEDIUM => $mediumLabel,
                         $HARD => $hardLabel));
-        echo $form->input('RatingsSelected', array('type' => 'select', 'label' => '', 'options' => $options, 'multiple' => 'checkbox', 'disabled' => array(1,2)));
+        echo $form->input('RatingsSelected', array('type' => 'select', 'label' => '', 'options' => $options, 'multiple' => 'checkbox', 'disabled' => array(1,2), 'selected' => $selected));
 
         // Hidden form field to pass deckId
         echo $form->hidden('deckId', array('value' => $deckId));
     ?>
+
     </div>
 
     <div id="mode_select">
