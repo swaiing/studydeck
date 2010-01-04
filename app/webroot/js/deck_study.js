@@ -4,8 +4,8 @@
 
 
 // Constants
-var RATING_MAP = new Array("easy","medium","hard");
-var DEFAULT_RATING = 2; 
+var RATING_MAP = new Array("unrated","easy","medium","hard");
+var DEFAULT_RATING = 3; 
 var VERACITY_MAP = new Array("incorrect","correct");
 var MODE_STUDY = "study";
 var MODE_QUIZ = "quiz";

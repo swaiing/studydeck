@@ -9,6 +9,7 @@ class SD_Global
     public static $EASY_CARD = 1;
     public static $MEDIUM_CARD = 2;
     public static $HARD_CARD = 3;
+    public static $TOTAL_CARD = 99;
 
     // Constants for the last guessed answer for a card
     public static $INCORRECT_RESULT = 0;
@@ -23,6 +24,7 @@ class SD_Global
     public static $SESSION_ID_KEY = 'id';
     public static $SESSION_RATING_VAL_KEY = 'rating';
     public static $SESSION_RESULT_VAL_KEY = 'last_guess';
+    public static $SESSION_RATINGS_SELECTED_KEY = 'sess_ratings_selected';
 
     // Constants for Model field names
     public static $MODEL_ID = 'id';

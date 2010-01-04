@@ -3,14 +3,6 @@
 div#heading {
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid #cecece;
-}
-
-div#heading h1 {
-    font-size: 20px;
-    margin: 0;
-    padding: 0;
-    clear: left;
 }
 
 div#heading p {
@@ -19,9 +11,10 @@ div#heading p {
     padding: 0 0 10px 0;
 }
 
+/** middle section **/
 div#middle {
     font-size: 12px;
-    border-bottom: 1px solid #cecece;
+    border: 1px solid #cecece;
 }
 
 div#middle input {
@@ -48,6 +41,10 @@ div#category_select p {
 
 div#category_select input {
     margin-left: 40px;
+}
+
+div#category_select .disabled {
+    color: #cecece;
 }
 
 div#mode_select {

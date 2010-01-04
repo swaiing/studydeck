@@ -235,24 +235,64 @@ class DecksController extends AppController {
    * Helper which returns cards given a deck.
    *
    */
-  function getCards($deckId)
+  private function getCards($deckId, $ratings)
   {
     if(!isset($deckId)) {
       $this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "deckId is null.");
       return null;
     }
+
+    // Disable recursion
     $this->Deck->recursive = -1;
     $this->Deck->Card->recursive = -1;
 
     // Set user id
     $userId = $this->Auth->user('id');
 
+    // TODO: Sanitize input?
+
+    // Subquery to get all cards in the deck
+    $subQueryOnCards = "(SELECT cards.id AS cid, cards.question AS cq, cards.answer AS ca FROM cards WHERE cards.deck_id=$deckId) AS Card";
+
+    // Subquery to get all the users's ratings for the cards
+    $subQueryOnRatings = "(SELECT ratings.id AS rid, ratings.rating AS rr, ratings.card_id as rcid, ratings.user_id AS ruid FROM ratings WHERE ratings.user_id=$userId) AS Ratings";
+
+    // Build WHERE clause to filter rating
+    if(isset($ratings) AND count($ratings) > 0) {
+
+        // Set selected ratings as a string
+        $ratingsStr = "(" . implode(",", $ratings) . ")";
+
+        $filter = "WHERE rr IN $ratingsStr";
+
+        // Handle empty 'hard' ratings which have no records
+        $specialCaseHardRating = 3;
+        if(in_array($specialCaseHardRating, $ratings)) {
+            $filter .= " OR rr is null";
+        }
+    }
+    else {
+        $filter = "";
+    }
+
+    // Build entire SQL string
+    $query = "SELECT cid AS 'id', cq as 'question', cq AS 'answer', rr AS 'rating' FROM $subQueryOnCards LEFT JOIN $subQueryOnRatings ON cid=rid $filter;";
+
+    // Debug SQL
+    $this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "query: $query", LOG_DEBUG);
+
+    // Run SQL
+    $cardRecords = $this->Deck->Card->query($query);
+
     // Retrieve Card model data for deck
+    /*
     $cardsParams = array(
                         'conditions' => array('Card.deck_id' => $deckId),
                         'fields' => array('Card.id','Card.question','Card.answer')
     );
     $cardRecords = $this->Deck->Card->find('all',$cardsParams);
+    */
+
     return $cardRecords;
   }
 
@@ -260,7 +300,7 @@ class DecksController extends AppController {
    * Helper which returns an array of cards' IDs
    *
    */
-  function getCardIds($cardRecords)
+  private function getCardIds($cardRecords)
   {
     // Store card IDs in array for use ratings/results queries
     $cardIds = array();
@@ -274,7 +314,7 @@ class DecksController extends AppController {
    * Helper which returns cards' ratings given an array of card IDs.
    * 
    */
-  function getRatings($cardIds)
+  private function getRatings($cardIds)
   {
     if(!isset($cardIds)) {
       $this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "cardIds is null.");
@@ -304,11 +344,45 @@ class DecksController extends AppController {
     return $ratingMap;
   }
 
+  /**
+   * Takes above output and returns array with count of cards for each rating.
+   *
+   */
+  private function getRatingsCount($cards)
+  {
+    if(!isset($cards)) {
+        return null;
+    }
+    
+    $ratingCount = array(SD_GLOBAL::$EASY_CARD => 0,
+                         SD_GLOBAL::$MEDIUM_CARD => 0,
+                         SD_GLOBAL::$HARD_CARD => 0,
+                         SD_GLOBAL::$TOTAL_CARD => 0);
+    foreach($cards as $cardRecord) {
+        //$this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "foo: " . print_r($cardRecord));
+        $rating = $cardRecord['Ratings']['rating'];
+        if($rating == null || $rating== SD_GLOBAL::$HARD_CARD) {
+            $ratingCount[SD_GLOBAL::$HARD_CARD]++;
+        }
+        else if($rating == SD_GLOBAL::$MEDIUM_CARD) {
+            $ratingCount[SD_GLOBAL::$MEDIUM_CARD]++;
+        }
+        else if($rating == SD_GLOBAL::$EASY_CARD) {
+            $ratingCount[SD_GLOBAL::$EASY_CARD]++;
+        }
+        else {
+            $this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "Unknown rating: $rating");
+        }
+        $ratingCount[SD_GLOBAL::$TOTAL_CARD]++;
+    }
+    return $ratingCount;
+  }
+
   /*
    * Helper which returns cards' results given an array of card IDs.
    *
    */
-  function getResults($cardIds)
+  private function getResults($cardIds)
   {
     if(!isset($cardIds)) {
       $this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "cardIds is null.");
@@ -347,22 +421,131 @@ class DecksController extends AppController {
    */
     function info($id)
     {
-        $this->study($id);
+        // Clear selected ratings 
+        $this->Session->write(SD_Global::$SESSION_RATINGS_SELECTED_KEY, null);
+
+        // Call 'study'
+        $this->study($id, null);
     }
 
+    /*
+     * Helper to access session data
+     *
+     */
+    private function addSessionTreeNode($sessionData, $keys) {
 
-    function study($id = null)
+        if($keys == null) {
+            return $sessionData;
+        }
+
+        // For logging
+        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+        $this->log($LOG_PREFIX . "Executing function", LOG_DEBUG);
+
+        // Default initializations
+        $curNode = &$sessionData;
+        $i = 0;
+        $key = $keys[$i];    
+
+        // Go as deep as possible into sessionData
+        if(isset($curNode)) {
+            for( ; $i < count($keys); $i++) {
+                $key = $keys[$i];    
+                if(array_key_exists($key, $curNode)) {
+                    $this->log($LOG_PREFIX . "Key: $key exists in sessionData.", LOG_DEBUG);
+                    $curNode = &$curNode[$key];
+                }
+                else {
+                    $this->log($LOG_PREFIX . "Key: $key does NOT exist in sessionData.", LOG_DEBUG);
+                    break;    
+                }
+            }
+        }
+
+        // Keys leftover, build rest of sessionData array
+        if($i != count($keys)) {
+
+            for($j = $i; $j < count($keys)-2; $j++) {
+                $key = $keys[$j];
+                $this->log($LOG_PREFIX . "Creating key: $key in sessionData.", LOG_DEBUG);
+                $curNode[$key] = array();
+                $curNode = &$curNode[$key];
+            }
+        }
+
+        // Add leaf value
+        $leafKey = $keys[$j];
+        $leafValue = $keys[$j+1];
+        $curNode[$leafKey] = $leafValue;
+
+        return $sessionData;
+    }
+
+  /*
+   * Deck info Learn/Quiz action. Redirects to Study/Quiz
+   *
+   */
+    function infoSubmit()
     {
+        // Params passed by form
+        $ratingsSelected = $this->data['Deck']['RatingsSelected'];
+        $isQuizMode = (int) $this->data['Deck']['isQuizMode'];
+        $deckId = (int) $this->data['Deck']['deckId'];
+        $userId = $this->Auth->user('id');
+
+        // Write the session object
+        $this->Session->write(SD_Global::$SESSION_RATINGS_SELECTED_KEY, $ratingsSelected);
+
+        // Debug
+        //$this->set('foo', $ratingsSelected);
+        //$this->set('bar', $isQuizMode);
+        //return true;
+
+        // Redirect to Quiz/Study
+        if($isQuizMode) {
+            $this->redirect(array('controller'=>'decks', 'action'=>'quiz', $deckId));
+        }
+        $this->redirect(array('controller'=>'decks', 'action'=>'learn', $deckId));
+    }
+
+    /*
+     * Private method called by 'learn' and 'quiz' action.
+     *
+     */
+    private function study($id)
+    {
+        // Set log info
+        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+
+        if(!isset($id)) {
+            $this->log($LOG_PREFIX . "Deck ID is null");
+            return false;
+        }
+
+        // Read selected ratings from session
+        $ratingsSelected = $this->Session->read(SD_Global::$SESSION_RATINGS_SELECTED_KEY);
+
+        // Debug
+        /*
+        if(isset($ratingsSelected)) {
+            foreach($ratingsSelected as $rating) {
+                $this->log($LOG_PREFIX . "ratingsSelected: $rating", LOG_DEBUG);
+            }
+        }
+        */
+
         // Set $deckRecord
         $this->Deck->id = $id;
+        $this->Deck->recursive = -1;
         $deckRecord = $this->Deck->read();
 
         // Call helper to retrieve array of cards
-        $cardRecords = $this->getCards($id);
+        $cardRecords = $this->getCards($id, $ratingsSelected);
         $cardIds = $this->getCardIds($cardRecords);
 
         // Call helper to retrieve ratings
         $ratingMap = $this->getRatings($cardIds);
+        $ratingsCount = $this->getRatingsCount($cardRecords);
 
         // Call helper to retrieve results
         $resultMap = $this->getResults($cardIds);
@@ -370,22 +553,34 @@ class DecksController extends AppController {
         // debug
         //$this->set('debug',$resultMap);
         //$this->set('debug',$ratingMap);
+        $this->set('debug',$cardRecords);
 
         // Set variables for view
         $this->set('deckId',$deckRecord['Deck']['id']);
         $this->set('deckData',$deckRecord);
         $this->set('cards',$cardRecords);
         $this->set('cardsRatings',$ratingMap);
+        $this->set('cardsRatingsCount',$ratingsCount);
         $this->set('cardsResults',$resultMap);
+        return true;
     }
 
     /*
-     * Identical to study action.
+     * Calls private study method
      *
      */
-    function quiz($id = null)
+    function learn($id)
     {
-      $this->study($id);
+        $this->study($id);
+    }
+
+    /*
+     * Calls private study method
+     *
+     */
+    function quiz($id)
+    {
+        $this->study($id);
     }
 
     /*
