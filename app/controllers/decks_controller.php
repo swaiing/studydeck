@@ -121,13 +121,52 @@ class DecksController extends AppController {
 			$deckToRemoveParams =  array('conditions' =>  array('Deck.id' => $this->params['form']['id']));
       	   	$deckToRemove = $this->Deck->find('first',$deckToRemoveParams);
 	       	//confirms that the login user is the owner of hte deck	     
-			if($deckToRemove['Deck']['user_id'] == $this->Auth->user('id')){
+			if($deckToRemove['Deck']['user_id'] == $this->Auth->user('id')) {
 				//actually deletes the deck			    
 				$this->Deck->delete($this->params['form']['id'],true);
 			}
 		}
 	}
 
+    function edit($deckId = null) {
+        //if no deck Id provided send the user to the create page
+        if($deckId == null) {
+            $this->redirect(array('controller'=>'decks','action'=>'create'));
+        }
+        
+        // Set user id
+        $userId = $this->Auth->user('id');
+        
+        // Disable recursion
+        $this->Deck->recursive = -1;
+        $this->Card->recursive = -1;
+        
+        $deckParams =  array('conditions' =>  array('Deck.id' => $deckId));
+      	$deck = $this->Deck->find('first',$deckParams);
+        
+        //if this deck does not exist send them to the create page
+        if($deck == null) {
+            $this->redirect(array('controller'=>'decks','action'=>'create'));
+        }
+        
+        //if this is not the users deck redirect them to this decks deck info page
+        if($deck['Deck']['user_id'] != $this->Auth->user('id')) {
+            $this->redirect(array('controller'=>'decks','action'=>'info',$deckId));
+        }
+        
+        $cardsParams =  array('conditions' =>  array('Card.deck_id' => $deckId),'order' => 'Card.order ASC');
+      	$cards = $this->Card->find('all',$cardsParams);
+        
+        //$this->data = array_merge($deck,$cards);
+        //$this->data['Deck'] = $deck['Deck'];
+        //$this->data['Card'] = $cards['Card'];
+        $this->data = $deck;
+        $this->set('existingCards', $cards);
+        
+        
+    
+    
+    }
 
 	//action for exploring decks
 	function explore($sortBy = null,$page = null,$query = null) {   

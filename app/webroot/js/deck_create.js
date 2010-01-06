@@ -169,7 +169,7 @@ function changeRowNumbering(row, isIncreasing, creatingNewRow) {
   var rowLabelElt = row.find("label");
   var curRowNum = rowLabelElt.html();
   var rowQstIdAttr = rowLabelElt.attr("for");
-
+  
   // Update row label
   if(isIncreasing) {
     curRowNum++;
@@ -181,7 +181,9 @@ function changeRowNumbering(row, isIncreasing, creatingNewRow) {
 
   // Update question input
   var rowQstInputElt = row.find("input#"+rowQstIdAttr);
-  var increaseNumbering = true;
+  //var increaseNumbering = true;
+  //steve talk to me about this change
+  var increaseNumbering = isIncreasing
   var newRowQstIdAttr = changeNumInString(rowQstIdAttr, increaseNumbering);
   var newRowQstNameAttr = changeNumInString(rowQstInputElt.attr("name"), increaseNumbering);
   rowLabelElt.attr("for",newRowQstIdAttr);
@@ -194,7 +196,27 @@ function changeRowNumbering(row, isIncreasing, creatingNewRow) {
   var newRowNameAttr = changeNumInString(rowAnsInputElt.attr("name"), increaseNumbering);
   rowAnsInputElt.attr("id",newRowIdAttr);
   rowAnsInputElt.attr("name",newRowNameAttr);
-
+  
+  // Update Order value
+  var rowOrderInputElt = row.find("input:first");
+  var rowOrderIdAttr = rowOrderInputElt.attr("id");
+  var rowOrderValueAttr = parseFloat(rowOrderInputElt.attr("value"));
+  var newRowOrderIdAttr = changeNumInString(rowOrderIdAttr, increaseNumbering);
+  var newRowOrderNameAttr = changeNumInString(rowOrderInputElt.attr("name"), increaseNumbering);
+  //var newRowOrderValueAttr = changeNumInString(rowOrderValueAttr, increaseNumbering);
+    
+  rowOrderInputElt.attr("id",newRowOrderIdAttr);
+  rowOrderInputElt.attr("name",newRowOrderNameAttr);
+  
+  if(increaseNumbering) {
+    newRowOrderValueAttr = rowOrderValueAttr + 1;
+  }
+  else {
+    newRowOrderValueAttr = rowOrderValueAttr - 1;
+  }
+  
+  rowOrderInputElt.attr("value",newRowOrderValueAttr);
+  
   // Clear the field values if row is new
   if(creatingNewRow) {
     rowQstInputElt.attr("value","");
@@ -208,7 +230,7 @@ function changeRowNumbering(row, isIncreasing, creatingNewRow) {
  */
 function changeNumInString(str, isIncreasing) {
 	
-	var firstNumIndex = str.search(/\d/g);
+    var firstNumIndex = str.search(/\d/g);
   if(firstNumIndex == -1) {
       return str;
   }
@@ -226,6 +248,7 @@ function changeNumInString(str, isIncreasing) {
 	
   var tail = temp.substr(lastNumIndex);
   var reformedStr = head + num + tail;
+  //alert("head" + head + "num: " + num + " tail " + tail);
   return reformedStr;
 }
 

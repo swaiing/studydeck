@@ -79,6 +79,9 @@
     for($i=0; $i<$DEFAULT_NUM_CARDS; $i++) {
         $card = "Card." . $i;
         echo "<li>";
+        // Hidden form to store card order
+        echo $form->hidden($card.".order", array('type'=>'text', 'label'=>false, 'size'=> 4, 'maxlength'=> 4, 'value' => $i+1));
+        
         echo $form->input($card.".question",array('type'=>'text','label'=>$i+1,'size'=>$TERM_FS));
         echo $form->input($card.".answer",$cardDefinitionOptions);
 		echo "<div class = \"plus\"></div>";
