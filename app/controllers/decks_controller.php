@@ -296,8 +296,11 @@ class DecksController extends AppController {
     // Subquery to get all the users's ratings for the cards
     $subQueryOnRatings = "(SELECT ratings.id AS rid, ratings.rating AS rr, ratings.card_id as rcid, ratings.user_id AS ruid FROM ratings WHERE ratings.user_id=$userId) AS Ratings";
 
+    // Debug ratings
+    //$this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "ratings: " . isset($ratings), LOG_DEBUG);
+
     // Build WHERE clause to filter rating
-    if(isset($ratings) AND count($ratings) > 0) {
+    if(isset($ratings) && count($ratings) > 0) {
 
         // Set selected ratings as a string
         $ratingsStr = "(" . implode(",", $ratings) . ")";
@@ -315,10 +318,10 @@ class DecksController extends AppController {
     }
 
     // Build entire SQL string
-    $query = "SELECT cid AS 'id', cq as 'question', cq AS 'answer', rr AS 'rating' FROM $subQueryOnCards LEFT JOIN $subQueryOnRatings ON cid=rid $filter;";
+    $query = "SELECT cid AS 'id', cq as 'question', ca AS 'answer', rr AS 'rating' FROM $subQueryOnCards LEFT JOIN $subQueryOnRatings ON cid=rid $filter;";
 
     // Debug SQL
-    $this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "query: $query", LOG_DEBUG);
+    //$this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "query: $query", LOG_DEBUG);
 
     // Run SQL
     $cardRecords = $this->Deck->Card->query($query);
@@ -532,13 +535,16 @@ class DecksController extends AppController {
         $deckId = (int) $this->data['Deck']['deckId'];
         $userId = $this->Auth->user('id');
 
-        // Write the session object
-        $this->Session->write(SD_Global::$SESSION_RATINGS_SELECTED_KEY, $ratingsSelected);
+        // Set log info
+        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
 
         // Debug
-        //$this->set('foo', $ratingsSelected);
-        //$this->set('bar', $isQuizMode);
-        //return true;
+        //$this->log($LOG_PREFIX . "empty: " . empty($ratingsSelected), LOG_DEBUG);
+
+        // Write the session object
+        if(!empty($ratingsSelected)) {
+            $this->Session->write(SD_Global::$SESSION_RATINGS_SELECTED_KEY, $ratingsSelected);
+        }
 
         // Redirect to Quiz/Study
         if($isQuizMode) {
@@ -563,6 +569,9 @@ class DecksController extends AppController {
 
         // Read selected ratings from session
         $ratingsSelected = $this->Session->read(SD_Global::$SESSION_RATINGS_SELECTED_KEY);
+
+        // Clear the session contents
+        $this->Session->delete(SD_Global::$SESSION_RATINGS_SELECTED_KEY);
 
         // Debug
         /*
@@ -592,7 +601,7 @@ class DecksController extends AppController {
         // debug
         //$this->set('debug',$resultMap);
         //$this->set('debug',$ratingMap);
-        $this->set('debug',$cardRecords);
+        //$this->set('debug',$ratingsSelected);
 
         // Set variables for view
         $this->set('deckId',$deckRecord['Deck']['id']);

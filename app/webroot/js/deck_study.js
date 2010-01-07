@@ -357,11 +357,16 @@ var NULL_ID = "null";
     'toggleRating':function() {
         
         // Get new rating
-        var newRating = (this.deck.getCard().rating + 1)%RATING_MAP.length;
+        var rating = this.deck.getCard().rating;
+        var newRating = rating+1;
+        if(newRating > 3) {
+            newRating = 1;
+        }
         this.deck.getCard().setRating(newRating);
+        var tmp = this.deck.getCard().rating;
 
         // Display new rating
-        var ratingStr = RATING_MAP[this.deck.getCard().rating];
+        var ratingStr = RATING_MAP[tmp];
         $("#card_rating").text(ratingStr);
 
     },
