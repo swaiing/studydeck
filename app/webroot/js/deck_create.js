@@ -198,13 +198,12 @@ function changeRowNumbering(row, isIncreasing, creatingNewRow) {
   rowAnsInputElt.attr("name",newRowNameAttr);
   
   // Update Order value
-  var rowOrderInputElt = row.find("input:first");
+  var rowOrderInputElt = row.find("input[name$='[order]']");
   var rowOrderIdAttr = rowOrderInputElt.attr("id");
   var rowOrderValueAttr = parseFloat(rowOrderInputElt.attr("value"));
   var newRowOrderIdAttr = changeNumInString(rowOrderIdAttr, increaseNumbering);
   var newRowOrderNameAttr = changeNumInString(rowOrderInputElt.attr("name"), increaseNumbering);
-  //var newRowOrderValueAttr = changeNumInString(rowOrderValueAttr, increaseNumbering);
-    
+      
   rowOrderInputElt.attr("id",newRowOrderIdAttr);
   rowOrderInputElt.attr("name",newRowOrderNameAttr);
   
@@ -214,13 +213,24 @@ function changeRowNumbering(row, isIncreasing, creatingNewRow) {
   else {
     newRowOrderValueAttr = rowOrderValueAttr - 1;
   }
-  
   rowOrderInputElt.attr("value",newRowOrderValueAttr);
+  
+  // Update Id value
+  var rowIdInputElt = row.find("input[name$='[id]']");
+  var rowIdIdAttr = rowIdInputElt.attr("id");
+  var newRowIdIdAttr = changeNumInString(rowIdIdAttr, increaseNumbering);
+  var newRowIdNameAttr = changeNumInString(rowIdInputElt.attr("name"), increaseNumbering);
+  
+  rowIdInputElt.attr("id",newRowIdIdAttr);
+  rowIdInputElt.attr("name",newRowIdNameAttr);
+  //alert(rowIdInputElt.attr("value") + " " + rowIdIdAttr +" " + newRowIdNameAttr);
   
   // Clear the field values if row is new
   if(creatingNewRow) {
     rowQstInputElt.attr("value","");
     rowAnsInputElt.attr("value","");
+    rowIdInputElt.attr("value","");
+        
   }
 }
 
