@@ -183,7 +183,7 @@ function changeRowNumbering(row, isIncreasing, creatingNewRow) {
   var rowQstInputElt = row.find("input#"+rowQstIdAttr);
   //var increaseNumbering = true;
   //steve talk to me about this change
-  var increaseNumbering = isIncreasing
+  var increaseNumbering = isIncreasing;
   var newRowQstIdAttr = changeNumInString(rowQstIdAttr, increaseNumbering);
   var newRowQstNameAttr = changeNumInString(rowQstInputElt.attr("name"), increaseNumbering);
   rowLabelElt.attr("for",newRowQstIdAttr);
@@ -215,15 +215,21 @@ function changeRowNumbering(row, isIncreasing, creatingNewRow) {
   }
   rowOrderInputElt.attr("value",newRowOrderValueAttr);
   
+  
   // Update Id value
   var rowIdInputElt = row.find("input[name$='[id]']");
   var rowIdIdAttr = rowIdInputElt.attr("id");
-  var newRowIdIdAttr = changeNumInString(rowIdIdAttr, increaseNumbering);
-  var newRowIdNameAttr = changeNumInString(rowIdInputElt.attr("name"), increaseNumbering);
-  
-  rowIdInputElt.attr("id",newRowIdIdAttr);
-  rowIdInputElt.attr("name",newRowIdNameAttr);
-  //alert(rowIdInputElt.attr("value") + " " + rowIdIdAttr +" " + newRowIdNameAttr);
+  //checks to make sure this input element exists
+  //this only exists on the edit decks page
+  if (rowIdIdAttr != null) {
+      
+      var newRowIdIdAttr = changeNumInString(rowIdIdAttr, increaseNumbering);
+      var newRowIdNameAttr = changeNumInString(rowIdInputElt.attr("name"), increaseNumbering);
+      
+      rowIdInputElt.attr("id",newRowIdIdAttr);
+      rowIdInputElt.attr("name",newRowIdNameAttr);
+      //alert(rowIdInputElt.attr("value") + " " + rowIdIdAttr +" " + newRowIdNameAttr);
+  }
   
   // Clear the field values if row is new
   if(creatingNewRow) {

@@ -80,8 +80,8 @@
         $card = "Card." . $i;
         echo "<li>";
         // Hidden form to store card order
-        echo $form->hidden($card.".order", array('type'=>'text', 'label'=>false, 'size'=> 4, 'maxlength'=> 4, 'value' => $existingCards[$i]['Card']['order']));
-        echo $form->hidden($card.".id", array('type'=>'text', 'label'=>false, 'size'=> 4, 'maxlength'=> 4, 'value' => $existingCards[$i]['Card']['id']));
+        echo $form->hidden($card.".order", array('type'=>'text', 'label'=>false,'value' => $existingCards[$i]['Card']['order']));
+        echo $form->hidden($card.".id", array('type'=>'text', 'label'=>false,'value' => $existingCards[$i]['Card']['id']));
         echo $form->input($card.".question",array('type'=>'text','label'=>$i+1,'size'=>$TERM_FS, 'value' => $existingCards[$i]['Card']['question']));
         echo $form->input($card.".answer",array('type'=>'text', 'label'=>false, 'size'=>$DEFINITION_FS, 'maxlength'=>$DEFINITION_LENGTH, 'value' => $existingCards[$i]['Card']['answer']));
         echo "<div class = \"plus\"></div>";
