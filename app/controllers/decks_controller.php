@@ -294,7 +294,7 @@ class DecksController extends AppController {
     $subQueryOnCards = "(SELECT cards.id AS cid, cards.question AS cq, cards.answer AS ca FROM cards WHERE cards.deck_id=$deckId) AS Card";
 
     // Subquery to get all the users's ratings for the cards
-    $subQueryOnRatings = "(SELECT ratings.id AS rid, ratings.rating AS rr, ratings.card_id as rcid, ratings.user_id AS ruid FROM ratings WHERE ratings.user_id=$userId) AS Ratings";
+    $subQueryOnRatings = "(SELECT ratings.id AS rid, ratings.rating AS rr, ratings.card_id as rcid, ratings.user_id AS ruid FROM ratings WHERE ratings.user_id=$userId) AS Rating";
 
     // Debug ratings
     //$this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "ratings: " . isset($ratings), LOG_DEBUG);
@@ -318,7 +318,7 @@ class DecksController extends AppController {
     }
 
     // Build entire SQL string
-    $query = "SELECT cid AS 'id', cq as 'question', ca AS 'answer', rr AS 'rating' FROM $subQueryOnCards LEFT JOIN $subQueryOnRatings ON cid=rid $filter;";
+    $query = "SELECT cid AS 'id', cq as 'question', ca AS 'answer', rid AS 'id', rr AS 'rating' FROM $subQueryOnCards LEFT JOIN $subQueryOnRatings ON cid=rid $filter;";
 
     // Debug SQL
     //$this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "query: $query", LOG_DEBUG);
@@ -354,8 +354,9 @@ class DecksController extends AppController {
 
   /*
    * Helper which returns cards' ratings given an array of card IDs.
-   * 
+   * Deprecated: getCards now retrieves ratings
    */
+   /*
   private function getRatings($cardIds)
   {
     if(!isset($cardIds)) {
@@ -385,6 +386,7 @@ class DecksController extends AppController {
 
     return $ratingMap;
   }
+  */
 
   /**
    * Takes above output and returns array with count of cards for each rating.
@@ -402,7 +404,7 @@ class DecksController extends AppController {
                          SD_GLOBAL::$TOTAL_CARD => 0);
     foreach($cards as $cardRecord) {
         //$this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "foo: " . print_r($cardRecord));
-        $rating = $cardRecord['Ratings']['rating'];
+        $rating = $cardRecord['Rating']['rating'];
         if($rating == null || $rating== SD_GLOBAL::$HARD_CARD) {
             $ratingCount[SD_GLOBAL::$HARD_CARD]++;
         }
@@ -589,11 +591,14 @@ class DecksController extends AppController {
 
         // Call helper to retrieve array of cards
         $cardRecords = $this->getCards($id, $ratingsSelected);
+
+        // Call helpers to post-process data
         $cardIds = $this->getCardIds($cardRecords);
+        $ratingsCount = $this->getRatingsCount($cardRecords);
 
         // Call helper to retrieve ratings
-        $ratingMap = $this->getRatings($cardIds);
-        $ratingsCount = $this->getRatingsCount($cardRecords);
+        // Removed: Improved query in getCards retrieves ratings
+        //$ratingMap = $this->getRatings($cardIds);
 
         // Call helper to retrieve results
         $resultMap = $this->getResults($cardIds);
@@ -607,7 +612,7 @@ class DecksController extends AppController {
         $this->set('deckId',$deckRecord['Deck']['id']);
         $this->set('deckData',$deckRecord);
         $this->set('cards',$cardRecords);
-        $this->set('cardsRatings',$ratingMap);
+        //$this->set('cardsRatings',$ratingMap);
         $this->set('cardsRatingsCount',$ratingsCount);
         $this->set('cardsResults',$resultMap);
         return true;

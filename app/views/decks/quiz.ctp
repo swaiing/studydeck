@@ -11,7 +11,6 @@
 <?php
     echo "var deckData = " . $javascript->object($deckData) . ";\n";
     echo "var cardData = " . $javascript->object($cards) . ";\n";
-    echo "var cardRatingsData = " . $javascript->object($cardsRatings) . ";\n";
     echo "var cardResultsData = " . $javascript->object($cardsResults) . ";\n";
 
     // Set variable to set study mode

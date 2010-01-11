@@ -163,6 +163,52 @@ div#middle_bar h2 {
   color: #003366;
 }
 
+/***** generic breadcrumb ****/
+div.crumb {
+    margin: 0 0 1em 0;
+    padding: 0;
+    float: left;
+    clear: left;
+    clear: both;
+}
+
+div.crumb span.you_are_here {
+    font-weight: bold;
+}
+
+/***** generic table *****/
+table.deck_table {
+    width: 100%;
+    margin: 0 0 10px 0;
+    padding: 0;
+    text-align: left;
+    border-collapse: collapse;
+    clear: both;
+}
+
+table.deck_table th {
+    font-size: 13px;
+    font-weight: normal;
+    padding: 8px;
+    background: #b9c9fe;
+    border-top: 4px solid #aabcfe;
+    border-bottom: 1px solid #fff;
+    color: #039;
+}
+
+table.deck_table td {
+    padding: 8px;
+    background: #e8edff;
+    border-bottom: 1px solid #fff;
+    color: #669;
+    border-top: 1px solid transparent;
+}
+
+table.deck_table tr:hover td {
+    background: #d0dafd;
+    color: #339;
+}
+
 /***** generic links *****/
 
 div#middle_bar a {

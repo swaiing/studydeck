@@ -79,7 +79,7 @@ var NULL_ID = "null";
    * Deck class
    *
    */
-  function Deck(deckData,cardData,cardRatingsData,cardResultsData) {
+  function Deck(deckData,cardData,cardResultsData) {
 
     // Deck DB fields
     this.id = NULL_ID;
@@ -105,9 +105,9 @@ var NULL_ID = "null";
         var newCard = new Card(cardData[i].Card.id,cardData[i].Card.question,cardData[i].Card.answer);
 
         // Check for rating in cardRatingsData
-        if(cardRatingsData[newCard.id]) {
-            newCard.setRatingId(cardRatingsData[newCard.id].id);
-            newCard.setRating(cardRatingsData[newCard.id].rating);
+        if(cardData[i].Rating.rating) {
+            newCard.setRatingId(cardData[i].Rating.id);
+            newCard.setRating(cardData[i].Rating.rating);
         }
 
         // Check for result in cardResultsData
@@ -245,7 +245,7 @@ var NULL_ID = "null";
         //this.deck = new Deck("SAN Vocab", 1);
 
         // Pass global deck JSON data
-        this.deck = new Deck(deckData,cardData,cardRatingsData,cardResultsData);
+        this.deck = new Deck(deckData,cardData,cardResultsData);
 
         // Set the title
         $("h1.title").text(this.deck.deckName);

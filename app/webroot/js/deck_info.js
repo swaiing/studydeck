@@ -3,6 +3,10 @@
 $(document).ready( function() {
     // Round corners
     $("div#middle").corner();
+    $("div#bottom").corner();
+
+    // Setup tabs
+    $("#bottom").tabs();
 
     // Disable checkboxes for ratings with no cards
     disableCheckboxes();

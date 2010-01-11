@@ -1,17 +1,22 @@
 /**** deck_info.js ****/
-
 div#heading {
-    margin: 0;
+    margin: 10px 0 0 0;
     padding: 0;
 }
 
 div#heading p {
     font-size: 14px;
     margin: 0;
-    padding: 0 0 10px 0;
+    padding: 0;
+}
+
+div#deck_utils {
+    float: right;
+    clear: right;
 }
 
 /** middle section **/
+
 div#middle {
     font-size: 12px;
     border: 1px solid #cecece;
@@ -62,4 +67,18 @@ div#mode_select input {
    padding: 0;
    float: left;
    clear: none;
+}
+
+/*** bottom section ***/
+
+div#bottom {
+    font-size: 12px;
+    margin: 15px 0 15px 0;
+    padding: .2em;
+}
+
+div#stats_tab, div#cards_tab, div#results_tab {
+    margin: 0;
+    padding: 10px;
+    clear: both;
 }
