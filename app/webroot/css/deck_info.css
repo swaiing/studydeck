@@ -7,7 +7,7 @@ div#heading {
 div#heading p {
     font-size: 14px;
     margin: 0;
-    padding: 0;
+    padding: 5px 0 5px 0;
 }
 
 div#deck_utils {
@@ -81,4 +81,10 @@ div#stats_tab, div#cards_tab, div#results_tab {
     margin: 0;
     padding: 10px;
     clear: both;
+}
+
+div#cards_tab div#edit_deck {
+    margin: 10px;
+    padding: 0;
+
 }

@@ -271,6 +271,35 @@ class DecksController extends AppController {
 	}
    
   /*
+   * Adds entry to my_decks table for deck.
+   *
+   */
+  function favorite($deckId)
+  {
+
+    $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+    if(!isset($deckId)) {
+        $this->log($LOG_PREFIX . "deckId is null.");
+        return null;
+    }
+    
+    // Disable recursion
+    $this->Deck->recursive = -1;
+
+    // Set user id
+    $userId = $this->Auth->user('id');
+
+    // Create new record in my_decks and save
+    $this->Deck->MyDeck->create(array(SD_Global::$MODEL_DECK_ID => $deckId,
+                                      SD_Global::$MODEL_USER_ID => $userId,
+                                      SD_Global::$MODEL_MYDECK_TYPE => SD_Global::$USER_SAVED));
+    $this->Deck->MyDeck->save();
+
+    // Reload dashboard?
+    $this->redirect(array('controller'=>'users', 'action'=>'dashboard'));
+  }
+   
+  /*
    * Helper which returns cards given a deck.
    *
    */
@@ -463,13 +492,37 @@ class DecksController extends AppController {
    * Deck landing page
    *
    */
-    function info($id)
+    function info($deckId)
     {
+        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+        if(!isset($deckId)) {
+            $this->log($LOG_PREFIX . "deckId is null.");
+            return null;
+        }
+
         // Clear selected ratings 
         $this->Session->write(SD_Global::$SESSION_RATINGS_SELECTED_KEY, null);
 
+        // Disable recursion
+        $this->Deck->recursive = -1;
+        $this->Deck->MyDeck->recursive = -1;
+
+        // Set user id
+        $userId = $this->Auth->user('id');
+
+        // Check if there is an association in my_decks for this deck
+        $params = array(
+                      'conditions' => array('MyDeck.user_id' => $userId,
+                                            'MyDeck.deck_id' => $deckId),
+                      'fields' => array('MyDeck.id', 'MyDeck.type'));
+        $myDeckResults = $this->Deck->MyDeck->find('all', $params);
+
+        // Send flag to view
+        $notAssociated = (count($myDeckResults) == 0);
+        $this->set('notAssociated', $notAssociated);
+
         // Call 'study'
-        $this->study($id, null);
+        $this->study($deckId, null);
     }
 
     /*
@@ -765,21 +818,21 @@ class DecksController extends AppController {
       // Check for null IDs
       if(($userId == null) || ($deckId == null)) {
         $this->log($LOG_PREFIX . "Valid ID.  userId: " . $userId . " | deckId: " . $deckId);
-        return False;
+        return false;
       }
 
       // Get session data
       $sessionData = $this->Session->read(SD_Global::$SESSION_USERS_KEY);
       if($sessionData == null) {
         $this->log($LOG_PREFIX . "No session data found.");
-        return False;
+        return false;
       }
 
       // Get Deck object in session 
       $deckSessionData = $sessionData[$userId][$deckId];
       if($deckSessionData == null) {
         $this->log($LOG_PREFIX . "No deck session data found.");
-        return False;
+        return false;
       }
       
       // Save Card Rating/Result models
@@ -857,7 +910,7 @@ class DecksController extends AppController {
       } //end foreach
 
       // Return success
-      return True;
+      return true;
     }
 
     function quitSession($deckId)
@@ -883,7 +936,7 @@ class DecksController extends AppController {
 
       // Redirect to appropriate page
       if($success) {
-        $this->redirect(array('controller'=>'decks','action'=>'view',$deckId));
+        $this->redirect(array('controller'=>'decks','action'=>'info',$deckId));
       }
       else {
         $this->redirect(array('controller'=>'decks','action'=>'failure'));

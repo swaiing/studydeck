@@ -51,13 +51,12 @@
 
 <div class="crumb">
     <?php
-        // TODO: Pull from my_decks table
-        $inDashboard = true;
-        if($inDashboard) {
-            echo $html->link('Dashboard', array('controller'=>'users', 'action'=>'dashboard'));
+        // If not in dashboard show explore link, otherwise 'dashboard' link
+        if($notAssociated) {
+            echo $html->link('Explore', array('controller'=>'decks', 'action'=>'explore'));
         }
         else {
-            echo $html->link('Explore', array('controller'=>'decks', 'action'=>'explore'));
+            echo $html->link('Dashboard', array('controller'=>'users', 'action'=>'dashboard'));
         }
     ?>
     > 
@@ -65,8 +64,12 @@
 </div>
 
 <div id="deck_utils">
-    <!-- TODO: write 'favorite' action -->
-    <?php echo $html->link('Add to Favorites', array('controller'=>'decks', 'action'=>'favorite')); ?>
+    <?php
+        // Add favorite link if not associated in my_decks
+        if($notAssociated) {
+            echo $html->link('Add to Favorites', array('controller'=>'decks', 'action'=>'favorite', $deckId));
+        }
+    ?>
 </div>
 
 <div id="heading">
@@ -141,6 +144,9 @@
     </div>
 
     <div id="cards_tab">
+        <div id="edit_deck">
+            <?php echo $html->link('Edit', array('controller'=>'decks', 'action'=>'edit', $deckId)); ?>
+        </div>
         <table class="deck_table">
         <tbody>
             <tr>
