@@ -26,8 +26,8 @@
 <div id="title_wrap">
   <h1 class="title"></h1>
   <?php
-        echo $html->link('Stop Learning',
-                          array('controller'=>'decks','action'=>'quitStudy',$deckId),
+        echo $html->link('Quit',
+                          array('controller'=>'decks','action'=>'quit',$deckId),
                           array('class'=>'top_link'));
   ?>
 </div>

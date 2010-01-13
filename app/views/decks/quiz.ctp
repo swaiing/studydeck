@@ -27,7 +27,7 @@
   <h1 class="title"></h1>
   <?php
         echo $html->link('End Quiz',
-                          array('controller'=>'decks','action'=>'quitQuiz',$deckId),
+                          array('controller'=>'decks','action'=>'quit',$deckId),
                           array('class'=>'top_link'));
   ?>
 </div>

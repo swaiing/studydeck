@@ -926,27 +926,21 @@ class DecksController extends AppController {
     }
 
     /*
-     * Ends a study session, writes ratings to DB.
+     * Ends a learn/quit session
      *
      */
-    function quitStudy($deckId)
+    function quit($deckId)
     {
       // Write session data, which consists of ratings
       $success = $this->quitSession($deckId);
 
-      // Redirect to appropriate page
-      if($success) {
-        $this->redirect(array('controller'=>'decks','action'=>'info',$deckId));
-      }
-      else {
-        $this->redirect(array('controller'=>'decks','action'=>'failure'));
-      }
+      // Redirect to deck info
+      $this->redirect(array('controller'=>'decks','action'=>'info',$deckId));
     }
 
     /*
      * Ends a quiz session, writes results to DB.
      *
-     */
     function quitQuiz($deckId)
     {
       // Write session data, which consists of results
@@ -960,6 +954,7 @@ class DecksController extends AppController {
         $this->redirect(array('controller'=>'decks','action'=>'failure'));
       }
     }
+     */
 
     /*
      * Generates the review page data, clears session
@@ -984,13 +979,13 @@ class DecksController extends AppController {
       $cardIds = $this->getCardIds($cardRecords);
 
       // Retrieve card ratings/results for view
-      $ratingMap = $this->getRatings($cardIds);
+      //$ratingMap = $this->getRatings($cardIds);
       $resultMap = $this->getResults($cardIds);
 
       // Bind data to view
       $this->set('quizResults',$deckSessionData);
       $this->set('cards',$cardRecords);
-      $this->set('cardsRatings',$ratingMap);
+      //$this->set('cardsRatings',$ratingMap);
       $this->set('cardsResults',$resultMap);
 
       // Clear session
