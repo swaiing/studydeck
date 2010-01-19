@@ -100,7 +100,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `flashcards`.`cards` (
   `id` INT NOT NULL AUTO_INCREMENT ,
-  `order` INT NOT NULL ,
+  `card_order` INT NOT NULL ,
   `question` TEXT NOT NULL ,
   `answer` TEXT NOT NULL ,
   `deck_id` INT NOT NULL ,
