@@ -313,17 +313,11 @@ class UsersController extends AppController {
 			    $tempPassword  =  substr(md5(rand()),0,8);
 						      	
 				//email tempPassword
-			    $this->SwiftMailer->smtpType = 'tls';
-               	$this->SwiftMailer->smtpHost = 'smtp.gmail.com';
-               	$this->SwiftMailer->smtpPort = 465;
-               	$this->SwiftMailer->smtpUsername = 'noreply@studydeck.com';
-                $this->SwiftMailer->smtpPassword = 'GoGate7';
- 				$this->SwiftMailer->sendAs = 'html';
-               	$this->SwiftMailer->from = 'noreply@studydeck.com';
-               	$this->SwiftMailer->to = $existingUser['User']['email'];
-               	//set variables to template as usual
+			    $this->setEmailAttributes($existingUser['User']['email'],'/users/login');
+                
+               	//set variables to template 
                	$this->set('tempPassword', $tempPassword);
-				$this->set('loginLink','http://192.168.1.101/studydeck/users/login');
+                
 				try {
 					if(!$this->SwiftMailer->send('forgotPassword', 'StudyDeck')) {
                     	$this->log("Error sending email");
@@ -355,16 +349,36 @@ class UsersController extends AppController {
 	}
 
 	function login(){
-      	  // Intentionally blank
+        // Intentionally blank
       
     }
 
 	function logout() {
-    $this->Auth->logout();
-    $this->Session->destroy();
-    $this->redirect("/");
-  }
+        $this->Auth->logout();
+        $this->Session->destroy();
+        $this->redirect("/");
+    }
 	
+    //sets base email attributes and builds link
+    private function setEmailAttributes($to = null, $urlSuffix = null) {
+        $this->SwiftMailer->smtpType = 'tls';
+        $this->SwiftMailer->smtpHost = 'smtp.gmail.com';
+        $this->SwiftMailer->smtpPort = 465;
+        $this->SwiftMailer->smtpUsername = 'noreply@studydeck.com';
+        $this->SwiftMailer->smtpPassword = 'GoGate7';
+        $this->SwiftMailer->sendAs = 'html';
+        $this->SwiftMailer->from = 'noreply@studydeck.com';
+        $this->SwiftMailer->to = $to;
+               
+        $baseUrl = FULL_BASE_URL;
+        $prodUrlTestStr = "://studydeck";
+        if(substr_compare($baseUrl, $prodUrlTestStr, -strlen($prodUrlTestStr), strlen($prodUrlTestStr)) != 0) {
+            $baseUrl = $baseUrl."/studydeck";
+        }
+        $loginLink = $baseUrl.$urlSuffix;
+		$this->set('loginLink', $loginLink);
+    }
+    
 	function register() {
     	//declares validationError variable for view
       	$this->set('validationError','');
@@ -401,19 +415,13 @@ class UsersController extends AppController {
 							//skips validation because it should already be done
                 	    	$this->TempUser->save($this->data,array('validate' =>false));
 
-							//email confirmationCode
-			       			$this->SwiftMailer->smtpType = 'tls';
-               		    	$this->SwiftMailer->smtpHost = 'smtp.gmail.com';
-               		    	$this->SwiftMailer->smtpPort = 465;
-               		    	$this->SwiftMailer->smtpUsername = 'noreply@studydeck.com';
-               		    	$this->SwiftMailer->smtpPassword = 'GoGate7';
- 				        	$this->SwiftMailer->sendAs = 'html';
-               		    	$this->SwiftMailer->from = 'noreply@studydeck.com';
-               		    	//$this->SwiftMailer->fromName = 'Welcome To StudyDeck!';
-               		    	$this->SwiftMailer->to = $this->data['TempUser']['email'];
+							
+			       			$this->setEmailAttributes($this->data['TempUser']['email'],'/users/confirmation/'.$confirmationCode);
+                            
                		    	//set variables to template as usual
-               		    	$this->set('confirmationLink', 'http://192.168.1.101/studydeck/users/confirmation/'.$confirmationCode);
         					$this->set('userName',$this->data['TempUser']['username']);
+                            
+                            //email confirmationCode
 							try {
 					    		if(!$this->SwiftMailer->send('confirmation', 'StudyDeck Confirmation')) {
                     				$this->log("Error sending email");
