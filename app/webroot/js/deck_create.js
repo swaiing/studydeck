@@ -198,7 +198,7 @@ function changeRowNumbering(row, isIncreasing, creatingNewRow) {
   rowAnsInputElt.attr("name",newRowNameAttr);
   
   // Update Order value
-  var rowOrderInputElt = row.find("input[name$='[order]']");
+  var rowOrderInputElt = row.find("input[name$='[card_order]']");
   var rowOrderIdAttr = rowOrderInputElt.attr("id");
   var rowOrderValueAttr = parseFloat(rowOrderInputElt.attr("value"));
   var newRowOrderIdAttr = changeNumInString(rowOrderIdAttr, increaseNumbering);
@@ -247,13 +247,13 @@ function changeRowNumbering(row, isIncreasing, creatingNewRow) {
 function changeNumInString(str, isIncreasing) {
 	
     var firstNumIndex = str.search(/\d/g);
-  if(firstNumIndex == -1) {
-      return str;
-  }
-  var head = str.substr(0,firstNumIndex);
-  var temp = str.substr(firstNumIndex);
-  var lastNumIndex = temp.search(/\D/g);
-  var num = temp.substr(0,lastNumIndex);
+    if(firstNumIndex == -1) {
+        return str;
+    }
+    var head = str.substr(0,firstNumIndex);
+    var temp = str.substr(firstNumIndex);
+    var lastNumIndex = temp.search(/\D/g);
+    var num = temp.substr(0,lastNumIndex);
 	
 	if(isIncreasing) {
 		num++;
@@ -262,10 +262,10 @@ function changeNumInString(str, isIncreasing) {
 		num--;
 	}
 	
-  var tail = temp.substr(lastNumIndex);
-  var reformedStr = head + num + tail;
-  //alert("head" + head + "num: " + num + " tail " + tail);
-  return reformedStr;
+    var tail = temp.substr(lastNumIndex);
+    var reformedStr = head + num + tail;
+    //alert("head" + head + "num: " + num + " tail " + tail);
+    return reformedStr;
 }
 
 // Uploads CSV into create deck form

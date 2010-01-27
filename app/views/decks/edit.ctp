@@ -36,11 +36,10 @@
 
     $DEFAULT_NUM_CARDS = count($existingCards);
 
-    // TODO: what's this for exactly?
-    $session->flash();
+    
 
     $privacyOptions = array($PRIVATE_FLAG => $PRIVATE_LABEL, $PUBLIC_FLAG=>$PUBLIC_LABEL);
-    $privacyAttributes = array('legend'=>false, 'label'=>'Privacy:', 'default'=>$PUBLIC_FLAG);
+    $privacyAttributes = array('legend'=>false, 'label'=>'Privacy:', 'default'=> $existingDeck['Deck']['privacy']);
 
     $cardTermOptions = array('type'=>'text', 'label'=>false, 'size'=>$TERM_FS, 'maxlength'=>$TERM_LENGTH);
     $cardDefinitionOptions = array('type'=>'text', 'label'=>false, 'size'=>$DEFINITION_FS, 'maxlength'=>$DEFINITION_LENGTH);
@@ -51,9 +50,12 @@
     // Deck detail fields
     echo "<div id=\"deck_inputs\">\n";
     echo "<ol>\n";
-
+    
+    //set Deck Id
+    echo $form->hidden('Deck.id', array('type'=>'text', 'label'=>false,'value' => $existingDeck['Deck']['id'])); 
+    
     // Title
-    echo "<li>" . $form->input('Deck.deck_name',array('label'=>'Title:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH)) . "</li>\n";
+    echo "<li>" . $form->input('Deck.deck_name',array('label'=>'Title:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH, 'value' => $existingDeck['Deck']['deck_name'])) . "</li>\n";
 
     // Tags/Categories
     echo "<li>" . $form->input('Tag.tag',array('label'=>'Tags:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH, 'id'=>'autoComplete')) . "</li>\n";
@@ -62,7 +64,7 @@
     echo "<li class=\"privacyOptions\">" . $form->radio('privacy', $privacyOptions, $privacyAttributes);
 
     // Description
-    echo "<li>" . $form->input('Deck.description',array('label'=>'Description:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH)) . "</li>\n";
+    echo "<li>" . $form->input('Deck.description',array('label'=>'Description:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH, 'value' => $existingDeck['Deck']['description'])) . "</li>\n";
     echo "</ol>\n";
 
     // Card inputs
@@ -80,7 +82,7 @@
         $card = "Card." . $i;
         echo "<li>";
         // Hidden form to store card order
-        echo $form->hidden($card.".order", array('type'=>'text', 'label'=>false,'value' => $existingCards[$i]['Card']['order']));
+        echo $form->hidden($card.".card_order", array('type'=>'text', 'label'=>false,'value' => $existingCards[$i]['Card']['card_order']));
         echo $form->hidden($card.".id", array('type'=>'text', 'label'=>false,'value' => $existingCards[$i]['Card']['id']));
         echo $form->input($card.".question",array('type'=>'text','label'=>$i+1,'size'=>$TERM_FS, 'value' => $existingCards[$i]['Card']['question']));
         echo $form->input($card.".answer",array('type'=>'text', 'label'=>false, 'size'=>$DEFINITION_FS, 'maxlength'=>$DEFINITION_LENGTH, 'value' => $existingCards[$i]['Card']['answer']));
