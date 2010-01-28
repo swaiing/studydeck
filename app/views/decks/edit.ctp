@@ -57,8 +57,14 @@
     // Title
     echo "<li>" . $form->input('Deck.deck_name',array('label'=>'Title:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH, 'value' => $existingDeck['Deck']['deck_name'])) . "</li>\n";
 
+    
+    //build current tag list
+    $tagList = "";
+    foreach($existingTags as $tempTag) {
+        $tagList = $tagList.$tempTag['Tag']['tag']." ";
+    }
     // Tags/Categories
-    echo "<li>" . $form->input('Tag.tag',array('label'=>'Tags:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH, 'id'=>'autoComplete')) . "</li>\n";
+    echo "<li>" . $form->input('Tag.tag',array('label'=>'Tags:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH, 'id'=>'autoComplete', 'value' => $tagList)) . "</li>\n";
  
     // Privacy radio
     echo "<li class=\"privacyOptions\">" . $form->radio('privacy', $privacyOptions, $privacyAttributes);
@@ -99,7 +105,7 @@
     echo "</div>";
     echo $form->end();
     
-    
+    print_r($existingTags);
     //echo print_r($this->data);
     //echo print_r($existingCards);
     // CSV upload

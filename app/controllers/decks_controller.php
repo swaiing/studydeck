@@ -56,7 +56,7 @@ class DecksController extends AppController {
                $this->Deck->saveAll($this->data,array('validate' => 'false'));
                 
                 $deckId = $this->Deck->id;
-                //$deckId =155;
+                
                 $tagList = $this->data['Tag']['tag'];
                 //$debugMsg ="";
                 $newTagArray = array();
@@ -141,6 +141,8 @@ class DecksController extends AppController {
             // Disable recursion
             $this->Deck->recursive = -1;
             $this->Card->recursive = -1;
+            $this->DeckTag->recursive = -1;
+            $this->Tag->recursive = -1;
             
             $deckParams =  array('conditions' =>  array('Deck.id' => $deckId));
             $deck = $this->Deck->find('first',$deckParams);
@@ -157,17 +159,30 @@ class DecksController extends AppController {
                 $this->redirect(array('controller'=>'decks','action'=>'info',$deckId));
             }
             
+            //get the cards that belong to the deck
             $cardsParams =  array('conditions' =>  array('Card.deck_id' => $deckId),'order' => 'Card.card_order ASC');
             $cards = $this->Card->find('all',$cardsParams);
             
-                       
+           
+            //get the tags that belong to the deck
+            $deckTagParams = array('conditions' =>  array('DeckTag.deck_id' => $deckId),'fields' => array('DeckTag.tag_id'));
+            $deckTags = $this->DeckTag->find('list',$deckTagParams);
+            
+            $tagsParams = array('conditions' =>  array('Tag.id' => $deckTags),'fields' => array('Tag.id','Tag.tag'));
+            $tags = $this->Tag->find('all',$tagsParams);
+            
+            
+            
+            $this->set('existingTags', $tags);           
             $this->set('existingDeck', $deck);
             $this->set('existingCards', $cards);
         
         }
         else {
               
-            
+            //sanitize the input data
+            App::import('Sanitize');
+            $this->data = Sanitize::clean($this->data);	
             
             $this->Card->recursive = -1;
             $cardsParams =  array('conditions' =>  array('Card.deck_id' => $this->data['Deck']['id']),'fields' => array('Card.id'));
@@ -176,8 +191,11 @@ class DecksController extends AppController {
             $cardsToDelete = array();
             $cardCount = count($cards);
             
+             
+            
             for($i = 0; $i < $cardCount; $i++) {
-                $cardsToDelete[$cards[$i]['Card']['id']] = 1;
+                $tempCardId = $cards[$i]['Card']['id'];
+                $cardsToDelete[$tempCardId] = $tempCardId;
             }
             
              $subCount = 0;
@@ -204,6 +222,14 @@ class DecksController extends AppController {
                     }
                 }
 				
+            }
+            if($this->Deck->saveAll($this->data,array('validate' => 'only'))) {
+
+                $this->Deck->saveAll($this->data,array('validate' => 'false'));
+                foreach($cardsToDelete as $removedCard) {
+                    //actually deletes the deck			    
+                    $this->Card->delete($removedCard,true);
+                }
             }
             print_r($this->data);
             print_r($cardsToDelete);
