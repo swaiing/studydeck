@@ -18,6 +18,7 @@
 	echo "<tr>";
 	echo "<td>" . $card['Card']['question'] . "</td>";
 	echo "<td>" . $card['Card']['answer'] . "</td>";
+    echo "<td>" . $card['Card']['card_order'] . "</td>";
 	echo "</tr>";
   }
 ?>

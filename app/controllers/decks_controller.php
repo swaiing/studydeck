@@ -23,90 +23,12 @@ class DecksController extends AppController {
 
 	function create(){
 
-        if(!empty($this->data)){
-            //sanitize the input data
-            App::import('Sanitize');
-            $this->data = Sanitize::clean($this->data);	
-			
-            //gets authenticated user Id
-            $userId = $this->Auth->user('id');
-			
-			
-            // add user id into deck
-            $this->data['Deck']['user_id'] = $userId; 
-
-                       
-            //finds the number of cards being entered
-            $num = count($this->data['Card']);
-
-            //traverses the cards and unsets empty card rows
-            for($x = 0; $x < $num; $x ++) {
-                //remove empty cards from creating
-                if(empty($this->data['Card'][$x]['question']) && empty($this->data['Card'][$x]['answer'])) {
-                    unset($this->data['Card'][$x]);
-                }
-				
-            }
+        if(!empty($this->data)) {
+            $editDeck = false;
+            $this->saveDeck($editDeck);
+        }
             
-            //$this->log("[" . get_class($this) . "-> create] " . $debugMsg, LOG_DEBUG);
-            
-            
-			if($this->Deck->saveAll($this->data,array('validate' => 'only'))) {
-
-               $this->Deck->saveAll($this->data,array('validate' => 'false'));
-                
-                $deckId = $this->Deck->id;
-                
-                $tagList = $this->data['Tag']['tag'];
-                //$debugMsg ="";
-                $newTagArray = array();
-                $deckTagArray = array();
-                
-                
-                $tagListArray = explode(" ", $tagList);
-                $tagListArrayLength = count($tagListArray);
-                  
-                for($tagIndex = 0; $tagIndex < $tagListArrayLength; $tagIndex ++) {            
-                    //$debugMsg = $debugMsg." ".trim($tagListArray[$tagIndex]); 
-                   
-                    $tag = trim($tagListArray[$tagIndex]);
-                    $tempTag = $this->Tag->find('first',array('conditions' => array('Tag.tag' => $tag)),array('fields' => 'Tag.id'));
-                    if(!empty($tag)) {
-                        if($tempTag == null) { 
-                            $newTagArray['Tag']['tag'] = $tag;
-                            //print_r($newTagArray);
-                            $this->Tag->create();
-                            $this->Tag->save($this->data, array('validate' => 'false'));
-                            $deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->Tag->id;
-                            //$deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->requestAction('/tags/sTag/'.$newTagArray);
-                            //$debugMsg = $debugMsg." new tag: ".$tag." id: ".$this->Tag->id;
-                            
-                        }
-                        else {                
-                            $deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $tempTag['Tag']['id']; 
-                            //$debugMsg = $debugMsg." existing tag: ".$tempTag['Tag']['id']; 
-                        }                                                          
-                        $deckTagArray['DeckTag'][$tagIndex]['deck_id'] = $deckId;                             
-                    }
-                }
-                                   
-                if($deckTagArray != null) {
-                    //$debugMsg = $debugMsg." reached here"; 
-                    //print_r($deckTagArray);
-                    $this->DeckTag->saveAll($deckTagArray['DeckTag']);
-                    //$this->log("[" . get_class($this) . "-> create] " . $debugMsg, LOG_DEBUG);
-                    
-                }
-                                    
-                $this->data['MyDeck']['deck_id'] = $deckId;
-                $this->data['MyDeck']['user_id'] = $userId;
-                $this->MyDeck->save($this->data); 
-                
-                $this->redirect(array('controller'=>'decks','action'=>'info',$deckId));
-                        
-			}
-			
-        } // end if(!empty($this->data))
+        
 
     }
 
@@ -172,68 +94,15 @@ class DecksController extends AppController {
             $tags = $this->Tag->find('all',$tagsParams);
             
             
-            
             $this->set('existingTags', $tags);           
             $this->set('existingDeck', $deck);
             $this->set('existingCards', $cards);
         
         }
         else {
-              
-            //sanitize the input data
-            App::import('Sanitize');
-            $this->data = Sanitize::clean($this->data);	
+            $editDeck = true;
+            $this->saveDeck($editDeck);
             
-            $this->Card->recursive = -1;
-            $cardsParams =  array('conditions' =>  array('Card.deck_id' => $this->data['Deck']['id']),'fields' => array('Card.id'));
-            $cards = $this->Card->find('all',$cardsParams);
-            
-            $cardsToDelete = array();
-            $cardCount = count($cards);
-            
-             
-            
-            for($i = 0; $i < $cardCount; $i++) {
-                $tempCardId = $cards[$i]['Card']['id'];
-                $cardsToDelete[$tempCardId] = $tempCardId;
-            }
-            
-             $subCount = 0;
-            //finds the number of cards being entered
-            $num = count($this->data['Card']);
-             
-            //traverses the cards and unsets empty card rows
-            for($x = 0; $x < $num; $x ++) {
-                //remove empty cards from creating
-                if(empty($this->data['Card'][$x]['question']) && empty($this->data['Card'][$x]['answer'])) {
-                    unset($this->data['Card'][$x]);
-                    $subCount++;
-                }
-                else {
-                    //keeps the ordering sequential
-                    $this->data['Card'][$x]['card_order'] = $this->data['Card'][$x]['card_order'] - $subCount;
-                    $currentCardId = -1;
-                    if(isset($this->data['Card'][$x]['id'])){
-                        $currentCardId = $this->data['Card'][$x]['id'];
-                    }
-                    if(isset($cardsToDelete[$currentCardId])) {
-                        unset($cardsToDelete[$currentCardId]);
-                    
-                    }
-                }
-				
-            }
-            if($this->Deck->saveAll($this->data,array('validate' => 'only'))) {
-
-                $this->Deck->saveAll($this->data,array('validate' => 'false'));
-                foreach($cardsToDelete as $removedCard) {
-                    //actually deletes the deck			    
-                    $this->Card->delete($removedCard,true);
-                }
-            }
-            print_r($this->data);
-            print_r($cardsToDelete);
-        
         }
         
         
@@ -1066,6 +935,162 @@ class DecksController extends AppController {
       $this->log($LOG_PREFIX . "Clearing session: " . $sessionToClear,LOG_DEBUG);
       $this->Session->delete($sessionToClear);
     }
+    
+    //function that handles creating and editing of deck
+    private function saveDeck($edit = null) {
+        //sanitize the input data
+        App::import('Sanitize');
+        $this->data = Sanitize::clean($this->data);	
+
+        //gets authenticated user Id
+        $userId = $this->Auth->user('id');
+
+
+        // add user id into deck for non-edit
+        if(!$edit) {
+            $this->data['Deck']['user_id'] = $userId; 
+        }
+
+        $this->Card->recursive = -1;
+        $cardsToDelete = array();
+        
+        //adds all previous existing cardsToDelete array
+        if($edit) {
+            $cardsParams =  array('conditions' =>  array('Card.deck_id' => $this->data['Deck']['id']),'fields' => array('Card.id'));
+            $cards = $this->Card->find('all',$cardsParams);
+            $cardCount = count($cards);
+            $deckId = $this->data['Deck']['id'];
+            
+            for($i = 0; $i < $cardCount; $i++) {
+                $tempCardId = $cards[$i]['Card']['id'];
+                $cardsToDelete[$tempCardId] = $tempCardId;
+            }
+
+        }
+        
+        
+        $subCount = 0;
+        
+        //finds the number of cards being entered
+        $num = count($this->data['Card']);
+
+        //traverses the cards and unsets empty card rows
+        for($x = 0; $x < $num; $x ++) {
+            //remove empty cards from creating
+            if(empty($this->data['Card'][$x]['question']) && empty($this->data['Card'][$x]['answer'])) {
+                unset($this->data['Card'][$x]);
+                $subCount++;
+            }
+            else {
+                //keeps the ordering sequential
+                $this->data['Card'][$x]['card_order'] = $this->data['Card'][$x]['card_order'] - $subCount;
+                
+                //removes cards from cardsToDelete array
+                if($edit) {
+                    $currentCardId = -1;
+                    if(isset($this->data['Card'][$x]['id'])){
+                        $currentCardId = $this->data['Card'][$x]['id'];
+                    }
+                    if(isset($cardsToDelete[$currentCardId])) {
+                        unset($cardsToDelete[$currentCardId]);
+                    
+                    }
+                }
+            }
+
+        }
+
+        if($this->Deck->saveAll($this->data,array('validate' => 'only'))) {
+
+            $this->Deck->saveAll($this->data,array('validate' => 'false'));
+            
+            //removes cards that user deleted during editing process
+            if($edit) {
+                foreach($cardsToDelete as $removedCard) {
+                    //actually deletes the deck			    
+                    $this->Card->delete($removedCard,true);
+                }
+            }
+            
+            $deckId = $this->Deck->id;
+
+            $tagList = $this->data['Tag']['tag'];
+            $newTagArray = array();
+            $deckTagArray = array();
+
+
+            $tagListArray = explode(" ", $tagList);
+            $tagListArrayLength = count($tagListArray);
+              
+            for($tagIndex = 0; $tagIndex < $tagListArrayLength; $tagIndex ++) {            
+               
+                $tag = trim($tagListArray[$tagIndex]);
+                $tempTag = $this->Tag->find('first',array('conditions' => array('Tag.tag' => $tag)),array('fields' => 'Tag.id'));
+                if(!empty($tag)) {
+                    if($tempTag == null) { 
+                        $newTagArray['Tag']['tag'] = $tag;
+                        $this->Tag->create();
+                        $this->Tag->save($this->data, array('validate' => 'false'));
+                        $deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->Tag->id;
+                        //$deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->requestAction('/tags/sTag/'.$newTagArray);
+                        //$debugMsg = $debugMsg." new tag: ".$tag." id: ".$this->Tag->id;
+                        
+                    }
+                    else {                
+                        $deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $tempTag['Tag']['id']; 
+                        
+                    }                                                          
+                    $deckTagArray['DeckTag'][$tagIndex]['deck_id'] = $deckId;                             
+                }
+            }
+                               
+            if($deckTagArray != null) {
+                //finds newly created tags and tags to delete from deck
+                if($edit) {
+                    $tempDeckTagParams = array('conditions' =>  array('DeckTag.deck_id' => $deckId),'fields' => array('DeckTag.tag_id'));
+                    $tempDeckTags = $this->DeckTag->find('list',$tempDeckTagParams);
+                    
+                    $deckTagCount = count($deckTagArray['DeckTag']);
+                    for($i = 0; $i < $deckTagCount; $i++) {
+                        
+                        foreach($tempDeckTags as $deckTagId => $tagId){
+                            
+                            if($deckTagArray['DeckTag'][$i]['tag_id'] == $tagId) {
+                                
+                                unset($deckTagArray['DeckTag'][$i]);
+                                unset($tempDeckTags[$deckTagId]);
+                                
+                                //breaks out of foreach after match is found
+                                break;
+                            }
+                        }
+                    }
+                    foreach($tempDeckTags as $deckTagId => $tagId){
+                        //actually deletes the deck			    
+                        $this->DeckTag->delete($deckTagId, false);
+                    }
+                
+                }
+                //saves the deck
+                if(count($deckTagArray['DeckTag']) > 0) {
+                    $this->DeckTag->saveAll($deckTagArray['DeckTag']);
+                }
+                
+                
+            }
+            
+            //if newly created deck add to mydecks 
+            if(!$edit) {    
+                $this->data['MyDeck']['deck_id'] = $deckId;
+                $this->data['MyDeck']['user_id'] = $userId;
+                $this->MyDeck->save($this->data); 
+            }
+
+            $this->redirect(array('controller'=>'decks','action'=>'info',$deckId));
+                
+        }
+    
+    }
 
     /*
      * Called when writeSession fails.
@@ -1077,13 +1102,12 @@ class DecksController extends AppController {
 
     function uploadCSV(){
     	    
-    	//disable need for a view		
-     	$this->autoRender=false;
+    //disable need for a view		
+    $this->autoRender=false;
 
 	
 	$file = new File($this->data['Deck']['csv_file']['tmp_name']);
 	
-	//$data = h($file->read()); //read file contents and pass through htmlspecialchars function
 	Configure::write ('debug',0);
 	$row = 1;
 	$handle=fopen($this->data['Deck']['csv_file']['tmp_name'],"r");
@@ -1094,18 +1118,7 @@ class DecksController extends AppController {
 		$row++;
 	}
 	fclose($handle);
-	//$file->close();	
-	//$this->Session->setFlash("temp name:".$data);
-
-	//$this->Session->setFlash("temp name:".$this->data['Deck']['csv_file']['tmp_name']." type:".$this->data['Deck']['csv_file']['type']." Extention: ".$ext);
-
-	/*
-	$csvReturn[1]['q'] = "question 1";
-	$csvReturn[1]['a'] = "answer 1";
-	$csvReturn[2]['q'] = "question 2";
-	$csvReturn[2]['a'] = "answer 2";
-
-	*/
+	
 	$csvReturn['totalCount'] = count($csvReturn);
 	$result = json_encode($csvReturn);
 	
@@ -1122,7 +1135,7 @@ class DecksController extends AppController {
         // Retrieve cards in deck by deck_id
         $findParams = array(
                             'conditions' => array('Card.deck_id' => $this->Deck->id),
-                            'fields' => array('Card.question', 'Card.answer'));
+                            'fields' => array('Card.question', 'Card.answer','Card.card_order'));
         $this->set('deck', $this->Card->find('all',$findParams));
     }
 
