@@ -16,14 +16,18 @@ $(document).ready(function(){
         autoFill: false
     });
 
-  // Event handler for last input box
-  $("ol#card_list li:last input:last").blur(function(event) {
+    // Event handler for last input box
+    $("ol#card_list li:last input:last").blur(function(event) {
     addRow(event);
-  });
+    });
 	
+    $("#deleteCardDialog").dialog({
+        bgiframe: true, autoOpen: false, height: 100, width: 360, modal: true
+    });
+    
   // Event handler for +/- buttons
 	$("div.plus").click(function(event) { addRow(event); });
-	$("div.minus").click(function(event) { subtractRow(event); });
+    $("div.minus").click(function(event) { subtractRowClick(event); });
 });
 
 
@@ -121,6 +125,37 @@ function addRow(event) {
   
 
 }
+/*
+*  Handles dialogbox for when '-' is clicked
+*
+*/
+function subtractRowClick(event) {
+    var row = $(event.target).parent();
+    var rowLabelElt = row.find("label");
+    var curRowNum = rowLabelElt.html();
+    var indexRowNum = curRowNum - 1;
+    var questionValue = $("#Card" + indexRowNum + "Question").attr("value");
+    var definitionValue = $("#Card" + indexRowNum + "Answer").attr("value");
+    
+    //if empty row then do not prompt
+    if(questionValue == "" && definitionValue == "") {
+        subtractRow(event);
+    }
+    else {
+    
+        $("#deleteCardDialog").html("Are you sure you want to delete this row?");
+        $("#deleteCardDialog").dialog('option','buttons', { 
+            No:function(){
+                $(this).dialog('close');
+            }, 
+            Yes:function(){
+                subtractRow(event);
+                $(this).dialog('close');
+            }
+        });
+        $("#deleteCardDialog").dialog('open');
+    }
+}
 
 /*
  * Event handler when '-' is clicked
@@ -129,20 +164,20 @@ function addRow(event) {
 function subtractRow(event) {
 	var parent = $(event.target).parent();
 	var prevSibling = parent.prev();
+    
+    // Remove the row if there's more than one left
+    if($(parent).siblings().size() > 1) {
 
-  // Remove the row if there's more than one left
-  if($(parent).siblings().size() > 1) {
+        // Run fade effect
+        $(parent).fadeOut("fast", function() { $(this).remove(); });
 
-    // Run fade effect
-    $(parent).fadeOut("fast", function() { $(this).remove(); });
+        // Re-number the rest of the rows
+          var increaseNumbering = false;
+          renumberRemainingRows(prevSibling, increaseNumbering);
 
-    // Re-number the rest of the rows
-	  var increaseNumbering = false;
-	  renumberRemainingRows(prevSibling, increaseNumbering);
-
-    // Add event handler to last input box
-    $("ol#card_list li:last input:last").blur(function(event) { addRow(event); });
-  }
+        // Add event handler to last input box
+        $("ol#card_list li:last input:last").blur(function(event) { addRow(event); });
+    }
 }
 
 /*
