@@ -78,7 +78,6 @@
 </div>
 
 <div id="middle">
-
     <?php echo $form->create('Deck', array('action' => 'infoSubmit')); ?>
     <div id="category_select">
         <p>1. Select difficulty:</p>
@@ -159,11 +158,12 @@
                 // Iterate cards for table
                 foreach($cards as $card) {
                     $id = $card['Card']['id'];
+                    $order = $card['Card']['card_order'];
                     $term = $card['Card']['question'];
                     $defn = $card['Card']['answer'];
                     $rating = $card['Rating']['rating'];
                     echo "<tr>";
-                    echo "<td>$id</td>";
+                    echo "<td>$order</td>";
                     echo "<td>$term</td>";
                     echo "<td>$defn</td>";
                     $ratingStr = $rating;
@@ -180,6 +180,89 @@
 
     <div id="results_tab">
         <h2>Results</h2>
+
+<table id="table_review">
+  <tr class="header_row">
+    <th>#</th>
+    <th>Question</th>
+    <th>Answer</th>
+    <th>Difficulty</th>
+    <th>Answered Correctly?</th>
+    <th>Times Answered Correctly</th>
+    <th>Times Answered Incorrectly</th>
+  </tr>
+
+<?php
+  $RATING_MAP = array(0 => "No Rating",
+                      1 => "Easy",
+                      2 => "Medium",
+                      3 => "Hard");
+  $CORRECT_MAP = array(0 => "Incorrect",
+                       1 => "Correct");
+
+  foreach($cards as $id => $card) {
+
+    // Data from $cards array
+    $id = $card['Card']['id'];
+    $order = $card['Card']['card_order'];
+    $term = $card['Card']['question'];
+    $defn = $card['Card']['answer'];
+    $rating = $card['Rating']['rating'];
+
+    // Data from $ratingMap and $resultMap arrays
+    $totalCorrect = 0;
+    $totalIncorrect = 0;
+    if(array_key_exists($id,$cardsResults)) {
+      $totalCorrect = $cardsResults[$id]['total_correct'];
+      $totalIncorrect = $cardsResults[$id]['total_incorrect'];
+    }
+
+    $cardWasQuizzed = false;
+    $ratingStr = "N/A";
+    $correctStr = "N/A";
+
+    // Convert rating to human-readable string
+    // Confirm $rating is 0-3
+    if(preg_match("/[0-3]/",$rating)) {
+      $ratingStr = $RATING_MAP[$rating];
+    }
+
+    // Get quiz result from session populated array
+    if(array_key_exists($id,$quiz)) {
+      $cardWasQuizzed = true;
+      $correct = $quiz[$id]['Result']['last_guess'];
+
+      // Confirm $correct is 0 or 1
+      if(preg_match("/[0|1]/",$correct)) {
+        $correctStr = $CORRECT_MAP[$correct];
+      }
+    }
+
+    // Highlight row based on correct/incorrect
+    if($cardWasQuizzed) {
+      if(strcmp($correct,'1') == 0) {
+        echo "<tr class='correct'>";
+      }
+      else if(strcmp($correct,'0') == 0) {
+        echo "<tr class='incorrect'>";
+      }
+      else {
+        echo "<tr>";
+      }
+    }
+
+    echo "<td>" . $order . "</td>";
+    echo "<td>" . $term . "</td>";
+    echo "<td>" . $defn . "</td>";
+    echo "<td>" . $ratingStr . "</td>";
+    echo "<td>" . $correctStr . "</td>";
+    echo "<td>" . $totalCorrect . "</td>";
+    echo "<td>" . $totalIncorrect . "</td>";
+    echo "</tr>";
+  }
+?>
+</table>
+
     </div>
 </div>
 

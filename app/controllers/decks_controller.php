@@ -262,7 +262,7 @@ class DecksController extends AppController {
     // TODO: Sanitize input?
 
     // Subquery to get all cards in the deck
-    $subQueryOnCards = "(SELECT cards.id AS cid, cards.question AS cq, cards.answer AS ca FROM cards WHERE cards.deck_id=$deckId) AS Card";
+    $subQueryOnCards = "(SELECT cards.id AS cid, cards.card_order AS co, cards.question AS cq, cards.answer AS ca FROM cards WHERE cards.deck_id=$deckId) AS Card";
 
     // Subquery to get all the users's ratings for the cards
     $subQueryOnRatings = "(SELECT ratings.id AS rid, ratings.rating AS rr, ratings.card_id as rcid, ratings.user_id AS ruid FROM ratings WHERE ratings.user_id=$userId) AS Rating";
@@ -289,7 +289,7 @@ class DecksController extends AppController {
     }
 
     // Build entire SQL string
-    $query = "SELECT cid AS 'id', cq as 'question', ca AS 'answer', rid AS 'id', rr AS 'rating' FROM $subQueryOnCards LEFT JOIN $subQueryOnRatings ON cid=rid $filter;";
+    $query = "SELECT cid AS 'id', co as 'card_order', cq as 'question', ca AS 'answer', rid AS 'id', rr AS 'rating' FROM $subQueryOnCards LEFT JOIN $subQueryOnRatings ON cid=rid $filter ORDER BY co ASC;";
 
     // Debug SQL
     //$this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "query: $query", LOG_DEBUG);
@@ -436,6 +436,7 @@ class DecksController extends AppController {
    */
     function info($deckId)
     {
+        // Logging
         $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
         if(!isset($deckId)) {
             $this->log($LOG_PREFIX . "deckId is null.");
@@ -445,6 +446,24 @@ class DecksController extends AppController {
         // Clear selected ratings 
         $this->Session->write(SD_Global::$SESSION_RATINGS_SELECTED_KEY, null);
 
+        // Call notAssociated method
+        // Binds $notAssociated -> whether deck is in dashboard (i.e. in my_decks)
+        $this->notAssociated($deckId);
+
+        // Call study method
+        // Binds $deckId, $deckData, $cards, $cardsRatingsCount, and $cardsResults to view
+        $this->study($deckId, null);
+
+        // Call quizReview method to bind session data
+        // Binds $quiz
+        $this->reviewQuiz($deckId);
+    }
+
+    /*
+     *  Helper to send flag if deck is in dashboard (i.e. is in 'my_decks' table)
+     */
+    private function notAssociated($deckId)
+    {
         // Disable recursion
         $this->Deck->recursive = -1;
         $this->Deck->MyDeck->recursive = -1;
@@ -462,16 +481,14 @@ class DecksController extends AppController {
         // Send flag to view
         $notAssociated = (count($myDeckResults) == 0);
         $this->set('notAssociated', $notAssociated);
-
-        // Call 'study'
-        $this->study($deckId, null);
     }
 
     /*
      * Helper to access session data
      *
      */
-    private function addSessionTreeNode($sessionData, $keys) {
+    private function addSessionTreeNode($sessionData, $keys)
+    {
 
         if($keys == null) {
             return $sessionData;
@@ -902,38 +919,27 @@ class DecksController extends AppController {
      * Generates the review page data, clears session
      *
      */
-    function review($deckId) {
+    function reviewQuiz($deckId) {
 
-      // Store userId
-      $userId = $this->Auth->user('id');
+        // Store userId
+        $userId = $this->Auth->user('id');
 
-      // Set log info
-      $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+        // Set log info
+        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
 
-      // Get deck session data
-      $sessionData = $this->Session->read(SD_Global::$SESSION_USERS_KEY);
-      $deckSessionData = $sessionData[$userId][$deckId];
+        // Get deck session data
+        $sessionData = $this->Session->read(SD_Global::$SESSION_USERS_KEY);
 
-      // Retrieve card question/answers for view
-      $cardRecords = $this->getCards($deckId);
+        // Data in session, bind to view
+        if(isset($sessionData)) {
+            $deckSessionData = $sessionData[$userId][$deckId];
+            $this->set('quiz',$deckSessionData);
+        }
 
-      // Generate array of cardIds to pass to getRatings & getResults
-      $cardIds = $this->getCardIds($cardRecords);
-
-      // Retrieve card ratings/results for view
-      //$ratingMap = $this->getRatings($cardIds);
-      $resultMap = $this->getResults($cardIds);
-
-      // Bind data to view
-      $this->set('quizResults',$deckSessionData);
-      $this->set('cards',$cardRecords);
-      //$this->set('cardsRatings',$ratingMap);
-      $this->set('cardsResults',$resultMap);
-
-      // Clear session
-      $sessionToClear = SD_Global::$SESSION_USERS_KEY . "." . $userId . "." . $deckId;
-      $this->log($LOG_PREFIX . "Clearing session: " . $sessionToClear,LOG_DEBUG);
-      $this->Session->delete($sessionToClear);
+        // Clear session
+        $sessionToClear = SD_Global::$SESSION_USERS_KEY . "." . $userId . "." . $deckId;
+        $this->log($LOG_PREFIX . "Clearing session: " . $sessionToClear,LOG_DEBUG);
+        $this->Session->delete($sessionToClear);
     }
     
     //function that handles creating and editing of deck

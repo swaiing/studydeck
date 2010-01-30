@@ -88,3 +88,14 @@ div#cards_tab div#edit_deck {
     padding: 0;
 
 }
+
+/*** review tab ***/
+
+.correct {
+    background-color: #CCFFDA;
+}
+
+.incorrect {
+    background-color: #FFB3C6;
+}
+
