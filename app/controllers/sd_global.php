@@ -18,6 +18,11 @@ class SD_Global
     public static $NULL_STR = "null";
 
     // Constants for session arrays
+    public static $SESSION_DECK_KEY = 'DeckObject_';
+    public static $SESSION_DECK_MODE_KEY = 'StudyMode_';
+    public static $SESSION_DECK_MODE_LEARN = 'LEARN';
+    public static $SESSION_DECK_MODE_QUIZ = 'QUIZ';
+    public static $SESSION_DECK_MODE_QUIZZED = "StudyMode_HasQuizzed";
     public static $SESSION_USERS_KEY = 'Users';
     public static $SESSION_RATING_KEY = 'Rating';
     public static $SESSION_RESULT_KEY = 'Result';

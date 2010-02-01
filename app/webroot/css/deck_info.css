@@ -91,11 +91,19 @@ div#cards_tab div#edit_deck {
 
 /*** review tab ***/
 
-.correct {
-    background-color: #CCFFDA;
+div#summary {
+    font-size: 30px;
+    font-weight: bold;
+    width: 450px;
+    margin: 10px auto 0 auto;
 }
 
-.incorrect {
-    background-color: #FFB3C6;
+div#summary img {
+    float: left;
+}
+
+div#summary div#grade {
+    float: left;
+    margin: 40px 0 0 0;
 }
 

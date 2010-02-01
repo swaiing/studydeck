@@ -8,6 +8,9 @@ $(document).ready( function() {
     // Setup tabs
     $("#bottom").tabs();
 
+    // Auto-select the review tab if present
+    $("#bottom").tabs('select',2);
+
     // Disable checkboxes for ratings with no cards
     disableCheckboxes();
 

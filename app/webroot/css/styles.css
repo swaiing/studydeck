@@ -198,10 +198,13 @@ table.deck_table th {
 
 table.deck_table td {
     padding: 8px;
-    background: #e8edff;
     border-bottom: 1px solid #fff;
     color: #669;
     border-top: 1px solid transparent;
+}
+
+table.deck_table td.center {
+    text-align: center;
 }
 
 table.deck_table tr:hover td {

@@ -289,7 +289,7 @@ class DecksController extends AppController {
     }
 
     // Build entire SQL string
-    $query = "SELECT cid AS 'id', co as 'card_order', cq as 'question', ca AS 'answer', rid AS 'id', rr AS 'rating' FROM $subQueryOnCards LEFT JOIN $subQueryOnRatings ON cid=rid $filter ORDER BY co ASC;";
+    $query = "SELECT cid AS 'id', co as 'card_order', cq as 'question', ca AS 'answer', rid AS 'id', rr AS 'rating' FROM $subQueryOnCards LEFT JOIN $subQueryOnRatings ON cid=rcid $filter ORDER BY co ASC;";
 
     // Debug SQL
     //$this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "query: $query", LOG_DEBUG);
@@ -297,16 +297,22 @@ class DecksController extends AppController {
     // Run SQL
     $cardRecords = $this->Deck->Card->query($query);
 
-    // Retrieve Card model data for deck
-    /*
-    $cardsParams = array(
-                        'conditions' => array('Card.deck_id' => $deckId),
-                        'fields' => array('Card.id','Card.question','Card.answer')
-    );
-    $cardRecords = $this->Deck->Card->find('all',$cardsParams);
-    */
-
     return $cardRecords;
+  }
+
+
+  /*
+   * Helper which rearranges array by cardId
+   *
+   */
+  private function indexByCardId($cardRecords)
+  {
+    $sorted = array();
+    foreach($cardRecords as $card) {
+        $id = $card['Card']['id'];
+        $sorted[$id] = $card;
+    }
+    return $sorted;
   }
 
   /*
@@ -444,7 +450,7 @@ class DecksController extends AppController {
         }
 
         // Clear selected ratings 
-        $this->Session->write(SD_Global::$SESSION_RATINGS_SELECTED_KEY, null);
+        $this->Session->delete(SD_Global::$SESSION_RATINGS_SELECTED_KEY);
 
         // Call notAssociated method
         // Binds $notAssociated -> whether deck is in dashboard (i.e. in my_decks)
@@ -454,9 +460,9 @@ class DecksController extends AppController {
         // Binds $deckId, $deckData, $cards, $cardsRatingsCount, and $cardsResults to view
         $this->study($deckId, null);
 
-        // Call quizReview method to bind session data
-        // Binds $quiz
-        $this->reviewQuiz($deckId);
+        // Call quizResults method to bind session data
+        // Binds $quiz to current session data for this deck
+        $this->quizResults($deckId);
     }
 
     /*
@@ -555,16 +561,30 @@ class DecksController extends AppController {
         // Debug
         //$this->log($LOG_PREFIX . "empty: " . empty($ratingsSelected), LOG_DEBUG);
 
-        // Write the session object
+        // Write the selected ratings in session
         if(!empty($ratingsSelected)) {
             $this->Session->write(SD_Global::$SESSION_RATINGS_SELECTED_KEY, $ratingsSelected);
         }
 
         // Redirect to Quiz/Study
         if($isQuizMode) {
+
+            //$this->Session->write(SD_Global::$SESSION_DECK_MODE_KEY.$deckId, SD_Global::$SESSION_DECK_MODE_QUIZ);
+            
+            // Set flag
+            $this->Session->write(SD_Global::$SESSION_DECK_MODE_QUIZZED.$deckId, 1);
+
+            // Clear session
+            $this->clearSession($deckId);
+
+            // Redirect
             $this->redirect(array('controller'=>'decks', 'action'=>'quiz', $deckId));
+
         }
-        $this->redirect(array('controller'=>'decks', 'action'=>'learn', $deckId));
+        else {
+            //$this->Session->write(SD_Global::$SESSION_DECK_MODE_KEY.$deckId, SD_Global::$SESSION_DECK_MODE_LEARN);
+            $this->redirect(array('controller'=>'decks', 'action'=>'learn', $deckId));
+        }
     }
 
     /*
@@ -603,28 +623,20 @@ class DecksController extends AppController {
 
         // Call helper to retrieve array of cards
         $cardRecords = $this->getCards($id, $ratingsSelected);
+        $indexedCardRecords = $this->indexByCardId($cardRecords);
 
         // Call helpers to post-process data
         $cardIds = $this->getCardIds($cardRecords);
         $ratingsCount = $this->getRatingsCount($cardRecords);
 
-        // Call helper to retrieve ratings
-        // Removed: Improved query in getCards retrieves ratings
-        //$ratingMap = $this->getRatings($cardIds);
-
         // Call helper to retrieve results
         $resultMap = $this->getResults($cardIds);
-
-        // debug
-        //$this->set('debug',$resultMap);
-        //$this->set('debug',$ratingMap);
-        //$this->set('debug',$ratingsSelected);
 
         // Set variables for view
         $this->set('deckId',$deckRecord['Deck']['id']);
         $this->set('deckData',$deckRecord);
         $this->set('cards',$cardRecords);
-        //$this->set('cardsRatings',$ratingMap);
+        $this->set('cardsIndexed',$indexedCardRecords);
         $this->set('cardsRatingsCount',$ratingsCount);
         $this->set('cardsResults',$resultMap);
         return true;
@@ -651,9 +663,85 @@ class DecksController extends AppController {
     /*
      * Called using AJAX to update card/deck data
      * stored in session.
-     *
      */
     function update()
+    {
+        // Set layout to blank
+        $this->layout = "";
+
+        // Set user ID
+        $userId = $this->Auth->user('id');
+
+        // Grab data from url, params and sanitize input
+        App::import('Sanitize');
+        $deckId = Sanitize::paranoid($this->params['url']['did']);
+        $cardId = Sanitize::paranoid($this->params['url']['cid']);
+        $ratingId = Sanitize::paranoid($this->params['url']['rid']);
+        $resultId = Sanitize::paranoid($this->params['url']['sid']);
+        $rating = Sanitize::paranoid($this->params['url']['rating']);
+        $correct = Sanitize::paranoid($this->params['url']['correct']);
+
+        // Set log info
+        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+
+        // Validate rating, correct
+        $ratingIsValid = preg_match("/[0-3]/",$rating);
+        $resultIsValid = preg_match("/[0|1]/",$correct);
+
+        // Debug
+        $this->log($LOG_PREFIX . "UPDATESTART - deckId: " . $deckId, LOG_DEBUG);
+        $this->log($LOG_PREFIX . "UPDATESTART - cardId: " . $cardId, LOG_DEBUG);
+        $this->log($LOG_PREFIX . "UPDATESTART - ratingId: " . $ratingId, LOG_DEBUG);
+        $this->log($LOG_PREFIX . "UPDATESTART - resultId: " . $resultId, LOG_DEBUG);
+        $this->log($LOG_PREFIX . "UPDATESTART - rating: " . $rating, LOG_DEBUG);
+        $this->log($LOG_PREFIX . "UPDATESTART - correct: " . $correct, LOG_DEBUG);
+        $this->log($LOG_PREFIX . "*********************************", LOG_DEBUG);
+
+        /*
+         * Store result/rating data in session object.
+         *
+         * Data structure:
+         * [$SESSION_DECK_KEY.$deckId] -> [$cardId] -> [$SESSION_RATING_KEY] -> [$SESSION_ID_KEY]
+         *                                                                   -> [$SESSION_RATING_VAL_KEY]
+         *                                          -> [$SESSION_RESULT_KEY] -> [$SESSION_ID_KEY]
+         *                                                                   -> [$SESSION_RESULT_VAL_KEY]
+         */
+
+        // Read deck object from session
+        $deckObj = $this->Session->read(SD_Global::$SESSION_DECK_KEY.$deckId);
+
+        // Card does not exist in session, init structure
+        if(!isset($deckObj) || !array_key_exists($cardId, $deckObj)) {
+
+            $deckObj[$cardId] = array(SD_Global::$SESSION_RATING_KEY => array(SD_Global::$SESSION_ID_KEY => null,
+                                                                              SD_Global::$SESSION_RATING_VAL_KEY => null));
+            $deckObj[$cardId] = array(SD_Global::$SESSION_RESULT_KEY => array(SD_Global::$SESSION_ID_KEY => null,
+                                                                              SD_Global::$SESSION_RESULT_VAL_KEY => null));
+        }
+
+        // Update rating in session object
+        $deckObj[$cardId][SD_Global::$SESSION_RATING_KEY][SD_Global::$SESSION_ID_KEY] = $ratingId;
+        $deckObj[$cardId][SD_Global::$SESSION_RATING_KEY][SD_Global::$SESSION_RATING_VAL_KEY] = $rating;
+
+        // Update result in session object
+        $deckObj[$cardId][SD_Global::$SESSION_RESULT_KEY][SD_Global::$SESSION_ID_KEY] = $resultId;
+        $deckObj[$cardId][SD_Global::$SESSION_RESULT_KEY][SD_Global::$SESSION_RESULT_VAL_KEY] = $correct;
+
+        // Log to debug
+        $this->set("debug", $deckObj);
+
+        // Write to the session
+        $this->Session->write(SD_Global::$SESSION_DECK_KEY.$deckId, $deckObj);
+    }
+
+    /*
+     * Old depcrecated function: I was a dumbass when I wrote this for the first time.
+     *
+     * Called using AJAX to update card/deck data
+     * stored in session.
+     *
+     */
+    function updateOld()
     {
         // Set layout to blank
         $this->layout = "";
@@ -765,13 +853,143 @@ class DecksController extends AppController {
         $this->Session->write(SD_Global::$SESSION_USERS_KEY,$userSessions);
     }
 
+    /**
+     * Clears user deck session object
+     */
+    function clearSession($deckId)
+    {
+        // Clear session
+        $sessionToClear = SD_Global::$SESSION_DECK_KEY.$deckId;
+        $this->log($LOG_PREFIX . "Clearing session: " . $sessionToClear, LOG_DEBUG);
+        $this->Session->delete($sessionToClear);
+    }
+
     /*
      * Helper function called by quit which writes the session data to the model.
      *
      */
-    function writeSession($userId,$deckId) {
+    function writeSession($deckId)
+    {
+        // userId as foreign key to save records
+        $userId = $this->Auth->user('id');
 
-      // Setup log prefix for this function
+        // setup log prefix for this function
+        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+
+        // Check for null ids
+        if(!isset($deckId)) {
+            $this->log($LOG_PREFIX . "Invalid deckId: " . $deckId, LOG_ERROR);
+            return false;
+        }
+
+        // Retrieve session
+        $deckObj = $this->Session->read(SD_Global::$SESSION_DECK_KEY.$deckId);
+
+        // Check for null object
+        if(!isset($deckObj)) {
+            $this->log($LOG_PREFIX . "Deck session not present for: " . SD_Global::$SESSION_DECK_KEY.$deckId, LOG_ERROR);
+            return false;
+        }
+
+        // Save Card Rating/Result models
+        foreach($deckObj as $cardId => $card) {
+
+            // Obtain rating/result info for card
+            $ratingId = $card[SD_Global::$SESSION_RATING_KEY][SD_Global::$SESSION_ID_KEY];
+            $rating = $card[SD_Global::$SESSION_RATING_KEY][SD_Global::$SESSION_RATING_VAL_KEY];
+            $resultId = $card[SD_Global::$SESSION_RESULT_KEY][SD_Global::$SESSION_ID_KEY];
+            $result = $card[SD_Global::$SESSION_RESULT_KEY][SD_Global::$SESSION_RESULT_VAL_KEY];
+
+            // Validate rating, correct
+            $ratingIsValid = preg_match("/[0-3]/", $rating);
+            $ratingIdIsValid = preg_match("/[\d]+/", $ratingId);
+            $resultIsValid = preg_match("/[0|1]/", $result);
+            $resultIdIsValid = preg_match("/[\d]+/", $resultId);
+
+            // Debug
+            $this->log($LOG_PREFIX . "*********************************", LOG_DEBUG);
+            $this->log($LOG_PREFIX . "writeSession - cardId: " . $cardId, LOG_DEBUG);
+            $this->log($LOG_PREFIX . "writeSession - ratingId: " . $ratingId, LOG_DEBUG);
+            //$this->log($LOG_PREFIX . "writeSession - ratingIdIsValid: " . $ratingIdIsValid, LOG_DEBUG);
+            $this->log($LOG_PREFIX . "writeSession - rating: " . $rating, LOG_DEBUG);
+            //$this->log($LOG_PREFIX . "writeSession - ratingIsValid: " . $ratingIsValid, LOG_DEBUG);
+            $this->log($LOG_PREFIX . "writeSession - resultId: " . $resultId, LOG_DEBUG);
+            //$this->log($LOG_PREFIX . "writeSession - resultIdIsValid: " . $resultIdIsValid, LOG_DEBUG);
+            $this->log($LOG_PREFIX . "writeSession - result: " . $result, LOG_DEBUG);
+            //$this->log($LOG_PREFIX . "writeSession - resultIsValid: " . $resultIsValid, LOG_DEBUG);
+
+            if($ratingIsValid) {
+
+                // Set record to update or create new
+                if($ratingIdIsValid) {
+                    $this->log($LOG_PREFIX . "Setting Rating model key to " . $ratingId, LOG_DEBUG); 
+                    $this->Deck->Card->Rating->id = $ratingId;
+                }
+                else {
+                    $this->log($LOG_PREFIX . "Creating rating record with cardId foreign key (" . $cardId . ")  and userId foreign key (" . $userId . ")", LOG_DEBUG);
+                    $this->Deck->Card->Rating->create(array(SD_Global::$MODEL_CARD_ID => $cardId,
+                                                            SD_Global::$MODEL_USER_ID => $userId));
+                }
+
+                // Save rating
+                $this->log($LOG_PREFIX . "Saving rating...ratingId(" . $ratingId . ") | rating: (" . $rating . ")", LOG_DEBUG);
+                $this->Deck->Card->Rating->set(SD_Global::$MODEL_RATING_RATING, $rating);
+                $this->Deck->Card->Rating->save();
+            }
+
+            if($resultIsValid) {
+
+                // Set record to update or create new
+                if($resultIdIsValid) {
+                    $this->log($LOG_PREFIX . "Setting Result model key to " . $resultId, LOG_DEBUG); 
+                    $this->Deck->Card->Result->id = $resultId;
+
+                    // Retrieve and update cumulative total fields
+                    if($result) {
+                        $tmpTot = $this->Deck->Card->Result->read(SD_Global::$MODEL_RESULT_TOT_CORRECT);
+                        $totalCorrect = $tmpTot[SD_Global::$MODEL_RESULT][SD_Global::$MODEL_RESULT_TOT_CORRECT] + 1;
+                        $this->Deck->Card->Result->set(SD_Global::$MODEL_RESULT_TOT_CORRECT, $totalCorrect);
+                    }
+                    else {
+                        $tmpTot = $this->Deck->Card->Result->read(SD_Global::$MODEL_RESULT_TOT_INCORRECT);
+                        $totalIncorrect = $tmpTot[SD_Global::$MODEL_RESULT][SD_Global::$MODEL_RESULT_TOT_INCORRECT] + 1;
+                        $this->Deck->Card->Result->set(SD_Global::$MODEL_RESULT_TOT_INCORRECT, $totalIncorrect);
+                    }
+
+                }
+                else {
+                    $this->log($LOG_PREFIX . "Creating result record with cardId foreign key (" . $cardId . ")  and userId foreign key (" . $userId . ")", LOG_DEBUG);
+                    $this->Deck->Card->Result->create(array(SD_Global::$MODEL_CARD_ID => $cardId,
+                                                            SD_Global::$MODEL_USER_ID => $userId));
+                    // Set count to 1
+                    if($result){
+                        $this->Deck->Card->Result->set(SD_Global::$MODEL_RESULT_TOT_CORRECT,1);
+                    }
+                    else {
+                        $this->Deck->Card->Result->set(SD_Global::$MODEL_RESULT_TOT_INCORRECT,1);
+                    }
+                }
+
+                // Save result
+                $this->log($LOG_PREFIX . "Saving result...resultId( " . $resultId . ") | result: (" . $result . ")",LOG_DEBUG);
+                $this->Deck->Card->Result->set(SD_Global::$MODEL_RESULT_LAST_GUESS, $result);
+                $this->Deck->Card->Result->save();
+            }
+
+        } //end foreach
+
+    }
+
+    /*
+     * Deprecated: Crappy function I wrote when I was a dumbass.  Re-implemented after rewriting 'update'.
+     *
+     * Helper function called by quit which writes the session data to the model.
+     *
+     */
+    function writeSessionOld($userId, $deckId)
+    {
+
+      // setup log prefix for this function
       $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
 
       // Check for null IDs
@@ -872,74 +1090,41 @@ class DecksController extends AppController {
       return true;
     }
 
-    function quitSession($deckId)
-    {
-      // Store userId
-      $userId = $this->Auth->user('id');
-
-      // Call writeSession to commit to model
-      $success = False;
-      $success = $this->writeSession($userId,$deckId);
-
-      return $success;
-    }
-
     /*
      * Ends a learn/quit session
      *
      */
     function quit($deckId)
     {
-      // Write session data, which consists of ratings
-      $success = $this->quitSession($deckId);
+        // Call writeSession to commit to model
+        $success = $this->writeSession($deckId);
 
-      // Redirect to deck info
-      $this->redirect(array('controller'=>'decks','action'=>'info',$deckId));
+        // Redirect to deck info
+        $this->redirect(array('controller'=>'decks', 'action'=>'info', $deckId));
     }
-
-    /*
-     * Ends a quiz session, writes results to DB.
-     *
-    function quitQuiz($deckId)
-    {
-      // Write session data, which consists of results
-      $success = $this->quitSession($deckId);
-
-      // Redirect to review page
-      if($success) {
-        $this->redirect(array('controller'=>'decks','action'=>'review',$deckId));
-      }
-      else {
-        $this->redirect(array('controller'=>'decks','action'=>'failure'));
-      }
-    }
-     */
 
     /*
      * Generates the review page data, clears session
      *
      */
-    function reviewQuiz($deckId) {
-
-        // Store userId
-        $userId = $this->Auth->user('id');
-
+    function quizResults($deckId)
+    {
         // Set log info
         $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
 
+        // Flag set for quiz in this session
+        $quizzedInSession = $this->Session->read(SD_Global::$SESSION_DECK_MODE_QUIZZED.$deckId);
+
         // Get deck session data
-        $sessionData = $this->Session->read(SD_Global::$SESSION_USERS_KEY);
+        $sessionData = $this->Session->read(SD_Global::$SESSION_DECK_KEY.$deckId);
 
-        // Data in session, bind to view
-        if(isset($sessionData)) {
-            $deckSessionData = $sessionData[$userId][$deckId];
-            $this->set('quiz',$deckSessionData);
+        // Set quiz results only if a quiz has taken place in this session
+        if(isset($quizzedInSession) && isset($sessionData)) {
+            $this->set('quiz', $sessionData);
+            $this->log($LOG_PREFIX . "Binding 'quiz' to 'sessionData'", LOG_DEBUG);
+            return true;
         }
-
-        // Clear session
-        $sessionToClear = SD_Global::$SESSION_USERS_KEY . "." . $userId . "." . $deckId;
-        $this->log($LOG_PREFIX . "Clearing session: " . $sessionToClear,LOG_DEBUG);
-        $this->Session->delete($sessionToClear);
+        return false;
     }
     
     //function that handles creating and editing of deck
