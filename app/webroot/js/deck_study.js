@@ -251,7 +251,8 @@ var NULL_ID = "null";
         $("h1.title").text(this.deck.deckName);
 
         // Reset form items
-        $("#show_answer_checkbox").attr('checked',false);
+        $("#show_answer_checkbox").attr('checked',true);
+        this.showAnswerToggle();
 
         // Temp start things up
         this.showCard(this.deck.getNextCard());
