@@ -61,7 +61,7 @@
     // Icon for correct/incorrect
     if(strcmp($correct,'1') == 0) {
         $correctCount++;
-        $correctIconImg = $html->image('accept.png', array('alt' => 'Right'));
+        $correctIconImg = $html->image('right.png', array('alt' => 'Right'));
     }
     else {
         $incorrectCount++;
