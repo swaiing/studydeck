@@ -11,11 +11,11 @@
 <div id="middle_wrapper_content">
 	<div id="middle_bar">
 	<?php $session->flash(); ?>
-		<h3> User Dashboard </h3>
+		<h1>Dashboard</h1>
 
-		<h1>Welcome <?php echo $activeUser; ?> </h1>
+		<!--<p>Welcome <?php echo $activeUser; ?>!</p>-->
 		<?php echo $html->link('change password',"/users/changePassword"); ?>
-		<p>User Stats</p>
+		<h2>User Stats</h2>
 		<table>
 			<tr>
 				<td>Number of Decks Studied: </td>
@@ -39,9 +39,9 @@
 
 		<div>Sort Decks By: <a href="/studydeck/users/dashboard"> Recently Used </a> &nbsp <a href="/studydeck/users/dashboard/bycount"> Times Studied </a>
 		</div>
-		<p>Public Decks</p>
+		<h2>Public Decks</h2>
 		<?php if(count($publicDecks)) { ?>
-		<table>
+		<table class="deck_table">
 			<tr>
 				<th>Title</th>
 				<th>Description</th>
@@ -77,9 +77,9 @@
 			echo "<div class=\"nodecks\">No Public Decks in Dashboard</div>";
 		}
 		?>
-		<p>User Created Decks </p>
+		<h2>User Created Decks </h2>
 		<?php if(count($userCreatedDecks)) { ?>
-		<table>
+		<table class="deck_table">
 			<tr>
 				<th>Title</th>
 				<th>Description</th>
