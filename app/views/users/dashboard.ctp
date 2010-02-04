@@ -45,8 +45,8 @@
 			<tr>
 				<th>Title</th>
 				<th>Description</th>
-				<th>Times Studied</th>
-				<th>Last Studied</th>
+				<th>Times Quizzed</th>
+				<th>Last Quizzed</th>
 				<th>Total Cards</th>
                 <th>Easy</th>
                 <th>Medium</th>

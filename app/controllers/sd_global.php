@@ -34,6 +34,7 @@ class SD_Global
     // Constants for Model field names
     public static $MODEL_ID = 'id';
     public static $MODEL_DECK_ID = 'deck_id';
+    public static $MODEL_DECK_VIEW_COUNT = 'view_count';
     public static $MODEL_MYDECK_TYPE = 'type';
     public static $MODEL_CARD_ID = 'card_id';
     public static $MODEL_CARD = 'Card';

@@ -329,42 +329,6 @@ class DecksController extends AppController {
     return $cardIds;
   }
 
-  /*
-   * Helper which returns cards' ratings given an array of card IDs.
-   * Deprecated: getCards now retrieves ratings
-   */
-   /*
-  private function getRatings($cardIds)
-  {
-    if(!isset($cardIds)) {
-      $this->log("[" . get_class($this) . "->" . __FUNCTION__ . "] " . "cardIds is null.");
-      return null;
-    }
-    $this->Deck->recursive = -1;
-    $this->Deck->Card->Rating->recursive = -1;
-
-    // Set user id
-    $userId = $this->Auth->user('id');
-
-    // Retrieve ratings by card_id and user_id
-    $ratingParams = array(
-                          'conditions' => array('Rating.user_id' => $userId,
-                                                'Rating.card_id' => $cardIds),
-                          'fields' => array('Rating.id','Rating.card_id','Rating.rating')
-    );
-    $ratingRecords = $this->Deck->Card->Rating->find('all',$ratingParams);
-      
-    // Index ratings into array by card ID.
-    $ratingMap = array();
-    foreach($ratingRecords as $rating) {
-       $ratingMap[$rating['Rating']['card_id']] = array('id' => $rating['Rating']['id'],
-                                                        'rating' => $rating['Rating']['rating']);
-    }
-
-    return $ratingMap;
-  }
-  */
-
   /**
    * Takes above output and returns array with count of cards for each rating.
    *
@@ -589,6 +553,7 @@ class DecksController extends AppController {
 
     /*
      * Private method called by 'learn' and 'quiz' action.
+     * Retrieves card records and ratings for view.
      *
      */
     private function study($id)
@@ -643,20 +608,35 @@ class DecksController extends AppController {
     }
 
     /*
+     * Action for study mode
      * Calls private study method
      *
      */
     function learn($id)
     {
+        // Call private study function
+        // Difference between study/quiz in JavaScript
         $this->study($id);
     }
 
     /*
+     * Action for quiz mode
      * Calls private study method
      *
      */
     function quiz($id)
     {
+        // Increment count field in 'decks' table
+        $this->Deck->recursive = -1;
+        $this->Deck->id = $id;
+        $tmp = $this->Deck->read(SD_Global::$MODEL_DECK_VIEW_COUNT);
+        $viewCount = $tmp['Deck']['view_count'];
+        $viewCount++;
+        $this->Deck->set(SD_Global::$MODEL_DECK_VIEW_COUNT, $viewCount);
+        $this->Deck->save();
+
+        // Call private study function
+        // Difference between study/quiz in JavaScript
         $this->study($id);
     }
 
@@ -732,125 +712,6 @@ class DecksController extends AppController {
 
         // Write to the session
         $this->Session->write(SD_Global::$SESSION_DECK_KEY.$deckId, $deckObj);
-    }
-
-    /*
-     * Old depcrecated function: I was a dumbass when I wrote this for the first time.
-     *
-     * Called using AJAX to update card/deck data
-     * stored in session.
-     *
-     */
-    function updateOld()
-    {
-        // Set layout to blank
-        $this->layout = "";
-
-        // Set user ID
-        $userId = $this->Auth->user('id');
-
-        // Grab data from url, params and sanitize input
-        App::import('Sanitize');
-        $deckId = Sanitize::paranoid($this->params['url']['did']);
-        $cardId = Sanitize::paranoid($this->params['url']['cid']);
-        $ratingId = Sanitize::paranoid($this->params['url']['rid']);
-        $resultId = Sanitize::paranoid($this->params['url']['sid']);
-        $rating = Sanitize::paranoid($this->params['url']['rating']);
-        $correct = Sanitize::paranoid($this->params['url']['correct']);
-
-        // Set log info
-        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
-
-        // Validate rating
-        if(!preg_match("/[0-3]/",$rating)) {
-          //$this->log($LOG_PREFIX . "Rating is an invalid value: " . $rating,LOG_DEBUG);
-        }
-  
-        // Validate result
-        if(!preg_match("/[0|1]/",$correct)) {
-          //$this->log($LOG_PREFIX . "Result is an invalid value: " . $correct,LOG_DEBUG);
-        }
-
-        // Debug
-        //$this->log($LOG_PREFIX . "deckId: " . $deckId, LOG_DEBUG);
-
-        /*
-         * This next big routine goes through nested-session arrays which contain card rating/result data.
-         *
-         * Session -> User -> Deck -> Card -> Rating
-         *                                 -> Result
-         *
-         * TODO: I'm sure there's a much better recursive way to do this that is much cleaner.
-         *
-         */
-        // Read 'Users' session array
-        $userSessions = $this->Session->read(SD_Global::$SESSION_USERS_KEY);
-
-        // Test user exists in session
-        if(($userSessions != null) && (array_key_exists($userId,$userSessions))) {
-          $userData = $userSessions[$userId];
-
-          // Test deck exists in session
-          if(array_key_exists($deckId,$userData)) {
-            $deckData = $userData[$deckId];
-
-            // Test card exists in User object
-            if(array_key_exists($cardId,$deckData)) {
-              $cardData = $deckData[$cardId];
-
-              // Test rating exists in User->Card object
-              if(array_key_exists(SD_Global::$SESSION_RATING_KEY,$cardData)) {
-                $ratingData = $cardData[SD_Global::$SESSION_RATING_KEY];
-
-                // Add rating values to object
-                $userSessions[$userId][$deckId][$cardId][SD_Global::$SESSION_RATING_KEY][SD_Global::$SESSION_ID_KEY] = $ratingId;
-                $userSessions[$userId][$deckId][$cardId][SD_Global::$SESSION_RATING_KEY][SD_Global::$MODEL_RATING_RATING] = $rating;
-              }
-              else {
-                $this->log($LOG_PREFIX . "No rating record for ratingId: " . $ratingId . " => " . $rating, LOG_DEBUG);
-                $userSessions[$userId][$deckId][$cardId][SD_Global::$SESSION_RATING_KEY] = array(SD_Global::$SESSION_ID_KEY => $ratingId, SD_Global::$MODEL_RATING_RATING => $rating);
-              }
-
-              // Test result exists in User->Card object
-              if(array_key_exists(SD_Global::$SESSION_RESULT_KEY,$cardData)) {
-                $resultData = $cardData[SD_Global::$SESSION_RESULT_KEY];
-
-                // Add results values to object
-                $userSessions[$userId][$deckId][$cardId][SD_Global::$SESSION_RESULT_KEY][SD_Global::$SESSION_ID_KEY] = $resultId;
-                $userSessions[$userId][$deckId][$cardId][SD_Global::$SESSION_RESULT_KEY][SD_Global::$MODEL_RESULT_LAST_GUESS] = $correct;
-              }
-              else {
-                $this->log($LOG_PREFIX . "No result record for resultId: " . $resultId . " => " . $correct, LOG_DEBUG);
-                $userSessions[$userId][$deckId][$cardId][SD_Global::$SESSION_RESULT_KEY] = array(SD_Global::$SESSION_ID_KEY => $resultId, SD_Global::$MODEL_RESULT_LAST_GUESS => $correct);
-              }
-            }
-            // No card data exists, create object
-            else {
-              $this->log($LOG_PREFIX . "No card record for cardId: " . $cardId, LOG_DEBUG);
-              $userSessions[$userId][$deckId][$cardId] = array(SD_Global::$SESSION_RATING_KEY => array(SD_Global::$SESSION_ID_KEY => $ratingId, SD_Global::$MODEL_RATING_RATING => $rating),
-                                                               SD_Global::$SESSION_RESULT_KEY => array(SD_Global::$SESSION_ID_KEY => $resultId, SD_Global::$MODEL_RESULT_LAST_GUESS => $correct));
-            }
-          }
-          // No deck data exists, create object
-          else {
-            $this->log($LOG_PREFIX . "No deck record for deckId: " . $deckId, LOG_DEBUG);
-            $userSessions[$userId][$deckId] = array($cardId => array(SD_Global::$SESSION_RATING_KEY => array(SD_Global::$SESSION_ID_KEY => $ratingId, SD_Global::$MODEL_RATING_RATING => $rating),
-                                                                     SD_Global::$SESSION_RESULT_KEY => array(SD_Global::$SESSION_ID_KEY => $resultId, SD_Global::$MODEL_RESULT_LAST_GUESS => $correct)));
-          }
-        }
-        // No user session exists, create ojbect
-        else {
-          // Create new entry for user in session
-          $this->log($LOG_PREFIX . "No user record for userId: " . $userId, LOG_DEBUG);
-          $userSessions[$userId] = array($deckId => array($cardId => array(SD_Global::$SESSION_RATING_KEY => array(SD_Global::$SESSION_ID_KEY => $ratingId, SD_Global::$MODEL_RATING_RATING => $rating),
-                                                                            SD_Global::$SESSION_RESULT_KEY => array(SD_Global::$SESSION_ID_KEY => $resultId, SD_Global::$MODEL_RESULT_LAST_GUESS => $correct))));
-        }
-
-        // Log to debug
-        $this->set("debug",$userSessions);
-
-        // Write to the session
-        $this->Session->write(SD_Global::$SESSION_USERS_KEY,$userSessions);
     }
 
     /**
@@ -978,116 +839,6 @@ class DecksController extends AppController {
 
         } //end foreach
 
-    }
-
-    /*
-     * Deprecated: Crappy function I wrote when I was a dumbass.  Re-implemented after rewriting 'update'.
-     *
-     * Helper function called by quit which writes the session data to the model.
-     *
-     */
-    function writeSessionOld($userId, $deckId)
-    {
-
-      // setup log prefix for this function
-      $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
-
-      // Check for null IDs
-      if(($userId == null) || ($deckId == null)) {
-        $this->log($LOG_PREFIX . "Valid ID.  userId: " . $userId . " | deckId: " . $deckId);
-        return false;
-      }
-
-      // Get session data
-      $sessionData = $this->Session->read(SD_Global::$SESSION_USERS_KEY);
-      if($sessionData == null) {
-        $this->log($LOG_PREFIX . "No session data found.");
-        return false;
-      }
-
-      // Get Deck object in session 
-      $deckSessionData = $sessionData[$userId][$deckId];
-      if($deckSessionData == null) {
-        $this->log($LOG_PREFIX . "No deck session data found.");
-        return false;
-      }
-      
-      // Save Card Rating/Result models
-      foreach($deckSessionData as $cardId => $card) {
-
-        // Save rating if valid
-        $rating = $card[SD_Global::$SESSION_RATING_KEY][SD_Global::$MODEL_RATING_RATING];
-        if(!preg_match("/[0-2]/",$rating)) {
-          $this->log($LOG_PREFIX . "Rating: (" . $rating . ") not valid for cardId: (" . $cardId . ").");
-        }
-        else {
-
-          // Set record to update or create new record
-          $ratingId = $card[SD_Global::$SESSION_RATING_KEY][SD_Global::$SESSION_ID_KEY];
-          if(strcmp($ratingId,SD_Global::$NULL_STR) != 0) {
-            $this->log($LOG_PREFIX . "Setting Rating model key to " . $ratingId,LOG_DEBUG); 
-            $this->Deck->Card->Rating->id = $ratingId;
-          }
-          else {
-            $this->log($LOG_PREFIX . "Creating rating record with cardId foreign key ( " . $cardId . ")  and userId foreign key (" . $userId . ")",LOG_DEBUG);
-            $this->Deck->Card->Rating->create(array(SD_Global::$MODEL_CARD_ID => $cardId,SD_Global::$MODEL_USER_ID => $userId));
-          }
-
-          // Save rating
-          $this->log($LOG_PREFIX . "Saving rating...ratingId( " . $ratingId . ") | rating: (" . $rating . ")",LOG_DEBUG);
-          $this->Deck->Card->Rating->set(SD_Global::$MODEL_RATING_RATING,$rating);
-          $this->Deck->Card->Rating->save();
-        }
-
-        // Save result if valid
-        $result = $card[SD_Global::$SESSION_RESULT_KEY][SD_Global::$MODEL_RESULT_LAST_GUESS];
-        if(!preg_match("/[0|1]/",$result)) {
-          $this->log($LOG_PREFIX . "Result: (" . $result . ") not valid for cardId: (" . $cardId . ").");
-        }
-        else {
-
-          // Set record to update or create new record
-          $resultId = $card[SD_Global::$SESSION_RESULT_KEY][SD_Global::$SESSION_ID_KEY];
-          if(strcmp($resultId,SD_Global::$NULL_STR) != 0) {
-            $this->log($LOG_PREFIX . "Setting Result model key to " . $resultId,LOG_DEBUG); 
-            $this->Deck->Card->Result->id = $resultId;
-
-            // Retrieve totals in record to update
-            if($result) {
-                $tmpTot = $this->Deck->Card->Result->read(SD_Global::$MODEL_RESULT_TOT_CORRECT);
-                $totalCorrect = $tmpTot[SD_Global::$MODEL_RESULT][SD_Global::$MODEL_RESULT_TOT_CORRECT] + 1;
-                $this->Deck->Card->Result->set(SD_Global::$MODEL_RESULT_TOT_CORRECT,$totalCorrect);
-            }
-            else {
-                $tmpTot = $this->Deck->Card->Result->read(SD_Global::$MODEL_RESULT_TOT_INCORRECT);
-                $totalIncorrect = $tmpTot[SD_Global::$MODEL_RESULT][SD_Global::$MODEL_RESULT_TOT_INCORRECT] + 1;
-                $this->Deck->Card->Result->set(SD_Global::$MODEL_RESULT_TOT_INCORRECT,$totalIncorrect);
-            }
-
-          }
-          else {
-            $this->log($LOG_PREFIX . "Creating result record with cardId foreign key ( " . $cardId . ")  and userId foreign key (" . $userId . ")",LOG_DEBUG);
-            $this->Deck->Card->Result->create(array(SD_Global::$MODEL_CARD_ID => $cardId,SD_Global::$MODEL_USER_ID => $userId));
-
-            // Increment count to 1
-            if($result){
-                $this->Deck->Card->Result->set(SD_Global::$MODEL_RESULT_TOT_CORRECT,1);
-            }
-            else {
-                $this->Deck->Card->Result->set(SD_Global::$MODEL_RESULT_TOT_INCORRECT,1);
-            }
-          }
-
-          // Save result
-          $this->log($LOG_PREFIX . "Saving result...resultId( " . $resultId . ") | result: (" . $result . ")",LOG_DEBUG);
-          $this->Deck->Card->Result->set(SD_Global::$MODEL_RESULT_LAST_GUESS,$result);
-          $this->Deck->Card->Result->save();
-        }
-
-      } //end foreach
-
-      // Return success
-      return true;
     }
 
     /*

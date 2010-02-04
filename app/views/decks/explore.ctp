@@ -42,7 +42,7 @@
 			<th>Tags</th>
 			<th>User</th>
 			<th>Created</th>
-			<th>View Count</th>
+			<th>Quiz Count</th>
 		</tr>
 		<?php foreach ($decks as $deck): ?>
 		<tr>

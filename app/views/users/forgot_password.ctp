@@ -21,7 +21,7 @@
     	$session->flash();
 
     	if($success != true) {
-    		echo "<p>Enter your email or username and a temporary password will be emailed to you which will allow you to reset your password.</p>";
+    		echo "<p>Enter your email address and we will set it to a temporary password which we will email you.</p>";
     	}
 
      	if($validationError != '') {
@@ -34,8 +34,6 @@
     	else {
 			echo $form->create('User', array('action' => 'forgotPassword'));
     		echo "<ol>\n";
-    		echo "<li>" . $form->input('User.username',array('label'=>'Username:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
-            echo "<li class=\"separator\">or</li>";
     		echo "<li>" . $form->input('User.email',array('label'=>'Email:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
             echo "</ol>\n";
      		echo $form->end('Email me');
