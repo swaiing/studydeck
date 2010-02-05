@@ -5,15 +5,17 @@
 
     <h1>Explore Decks</h1>
 
+    
     <div id="search_box">
 	<?php
 		echo $form->create("Deck",array('action' => 'explore'));
 		echo $form->input("searchQuery", array('label' => 'Search:'));
 		echo $form->end("Search");
-	?>
+    ?>
+	
     </div>
 
-	<?php //echo print_r($temp); ?>
+
 
 
 	<!--<div><a href="/studydeck/decks/explore">All Decks</a></div>-->
@@ -38,50 +40,51 @@
 		<tr>
 			<th></th>
 			<th>Deck Name</th>
+            <th># of Cards</th>
 			<th>Description</th>
 			<th>Tags</th>
 			<th>User</th>
 			<th>Created</th>
 			<th>Quiz Count</th>
 		</tr>
-		<?php foreach ($decks as $deck): ?>
-		<tr>
-			<?php $itemCount ++; ?>
-			<td><?php echo $itemCount; ?> </td>
-			<td>
-			<?php
-		  		echo $html->link($deck['Deck']['deck_name'],"/decks/info/".$deck['Deck']['id']);
-                echo "(" . count($deck['Card']) . ")";
-			?>
-			</td>
-			<td><?php echo $deck['Deck']['description']; ?> </td>
-			<td>
-			<?php 
-				foreach ($deck['DeckTag'] as $tag) {
-			  
-			  		if (isset($tagArray[$tag['tag_id']])) {
-			  			echo $tagArray[$tag['tag_id']]." ";
-			  		}
-				}
-			?>
-
-		 	</td>
-			<td><?php echo $deck['User']['username']; ?> </td>
-			<td><?php echo $deck['Deck']['created']; ?></td>
-			<td><?php echo $deck['Deck']['view_count']; ?> </td>
+		<?php 
+        foreach ($decks as $deck):
+            echo "<tr>";
+            $itemCount++;
+			echo "<td>".$itemCount."</td>";
+			echo "<td>".$html->link($deck['Deck']['deck_name'],"/decks/info/".$deck['Deck']['id'])."</td>";
+            echo "<td>".count($deck['Card'])."</td>";
+			echo "<td>".$deck['Deck']['description']."</td>";
+			echo "<td>";
+            foreach ($deck['DeckTag'] as $tag) {
+			  	if (isset($tagArray[$tag['tag_id']])) {
+			  		echo $tagArray[$tag['tag_id']]." ";
+			  	}
+			}
+			echo "</td>";
+			echo "<td>".$deck['User']['username']."</td>";
+			echo "<td>"; 
+            $time = new TimeHelper();
+            if($time->wasWithinLast('3 days', $deck['Deck']['created'])){ 
+                echo $time->relativeTime($deck['Deck']['created']);
+            }
+            else {
+                echo $time->format('m-d-y',$deck['Deck']['created']);
+            }
+                
+            echo "</td>";
+			echo "<td>".$deck['Deck']['view_count']."</td>";
 		
-		</tr>
-		<?php endforeach; ?>
-	</table>
-	<div> Page 
-	<?php  
-		for ($pageInc = 1; $pageInc <= $pages; $pageInc++) {
-			echo $html->link($pageInc,"/decks/explore/".$sort."/".$pageInc."/".$queryString);
-			echo '&nbsp;';   
-		}
-	?>
-	</div>
-
+            echo "</tr>";
+        endforeach; 
+	echo "</table>";
+	echo "<div> Page "; 
+	for ($pageInc = 1; $pageInc <= $pages; $pageInc++) {
+		echo $html->link($pageInc,"/decks/explore/".$sort."/".$pageInc."/".$queryString);
+		echo '&nbsp;';   
+	}
+	echo "</div>";
+    ?>
 
 </div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->
