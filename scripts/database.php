@@ -85,8 +85,7 @@ class DATABASE_CONFIG {
 		'login' => 'mysqldev',
 		'password' => 'mysqldev',
 		'database' => 'studydeckdev',
-		'prefix' => '',
-        'encoding' => 'utf8',
+		'prefix' => ''
 	);
 
 	var $test = array(
