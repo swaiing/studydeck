@@ -73,7 +73,7 @@
             }
                 
             echo "</td>";
-			echo "<td>".$deck['Deck']['view_count']."</td>";
+			echo "<td>".$deck['Deck']['quiz_count']."</td>";
 		
             echo "</tr>";
         endforeach; 

@@ -10,11 +10,11 @@
 
 <div id="middle_wrapper_content">
 	<div id="middle_bar">
-	<?php $session->flash(); ?>
+	
 		<h1>Dashboard</h1>
 
-		<!--<p>Welcome <?php echo $activeUser; ?>!</p>-->
-		<?php echo $html->link('change password',"/users/changePassword"); ?>
+		<p>Welcome <?php echo $activeUser; ?>!</p>
+		
 		<h2>User Stats</h2>
 		<table>
 			<tr>

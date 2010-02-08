@@ -119,7 +119,7 @@ class DecksController extends AppController {
 	    	$sortBy = 'Deck.created DESC';
 	    }
 	    elseif ($sortBy == 'popular') {
-	        $sortBy = 'Deck.view_count DESC';
+	        $sortBy = 'Deck.quiz_count DESC';
 	    }
 	    elseif ($sortBy == 'alphabetical') {
 	        $sortBy = 'Deck.deck_name ASC';

@@ -234,7 +234,7 @@ class UsersController extends AppController {
 
 			 			 
 			 //hold study count of deck
-			 $tempStudyCount = $myDeck['MyDeck']['study_count'];
+			 $tempStudyCount = $myDeck['MyDeck']['quiz_count'];
 			 //Find favorite decks
 			 if($tempStudyCount != 0) {
 			 	if($favDeck1 == null) {
@@ -249,7 +249,7 @@ class UsersController extends AppController {
 			 	}
 			 }
 			 //logic that determines whether to show last study time		 
-			 if ($myDeck['MyDeck']['study_count'] == 0) {
+			 if ($myDeck['MyDeck']['quiz_count'] == 0) {
 			    $tempStudyCountArray = array($tempStudyCount,"");			 				     
 			 }
 			 else {
