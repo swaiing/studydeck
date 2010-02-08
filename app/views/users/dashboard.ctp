@@ -11,84 +11,19 @@
 <div id="middle_wrapper_content">
 	<div id="middle_bar">
 	
-		<h1>Dashboard</h1>
-
-		<p>Welcome <?php echo $activeUser; ?>!</p>
+		<h1>Welcome <?php echo $activeUser; ?>!</h1>
+        <br/>    
+		<div>Sort Decks By: <a href="/studydeck/users/dashboard">Last Quizzed</a> &nbsp <a href="/studydeck/users/dashboard/bycount">Times Quizzed</a></div>
 		
-		<h2>User Stats</h2>
-		<table>
-			<tr>
-				<td>Number of Decks Studied: </td>
-				<td><?php echo $numDecksStudied ?></td>
-			</tr>
-			<?php 
-			if($favDeck1 != null) { 
-				echo "<tr>";
-				echo "<td>Favourite Decks: </td>";
-				echo "<td>"; 
-				echo $html->link($favDeck1['Deck']['deck_name'],"/studydeck/decks/study/".$favDeck1['Deck']['id']); 
-				echo "</td>";
-				echo "<td>";					
-				if($favDeck2 != null) {
-					echo $html->link($favDeck2['Deck']['deck_name'],"/studydeck/decks/study/".$favDeck2['Deck']['id']); 
-				}
-				echo "</td>";
-				echo "</tr>";
-			} ?> 
-		</table>
-
-		<div>Sort Decks By: <a href="/studydeck/users/dashboard"> Recently Used </a> &nbsp <a href="/studydeck/users/dashboard/bycount"> Times Studied </a>
-		</div>
-		<h2>Public Decks</h2>
-		<?php if(count($publicDecks)) { ?>
-		<table class="deck_table">
-			<tr>
-				<th>Title</th>
-				<th>Description</th>
-				<th>Times Quizzed</th>
-				<th>Last Quizzed</th>
-				<th>Total Cards</th>
-                <th>Easy</th>
-                <th>Medium</th>
-                <th>Hard</th>
-                <th>Remove</th>
-			</tr>
-			<?php 
-				foreach ($publicDecks as $pDeck):
-      				echo "<tr id=\"publicDeckRow".$pDeck['Deck']['id']."\">";
-
-			?>
-				<td><a href="/studydeck/decks/info/<?php echo $pDeck['Deck']['id']; ?> "> <?php echo $pDeck['Deck']['deck_name']; ?></a> 
-				</td> 
-				<td><?php echo $pDeck['Deck']['description']; ?></td>
-				<td><?php echo $pDeck['0']; ?></td>
-				<td> <?php echo $pDeck['1']; ?> </td>
-                <td><?php echo $pDeck['All']; ?></td>
-                <td><?php echo $pDeck['Easy']; ?></td>
-                <td><?php echo $pDeck['Medium'] ?></td>
-				<td><?php echo $pDeck['Hard']; ?></td>
-                <td><?php echo $html->link("x","#",array('onclick' => "publicDeleteDialog(".$pDeck['Deck']['id'].",\"".$pDeck['Deck']['deck_name']."\")"));?></td>            
-            </tr>
-			<?php endforeach; ?>
-
-		</table>
-		<?php }
-		else {
-			echo "<div class=\"nodecks\">No Public Decks in Dashboard</div>";
-		}
-		?>
-		<h2>User Created Decks </h2>
+		<h2>Created By Me</h2>
 		<?php if(count($userCreatedDecks)) { ?>
 		<table class="deck_table">
 			<tr>
-				<th>Title</th>
-				<th>Description</th>
-				<th>Times Studied</th>
-				<th>Last Studied</th>
-				<th>Total Cards</th>
-                <th>Easy</th>
-                <th>Medium</th>
-                <th>Hard</th>
+				<th>Deck</th>
+                <th>Total Cards</th>
+				<th>Times Quizzed</th>
+				<th>Last Quizzed</th>				
+                <th>Progress</th>
                 <th>Remove</th>
 			</tr>
 			<?php foreach ($userCreatedDecks as $ucDeck):
@@ -96,13 +31,23 @@
 
 			?>
 
-				<td><a href="/studydeck/decks/info/<?php echo $ucDeck['Deck']['id']; ?> "> <?php echo $ucDeck['Deck']['deck_name']; ?></a></td> 
-				<td> <?php echo $ucDeck['Deck']['description']; ?> </td>
-				<td> <?php echo $ucDeck['0']; ?> </td><td> <?php echo $ucDeck['1']; ?> </td>
-				<td><?php echo $ucDeck['All']; ?></td>
-                <td><?php echo $ucDeck['Easy']; ?></td>
-                <td><?php echo $ucDeck['Medium'] ?></td>
-                <td><?php echo $ucDeck['Hard']; ?></td>
+				<td>
+                    <a href="/studydeck/decks/info/<?php echo $ucDeck['Deck']['id']; ?> "> <?php echo $ucDeck['Deck']['deck_name']; ?></a>
+                    <div><?php echo $ucDeck['Deck']['description']; ?></div>
+                </td> 
+                <?php $totalCards = $ucDeck['All'];  ?>
+				<td><?php echo $totalCards; ?></td>
+				<td><?php echo $ucDeck['MyDeck']['quiz_count']; ?></td>
+                <td><?php echo $ucDeck['MyDeck']['modified']; ?></td>
+                <?php 
+                if($totalCards != 0) {
+                    $easyPercent = ($ucDeck['Easy']/$totalCards)*100;
+                    $mediumPercent = ($ucDeck['Medium']/$totalCards)*100;
+                    $hardPercent = ($ucDeck['Hard']/$totalCards)*100;
+                    $progressImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=00FF00,FFFF00,FF0000&chs=150x40&chd=t:".$easyPercent."|".$mediumPercent."|".$hardPercent;
+                }
+                ?>
+                <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>
                 <td><?php echo $html->link("x","#",array('onclick' => "userDeleteDialog(".$ucDeck['Deck']['id'].",\"".$ucDeck['Deck']['deck_name']."\")"));?></td>
                  
             </tr>
@@ -114,9 +59,55 @@
 			echo "<div class=\"nodecks\">No User Created Decks in Dashboard</div>";
 		}
 		?>
+        <h2>Created By Others</h2>
+		<?php if(count($publicDecks)) { ?>
+		<table class="deck_table">
+			<tr>
+				<th>Deck</th>
+                <th>Total Cards</th>
+				<th>Times Quizzed</th>
+				<th>Last Quizzed</th>				
+                <th>Progress</th>
+                <th>Remove</th>
+			</tr>
+			<?php 
+				foreach ($publicDecks as $pDeck):
+      				echo "<tr id=\"publicDeckRow".$pDeck['Deck']['id']."\">";
+
+			?>
+				<td>
+                    <a href="/studydeck/decks/info/<?php echo $pDeck['Deck']['id']; ?> "> <?php echo $pDeck['Deck']['deck_name']; ?></a> 
+                    <div><?php echo $pDeck['Deck']['description']; ?></div>
+				</td> 
+                <?php $totalCards = $pDeck['All'];  ?>
+				<td><?php echo $totalCards; ?></td>
+				<td><?php echo $pDeck['MyDeck']['quiz_count']; ?></td>
+				<td><?php echo $pDeck['MyDeck']['modified']; ?> </td>
+                <?php
+                if($totalCards != 0) {    
+                    $easyPercent = ($pDeck['Easy']/$totalCards)*100;
+                    $mediumPercent = ($pDeck['Medium']/$totalCards)*100;
+                    $hardPercent = ($pDeck['Hard']/$totalCards)*100;
+                    $progressImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=00FF00,FFFF00,FF0000&chs=150x40&chd=t:".$easyPercent."|".$mediumPercent."|".$hardPercent;
+                }
+                ?>
+                <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>
+                <td><?php echo $html->link("x","#",array('onclick' => "publicDeleteDialog(".$pDeck['Deck']['id'].",\"".$pDeck['Deck']['deck_name']."\")"));?></td>            
+            </tr>
+			<?php endforeach; ?>
+
+		</table>
+		<?php }
+		else {
+			echo "<div class=\"nodecks\">No Public Decks in Dashboard</div>";
+		}
+		?>
+        <div>Displaying <?php echo $numDecksStudied ?> decks</div>
         <div id="publicDeleteDialog" title="Remove From Dashboard"></div>
         <div id="userDeleteDialog" title="Remove Your Deck"></div>
-
+        
+				
+       
 		</div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->
 <div class="clear_div">&nbsp;</div>

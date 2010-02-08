@@ -4,7 +4,7 @@ class UsersController extends AppController {
 	var $scaffold;
 	var $components =array('Auth','SwiftMailer');
 	var $helpers = array('Html','Javascript');
-	var $uses = array('User','MyDeck','Deck','Rating','TempUser');
+	var $uses = array('User','MyDeck','Deck','Rating','TempUser','Card');
 
 	function beforeFilter() {
       
@@ -182,40 +182,45 @@ class UsersController extends AppController {
 		$userCreatedDecks=array();
 		$userCreatedDecksNoStudy = array();
 
-		$this->Deck->recursive=1;
-		 
+		$this->Deck->recursive=-1;
+        $this->Card->recursive=-1;
 
-		$favDeck1 = null;
-		$favDeck2 = null;
-		 
 		//pulls the current user id
 		$currentUserId = $this->Auth->user('id');
 
 		//pulls all decks the user has in the mydecks table
+        $colSortBy = 'MyDeck.modified DESC';
 		if($sortBy == 'bycount') {
-			$allMyDecksParams = array('conditions' => array('MyDeck.user_id' => $currentUserId),'order'=>array('MyDeck.study_count DESC'));
-			$allMyDecks = $this->MyDeck->find ('all',$allMyDecksParams);
-		}
-		else {
-			$allMyDecksParams = array('conditions' => array('MyDeck.user_id' => $currentUserId),'order'=>array('MyDeck.modified DESC'));
-			$allMyDecks = $this->MyDeck->find ('all',$allMyDecksParams);
-		}
+            $colSortBy = 'MyDeck.quiz_count DESC';
+        }
+        
+		$allMyDecksParams = array('conditions' => array('MyDeck.user_id' => $currentUserId),'order'=> $colSortBy);
+		$allMyDecks = $this->MyDeck->find ('all',$allMyDecksParams);
+		
 		//traverses each of mydecks
 		foreach ($allMyDecks as $myDeck) {
+            $deckId = $myDeck['MyDeck']['deck_id'];
 			//pulls the full deck info for this mydeck
-			$tempDeckParams = array('conditions' => array('Deck.id' => $myDeck['MyDeck']['deck_id']));
+			$tempDeckParams = array('conditions' => array('Deck.id' => $deckId));
 			$tempDeck = $this->Deck->find('first',$tempDeckParams);
-			 
-			$totalCards = count($tempDeck['Card']);
-			$easyR = 0;
+			
+            $tempCardsParams = array('conditions' => array('Card.deck_id' => $deckId));
+            $tempCards = $this->Card->find('list', $tempCardsParams);
+           
+           
+            $tempRatingConditions = array('Rating.card_id' => $tempCards, 'Rating.user_id' => $currentUserId);
+            $tempRatingsParams = array('conditions' => $tempRatingConditions, 'fields' => array('Rating.rating'));
+            $tempRatings = $this->Rating->find('all', $tempCardsParams);
+            
+			$totalCards = count($tempCards);
+            $easyR = 0;
 			$mediumR = 0;
 			$hardR = 0;
 			//finds the amount of easy medium and hard cards for each deck
-			for ($cardX = 0; $cardX < $totalCards ; $cardX++) {
-				$tempRatingParams = array('conditions' => array ('Rating.card_id' =>$tempDeck['Card'][$cardX]['id'],'Rating.user_id' => $currentUserId));
-				$tempRating = $this->Rating->find('first',$tempRatingParams);
-				if($tempRating != NULL ) {
-			    	$numRate = $tempRating['Rating']['rating'];
+			foreach($tempRatings as $rating) {
+			
+				if($rating != NULL ) {
+			    	$numRate = $rating['Rating']['rating'];
 			     	if ($numRate == 1) {
 			     		$easyR ++;
 			     	}
@@ -226,70 +231,33 @@ class UsersController extends AppController {
 			     		$hardR ++;
 			     	}
 			    }
-                else {
-                    //if no rating default as hard
-                    $hardR ++;
-                }
-			 }
+                
+			}
+            $hardR = $hardR + ($totalCards - ($easyR + $mediumR + $hardR)); 
 
-			 			 
-			 //hold study count of deck
-			 $tempStudyCount = $myDeck['MyDeck']['quiz_count'];
-			 //Find favorite decks
-			 if($tempStudyCount != 0) {
-			 	if($favDeck1 == null) {
-			 		$favDeck1 = array_merge($tempDeck, array('StudyCount' => $tempStudyCount));      
-			 	}
-			 	else if ($tempStudyCount >= $favDeck1['StudyCount']) {
-					$favDeck2 = $favDeck1;
-					$favDeck1 = array_merge($tempDeck, array('StudyCount' => $tempStudyCount));
-			 	}
-				else if ($favDeck2 == null || $tempStudyCount >= $favDeck2['StudyCount'] ) {
-			 		$favDeck2 = array_merge($tempDeck, array('StudyCount' => $tempStudyCount));	
-			 	}
-			 }
-			 //logic that determines whether to show last study time		 
-			 if ($myDeck['MyDeck']['quiz_count'] == 0) {
-			    $tempStudyCountArray = array($tempStudyCount,"");			 				     
-			 }
-			 else {
-				$tempStudyCountArray = array($tempStudyCount,$myDeck['MyDeck']['modified']);
-			 }
+									 
+			//logic that determines whether to show last study time		 
+			if ($myDeck['MyDeck']['quiz_count'] == 0) {
+                $myDeck['MyDeck']['modified'] ="";			  
+			}
+             
+			$deck = array_merge($tempDeck, $myDeck, array("All"=> $totalCards,"Easy"=>$easyR,"Medium" => $mediumR, "Hard"=>$hardR));
 
-			 $deck = array_merge($tempDeck, $tempStudyCountArray,array("All"=> $totalCards,"Easy"=>$easyR,"Medium" => $mediumR, "Hard"=>$hardR));
-
-			 //splits decks between user decks and private decks
-		 	 if($deck['Deck']['user_id'] == $currentUserId)	{ 
-			 	//splits the decks into studied and unstudied decks
-			 	if ($deck['0'] != '0') {    
-					array_push($userCreatedDecks, $deck);
-				}
-				else {
-					array_push($userCreatedDecksNoStudy, $deck);  
-				}		
-								
-			 }
-			 else {
-			 	if ($deck['0'] != '0') {    
-					array_push($publicDecks, $deck);
-				}
-				else {
-				   array_push($publicDecksNoStudy, $deck);  
-				}
-			
-			 }
+			//splits decks between user decks and private decks
+		 	if($deck['Deck']['user_id'] == $currentUserId)	{ 
+                array_push($userCreatedDecks, $deck);			 			
+			}
+			else {
+                array_push($publicDecks, $deck);
+			}
 			 
-		 }
-		 //merges studied and unstudied decks by putting undstudied decks on the back
-		 $publicDecks = array_merge($publicDecks, $publicDecksNoStudy);
-		 $userCreatedDecks = array_merge($userCreatedDecks, $userCreatedDecksNoStudy);
-
-		 //sets variable used by view
-		 $this->set('userCreatedDecks', $userCreatedDecks);
-		 $this->set('publicDecks', $publicDecks);
-		 $this->set('numDecksStudied', count($allMyDecks));
-		 $this->set('favDeck1',$favDeck1);
-		 $this->set('favDeck2',$favDeck2);
+		}
+		 
+		//sets variable used by view
+		$this->set('userCreatedDecks', $userCreatedDecks);
+		$this->set('publicDecks', $publicDecks);
+		$this->set('numDecksStudied', count($allMyDecks));
+		 
 		 
 	}
 
