@@ -1,4 +1,6 @@
 <?php 
+include 'sd_global.php';
+
 class UsersController extends AppController {
 	var $name = 'Users';
 	var $scaffold;
@@ -68,7 +70,7 @@ class UsersController extends AppController {
 		    
 					
 		    
-		 }
+		}
 
 	}
 
@@ -221,13 +223,13 @@ class UsersController extends AppController {
 			
 				if($rating != NULL ) {
 			    	$numRate = $rating['Rating']['rating'];
-			     	if ($numRate == 1) {
+			     	if ($numRate == SD_Global::$EASY_CARD) {
 			     		$easyR ++;
 			     	}
-			     	elseif ($numRate == 2) {
+			     	elseif ($numRate == SD_Global::$MEDIUM_CARD) {
 			     		$mediumR ++;
 			     	}
-			     	elseif ($numRate == 3) {
+			     	elseif ($numRate == SD_Global::$HARD_CARD) {
 			     		$hardR ++;
 			     	}
 			    }
