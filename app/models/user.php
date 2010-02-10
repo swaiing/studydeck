@@ -15,15 +15,33 @@ class User extends AppModel{
             'identicalFieldValues' => array(
                 'rule' => array('identicalFieldValues', 'email_confirmation'),
                 'message' => 'Email and confirmation email fields do not match'
-                ),
+                ), 
             'unique' => array(
                 'rule' => 'isUnique',
                 'message' => 'This email is already in use.'
                 ) 
                             
+            ),            
+        'auth_password' => array(
+            'authenticateUser' => array(
+                'rule' => array('authenticateUser', 'auth_password'),
+                'message' => 'Incorrect Password'
+                ),
+            'notempty' => array(
+                'rule' => VALID_NOT_EMPTY,
+                'message' => 'Current password field cannot be blank'
+                )
+            ),
+        'password' => array(
+            'minimumLength' => array(
+                'rule' => array('minLength','6'),
+                'message'=> 'Password must be at least 6 characters long'
+                ),
+            'identicalFieldValues' => array(
+                'rule' => array('identicalFieldValues', 'password_confirmation'),
+                'message' => 'Password and confirmation password fields do not match'
+                )
             )
-        
-        
         
     );
     
@@ -42,6 +60,15 @@ class User extends AppModel{
             }
         }
         return TRUE;
+    } 
+    
+    function authenticateUser($field=array(), $auth_field = null ) 
+    {
+                
+        if($this->field('password') == Security::hash($this->data[$this->name][$auth_field],null, true)) {
+            return TRUE;
+        }
+        return FALSE;
     } 
 }
 ?>

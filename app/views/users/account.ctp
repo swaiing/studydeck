@@ -36,13 +36,13 @@
 
     echo "<div id=\"change_password_box\">";
         echo "<h2>Change Password:</h2>";
-        echo $form->input('User.new_password',array('type'=>'password','label'=>'New Password:','size'=>$FIELD_SIZE));
-        echo $form->input('User.new_password_confirmation',array('type'=>'password','label'=>'Confrim Password:','size'=>$FIELD_SIZE));      
+        echo $form->input('User.password',array('label'=>'New Password:','size'=>$FIELD_SIZE));
+        echo $form->input('User.password_confirmation',array('type'=>'password','label'=>'Confrim Password:','size'=>$FIELD_SIZE));      
     echo "</div>"; 
     
     echo "<br/>";
     echo "<div>";       
-        echo $form->input('User.passwordtemp',array('label'=>'Current Password:','size'=>$FIELD_SIZE));      
+        echo $form->input('User.auth_password',array('type'=>'password','label'=>'Current Password:','size'=>$FIELD_SIZE));      
     echo "</div>";     
         
     echo $form->end('Update Account');

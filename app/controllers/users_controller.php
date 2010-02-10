@@ -25,39 +25,44 @@ class UsersController extends AppController {
         //pulls the current user id
         $currentUserId = $this->Auth->user('id');
         $this->User->recursive = -1;
+            
+        if (!empty($this->data)) {
+            //sets user id to update
+            $this->data['User']['id'] = $currentUserId;
+            
+            $fieldsToSave = array('auth_password');
+            
+            //checks to see if user is trying to update email
+            if($this->data['User']['email'] != null || $this->data['User']['email_confirmation'] != null) {
+         
+                array_push($fieldsToSave, 'email');
+            
+            }
+            //checks to see if user is trying to update password
+            if($this->data['User']['password'] != null || $this->data['User']['password_confirmation'] != null) {
+                array_push($fieldsToSave, 'password');      
+                $this->data['User']['password'] = $this->Auth->password($this->data['User']['password']);
+                $this->data['User']['password_confirmation'] = $this->Auth->password($this->data['User']['password_confirmation']); 
+            }
+            
+            if($this->User->save($this->data, true, $fieldsToSave)) {
+                $this->data = null;
+            
+            }
+            else {
+                //on save fail remove all passwords for security
+                unset($this->data['User']['password']);
+                unset($this->data['User']['password_confirmation']);
+                unset($this->data['User']['auth_password']);
+            }
+            
+            
+    
+        }        
+        //get user information
         $userParams = array('conditions' => array('User.id' => $currentUserId), 'fields' => array('User.username','User.email','User.password'));
         $user = $this->User->find('first', $userParams);
         $this->set('user', $user);
-        
-        
-        if (!empty($this->data)) {
-            $this->data['User']['id'] = $currentUserId;
-            $this->User->save($this->data);
-            
-            
-            /*
-            if($this->Auth->password($this->data['User']['password']) == $user['User']['password']) {
-            
-            
-            }
-    
-    
-            if(isset($this->data['User']['email']) || isset($this->data['User']['email_confirmation'])) {
-            
-            
-            }
-            if(isset($this->data['User']['new_password']) || isset($this->data['User']['new_password_confirmation'])) {
-            
-            
-            }
-            */
-    
-    
-    
-    
-    
-    
-        }
     }
      
 	//allows user to change their password

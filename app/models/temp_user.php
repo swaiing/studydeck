@@ -13,8 +13,10 @@ class TempUser extends AppModel{
 		        'message' => 'Username must be between 4 and 30 characters'
 	        )
 	    ), 
-      	'password'=>array('rule'=>array('minLength','6'),
-	    'message'=> 'Password must be at least 6 characters long'),
+      	'password'=>array(
+            'rule'=>array('minLength','6'),
+            'message'=> 'Password must be at least 6 characters long'
+            ),
 	    'email'=>array('rule'=>'email','message'=> 'Not a valid email address')
     );
 }
