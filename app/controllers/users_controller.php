@@ -19,7 +19,46 @@ class UsersController extends AppController {
 		//variable used for handling redirection	       
         $this->set('prevUrl', $this->Session->read('Auth.redirect'));
 	
-    }     
+    } 
+
+    function account() {
+        //pulls the current user id
+        $currentUserId = $this->Auth->user('id');
+        $this->User->recursive = -1;
+        $userParams = array('conditions' => array('User.id' => $currentUserId), 'fields' => array('User.username','User.email','User.password'));
+        $user = $this->User->find('first', $userParams);
+        $this->set('user', $user);
+        
+        
+        if (!empty($this->data)) {
+            $this->data['User']['id'] = $currentUserId;
+            $this->User->save($this->data);
+            
+            
+            /*
+            if($this->Auth->password($this->data['User']['password']) == $user['User']['password']) {
+            
+            
+            }
+    
+    
+            if(isset($this->data['User']['email']) || isset($this->data['User']['email_confirmation'])) {
+            
+            
+            }
+            if(isset($this->data['User']['new_password']) || isset($this->data['User']['new_password_confirmation'])) {
+            
+            
+            }
+            */
+    
+    
+    
+    
+    
+    
+        }
+    }
      
 	//allows user to change their password
 	function changePassword() {
