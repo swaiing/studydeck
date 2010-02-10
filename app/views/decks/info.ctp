@@ -143,7 +143,7 @@
     <div id="stats_tab">
         <ul>
             <li>Created: <?php echo $deckData['Deck']['created']; ?></li>
-            <li>Studied: <?php echo $deckData['Deck']['view_count'] . " times"; ?></li>
+            <li>Quizzed: <?php echo $userQuizCount . " times"; ?></li>
         </ul>
     </div>
 
