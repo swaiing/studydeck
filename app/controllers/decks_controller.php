@@ -400,6 +400,23 @@ class DecksController extends AppController {
     return $resultMap;
   }
 
+    /*
+     * Get user quiz count for a deck
+     */
+    function getQuizCount($deckId) {
+
+        // Set userId
+        $userId = $this->Auth->user('id');
+
+        // Run find
+        $this->Deck->MyDeck->recursive = -1;
+        $params = array(
+                      'conditions' => array('MyDeck.user_id' => $userId,
+                                            'MyDeck.deck_id' => $deckId),
+                      'fields' => array('MyDeck.id', 'MyDeck.quiz_count'));
+        return $this->Deck->MyDeck->find('first', $params);
+    }
+
   /*
    * Deck landing page
    *
@@ -422,11 +439,15 @@ class DecksController extends AppController {
 
         // Call study method
         // Binds $deckId, $deckData, $cards, $cardsRatingsCount, and $cardsResults to view
-        $this->study($deckId, null);
+        $this->study($deckId);
 
         // Call quizResults method to bind session data
         // Binds $quiz to current session data for this deck
         $this->quizResults($deckId);
+
+        // Set quiz count
+        $myDeckResults = $this->getQuizCount($deckId);
+        $this->set('userQuizCount', $myDeckResults['MyDeck']['quiz_count']);
     }
 
     /*
@@ -626,15 +647,6 @@ class DecksController extends AppController {
      */
     function quiz($id)
     {
-        // Increment count field in 'decks' table
-        $this->Deck->recursive = -1;
-        $this->Deck->id = $id;
-        $tmp = $this->Deck->read(SD_Global::$MODEL_DECK_VIEW_COUNT);
-        $viewCount = $tmp['Deck']['view_count'];
-        $viewCount++;
-        $this->Deck->set(SD_Global::$MODEL_DECK_VIEW_COUNT, $viewCount);
-        $this->Deck->save();
-
         // Call private study function
         // Difference between study/quiz in JavaScript
         $this->study($id);
@@ -752,6 +764,9 @@ class DecksController extends AppController {
             return false;
         }
 
+        // Flag indicating quiz mode, which we infer if a result is saved
+        $isQuizMode = false;
+
         // Save Card Rating/Result models
         foreach($deckObj as $cardId => $card) {
 
@@ -768,6 +783,7 @@ class DecksController extends AppController {
             $resultIdIsValid = preg_match("/[\d]+/", $resultId);
 
             // Debug
+            /*
             $this->log($LOG_PREFIX . "*********************************", LOG_DEBUG);
             $this->log($LOG_PREFIX . "writeSession - cardId: " . $cardId, LOG_DEBUG);
             $this->log($LOG_PREFIX . "writeSession - ratingId: " . $ratingId, LOG_DEBUG);
@@ -778,6 +794,7 @@ class DecksController extends AppController {
             //$this->log($LOG_PREFIX . "writeSession - resultIdIsValid: " . $resultIdIsValid, LOG_DEBUG);
             $this->log($LOG_PREFIX . "writeSession - result: " . $result, LOG_DEBUG);
             //$this->log($LOG_PREFIX . "writeSession - resultIsValid: " . $resultIsValid, LOG_DEBUG);
+            */
 
             if($ratingIsValid) {
 
@@ -799,6 +816,9 @@ class DecksController extends AppController {
             }
 
             if($resultIsValid) {
+
+                // Set flag to true
+                $isQuizMode = true;
 
                 // Set record to update or create new
                 if($resultIdIsValid) {
@@ -839,6 +859,29 @@ class DecksController extends AppController {
 
         } //end foreach
 
+        // Increment 'quiz_mode' columns
+        if($isQuizMode) {
+
+            // Increment global quiz count field in 'decks' table
+            $this->Deck->recursive = -1;
+            $this->Deck->id = $deckId;
+            $tmp = $this->Deck->read(SD_Global::$MODEL_DECK_QUIZ_COUNT);
+            $quizCount = $tmp['Deck']['quiz_count'];
+            $quizCount++;
+            $this->Deck->set(SD_Global::$MODEL_DECK_QUIZ_COUNT, $quizCount);
+            $this->Deck->save();
+
+            // Increment user quiz count in 'my_decks' table
+            $myDeckResults = $this->getQuizCount($deckId);
+            $userQuizCount = $myDeckResults['MyDeck']['quiz_count'];
+            $userQuizCount++;
+            $myDeckId = $myDeckResults['MyDeck']['id'];
+            $this->Deck->MyDeck->id = $myDeckId;
+            $this->Deck->MyDeck->set(SD_Global::$MODEL_DECK_QUIZ_COUNT, $userQuizCount);
+            $this->Deck->MyDeck->save();
+        }
+
+        return;
     }
 
     /*
