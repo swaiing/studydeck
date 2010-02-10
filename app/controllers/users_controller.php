@@ -223,8 +223,10 @@ class UsersController extends AppController {
 		$userCreatedDecks=array();
 		$userCreatedDecksNoStudy = array();
 
-		$this->Deck->recursive=-1;
-        $this->Card->recursive=-1;
+		$this->Deck->recursive= -1;
+        $this->Card->recursive= -1;
+        $this->Rating->recursive= -1;
+        
 
 		//pulls the current user id
 		$currentUserId = $this->Auth->user('id');
@@ -245,14 +247,17 @@ class UsersController extends AppController {
 			$tempDeckParams = array('conditions' => array('Deck.id' => $deckId));
 			$tempDeck = $this->Deck->find('first',$tempDeckParams);
 			
+            //pulls all the cards for the deck
             $tempCardsParams = array('conditions' => array('Card.deck_id' => $deckId));
             $tempCards = $this->Card->find('list', $tempCardsParams);
-           
-           
-            $tempRatingConditions = array('Rating.card_id' => $tempCards, 'Rating.user_id' => $currentUserId);
-            $tempRatingsParams = array('conditions' => $tempRatingConditions, 'fields' => array('Rating.rating'));
-            $tempRatings = $this->Rating->find('all', $tempCardsParams);
             
+            
+            //gets all the ratings for all the cards for that user
+            $tempRatingConditions = array('Rating.card_id' => $tempCards,'Rating.user_id' => $currentUserId);
+            $tempRatingsParams = array('conditions' => $tempRatingConditions, 'fields' => array('Rating.rating'));
+            $tempRatings = $this->Rating->find('all', $tempRatingsParams);
+            
+                  
 			$totalCards = count($tempCards);
             $easyR = 0;
 			$mediumR = 0;

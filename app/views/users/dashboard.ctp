@@ -56,7 +56,10 @@
 		</table>
 		<?php }
 		else {
-			echo "<div class=\"nodecks\">No User Created Decks in Dashboard</div>";
+			echo "<div class=\"nodecks\">You have not created any decks yet";
+            echo "<br/>";
+            echo $html->link("Create a deck!", array('controller'=>'decks', 'action'=>'create'));
+            echo "</div>";
 		}
 		?>
         <h2>Created By Others</h2>
@@ -99,9 +102,13 @@
 		</table>
 		<?php }
 		else {
-			echo "<div class=\"nodecks\">No Public Decks in Dashboard</div>";
+			echo "<div class=\"nodecks\">";
+            echo $html->link("Explore existing decks!", array('controller'=>'decks', 'action'=>'explore'));           
+            echo "</div>";
+            echo "<br/>";
 		}
 		?>
+        
         <div>Displaying <?php echo $numDecksStudied ?> decks</div>
         <div id="publicDeleteDialog" title="Remove From Dashboard"></div>
         <div id="userDeleteDialog" title="Remove Your Deck"></div>
