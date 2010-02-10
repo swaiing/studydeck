@@ -65,59 +65,7 @@ class UsersController extends AppController {
         $this->set('user', $user);
     }
      
-	//allows user to change their password
-	function changePassword() {
-		//declares validationError variable for view
-    	$this->set('validationError','');
-		$validationError = '';
-		//sets the success variable to false to prompt user for email in view
-		$this->set('success',false);
-		
-		if (!empty($this->data)) {
-			//checks to make sure fields are not left empty
-		    if($this->data['User']['password'] != null && $this->data['User']['new_password'] != null && $this->data['User']['new_password_confirmation'] != null) {
-
-				$currentPassword = $this->Auth->password($this->data['User']['password']);
-		    	$newPassword = $this->Auth->password($this->data['User']['new_password']);
-
-		    	//variety of checks to validate the data
-		   		if(strlen($this->data['User']['new_password']) < 6) {
-		    		$validationError = 'Passwords must be at least 6 characters long';		   
-		    	}
-		    	else if($this->data['User']['new_password'] != $this->data['User']['new_password_confirmation']) {
-		    		$validationError = 'New Passwords Do Not Match!';
-		    	}
-
-				$this->data = $this->User->read(null,$this->Auth->user('id'));
-
-	    		if($this->data['User']['password'] != $currentPassword) {
-		    		$validationError ='Current Password Incorrect!';
-	    		}
-		    }
-		    else {
-				$validationError = 'Form Not Complete!';
-		    
-			}
-		    
-
-			//if all the validation checks out this changes the password
-		    if($validationError == '') {			
-				$this->data['User']['password'] = $newPassword;
-		    	$this->User->save($this->data);
-				$this->set('success',true);
-		    }
-		    else {
-				$this->data['User']['password'] = "";
-				$this->set('validationError',$validationError);
-		    		
-		    }
-		    
-					
-		    
-		}
-
-	}
-
+	
 	//user is sent to this action through a link in their email
 	//the function confirms their new account creation
 	function confirmation($confirmationCode = null) {
