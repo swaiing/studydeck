@@ -4,22 +4,39 @@ INSERT INTO users (email, password, username) VALUES ("scott@studydeck.com", "59
 INSERT INTO users (email, password, username) VALUES ("nicolo@studydeck.com", "5911211b41ad0fc56b09e05fe73ee5cedd42ca23", "nicolo");
 
 -- CREATE DECK
-INSERT INTO decks (deck_name, privacy, view_count, user_id, description, created) VALUES ("SAN Terms", 1, 0, 1, "Storage Area Networks terms and definitions.", NOW());
-INSERT INTO decks (deck_name, privacy, view_count, user_id, description, created) VALUES ("State Capitals", 1, 0, 2, "All 50 states of the United States and the respective capital cities.", NOW());
-INSERT INTO decks (deck_name, privacy, view_count, user_id, description, created) VALUES ("SAT Words", 1, 0, 3, "SAT prep words and definitions.", NOW());
+INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("SAN Terms", 1, 0, 1, "Storage Area Networks terms and definitions.", NOW());
+INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("State Capitals", 1, 0, 2, "All 50 states of the United States and the respective capital cities.", NOW());
+INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("SAT Words", 1, 0, 3, "SAT prep words and definitions.", NOW());
+
+-- CREATE SOME TAGS
+INSERT INTO tags (tag, created) VALUES ("storage", NOW());
+INSERT INTO tags (tag, created) VALUES ("geography", NOW());
+INSERT INTO tags (tag, created) VALUES ("united states", NOW());
+INSERT INTO tags (tag, created) VALUES ("capitals", NOW());
+INSERT INTO tags (tag, created) VALUES ("vocabulary", NOW());
+INSERT INTO tags (tag, created) VALUES ("sat", NOW());
 
 -- ADD NECESSARY ASSOCIATIONS (for dashboard)
-INSERT INTO my_decks (user_id, deck_id, type, study_count, created) VALUES (1,1,2,0,NOW());
-INSERT INTO my_decks (user_id, deck_id, type, study_count, created) VALUES (1,2,3,0,NOW());
-INSERT INTO my_decks (user_id, deck_id, type, study_count, created) VALUES (1,3,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (1,1,2,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (1,2,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (1,3,3,0,NOW());
 
-INSERT INTO my_decks (user_id, deck_id, type, study_count, created) VALUES (2,2,2,0,NOW());
-INSERT INTO my_decks (user_id, deck_id, type, study_count, created) VALUES (2,1,3,0,NOW());
-INSERT INTO my_decks (user_id, deck_id, type, study_count, created) VALUES (2,3,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (2,2,2,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (2,1,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (2,3,3,0,NOW());
 
-INSERT INTO my_decks (user_id, deck_id, type, study_count, created) VALUES (3,3,2,0,NOW());
-INSERT INTO my_decks (user_id, deck_id, type, study_count, created) VALUES (3,1,3,0,NOW());
-INSERT INTO my_decks (user_id, deck_id, type, study_count, created) VALUES (3,1,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (3,3,2,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (3,1,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (3,1,3,0,NOW());
+
+-- CREATE TAG ASSOCIATIONS
+INSERT INTO deck_tags (deck_id, tag_id, created) VALUES (1, 1, NOW());
+INSERT INTO deck_tags (deck_id, tag_id, created) VALUES (1, 5, NOW());
+INSERT INTO deck_tags (deck_id, tag_id, created) VALUES (2, 2, NOW());
+INSERT INTO deck_tags (deck_id, tag_id, created) VALUES (2, 3, NOW());
+INSERT INTO deck_tags (deck_id, tag_id, created) VALUES (2, 4, NOW());
+INSERT INTO deck_tags (deck_id, tag_id, created) VALUES (3, 6, NOW());
+INSERT INTO deck_tags (deck_id, tag_id, created) VALUES (3, 5, NOW());
 
 -- CREATE CARDS
 
