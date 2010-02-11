@@ -33,8 +33,8 @@ class User extends AppModel{
                 )
             ),
         'password' => array(
-            'minimumLength' => array(
-                'rule' => array('minLength','6'),
+            'passwordLength' => array(
+                'rule' => array('minLength', 6),
                 'message'=> 'Password must be at least 6 characters long'
                 ),
             'identicalFieldValues' => array(

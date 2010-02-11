@@ -41,11 +41,18 @@ class UsersController extends AppController {
             //checks to see if user is trying to update password
             if($this->data['User']['password'] != null || $this->data['User']['password_confirmation'] != null) {
                 array_push($fieldsToSave, 'password');      
-                $this->data['User']['password'] = $this->Auth->password($this->data['User']['password']);
-                $this->data['User']['password_confirmation'] = $this->Auth->password($this->data['User']['password_confirmation']); 
+                
             }
             
-            if($this->User->save($this->data, true, $fieldsToSave)) {
+            $this->User->set($this->data);
+            //needs to validate first to handle password length checking
+            if($this->User->validates(array('fieldList' => $fieldsToSave))) {
+                //if saving new password hash the password
+                if(in_array('password', $fieldsToSave)) {
+                    $this->data['User']['password'] = $this->Auth->password($this->data['User']['password']); 
+                }
+                
+                $this->User->save($this->data, false, $fieldsToSave);
                 $this->data = null;
             
             }
@@ -353,65 +360,45 @@ class UsersController extends AppController {
       	if (!empty($this->data)) {
 	    	$this->TempUser->set($this->data);
 	       	if ($this->TempUser->validates()) {
-	       		//checks to see if the password and password confirmation match		
-	            if ($this->data['TempUser']['password'] == $this->data['TempUser']['password_confirm']) {  
-			      
-			    	//checks to see if username is in use
-					$existingUserParams = array('conditions' => array('User.username' => $this->data['TempUser']['username']));			      
-			      	$existingUser = $this->User->find('first',$existingUserParams);
+	       		
+                //generates a confirmation code
+                $confirmationCode =  substr(md5(rand()),0,44);
+                //encrypts the password
+                $this->data['TempUser']['password'] = $this->Auth->password($this->data['TempUser']['password']);
+                $this->data['TempUser']['confirmation_code'] = $confirmationCode;
+            
+                //creates the user in the temp user table
+                //skips validation because it should already be done
+                $this->TempUser->save($this->data,false);
 
-			      	if ($existingUser != null) {
-			      		$this->set('validationError','Username is already in use!');   
-			      	}
-			      	else {
-						//checks to see if email is in use
-						$existingUserParams = array('conditions' => array('User.email' => $this->data['TempUser']['email']));
-			      		$existingUser = $this->User->find('first',$existingUserParams);
-			      		if ($existingUser != null) {
-			      			$this->set('validationError','Email address is already in use!');
-					       
-			        	}
-						else {
-							//generates a confirmation code
-			      			$confirmationCode =  substr(md5(rand()),0,44);
-							//encrypts the password
-			      			$this->data['TempUser']['password'] = $this->Auth->password($this->data['TempUser']['password']);
-			      			$this->data['TempUser']['confirmation_code'] = $confirmationCode;
-					
-							//creates the user in the temp user table
-							//skips validation because it should already be done
-                	    	$this->TempUser->save($this->data,array('validate' =>false));
+            
+                $this->setEmailAttributes($this->data['TempUser']['email'],'/users/confirmation/'.$confirmationCode);
+                
+                //set variables to template as usual
+                $this->set('userName',$this->data['TempUser']['username']);
+                
+                //email confirmationCode
+                try {
+                    if(!$this->SwiftMailer->send('confirmation', 'StudyDeck Confirmation')) {
+                        $this->log("Error sending email");
+                    }
+                }
+                catch(Exception $e) {
+                    $this->log("Failed to send email: ".$e->getMessage());
 
-							
-			       			$this->setEmailAttributes($this->data['TempUser']['email'],'/users/confirmation/'.$confirmationCode);
-                            
-               		    	//set variables to template as usual
-        					$this->set('userName',$this->data['TempUser']['username']);
-                            
-                            //email confirmationCode
-							try {
-					    		if(!$this->SwiftMailer->send('confirmation', 'StudyDeck Confirmation')) {
-                    				$this->log("Error sending email");
-            	    			}
-        					}
-        					catch(Exception $e) {
-              					$this->log("Failed to send email: ".$e->getMessage());
-	      		
-							}
-        	
+                }
 
-							//directs them to a page where alerting them that the email has been sent
-							$this->redirect(array('action' => '/confirmation/registered'));
-					
-				 		}
-               		}
-            	}
-				else {
-					$this->set('validationError','Passwords do not match!');
-				}
-			}
 
-		}
+                //directs them to a page where alerting them that the email has been sent
+                $this->redirect(array('action' => '/confirmation/registered'));
+            }
+            else {
+                unset($this->data['TempUser']['password']);
+                unset($this->data['TempUser']['password_confirm']);
+            
+            }
+            
+   		}
 
 	}
 
