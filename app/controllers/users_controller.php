@@ -63,8 +63,6 @@ class UsersController extends AppController {
                 unset($this->data['User']['auth_password']);
             }
             
-            
-    
         }        
         //get user information
         $userParams = array('conditions' => array('User.id' => $currentUserId), 'fields' => array('User.username','User.email','User.password'));

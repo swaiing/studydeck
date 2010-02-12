@@ -7,7 +7,7 @@ class DecksController extends AppController {
 	var $name = 'Decks';
     var $scaffold;
     var $uses = array('Deck','Card','Tag','MyDeck','DeckTag','Rating','Result');
-    var $helpers = array('Html','Javascript','Form','Time');
+    var $helpers = array('Html','Javascript','Form','RelativeTime');
     var $components = array('Auth','RequestHandler');
 
 

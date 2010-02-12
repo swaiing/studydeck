@@ -64,14 +64,10 @@
 			echo "</td>";
 			echo "<td>".$deck['User']['username']."</td>";
 			echo "<td>"; 
-            $time = new TimeHelper();
-            if($time->wasWithinLast('3 days', $deck['Deck']['created'])){ 
-                echo $time->relativeTime($deck['Deck']['created']);
-            }
-            else {
-                echo $time->format('m-d-y',$deck['Deck']['created']);
-            }
-                
+            $rt = new RelativeTimeHelper();
+            echo $rt->getRelativeTime($deck['Deck']['created']);
+            
+            
             echo "</td>";
 			echo "<td>".$deck['Deck']['quiz_count']."</td>";
 		
