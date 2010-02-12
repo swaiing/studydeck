@@ -1006,7 +1006,6 @@ class DecksController extends AppController {
 
             $tagListArray = explode(" ", $tagList);
             $tagListArrayLength = count($tagListArray);
-              
             for($tagIndex = 0; $tagIndex < $tagListArrayLength; $tagIndex ++) {            
                
                 $tag = trim($tagListArray[$tagIndex]);
@@ -1015,7 +1014,7 @@ class DecksController extends AppController {
                     if($tempTag == null) { 
                         $newTagArray['Tag']['tag'] = $tag;
                         $this->Tag->create();
-                        $this->Tag->save($this->data, array('validate' => 'false'));
+                        $this->Tag->save($newTagArray, array('validate' => 'false'));
                         $deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->Tag->id;
                         //$deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->requestAction('/tags/sTag/'.$newTagArray);
                         //$debugMsg = $debugMsg." new tag: ".$tag." id: ".$this->Tag->id;
