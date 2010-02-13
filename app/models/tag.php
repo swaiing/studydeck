@@ -3,7 +3,7 @@ class Tag extends AppModel {
     var $name = 'Tag';
     var $hasMany = 'DeckTag';
     //var $actsAs = array ('TagSearchable');
-    //var $actsAs = array ('Searchable');
+    var $actsAs = array ('Searchable');
        
     var $validate = array(
         'tag' => array(

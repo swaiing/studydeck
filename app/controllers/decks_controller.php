@@ -984,9 +984,10 @@ class DecksController extends AppController {
             }
 
         }
+        
 
         if($this->Deck->saveAll($this->data,array('validate' => 'only'))) {
-
+           
             $this->Deck->saveAll($this->data,array('validate' => 'false'));
             
             //removes cards that user deleted during editing process
@@ -1002,8 +1003,10 @@ class DecksController extends AppController {
             $tagList = $this->data['Tag']['tag'];
             $newTagArray = array();
             $deckTagArray = array();
-
-
+           
+            //needed for proper indexing, resets the searchable behavior to work with tags now instead of decks
+            $this->Tag->Behaviors->attach('Searchable');
+            
             $tagListArray = explode(" ", $tagList);
             $tagListArrayLength = count($tagListArray);
             for($tagIndex = 0; $tagIndex < $tagListArrayLength; $tagIndex ++) {            
@@ -1013,11 +1016,11 @@ class DecksController extends AppController {
                 if(!empty($tag)) {
                     if($tempTag == null) { 
                         $newTagArray['Tag']['tag'] = $tag;
+                        
                         $this->Tag->create();
                         $this->Tag->save($newTagArray, array('validate' => 'false'));
+
                         $deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->Tag->id;
-                        //$deckTagArray['DeckTag'][$tagIndex]['tag_id'] = $this->requestAction('/tags/sTag/'.$newTagArray);
-                        //$debugMsg = $debugMsg." new tag: ".$tag." id: ".$this->Tag->id;
                         
                     }
                     else {                

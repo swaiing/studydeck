@@ -41,12 +41,17 @@ class SearchableBehavior extends ModelBehavior {
 	}
 	
 	function afterSave() {
+        
 		if ($this->_index !== false) {
+            
 			if (!$this->SearchIndex) {
 				$this->SearchIndex = ClassRegistry::init('SearchIndex');
 			}
 			if ($this->foreignKey == 0) {
+              
 				$this->foreignKey = $this->model->getLastInsertID();
+                //nicolo added this create
+                $this->SearchIndex->create();
 				$this->SearchIndex->save(
 					array(
 						'SearchIndex' => array(
@@ -57,6 +62,7 @@ class SearchableBehavior extends ModelBehavior {
 					)
 				);
 			} else {
+ 
 				$searchEntry = $this->SearchIndex->find('first',array('fields'=>array('id'),'conditions'=>array('model'=>$this->model->name,'association_key'=>$this->foreignKey)));
 				$this->SearchIndex->save(
 					array(
@@ -79,10 +85,10 @@ class SearchableBehavior extends ModelBehavior {
 		$index = array();
         
         $data = $this->model->data[$this->model->name];
-                
+        
 		foreach ($data as $key => $value) {
 			if (is_string($value)) {
-				$columns = $this->model->getColumnTypes();
+				$columns = $this->model->getColumnTypes();   
 				if ($key != $this->model->primaryKey && isset($columns[$key]) && in_array($columns[$key],array('text','varchar','char','string'))) {
 					$index []= strip_tags(html_entity_decode($value,ENT_COMPAT,'UTF-8'));
 				}
@@ -91,6 +97,7 @@ class SearchableBehavior extends ModelBehavior {
         $index = join('. ',$index);
 		$index = iconv('UTF-8', 'ASCII//TRANSLIT', $index);
 		$index = preg_replace('/[\ ]+/',' ',$index);
+        
 		return $index;
 	}
 
