@@ -5,7 +5,7 @@ class UsersController extends AppController {
 	var $name = 'Users';
 	var $scaffold;
 	var $components =array('Auth','SwiftMailer');
-	var $helpers = array('Html','Javascript');
+	var $helpers = array('Html','Javascript','RelativeTime');
 	var $uses = array('User','MyDeck','Deck','Rating','TempUser','Card');
 
 	function beforeFilter() {

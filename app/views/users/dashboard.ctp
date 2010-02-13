@@ -38,7 +38,13 @@
                 <?php $totalCards = $ucDeck['All'];  ?>
 				<td><?php echo $totalCards; ?></td>
 				<td><?php echo $ucDeck['MyDeck']['quiz_count']; ?></td>
-                <td><?php echo $ucDeck['MyDeck']['modified']; ?></td>
+                <td><?php 
+                    if($ucDeck['MyDeck']['modified'] != null) {
+                        $rt = new RelativeTimeHelper();
+                        echo $rt->getRelativeTime($ucDeck['MyDeck']['modified']);
+                    }
+                ?>
+                </td>
                 <?php 
                 if($totalCards != 0) {
                     $easyPercent = ($ucDeck['Easy']/$totalCards)*100;
@@ -85,7 +91,13 @@
                 <?php $totalCards = $pDeck['All'];  ?>
 				<td><?php echo $totalCards; ?></td>
 				<td><?php echo $pDeck['MyDeck']['quiz_count']; ?></td>
-				<td><?php echo $pDeck['MyDeck']['modified']; ?> </td>
+				<td><?php
+                    if($pDeck['MyDeck']['modified'] != null) {
+                        $rt = new RelativeTimeHelper();
+                        echo $rt->getRelativeTime($pDeck['MyDeck']['modified']);
+                    }
+                    ?>
+                </td>
                 <?php
                 if($totalCards != 0) {    
                     $easyPercent = ($pDeck['Easy']/$totalCards)*100;

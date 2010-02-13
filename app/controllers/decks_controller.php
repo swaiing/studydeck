@@ -733,7 +733,7 @@ class DecksController extends AppController {
     {
         // Clear session
         $sessionToClear = SD_Global::$SESSION_DECK_KEY.$deckId;
-        $this->log($LOG_PREFIX . "Clearing session: " . $sessionToClear, LOG_DEBUG);
+        //$this->log($LOG_PREFIX . "Clearing session: " . $sessionToClear, LOG_DEBUG);
         $this->Session->delete($sessionToClear);
     }
 
