@@ -135,7 +135,8 @@ class DecksController extends AppController {
 	    
 		$queryString = $this->data['Deck']['searchQuery'];
 	    //set querystring for query equal to the query parameter
-	    if ($query != null) {
+	    
+        if ($query != null) {
 	    	$queryString = $query;
 	    }
 	    

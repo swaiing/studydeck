@@ -39,9 +39,8 @@
 	<table class="deck_table">
 		<tr>
 			<th></th>
-			<th>Deck Name</th>
+			<th>Deck</th>
             <th># of Cards</th>
-			<th>Description</th>
 			<th>Tags</th>
 			<th>User</th>
 			<th>Created</th>
@@ -52,9 +51,11 @@
             echo "<tr>";
             $itemCount++;
 			echo "<td>".$itemCount."</td>";
-			echo "<td>".$html->link($deck['Deck']['deck_name'],"/decks/info/".$deck['Deck']['id'])."</td>";
+			echo "<td>".$html->link($deck['Deck']['deck_name'],"/decks/info/".$deck['Deck']['id']);
+            echo "<div>".$deck['Deck']['description']."</div>";
+            echo "</td>";
             echo "<td>".count($deck['Card'])."</td>";
-			echo "<td>".$deck['Deck']['description']."</td>";
+			
 			echo "<td>";
             foreach ($deck['DeckTag'] as $tag) {
 			  	if (isset($tagArray[$tag['tag_id']])) {
