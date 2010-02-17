@@ -1,0 +1,75 @@
+/****** rating selector widget ******/
+
+.rts {
+    position: relative;
+    width: 224px;
+    height: 33px;
+    background: url(/studydeck/img/rts.jpg) no-repeat;
+    /*background-color: #b9c9fe;*/
+    margin: 0 auto 0 auto;
+    padding: 0;
+}
+
+.rts li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+}
+.rts li, .rts a {
+    height: 33px;
+    display: block;
+    text-decoration: none;
+    font-weight: bold;
+    color: #000;
+}
+
+/** easy button style effects **/
+.easy   { left: 0; width: 74px; }
+.rts-easy, .rts-easy-click {
+    position: absolute;
+    left: 0;
+    width: 74px;
+    height: 33px;
+    background: transparent url(/studydeck/img/rts.jpg) 0 -34px no-repeat;
+    /*background-color: #011d83;*/
+}
+.rts-easy-click {
+    background: transparent url(/studydeck/img/rts.jpg) 0 -68px no-repeat;
+    /*background-color: #029c2e;*/
+}
+
+/** medium button style effects **/
+.medium { left: 75px; width: 74px; }
+.rts-medium, .rts-medium-click {
+    position: absolute;
+    left: 75px;
+    width: 74px;
+    height: 33px;
+    background: transparent url(/studydeck/img/rts.jpg) -75px -34px no-repeat;
+    /*background-color: #011d83;*/
+}
+.rts-medium-click {
+    background: transparent url(/studydeck/img/rts.jpg) -75px -68px no-repeat;
+    /*background-color: #fcd854;*/
+}
+
+
+/** hard button style effects **/
+.hard   { left: 149px; width: 74px; }
+.rts-hard, .rts-hard-click {
+    position: absolute;
+    left: 149px;
+    width: 74px;
+    height: 33px;
+    background: transparent url(/studydeck/img/rts.jpg) -150px -34px no-repeat;
+    /*
+    background-color: #011d83;
+    */
+}
+.rts-hard-click {
+    background: transparent url(/studydeck/img/rts.jpg) -150px -68px no-repeat;
+    /*
+    background-color: #b30000;
+    */
+}

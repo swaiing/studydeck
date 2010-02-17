@@ -8,6 +8,8 @@
 <div id="right_margin_wrap">
 </div>
 
+<div id="mask"></div>
+
 <!-- Card wrapper -->
 <div id="card_wrap">
 
@@ -15,7 +17,7 @@
     <div id="row_top">
         <div id="prev_button" class="left_button">previous</div>
         <div id="next_button" class="right_button">next</div>
-        <div class="middle_button" id="card_rating"></div>
+        <div id="card_rating" class="middle_button"></div>
     </div>
 
     <div id="row_question">

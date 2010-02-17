@@ -22,6 +22,16 @@ div#title_wrap a.top_link {
 
 /****** card viewer styles ******/
 
+div#mask {
+    position: absolute;
+    width: 50%;
+    height: 310px;
+    padding: 0;
+    margin: 0 25% 0 25%;
+    background-color: #000;
+    display: none;
+}
+
 div#card_wrap {
     min-height: 300px;
     border: 1px solid #000000;
@@ -30,49 +40,14 @@ div#card_wrap {
     cursor: pointer;
 }
 
+/****** question/answer ******/
+
 div#row_top {
+    position: relative;
+    height: 40px;
     border-bottom: 1px solid #000000;
-}
-
-div.middle_button {
-    text-align: center;
-    height: 10%;
-    margin: 0 25% 0 25%;
-    padding: 10px;
-    clear: none;
-}
-
-div.left_button {
-    text-align: center;
-    width: 20%;
-    border-right: 1px solid #000000;
-    float: left;
-    clear: left;
     margin: 0;
     padding: 0;
-}
-
-div.right_button {
-    text-align: center;
-    width: 20%;
-    border-left: 1px solid #000000;
-    float: right;
-    clear: right;
-    margin: 0;
-    padding: 0;
-}
-
-div#prev_button, div#next_button {
-    padding: 10px;
-    background-color: #B8CEE0;
-}
-div#correct_button {
-    background-color: green;
-    padding: 10px;
-}
-div#incorrect_button {
-    background-color: red;
-    padding: 10px;
 }
 
 div#row_question {
@@ -92,7 +67,61 @@ div#row_answer {
 }
 
 div#row_bottom {
+    position: relative;
+    height: 40px;
     border-top: 1px solid #000000;
+    padding: 0;
+    margin: 0;
+}
+/****** previous/next, correct/incorrect buttons ******/
+
+div.middle_button {
+    text-align: center;
+    height: 40px;
+    margin: 0 25% 0 25%;
+    padding: 3px 0 0 0;
+}
+
+div.left_button {
+    text-align: center;
+    height: 40px;
+    width: 20%;
+    border-right: 1px solid #000000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+div.right_button {
+    text-align: center;
+    height: 40px;
+    width: 20%;
+    border-left: 1px solid #000000;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+}
+
+div#prev_button, div#next_button {
+    background-color: #b9c9fe;
+    padding: 0;
+}
+div#correct_button {
+    background-color: #029c2e;
+    padding: 0;
+}
+div#incorrect_button {
+    background-color: #b30000;
+    padding: 0;
+}
+
+div#card_rating div.rating_str {
+    margin: 0;
+    padding: 0;
 }
 
 /****** generic margin box styles ******/

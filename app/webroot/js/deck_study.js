@@ -1,5 +1,5 @@
 /**
- * study_deck.js
+ * deck_study.js
  */
 
 
@@ -42,6 +42,17 @@ var NULL_ID = "null";
    * Card methods
    *
    */
+
+  Card.prototype.getRatingStr = function() {
+    return RATING_MAP[this.rating];
+  }
+
+  Card.prototype.setRatingFromStr = function(ratingStr) {
+    var i = jQuery.inArray(ratingStr, RATING_MAP);
+    if(i != -1) {
+        this.rating = i;
+    }
+  }
 
   Card.prototype.setCorrect = function() {
     this.correct = 1;
@@ -91,6 +102,12 @@ var NULL_ID = "null";
     this.unviewedCards = new Array();
     this.numTotalCards = 0;
 
+    // Check for 'cardData' JSON object
+    if(cardData == null || deckData == null) {
+        alert('JSON object(s) not found.');
+        return;
+    }
+
     // Set deck meta fields
     if(deckData.Deck) {
         this.id = deckData.Deck.id;
@@ -98,11 +115,11 @@ var NULL_ID = "null";
         this.userId = deckData.Deck.user_id;
     }
 
-    // Read cards from JSON object cardData
+    // Read cards from JSON object "cardData"
     for (var i=0; i<cardData.length; i++) {
 
         // Set properties of new card
-        var newCard = new Card(cardData[i].Card.id,cardData[i].Card.question,cardData[i].Card.answer);
+        var newCard = new Card(cardData[i].Card.id, cardData[i].Card.question, cardData[i].Card.answer);
 
         // Check for rating in cardRatingsData
         if(cardData[i].Rating.rating) {
@@ -139,6 +156,7 @@ var NULL_ID = "null";
     return this.curCard;
   }
 
+  // AJAX function which sends request to update action
   Deck.prototype.sendUpdate = function(card) {
 
     if(!card) {
@@ -224,46 +242,51 @@ var NULL_ID = "null";
     deck:null,
     isShowingAnswer:0,
     mode:MODE_STUDY,
+    rts:null,
 
     // Bootstrap intialize function
     'init':function() {
 
-        //var MODE = "study";
-        //var MODE = "quiz";
+        // Pass global deck JSON data
+        this.deck = new Deck(deckData, cardData, cardResultsData);
+
+        // Get first card
+        var firstCard = this.deck.getNextCard();
+
+        // Set the title
+        //$("h1.title").text(this.deck.deckName);
+        // TODO: Workaround for HTML entity references
+        $("h1.title").html(this.deck.deckName);
+
+        // Reset form items
+        $("#show_answer_checkbox").attr('checked',true);
+        this.showAnswerToggle();
 
         // Call build UI functions
         if(MODE == MODE_STUDY) {
           this.mode = MODE_STUDY;
           this.renderStudyWindows();
+
+          // Initialize new RatingSelector object
+          this.rts = new RatingSelector("#card_rating");
+
         }
         else if(MODE == MODE_QUIZ) {
           this.mode = MODE_QUIZ;
           this.renderQuizButtons();
         }
 
-        // dummy data
-        //this.deck = new Deck("SAN Vocab", 1);
-
-        // Pass global deck JSON data
-        this.deck = new Deck(deckData,cardData,cardResultsData);
-
-        // Set the title
-        $("h1.title").text(this.deck.deckName);
-
-        // Reset form items
-        $("#show_answer_checkbox").attr('checked',true);
-        this.showAnswerToggle();
-
-        // Temp start things up
-        this.showCard(this.deck.getNextCard());
+        // Load first card
+        this.showCard(firstCard);
     },
 
-    // Builds UI
+    // Builds correct/incorrect buttons for quiz mode
     'renderQuizButtons':function() {
         $("#row_bottom").prepend("<div id=\"incorrect_button\" class=\"left_button\">incorrect</div>");
         $("#row_bottom").prepend("<div id=\"correct_button\" class=\"right_button\">correct</div>");
     },
 
+    // Builds left-side windows for learn mode
     'renderStudyWindows':function() {
 
       var optionsBox = $('<div class=\"margin_box\"></div>')
@@ -283,7 +306,7 @@ var NULL_ID = "null";
                         .prependTo('#left_margin_wrap');
 
     },
-    
+
     // Helper functions
     'showCard':function(card) {
         if(!card) {
@@ -297,14 +320,25 @@ var NULL_ID = "null";
         }
 
         // Set rating field
-        var ratingStr = RATING_MAP[card.rating];
-        $("#card_rating").text(ratingStr);
+        if(this.rts) {
+            // Pass to RatingSelector
+            this.rts.setCard(card);
+        }
+        else {
+            // Display
+            var eltStr = "<div class=\"rating_str\">" + card.getRatingStr() + "</div>";
+            $("#card_rating").html(eltStr);
+        }
 
         // Set question field
-        $("#card_question").text(card.question);
+        //$("#card_question").text(card.question);
+        // TODO: Workaround for HTML entity references
+        $("#card_question").html(card.question);
 
         // Set answer field
-        $("#card_answer").text(card.answer);
+        //$("#card_answer").text(card.answer);
+        // TODO: Workaround for HTML entity references
+        $("#card_answer").html(card.answer);
 
         // Update deck progress
         var progressStr = this.deck.getNumViewed() + "/" + this.deck.getNumCards();
@@ -339,6 +373,10 @@ var NULL_ID = "null";
         // Get the next card
         this.deck.getNextCard();
 
+        // Animation card transition
+        //$("div#mask").show();
+        //$("div#mask").slideUp('fast');
+
         // Reset the display and show the card
         this.resetButtons();
         this.showCard(this.deck.getCard());
@@ -353,23 +391,6 @@ var NULL_ID = "null";
         this.resetButtons();
         this.showCard(this.deck.getCard());
     
-    },
-
-    'toggleRating':function() {
-        
-        // Get new rating
-        var rating = this.deck.getCard().rating;
-        var newRating = rating+1;
-        if(newRating > 3) {
-            newRating = 1;
-        }
-        this.deck.getCard().setRating(newRating);
-        var tmp = this.deck.getCard().rating;
-
-        // Display new rating
-        var ratingStr = RATING_MAP[tmp];
-        $("#card_rating").text(ratingStr);
-
     },
 
     'correct':function() {
@@ -429,11 +450,6 @@ var NULL_ID = "null";
 
     // Next button
     $("#next_button").click(function(event) { DeckViewerUI.next(); });
-
-    // Change rating button
-    if(DeckViewerUI.mode == MODE_STUDY) {
-      $("#card_rating").click(function(event) { DeckViewerUI.toggleRating(); });
-    }
 
     // Reveal answer click
     $("#row_answer").click(function(event) { DeckViewerUI.showAnswer(); });

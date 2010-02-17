@@ -1,5 +1,5 @@
 body {
-  font-family: trebuchet, verdana, sans-serif;
+  font-family: verdana, helvetica, sans-serif;
   font-size: 11px;
   margin: 0;
   padding: 0;
@@ -207,10 +207,13 @@ table.deck_table td.center {
     text-align: center;
 }
 
+/*
+ * Disable hover
 table.deck_table tr:hover td {
     background: #d0dafd;
     color: #339;
 }
+ */
 
 /***** generic links *****/
 
