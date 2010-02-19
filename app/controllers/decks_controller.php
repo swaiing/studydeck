@@ -119,6 +119,17 @@ class DecksController extends AppController {
 
 	//action for exploring decks
 	function explore($sortBy = null,$page = null,$query = null) {   
+    
+        App::import('Sanitize');
+        $sanitizeParams = array('connection'=>'default',
+                    'odd_spaces'=>'true',
+                    'encode'=>true,
+                    'dollar'=>true,
+                    'carriage'=>true,
+                    'unicode'=>true,
+                    'escape'=>true,
+                    'backslash'=>true
+        );
 		//sets sort variable for view   
 		$this->set('sort', $sortBy);
       	//sets sql sort based on sort parameter       
@@ -154,6 +165,8 @@ class DecksController extends AppController {
 	    	
 			$exploreDecksParams = array('conditions'=> array('Deck.privacy'=> SD_Global::$PUBLIC_DECK),'limit' => 20,'page' => $page,'order'=> $sortBy);
 			$exploreDecks = $this->Deck->find('all',$exploreDecksParams);
+            
+            $exploreDecks = Sanitize::clean($exploreDecks, $sanitizeParams);
 	       	$this->set('decks',$exploreDecks);
 			
 			//sets the pages count, 20 results per page
@@ -191,6 +204,9 @@ class DecksController extends AppController {
 			$exploreDecksConditions = array('Deck.id' => $arrayOfDeckIds,'Deck.privacy' => SD_Global::$PUBLIC_DECK);
 			$exploreDecksParams = array('limit' => 20,'page' => $page,'conditions'=> $exploreDecksConditions,'order'=> $sortBy);
 			$exploreDecks = $this->Deck->find('all',$exploreDecksParams);
+            
+            
+            $exploreDecks = Sanitize::clean($exploreDecks, $sanitizeParams);
 			$this->set('decks',$exploreDecks); 
 
 			$findDeckCount = $this->Deck->find('count',array('conditions'=> array('Deck.id' => $arrayOfDeckIds,'Deck.privacy' => SD_Global::$PUBLIC_DECK)));
@@ -213,7 +229,9 @@ class DecksController extends AppController {
 		    }
 		     
 		}
-	       	    
+            
+        //$tagArray = Sanitize::clean($tagArray, $sanitizeParams);
+        
 	    $this->set('queryString',$queryString);
 	    $this->data['Deck']['searchQuery'] = $queryString;
 		$this->set('tagArray',$tagArray);

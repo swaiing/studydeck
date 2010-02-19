@@ -51,7 +51,7 @@
             echo "<tr>";
             $itemCount++;
 			echo "<td>".$itemCount."</td>";
-			echo "<td>".$html->link($deck['Deck']['deck_name'],"/decks/info/".$deck['Deck']['id']);
+			echo "<td>".$html->link(html_entity_decode($deck['Deck']['deck_name']),"/decks/info/".$deck['Deck']['id']);
             echo "<div>".$deck['Deck']['description']."</div>";
             echo "</td>";
             echo "<td>".count($deck['Card'])."</td>";
@@ -66,7 +66,7 @@
 			echo "<td>".$deck['User']['username']."</td>";
 			echo "<td>"; 
             $rt = new RelativeTimeHelper();
-            echo $rt->getRelativeTime($deck['Deck']['created']);
+            echo $rt->getRelativeTime(html_entity_decode($deck['Deck']['created']));
             
             
             echo "</td>";

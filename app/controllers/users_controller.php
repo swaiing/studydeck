@@ -246,7 +246,20 @@ class UsersController extends AppController {
 			}
              
 			$deck = array_merge($tempDeck, $myDeck, array("All"=> $totalCards,"Easy"=>$easyR,"Medium" => $mediumR, "Hard"=>$hardR));
+            
+            App::import('Sanitize');
+            $sanitizeParams = array('connection'=>'default',
+                    'odd_spaces'=>'true',
+                    'encode'=>true,
+                    'dollar'=>true,
+                    'carriage'=>true,
+                    'unicode'=>true,
+                    'escape'=>true,
+                    'backslash'=>true
+            );
 
+            $deck = Sanitize::clean($deck, $sanitizeParams);
+            
 			//splits decks between user decks and private decks
 		 	if($deck['Deck']['user_id'] == $currentUserId)	{ 
                 array_push($userCreatedDecks, $deck);			 			

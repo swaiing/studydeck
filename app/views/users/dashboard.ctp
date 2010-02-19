@@ -32,7 +32,7 @@
 			?>
 
 				<td>
-                    <a href="/studydeck/decks/info/<?php echo $ucDeck['Deck']['id']; ?> "> <?php echo $ucDeck['Deck']['deck_name']; ?></a>
+                    <?php echo $html->link(html_entity_decode($ucDeck['Deck']['deck_name']),"/decks/info/".$ucDeck['Deck']['id']); ?>
                     <div><?php echo $ucDeck['Deck']['description']; ?></div>
                 </td> 
                 <?php $totalCards = $ucDeck['All'];  ?>
@@ -41,7 +41,7 @@
                 <td><?php 
                     if($ucDeck['MyDeck']['modified'] != null) {
                         $rt = new RelativeTimeHelper();
-                        echo $rt->getRelativeTime($ucDeck['MyDeck']['modified']);
+                        echo $rt->getRelativeTime(html_entity_decode($ucDeck['MyDeck']['modified']));
                     }
                 ?>
                 </td>
@@ -85,7 +85,7 @@
 
 			?>
 				<td>
-                    <a href="/studydeck/decks/info/<?php echo $pDeck['Deck']['id']; ?> "> <?php echo $pDeck['Deck']['deck_name']; ?></a> 
+                    <?php echo $html->link(html_entity_decode($pDeck['Deck']['deck_name']),"/decks/info/".$pDeck['Deck']['id']); ?>
                     <div><?php echo $pDeck['Deck']['description']; ?></div>
 				</td> 
                 <?php $totalCards = $pDeck['All'];  ?>
@@ -94,7 +94,7 @@
 				<td><?php
                     if($pDeck['MyDeck']['modified'] != null) {
                         $rt = new RelativeTimeHelper();
-                        echo $rt->getRelativeTime($pDeck['MyDeck']['modified']);
+                        echo $rt->getRelativeTime(html_entity_decode($pDeck['MyDeck']['modified']));
                     }
                     ?>
                 </td>
