@@ -610,13 +610,34 @@ class DecksController extends AppController {
         }
         */
 
+        // Import sanitize library
+        // TODO: Explore the effects of every parameter here.
+        // i.e. What characters are we losing?
+        App::import('Sanitize');
+        $sanitizeParams = array('connection'=>'default',
+                        'odd_spaces'=>'true',
+                        'encode'=>true,
+                        'dollar'=>true,
+                        'carriage'=>true,
+                        'unicode'=>true,
+                        'escape'=>true,
+                        'backslash'=>true
+        );
+
         // Set $deckRecord
         $this->Deck->id = $id;
         $this->Deck->recursive = -1;
         $deckRecord = $this->Deck->read();
 
+        // Sanitize array
+        $deckRecord = Sanitize::clean($deckRecord, $sanitizeParams);
+
         // Call helper to retrieve array of cards
         $cardRecords = $this->getCards($id, $ratingsSelected);
+
+        // Sanitize array
+        $cardRecords = Sanitize::clean($cardRecords, $sanitizeParams);
+        
         $indexedCardRecords = $this->indexByCardId($cardRecords);
 
         // Call helpers to post-process data
