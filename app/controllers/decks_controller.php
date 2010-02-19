@@ -93,6 +93,13 @@ class DecksController extends AppController {
             $tagsParams = array('conditions' =>  array('Tag.id' => $deckTags),'fields' => array('Tag.id','Tag.tag'));
             $tags = $this->Tag->find('all',$tagsParams);
             
+            App::import('Sanitize');
+            /*
+            $tags = Sanitize::clean($tags);	
+            $deck = Sanitize::clean($deck);	
+            
+            $cards = Sanitize::clean($cards, array('encode' => false,'escape' => false));	
+            */
             
             $this->set('existingTags', $tags);           
             $this->set('existingDeck', $deck);
@@ -1020,9 +1027,8 @@ class DecksController extends AppController {
     
     //function that handles creating and editing of deck
     private function saveDeck($edit = null) {
-        //sanitize the input data
-        App::import('Sanitize');
-        $this->data = Sanitize::clean($this->data);	
+       
+        
 
         //gets authenticated user Id
         $userId = $this->Auth->user('id');
