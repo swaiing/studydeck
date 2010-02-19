@@ -83,10 +83,15 @@ div#stats_tab, div#cards_tab, div#results_tab {
     clear: both;
 }
 
-div#cards_tab div#edit_deck {
-    margin: 10px;
+div#edit_deck {
+    margin: 10px 10px 0 0;
     padding: 0;
+}
 
+span.edit_rating {
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 /*** review tab ***/

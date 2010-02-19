@@ -711,12 +711,11 @@ class DecksController extends AppController {
         // Set user ID
         $userId = $this->Auth->user('id');
 
-        // Grab data from url, params and sanitize input
-        App::import('Sanitize');
-        $deckId = Sanitize::paranoid($this->params['url']['did']);
-        $cardId = Sanitize::paranoid($this->params['url']['cid']);
-        $ratingId = Sanitize::paranoid($this->params['url']['rid']);
-        $rating = Sanitize::paranoid($this->params['url']['rating']);
+        // Grab data from url, params
+        $deckId = $this->params['url']['did'];
+        $cardId = $this->params['url']['cid'];
+        $ratingId = $this->params['url']['rid'];
+        $rating = $this->params['url']['rating'];
 
         // Set log info
         $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
@@ -773,12 +772,11 @@ class DecksController extends AppController {
         // Set user ID
         $userId = $this->Auth->user('id');
 
-        // Grab data from url, params and sanitize input
-        App::import('Sanitize');
-        $deckId = Sanitize::paranoid($this->params['url']['did']);
-        $cardId = Sanitize::paranoid($this->params['url']['cid']);
-        $resultId = Sanitize::paranoid($this->params['url']['sid']);
-        $correct = Sanitize::paranoid($this->params['url']['correct']);
+        // Grab data from url, params
+        $deckId = $this->params['url']['did'];
+        $cardId = $this->params['url']['cid'];
+        $resultId = $this->params['url']['sid'];
+        $correct = $this->params['url']['correct'];
 
         // Set log info
         $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
@@ -821,6 +819,37 @@ class DecksController extends AppController {
         $this->Session->write(SD_Global::$SESSION_DECK_RESULT_KEY.$deckId, $deckObj);
         return true;
     }
+
+    /*
+     * Called using AJAX to trigger a session cache flush.
+     *
+     */
+    function updateSave()
+    {
+        // Set layout to blank
+        $this->layout = "";
+
+        // Set user ID
+        $userId = $this->Auth->user('id');
+
+        // Grab data from url, params
+        $deckId = $this->params['url']['did'];
+        $commitType = $this->params['url']['save'];
+
+        // Set log info
+        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+
+        // Debug
+        $this->log($LOG_PREFIX . "UPDATESTART - deckId: " . $deckId, LOG_DEBUG);
+        $this->log($LOG_PREFIX . "UPDATESTART - commitType: " . $commitType, LOG_DEBUG);
+        $this->log($LOG_PREFIX . "*********************************", LOG_DEBUG);
+
+        // Call writeSession to commit to model
+        $success = $this->writeSession($deckId, $commitType);
+        
+        return true;
+    }
+
     /**
      * Clears user deck session object
      */

@@ -4,8 +4,11 @@
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js',false);
     echo $javascript->link('jquery.corner',false);
+    echo $javascript->link('deck_class',false);
+    echo $javascript->link('deck_rts_wdg',false);
     echo $javascript->link('deck_info',false);
     echo $html->css('deck_info',null,null,false);
+    echo $html->css('deck_rts_wdg',null,null,false);
     echo $html->css('jquery-ui-1.7.2.custom.gray',null,null,false);
 
     // Page global constants
@@ -45,6 +48,15 @@
         $selected = array($HARD);
     }
 ?>
+
+<script type="text/javascript">
+<?php
+    echo "var deckData = " . $javascript->object($deckData) . ";\n";
+    echo "var cardData = " . $javascript->object($cards) . ";\n";
+    echo "var cardResultsData = " . $javascript->object($cardsResults) . ";\n";
+?>
+</script>
+
 <!-- Begin view content -->
 <div id="middle_wrapper_content">
 <div id="middle_bar">
@@ -158,7 +170,7 @@
                 <th>#</th>
                 <th>Term</th>
                 <th>Definition</th>
-                <th>Rating</th>
+                <th>Rating <span class="edit_rating">[Edit Ratings]</span></th>
             </tr>
             <?php
                 // Iterate cards for table
@@ -168,7 +180,7 @@
                     $term = $card['Card']['question'];
                     $defn = $card['Card']['answer'];
                     $rating = $card['Rating']['rating'];
-                    echo "<tr>";
+                    echo "<tr class=\"card_row id_" . $id . "\">";
                     echo "<td>$order</td>";
                     echo "<td>$term</td>";
                     echo "<td>$defn</td>";
@@ -176,7 +188,8 @@
                     if(!isset($ratingStr)) {
                         $ratingStr = $DEFAULT_RATING;
                     }
-                    echo "<td>$RATING_MAP[$ratingStr]</td>";
+                    echo "<td class=\"rts_col\"><span class=\"rating_text\">";
+                    echo "$RATING_MAP[$ratingStr]</span></td>";
                     echo "</tr>";
                 }
             ?>

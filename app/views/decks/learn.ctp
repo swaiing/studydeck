@@ -3,10 +3,11 @@
 <?php
     //echo $javascript->link('jquery-1.2.6.min',false) . "\n";
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
-    echo $javascript->link('deck_study',false) . "\n";;
-    echo $javascript->link('deck_rts_wdg',false) . "\n";;
-    echo $html->css('deck_study',null,null,false) . "\n";
-    echo $html->css('deck_rts_wdg',null,null,false) . "\n";
+    echo $javascript->link('deck_class',false);
+    echo $javascript->link('deck_study',false);
+    echo $javascript->link('deck_rts_wdg',false);
+    echo $html->css('deck_study',null,null,false);
+    echo $html->css('deck_rts_wdg',null,null,false);
 ?>
 
 <script type="text/javascript">

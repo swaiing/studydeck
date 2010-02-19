@@ -77,7 +77,7 @@ function RatingSelector(elt) {
         });
 
     });
-    return false;
+    return true;
 }
 
 // Method which highlights clicked button 
