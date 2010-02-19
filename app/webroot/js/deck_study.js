@@ -1,5 +1,6 @@
 /**
  * deck_study.js
+ *
  */
 
 
@@ -16,12 +17,15 @@ var NULL_ID = "null";
    * Card class
    *
    */
-  function Card(id,question,answer) {
+  function Card(id, did, question, answer) {
 
     // Card table fields
     this.id = id;
     this.question = question;
     this.answer = answer;
+
+    // Store deck ID for AJAX
+    this.deckId = did;
 
     // Results table fields
     this.resultsId = NULL_ID;
@@ -47,19 +51,25 @@ var NULL_ID = "null";
     return RATING_MAP[this.rating];
   }
 
+  // UI triggered by RatingSelector to update rating
   Card.prototype.setRatingFromStr = function(ratingStr) {
     var i = jQuery.inArray(ratingStr, RATING_MAP);
     if(i != -1) {
         this.rating = i;
+        this.notifyRating();
     }
   }
 
+  // UI triggered by correct button to set correct
   Card.prototype.setCorrect = function() {
     this.correct = 1;
+    this.notifyResult();
   }
 
+  // UI triggered by incorrect button to set incorrect
   Card.prototype.setIncorrect = function() {
     this.correct = 0;
+    this.notifyResult();
   }
 
   Card.prototype.updateTotal = function() {
@@ -86,11 +96,65 @@ var NULL_ID = "null";
   }
 
   /**
+   * AJAX call to update rating
+   */
+  Card.prototype.notifyRating = function() {
+
+    // Build url data string
+    var dataStr = "did=" + this.deckId;
+    dataStr += "&cid=" + this.id;
+    dataStr += "&rid=" + this.ratingId;
+    dataStr += "&rating=" + this.rating;
+    //alert(dataStr);
+
+    // Debug window
+    //var newWindow = window.open('','mywin','height=500,width=600,scrollbars=yes');
+
+    $.ajax({
+        type: "GET",
+        url: "/studydeck/decks/updateRating",
+        data: dataStr,
+        success: function(msg) {
+            //newWindow.document.write(msg);
+            //alert("SUCCESS: " + msg);
+        }
+    });
+    return true;
+  }
+
+  /**
+   * AJAX call to update result
+   */
+  Card.prototype.notifyResult = function() {
+
+    // Build url data string
+    var dataStr = "did=" + this.deckId;
+    dataStr += "&cid=" + this.id;
+    dataStr += "&sid=" + this.resultsId;
+    dataStr += "&correct=" + this.correct;
+    //alert(dataStr);
+
+    // Debug window
+    //var newWindow = window.open('','mywin','height=500,width=600,scrollbars=yes');
+
+    $.ajax({
+        type: "GET",
+        url: "/studydeck/decks/updateResult",
+        data: dataStr,
+        success: function(msg) {
+            //newWindow.document.write(msg);
+            //alert("SUCCESS: " + msg);
+        }
+    });
+    return true;
+  }
+
+  /**
    *
    * Deck class
    *
    */
-  function Deck(deckData,cardData,cardResultsData) {
+  function Deck(deckData, cardData, cardResultsData) {
 
     // Deck DB fields
     this.id = NULL_ID;
@@ -103,9 +167,9 @@ var NULL_ID = "null";
     this.numTotalCards = 0;
 
     // Check for 'cardData' JSON object
-    if(cardData == null || deckData == null) {
+    if(!(cardData && deckData)) {
         alert('JSON object(s) not found.');
-        return;
+        return false;
     }
 
     // Set deck meta fields
@@ -119,7 +183,7 @@ var NULL_ID = "null";
     for (var i=0; i<cardData.length; i++) {
 
         // Set properties of new card
-        var newCard = new Card(cardData[i].Card.id, cardData[i].Card.question, cardData[i].Card.answer);
+        var newCard = new Card(cardData[i].Card.id, this.id, cardData[i].Card.question, cardData[i].Card.answer);
 
         // Check for rating in cardRatingsData
         if(cardData[i].Rating.rating) {
@@ -156,62 +220,31 @@ var NULL_ID = "null";
     return this.curCard;
   }
 
-  // AJAX function which sends request to update action
-  Deck.prototype.sendUpdate = function(card) {
-
-    if(!card) {
-        alert("sendUpdate: card is null");
-        return;
-    }
-
-    // Build url data string
-    var dataStr = "did=" + this.id;
-    dataStr += "&cid=" + card.id;
-    dataStr += "&rid=" + card.ratingId;
-    dataStr += "&sid=" + card.resultsId;
-    dataStr += "&rating=" + card.rating;
-    dataStr += "&correct=" + card.correct;
-    //alert(dataStr);
-
-    // Debug window
-    //var newWindow = window.open('','mywin','height=500,width=600,scrollbars=yes');
-
-    $.ajax({
-        type: "GET",
-        url: "/studydeck/decks/update",
-        data: dataStr,
-        success: function(msg) {
-            //newWindow.document.write(msg);
-            //alert("SUCCESS: " + msg);
-        }
-    });
-  }
-
+  // Advance current card
   Deck.prototype.getNextCard = function() {
     if(this.unviewedCards.length > 0) {
         if(this.curCard) {
             // Update JS object totals
             this.curCard.updateTotal();
 
-            // Update DB with card info
-            this.sendUpdate(this.curCard);
-
             // Push card on viewed cards stack
             this.viewedCards.push(this.curCard);
         }
+
         this.curCard = this.unviewedCards.pop();
     } 
+    else {
+        return null;
+    }
     return this.curCard;
   }
 
+  // Go back to previous card
   Deck.prototype.getPreviousCard = function() {
     if(this.viewedCards.length > 0) {
         if(this.curCard) {
             // Update JS object totals
             this.curCard.updateTotal();
-
-            // Update DB with card info
-            this.sendUpdate(this.curCard);
 
             // Push card on viewed cards stack
             this.unviewedCards.push(this.curCard);
@@ -371,15 +404,22 @@ var NULL_ID = "null";
     'next':function() {
         
         // Get the next card
-        this.deck.getNextCard();
+        var success = this.deck.getNextCard();
 
         // Animation card transition
         //$("div#mask").show();
         //$("div#mask").slideUp('fast');
 
         // Reset the display and show the card
-        this.resetButtons();
-        this.showCard(this.deck.getCard());
+        if(success) {
+            this.resetButtons();
+            this.showCard(this.deck.getCard());
+        }
+        // End of deck
+        else {
+            $("#card_question").text('End of StudyDeck');
+            $("#card_answer").text('');
+        }
     },
 
     'previous':function() {
@@ -452,7 +492,7 @@ var NULL_ID = "null";
     $("#next_button").click(function(event) { DeckViewerUI.next(); });
 
     // Reveal answer click
-    $("#row_answer").click(function(event) { DeckViewerUI.showAnswer(); });
+    $("#row_body").click(function(event) { DeckViewerUI.showAnswer(); });
 
     // Set correct button
     $("#correct_button").click(function(event) { DeckViewerUI.correct(); });

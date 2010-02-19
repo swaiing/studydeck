@@ -20,12 +20,14 @@
         <div id="card_rating" class="middle_button"></div>
     </div>
 
-    <div id="row_question">
-        <span id="card_question"></span>
-    </div>
+    <div id="row_body">
+        <div id="row_question">
+            <span id="card_question"></span>
+        </div>
 
-    <div id="row_answer">
-        <span id="card_answer"></span>
+        <div id="row_answer">
+            <span id="card_answer"></span>
+        </div>
     </div>
 
     <!-- Bottom-row content -->

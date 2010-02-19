@@ -29,7 +29,7 @@
   <h1 class="title"></h1>
   <?php
         echo $html->link('Quit',
-                          array('controller'=>'decks','action'=>'quit',$deckId),
+                          array('controller'=>'decks','action'=>'quit', $deckId, "COMMIT_RATING"),
                           array('class'=>'top_link'));
   ?>
 </div>

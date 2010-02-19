@@ -70,6 +70,10 @@
             echo $html->link('Add to Favorites', array('controller'=>'decks', 'action'=>'favorite', $deckId));
         }
     ?>
+    <!--TODO: Display link only when owner -->
+    <div id="edit_deck">
+        <?php echo $html->link('Edit', array('controller'=>'decks', 'action'=>'edit', $deckId)); ?>
+    </div>
 </div>
 
 <div id="heading">
@@ -148,9 +152,6 @@
     </div>
 
     <div id="cards_tab">
-        <div id="edit_deck">
-            <?php echo $html->link('Edit', array('controller'=>'decks', 'action'=>'edit', $deckId)); ?>
-        </div>
         <table class="deck_table">
         <tbody>
             <tr>

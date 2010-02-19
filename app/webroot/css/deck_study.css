@@ -50,19 +50,22 @@ div#row_top {
     padding: 0;
 }
 
+div#row_body {
+    margin: 0;
+    padding: 0;
+}
+
 div#row_question {
     font-size: 16px;
     text-align: center;
-    border: 1px solid #000000;
-    margin: 10px;
+    margin: 0;
     padding: 10px;
 }
 
 div#row_answer {
     font-size: 12px;
     min-height: 150px;
-    border: 1px solid #000000;
-    margin: 10px;
+    margin: 0;
     padding: 10px;
 }
 
@@ -109,14 +112,17 @@ div.right_button {
 div#prev_button, div#next_button {
     background-color: #b9c9fe;
     padding: 0;
+    margin: 0;
 }
 div#correct_button {
     background-color: #029c2e;
     padding: 0;
+    margin: 0;
 }
 div#incorrect_button {
     background-color: #b30000;
     padding: 0;
+    margin: 0;
 }
 
 div#card_rating div.rating_str {

@@ -18,7 +18,11 @@ class SD_Global
     public static $NULL_STR = "null";
 
     // Constants for session arrays
-    public static $SESSION_DECK_KEY = 'DeckObject_';
+    //public static $SESSION_DECK_KEY = 'DeckObject_';
+    public static $SESSION_COMMIT_RATING_TYPE = "COMMIT_RATING";
+    public static $SESSION_COMMIT_RESULT_TYPE = "COMMIT_RESULT";
+    public static $SESSION_DECK_RATING_KEY = 'DeckObject_Rating_';
+    public static $SESSION_DECK_RESULT_KEY = 'DeckObject_Result_';
     public static $SESSION_DECK_MODE_KEY = 'StudyMode_';
     public static $SESSION_DECK_MODE_LEARN = 'LEARN';
     public static $SESSION_DECK_MODE_QUIZ = 'QUIZ';
