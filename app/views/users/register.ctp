@@ -15,10 +15,6 @@
     	$FIELD_SIZE = 35;
         $FIELD_LENGTH = 50;
 
-    	if ($validationError != '') {
-    		echo "Registration Error: ".$validationError;
-    	}
-
     	echo "<div id=\"register_box\" class=\"form_box\">\n";
     	echo "<h2>Register with StudyDeck</h2>\n";
 
@@ -32,8 +28,14 @@
     	echo "<li>" . $form->input('TempUser.password_confirm', array('type' => 'password', 'label'=>'Repeat:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
 
         echo "</ol>\n";
+        $recaptcha->display_form('echo');
+        if($recaptchaFailed) {
+            echo "<div>Captcha input has failed!";
+            echo "</div>\n"; 
+        }
     	echo $form->end('Create my account');
-    	echo "</div>\n";
+    	echo "</div>\n"; 
+        
 	?>
 
     <div id="register_priv_box">

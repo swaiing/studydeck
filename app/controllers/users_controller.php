@@ -4,7 +4,7 @@ include 'sd_global.php';
 class UsersController extends AppController {
 	var $name = 'Users';
 	var $scaffold;
-	var $components =array('Auth','SwiftMailer');
+	var $components =array('Auth','SwiftMailer','Recaptcha');
 	var $helpers = array('Html','Javascript','RelativeTime');
 	var $uses = array('User','MyDeck','Deck','Rating','TempUser','Card');
 
@@ -18,7 +18,20 @@ class UsersController extends AppController {
         
 		//variable used for handling redirection	       
         $this->set('prevUrl', $this->Session->read('Auth.redirect'));
-	
+        
+        
+        //sets keys for recaptcha
+        $domain =  substr(strrchr(FULL_BASE_URL, '/'),1);      
+        if (($handle = fopen("files/recaptchakeys.csv","r")) !== FALSE) {
+            while($fileContents = fgetcsv($handle)){
+                if($fileContents[0] == $domain) {
+                    $this->Recaptcha->publickey = $fileContents[1];
+                    $this->Recaptcha->privatekey = $fileContents[2];
+                }
+            }
+        }
+        fclose($handle);
+        
     } 
 
     function account() {
@@ -365,43 +378,50 @@ class UsersController extends AppController {
     }
     
 	function register() {
-    	//declares validationError variable for view
-      	$this->set('validationError','');
-      	       
+    	//declares recaptchaFail variable for view
+      	$this->set('recaptchaFailed',false);
+      	        
       	if (!empty($this->data)) {
 	    	$this->TempUser->set($this->data);
 	       	if ($this->TempUser->validates()) {
-	       		
-                //generates a confirmation code
-                $confirmationCode =  substr(md5(rand()),0,44);
-                //encrypts the password
-                $this->data['TempUser']['password'] = $this->Auth->password($this->data['TempUser']['password']);
-                $this->data['TempUser']['confirmation_code'] = $confirmationCode;
-            
-                //creates the user in the temp user table
-                //skips validation because it should already be done
-                $this->TempUser->save($this->data,false);
+                if($this->Recaptcha->valid($this->params['form'])){
+                
+                    //generates a confirmation code
+                    $confirmationCode =  substr(md5(rand()),0,44);
+                    //encrypts the password
+                    $this->data['TempUser']['password'] = $this->Auth->password($this->data['TempUser']['password']);
+                    $this->data['TempUser']['confirmation_code'] = $confirmationCode;
+                
+                    //creates the user in the temp user table
+                    //skips validation because it should already be done
+                    $this->TempUser->save($this->data,false);
 
-            
-                $this->setEmailAttributes($this->data['TempUser']['email'],'/users/confirmation/'.$confirmationCode);
                 
-                //set variables to template as usual
-                $this->set('userName',$this->data['TempUser']['username']);
-                
-                //email confirmationCode
-                try {
-                    if(!$this->SwiftMailer->send('confirmation', 'StudyDeck Confirmation')) {
-                        $this->log("Error sending email");
+                    $this->setEmailAttributes($this->data['TempUser']['email'],'/users/confirmation/'.$confirmationCode);
+                    
+                    //set variables to template as usual
+                    $this->set('userName',$this->data['TempUser']['username']);
+                    
+                    //email confirmationCode
+                    try {
+                        if(!$this->SwiftMailer->send('confirmation', 'StudyDeck Confirmation')) {
+                            $this->log("Error sending email");
+                        }
                     }
+                    catch(Exception $e) {
+                        $this->log("Failed to send email: ".$e->getMessage());
+
+                    }
+                    //directs them to a page where alerting them that the email has been sent
+                    $this->redirect(array('action' => '/confirmation/registered'));
                 }
-                catch(Exception $e) {
-                    $this->log("Failed to send email: ".$e->getMessage());
-
+                else {
+                    $this->set('recaptchaFailed',true);
+                    unset($this->data['TempUser']['password']);
+                    unset($this->data['TempUser']['password_confirm']);
                 }
 
-
-                //directs them to a page where alerting them that the email has been sent
-                $this->redirect(array('action' => '/confirmation/registered'));
+                
             }
             else {
                 unset($this->data['TempUser']['password']);
