@@ -77,6 +77,7 @@ function RatingSelector(elt) {
         });
 
     });
+
     return true;
 }
 
@@ -91,6 +92,16 @@ RatingSelector.prototype.showSelected = function(classAttr, buttonElt) {
     $(buttonElt).before('<div class="' + clickDiv + '"></div>');
     $(clickDiv).css({display:"none"}).fadeIn(100);
     return false;
+}
+
+// Return formatted text to display rating
+RatingSelector.prototype.getRatingString = function() {
+    var str = "";
+    if(this.card) {
+        str = this.RATING_MAP[this.card.rating];
+        //str.replace(/^[a-z]/g
+    }
+    return str;
 }
 
 // Method which sets the card property of the class
@@ -119,4 +130,12 @@ RatingSelector.prototype.setCard = function(card) {
         }
     });
     return false;
+}
+
+// Method which sets DOM element to update with rating string
+RatingSelector.prototype.setRatingElt = function(elt) {
+    if(this.card) {
+        this.card.setRatingElt(elt);
+    }
+    return;
 }

@@ -36,6 +36,10 @@ RatingSelectorUI = {
             // Bind card to RTS widget
             var c = obj.deck.getCard(id);
             rts.setCard(c);
+
+            // Bind DOM rating field to widget
+            var ratingElt = $("span.rating", this);
+            rts.setRatingElt(ratingElt);
         });
     }
 }
@@ -55,15 +59,18 @@ $(document).ready( function() {
     disableCheckboxes();
 
     // Set on-click handlers for quiz/learn mode
-    $("input#quiz_button").click(function(event) { setQuizMode(); });
-    $("input#learn_button").click(function(event) { setLearnMode(); });
+    $("input#quiz_button").click(function() { setQuizMode(); });
+    $("input#learn_button").click(function() { setLearnMode(); });
 
     // Set on-click handler for select 'All' checkbox
-    $("input#select_all_checkbox").click(function(event) { selectAllCheckboxes(); });
+    $("input#select_all_checkbox").click(function() { selectAllCheckboxes(); });
 
     // Toggle edit rating mode
     RatingSelectorUI.init();
-    $("div#cards_tab span.edit_rating").click(function(event) { toggleRatingEdit(); });
+    $("div#cards_tab th.edit_rating").click(function() {
+        var obj = this;
+        toggleRatingEdit(obj);
+    });
 });
 
 // Disables all checkboxes with '(0)' aka zero cards
@@ -108,14 +115,15 @@ function setLearnMode() {
 }
 
 // Onclick handler when Edit rating is clicked
-function toggleRatingEdit() {
+function toggleRatingEdit(obj) {
 
-    var editTxt = '[Edit Ratings]';
-    var updateTxt = '[Done Editing]';
+    //var editTxt = $(obj).text();
+    var editTxt = 'Edit Ratings';
+    var updateTxt = 'Save Ratings';
     var modeEdit = true;
 
     // Change 'Edit' text
-    var ctrlElt = $("div#cards_tab span.edit_rating");
+    var ctrlElt = $(obj);
     var text = ctrlElt.text();
     if(text == editTxt) {
         ctrlElt.text(updateTxt);
@@ -134,11 +142,11 @@ function toggleRatingEdit() {
 
         if(modeEdit) {
             $("ul.rts",elt).css({display:""});
-            $("span.rating_text",elt).css({display:"none"});
+            $("span.rating",elt).css({display:"none"});
         }
         else {
             $("ul.rts",elt).css({display:"none"});
-            $("span.rating_text",elt).css({display:""});
+            $("span.rating",elt).css({display:""});
         }
 
     });

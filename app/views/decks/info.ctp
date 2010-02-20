@@ -16,7 +16,7 @@
     $MEDIUM = 2;
     $HARD = 3;
     $TOTAL = 99;
-    $RATING_MAP = array(1 => 'Easy', 2 => 'Medium', 3 => 'Hard');
+    $RATING_MAP = array(1 => 'easy', 2 => 'medium', 3 => 'hard');
     $DEFAULT_RATING = 3;
 
     // Set for display
@@ -64,28 +64,30 @@
 <div class="crumb">
     <?php
         // If not in dashboard show explore link, otherwise 'dashboard' link
-        if($notAssociated) {
+        if($assocNope) {
             echo $html->link('Explore', array('controller'=>'decks', 'action'=>'explore'));
         }
         else {
             echo $html->link('Dashboard', array('controller'=>'users', 'action'=>'dashboard'));
         }
     ?>
-    > 
+    &gt;
     <span class="you_are_here"><?php echo $deckName; ?></span>
 </div>
 
 <div id="deck_utils">
     <?php
-        // Add favorite link if not associated in my_decks
-        if($notAssociated) {
+        // Add favorite link if there's no association
+        if($assocNope) {
             echo $html->link('Add to Favorites', array('controller'=>'decks', 'action'=>'favorite', $deckId));
         }
+        // Add 'Edit' link if you created it
+        else if($assocCreated) {
+            echo $html->link('Edit Deck', array('controller'=>'decks', 'action'=>'edit', $deckId));
+        }
+        else if($assocViewed) {}
+        else if($assocSaved) {}
     ?>
-    <!--TODO: Display link only when owner -->
-    <div id="edit_deck">
-        <?php echo $html->link('Edit', array('controller'=>'decks', 'action'=>'edit', $deckId)); ?>
-    </div>
 </div>
 
 <div id="heading">
@@ -146,8 +148,8 @@
 
 <div id="bottom">
     <ul>
-        <li><a href="#stats_tab">Stats</a></li>
         <li><a href="#cards_tab">Cards</a></li>
+        <li><a href="#stats_tab">Stats</a></li>
         <?php
             // Display results tab only if quizzed
             if(isset($quiz)) {
@@ -165,13 +167,18 @@
 
     <div id="cards_tab">
         <table class="deck_table">
-        <tbody>
+        <col class="col_num"/>
+        <col class="col_term_defn"/>
+        <col class="col_rating"/>
+        <col class="col_rating_edit"/>
+        <thead>
             <tr>
-                <th>#</th>
-                <th>Term</th>
-                <th>Definition</th>
-                <th>Rating <span class="edit_rating">[Edit Ratings]</span></th>
+                <th class="ord"></th>
+                <th>Term and Definition</th>
+                <th class="edit_rating">Edit Ratings</th>
             </tr>
+        </thead>
+        <tbody>
             <?php
                 // Iterate cards for table
                 foreach($cards as $card) {
@@ -181,15 +188,20 @@
                     $defn = $card['Card']['answer'];
                     $rating = $card['Rating']['rating'];
                     echo "<tr class=\"card_row id_" . $id . "\">";
-                    echo "<td>$order</td>";
-                    echo "<td>$term</td>";
-                    echo "<td>$defn</td>";
+                    echo "<td class=\"ord\">$order</td>";
+                    echo "<td>";
+                    echo "<div class=\"term\">$term</div>";
+                    echo "<div class=\"defn\">$defn</div>";
+                    echo "</td>";
                     $ratingStr = $rating;
                     if(!isset($ratingStr)) {
                         $ratingStr = $DEFAULT_RATING;
                     }
-                    echo "<td class=\"rts_col\"><span class=\"rating_text\">";
-                    echo "$RATING_MAP[$ratingStr]</span></td>";
+                    //echo "<td class=\"rating\">$RATING_MAP[$ratingStr]</td>";
+                    //echo "<td class=\"rts_col\"></td>";
+                    echo "<td class=\"rts_col\">";
+                    echo "<span class=\"rating\">$RATING_MAP[$ratingStr]</span>";
+                    echo "</td>";
                     echo "</tr>";
                 }
             ?>

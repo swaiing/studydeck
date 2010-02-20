@@ -459,9 +459,9 @@ class DecksController extends AppController {
         // Clear selected ratings 
         $this->Session->delete(SD_Global::$SESSION_RATINGS_SELECTED_KEY);
 
-        // Call notAssociated method
-        // Binds $notAssociated -> whether deck is in dashboard (i.e. in my_decks)
-        $this->notAssociated($deckId);
+        // Call assocations
+        // Binds $ -> whether deck is in dashboard (i.e. in my_decks)
+        $this->bindAssocations($deckId);
 
         // Call study method
         // Binds $deckId, $deckData, $cards, $cardsRatingsCount, and $cardsResults to view
@@ -479,7 +479,7 @@ class DecksController extends AppController {
     /*
      *  Helper to send flag if deck is in dashboard (i.e. is in 'my_decks' table)
      */
-    private function notAssociated($deckId)
+    private function bindAssocations($deckId)
     {
         // Disable recursion
         $this->Deck->recursive = -1;
@@ -495,9 +495,33 @@ class DecksController extends AppController {
                       'fields' => array('MyDeck.id', 'MyDeck.type'));
         $myDeckResults = $this->Deck->MyDeck->find('all', $params);
 
+        // my_decks table assocations
+        $assocViewed = false;
+        $assocCreated = false;
+        $assocSaved = false;
+
+        // Iterate my_deck records
+        foreach($myDeckResults as $record) {
+            $myDeckType = $record['MyDeck']['type'];
+            if($myDeckType == SD_Global::$RECENTLY_VIEWED_DECK) {
+                $assocViewed = true;
+            }
+            else if($myDeckType == SD_Global::$USER_CREATED) {
+                $assocCreated = true;
+            }
+            else if($myDeckType == SD_Global::$USER_SAVED) {
+                $assocSaved = true;
+            }
+        }
+
         // Send flag to view
-        $notAssociated = (count($myDeckResults) == 0);
-        $this->set('notAssociated', $notAssociated);
+        $assocNope = (count($myDeckResults) == 0);
+
+        // Bind to view
+        $this->set('assocViewed', $assocViewed);
+        $this->set('assocCreated', $assocCreated);
+        $this->set('assocSaved', $assocSaved);
+        $this->set('assocNope', $assocNope);
     }
 
     /*

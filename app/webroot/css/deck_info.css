@@ -11,6 +11,8 @@ div#heading p {
 }
 
 div#deck_utils {
+    font-size: 14px;
+    font-weight: bold;
     float: right;
     clear: right;
 }
@@ -83,16 +85,34 @@ div#stats_tab, div#cards_tab, div#results_tab {
     clear: both;
 }
 
-div#edit_deck {
-    margin: 10px 10px 0 0;
-    padding: 0;
-}
-
 span.edit_rating {
     cursor: pointer;
     font-weight: bold;
     text-decoration: underline;
 }
+
+/*** card list tab ***/
+
+div#cards_tab table.deck_table tbody { 
+    height: 500px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+div#cards_tab th { font-weight: bold }
+div#cards_tab th.edit_rating {
+    cursor: pointer;
+    text-align: center;
+}
+div#cards_tab table.deck_table col.col_num { width: 5% }
+div#cards_tab table.deck_table col.col_term_defn { width: 50% }
+div#cards_tab table.deck_table col.col_rating { width: 45% }
+/*
+div#cards_tab table.deck_table col.col_rating_edit { width: 40% }
+*/
+div#cards_tab table.deck_table div.term { font-weight: bold }
+div#cards_tab table.deck_table td.ord { text-align: center }
+div#cards_tab table.deck_table td.rts_col { text-align: center };
 
 /*** review tab ***/
 

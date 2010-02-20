@@ -32,6 +32,7 @@
     // Rating table fields
     this.ratingId = this.NULL_ID;
     this.rating = this.DEFAULT_RATING;
+    this.ratingElt = null;
 
     // JS event-handler fields
     this.correct = this.NULL_ID;
@@ -52,8 +53,18 @@
     var i = jQuery.inArray(ratingStr, this.RATING_MAP);
     if(i != -1) {
         this.rating = i;
+
+        // AJAX call to back-end
         this.notifyRating();
+
+        // Update elt
+        $(this.ratingElt).text(ratingStr);
     }
+  }
+
+  // Set rating element to DOM object to receive updates
+  Card.prototype.setRatingElt = function(elt) {
+    this.ratingElt = elt;      
   }
 
   // UI triggered by correct button to set correct

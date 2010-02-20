@@ -64,6 +64,7 @@ div#row_question {
 
 div#row_answer {
     font-size: 12px;
+    text-align: center;
     min-height: 150px;
     margin: 0;
     padding: 10px;
