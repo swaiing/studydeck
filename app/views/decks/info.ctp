@@ -99,7 +99,6 @@
             // Hidden form field to pass deckId
             echo $form->hidden('deckId', array('value' => $deckId));
         ?>
-
     </div>
 
     <div id="mode_select">
@@ -145,26 +144,23 @@
             <col class="col_num"/>
             <col class="col_term_defn"/>
             <col class="col_rating"/>
-            <col class="col_rating_edit"/>
             <thead>
                 <tr>
                     <th class="ord"></th>
                     <th>Question and Answer</th>
                     <th class="edit_rating">
                         <button type="button" class="btn"><span><span><b>&nbsp;</b><u>Edit Difficulties</u></span></span></button>
-
                     </th>
                 </tr>
             </thead>
         </table>
 
         <!-- Card list table in scrollable div -->
-        <div id="table_scroll">
+        <div class="table_scroll">
         <table class="deck_table">
             <col class="col_num"/>
             <col class="col_term_defn"/>
             <col class="col_rating"/>
-            <col class="col_rating_edit"/>
             <tbody>
             <?php
                 // Iterate cards for table

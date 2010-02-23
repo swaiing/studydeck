@@ -8,6 +8,7 @@ DeckInfoUI = {
 
     deck:null,
     table:null,
+    resultsTable:null,
     RATING_MAP:new Array("unrated","easy","medium","hard"),
 
     'init':function() {
@@ -20,12 +21,28 @@ DeckInfoUI = {
 
     'setupRts':function() {
 
+        // Setup RTS elements on card list tab
+        this.table = $("div#cards_tab table.deck_table tr.card_row");
+        this.bindRts(this.table);
+
+        // Setup RTS elements on quiz results tab
+        this.resultsTable = $("div#results_tab table.deck_table tr.card_row");
+        this.bindRts(this.resultsTable);
+
+    },
+
+    // Function which binds an RTS element to rows in a table
+    'bindRts':function(table) {
+
+        if(!table) {
+            return;
+        }
+
         // Set variable for scope within closure
         var obj = this;
 
-        // Setup RTS elements
-        this.table = $("div#cards_tab table.deck_table tr.card_row");
-        this.table.each(function() {
+        // For every row in the table add an RTS
+        table.each(function() {
 
             // Get ID of card from class attribute
             var cArr = ($(this).attr("class")).split(" ");
@@ -84,9 +101,11 @@ DeckInfoUI = {
                 if(ratingCount == totalCards) {
                     $("input", this).attr('checked','checked');
                 }
+                /*
                 else {
                     $("input", this).removeAttr('checked');
                 }
+                */
             }
             else {
                 labelStr = origLabelStr + " (0)";
@@ -107,20 +126,19 @@ DeckInfoUI = {
     // Sets hidden field value to '1'
     'setQuizMode':function() {
         var trueVal = 1;
-        $("div#category_select input#DeckIsQuizMode").val(trueVal);
+        $("div#mode_select input#DeckIsQuizMode").val(trueVal);
     },
 
     // Onclick handler for the 'Learn' button
     // Sets hidden field value to '0'
     'setLearnMode':function() {
         var falseVal = 0;
-        $("div#category_select input#DeckIsQuizMode").val(falseVal);
+        $("div#mode_select input#DeckIsQuizMode").val(falseVal);
     },
 
     // Onclick handler when Edit rating is clicked
-    'toggleRatingEdit':function(obj) {
+    'toggleRatingEdit':function(obj, isResultsTab) {
 
-        //var editTxt = $(obj).text();
         var editTxt = 'Edit Difficulties';
         var updateTxt = 'Save Difficulties';
         var modeEdit = true;
@@ -143,8 +161,13 @@ DeckInfoUI = {
             DeckInfoUI.refreshCheckboxCounts();
         }
 
+        var table = this.table;
+        if(isResultsTab) {
+            table = this.resultsTable;
+        }
+
         // Display/hide rating selectors
-        this.table.each(function() {
+        table.each(function() {
             var elt = $("td.rts_col", this);
 
             if(modeEdit) {
@@ -189,8 +212,6 @@ $(document).ready( function() {
     $("input#select_all_checkbox").click(function() { DeckInfoUI.selectAllCheckboxes(); });
 
     // Set onclick for rating selector
-    $("div#cards_tab th.edit_rating button").click(function() {
-        var obj = this;
-        DeckInfoUI.toggleRatingEdit(obj);
-    });
+    $("div#cards_tab th.edit_rating button").click(function() { DeckInfoUI.toggleRatingEdit(this); });
+    $("div#results_tab th.edit_rating button").click(function() { DeckInfoUI.toggleRatingEdit(this, true); });
 });

@@ -228,6 +228,10 @@ div#middle_bar  a:hover {
 }
 
 /*****  CSS buttons *****/
+button {
+    cursor: pointer;
+}
+
 .btn {
     display: inline-block;
     background: none;

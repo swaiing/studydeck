@@ -1,37 +1,55 @@
-<!-- File: /app/views/elements/deck_viewer.ctp -->
+<!-- File: /app/views/elements/results_tab.ctp -->
+<?php
+  $RATING_MAP = array(0 => "No Rating",
+                      1 => "easy",
+                      2 => "medium",
+                      3 => "hard");
+  $DEFAULT_RATING = 3;
+  $correctCount = 0;
+  $incorrectCount = 0;
+?>
 
 <div id="results_tab">
 
+<!-- Static table header -->
 <table class="deck_table">
-    <tr class="header_row">
-        <th>#</th>
-        <th>Question</th>
-        <th>Answer</th>
-        <th>Difficulty</th>
-        <th>Correct</th>
-        <th>History</th>
-    </tr>
+    <col class="col_correct"/>
+    <col class="col_num"/>
+    <col class="col_term_defn"/>
+    <col class="col_history"/>
+    <col class="col_rating"/>
+    <thead>
+        <tr class="header_row">
+            <th></th>
+            <th></th>
+            <th>Question and Answer</th>
+            <th class="history">History</th>
+            <th class="edit_rating">
+                <button type="button" class="btn"><span><span><b>&nbsp;</b><u>Edit Difficulties</u></span></span></button>
+            </th>
+
+        </tr>
+    </thead>
+    </table>
+
+    <!-- Quiz review in scrollable div -->
+    <div class="table_scroll">
+    <table class="deck_table">
+        <col class="col_correct"/>
+        <col class="col_num"/>
+        <col class="col_term_defn"/>
+        <col class="col_history"/>
+        <col class="col_rating"/>
+        <tbody>
 
 <?php
-  $RATING_MAP = array(0 => "No Rating",
-                      1 => "Easy",
-                      2 => "Medium",
-                      3 => "Hard");
-  $CORRECT_MAP = array(0 => "Incorrect",
-                       1 => "Correct");
-  $correctCount = 0;
-  $incorrectCount = 0;
-
   foreach($quiz as $id => $card) {
 
     // Confirm $correct is 0 or 1
     // Skip if it is otherwise/null, b/c card is in session due to rating being set
     $correct = $card['Result']['last_guess'];
     $quizzed = preg_match("/[0|1]/",$correct);
-    if($quizzed) {
-      $correctStr = $CORRECT_MAP[$correct];
-    }
-    else {
+    if(!$quizzed) {
         continue;
     }
 
@@ -40,13 +58,16 @@
     $term = $cardsIndexed[$id]['Card']['question'];
     $defn = $cardsIndexed[$id]['Card']['answer'];
     $rating = $cardsIndexed[$id]['Rating']['rating'];
+    if(empty($rating)) {
+        $rating = $DEFAULT_RATING;
+    }
     $ratingStr = $RATING_MAP[$rating];
 
     // Build Google Chart: http://code.google.com/apis/chart/types.html#bar_charts
     // From data in $ratingMap and $resultMap arrays
     $totalCorrect = 0;
     $totalIncorrect = 0;
-    if(array_key_exists($id,$cardsResults)) {
+    if(array_key_exists($id, $cardsResults)) {
       $totalCorrect = $cardsResults[$id]['total_correct'];
       $totalIncorrect = $cardsResults[$id]['total_incorrect'];
     }
@@ -59,7 +80,7 @@
     $correctImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=00FF00,FF0000&chs=100x15&chd=t:$p|$r";
 
     // Icon for correct/incorrect
-    if(strcmp($correct,'1') == 0) {
+    if(strcmp($correct, '1') == 0) {
         $correctCount++;
         $correctIconImg = $html->image('right.png', array('alt' => 'Right'));
     }
@@ -69,16 +90,21 @@
     }
 
     // Output cell html
+    echo "<tr class=\"card_row id_" . $id . "\">";
+    echo "<td>" . $correctIconImg . "</td>";
     echo "<td>" . $order . "</td>";
-    echo "<td>" . $term . "</td>";
-    echo "<td>" . $defn . "</td>";
-    echo "<td class=\"center\">" . $ratingStr . "</td>";
-    echo "<td class=\"center\">" . $correctIconImg . "</td>";
-    echo "<td class=\"center\">" . $totalCorrect . "/" . $totalAnswered . "<img src=\"" . $correctImgStr . "\" alt=\"Correct distribution\" \></td>";
+    echo "<td>";
+    echo "<div class=\"term\">$term</div>";
+    echo "<div class=\"defn\">$defn</div>";
+    echo "</td>";
+    echo "<td class=\"history\">" . $totalCorrect . "/" . $totalAnswered . "<img src=\"" . $correctImgStr . "\" alt=\"Correct distribution\" /></td>";
+    echo "<td class=\"rts_col\">";
+    echo "<span class=\"rating\">$ratingStr</span>";
+    echo "</td>";
     echo "</tr>";
   }
 ?>
-
+    </tbody>
 </table>
 
 <?php
@@ -97,10 +123,6 @@
     <div class="clear_div">&nbsp;</div>
 </div>
 
-<?php //print_r($quiz); ?>
-<!--
-<hr/>
--->
-<?php //print_r($cardsIndexed); ?>
+</div> <!-- end div.table_scroll -->
 
 </div> <!-- end results_tab -->

@@ -656,7 +656,6 @@ class DecksController extends AppController {
 
         // Sanitize array
         $cardRecords = Sanitize::clean($cardRecords, $sanitizeParams);
-        
         $indexedCardRecords = $this->indexByCardId($cardRecords);
 
         // Call helpers to post-process data

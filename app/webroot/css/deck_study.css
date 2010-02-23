@@ -58,6 +58,7 @@ div#row_body {
 div#row_question {
     font-size: 16px;
     text-align: center;
+    min-height: 30px;
     margin: 0;
     padding: 10px;
 }
@@ -67,6 +68,7 @@ div#row_answer {
     text-align: center;
     min-height: 150px;
     margin: 0;
+    border-top: 1px dashed #cecece;
     padding: 10px;
 }
 

@@ -32,7 +32,7 @@
     // Rating table fields
     this.ratingId = this.NULL_ID;
     this.rating = this.DEFAULT_RATING;
-    this.ratingElt = null;
+    this.ratingElts = new Array();
 
     // JS event-handler fields
     this.correct = this.NULL_ID;
@@ -57,16 +57,18 @@
         // AJAX call to back-end
         this.notifyRating();
 
-        // Update elt
-        if(this.ratingElt) {
-            $(this.ratingElt).text(ratingStr);
+        // Update elts
+        if(this.ratingElts.length > 0) {
+            for(var i=0; i< this.ratingElts.length; i++) {
+                $(this.ratingElts[i]).text(ratingStr);
+            }
         }
     }
   }
 
   // Set rating element to DOM object to receive updates
   Card.prototype.setRatingElt = function(elt) {
-    this.ratingElt = elt;      
+    this.ratingElts.push(elt);      
   }
 
   // UI triggered by correct button to set correct

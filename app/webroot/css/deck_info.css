@@ -85,32 +85,32 @@ div#stats_tab, div#cards_tab, div#results_tab {
     clear: both;
 }
 
-span.edit_rating {
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: underline;
-}
+/*** card/quiz review tab generic ***/
 
-/*** card list tab ***/
-
-div#cards_tab div#table_scroll {
+div.table_scroll {
     height: 500px;
     overflow-y: scroll;
     overflow-x: hidden;
 }
-div#cards_tab th.edit_rating {
-    font-weight: bold;
-    cursor: pointer;
+table.deck_table th.edit_rating, table.deck_table th.history {
     text-align: center;
 }
+table.deck_table td.rts_col { text-align: center }
+table.deck_table td div.term { font-weight: bold }
+table.deck_table td.ord { text-align: center }
+
+/*** card list tab ***/
 div#cards_tab table.deck_table col.col_num { width: 5% }
 div#cards_tab table.deck_table col.col_term_defn { width: 50% }
 div#cards_tab table.deck_table col.col_rating { width: 45% }
-div#cards_tab table.deck_table div.term { font-weight: bold }
-div#cards_tab table.deck_table td.ord { text-align: center }
-div#cards_tab table.deck_table td.rts_col { text-align: center };
 
-/*** review tab ***/
+/*** quiz review tab ***/
+div#results_tab table.deck_table col.col_correct { width: 5% }
+div#results_tab table.deck_table col.col_num { width: 5% }
+div#results_tab table.deck_table col.col_term_defn { width: 45% }
+div#results_tab table.deck_table col.col_history { width: 20% }
+div#results_tab table.deck_table td.history { text-align: center }
+div#results_tab table.deck_table col.col_rating { width: 25% }
 
 div#summary {
     font-size: 30px;
@@ -118,11 +118,9 @@ div#summary {
     width: 450px;
     margin: 10px auto 0 auto;
 }
-
 div#summary img {
     float: left;
 }
-
 div#summary div#grade {
     float: left;
     margin: 40px 0 0 0;
