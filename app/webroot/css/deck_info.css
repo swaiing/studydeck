@@ -93,23 +93,19 @@ span.edit_rating {
 
 /*** card list tab ***/
 
-div#cards_tab table.deck_table tbody { 
+div#cards_tab div#table_scroll {
     height: 500px;
     overflow-y: scroll;
     overflow-x: hidden;
 }
-
-div#cards_tab th { font-weight: bold }
 div#cards_tab th.edit_rating {
+    font-weight: bold;
     cursor: pointer;
     text-align: center;
 }
 div#cards_tab table.deck_table col.col_num { width: 5% }
 div#cards_tab table.deck_table col.col_term_defn { width: 50% }
 div#cards_tab table.deck_table col.col_rating { width: 45% }
-/*
-div#cards_tab table.deck_table col.col_rating_edit { width: 40% }
-*/
 div#cards_tab table.deck_table div.term { font-weight: bold }
 div#cards_tab table.deck_table td.ord { text-align: center }
 div#cards_tab table.deck_table td.rts_col { text-align: center };
@@ -131,4 +127,3 @@ div#summary div#grade {
     float: left;
     margin: 40px 0 0 0;
 }
-

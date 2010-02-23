@@ -5,7 +5,8 @@
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js',false);
     echo $javascript->link('user_dashboard',false);
-    echo $html->css('jquery-ui-1.7.2.custom',null,null,false);
+    echo $html->css('jquery-ui-1.7.2.custom.gray',null,null,false);
+    //echo $html->css('jquery-ui-1.7.2.custom',null,null,false);
 ?>
 
 <div id="middle_wrapper_content">

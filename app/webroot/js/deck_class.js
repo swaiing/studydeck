@@ -58,7 +58,9 @@
         this.notifyRating();
 
         // Update elt
-        $(this.ratingElt).text(ratingStr);
+        if(this.ratingElt) {
+            $(this.ratingElt).text(ratingStr);
+        }
     }
   }
 
@@ -164,6 +166,7 @@
   function Deck(deckData, cardData, cardResultsData) {
 
     // Constants
+    this.RATING_MAP = new Array("unrated","easy","medium","hard");
     this.NULL_ID = "null";
 
     // Deck DB fields
@@ -171,6 +174,7 @@
     this.deckName = '';
     this.userId = '';
 
+    // Instance variables
     this.curCard = null;
     this.viewedCards = new Array();
     this.unviewedCards = new Array();
@@ -190,15 +194,16 @@
     }
 
     // Read cards from JSON object "cardData"
-    for (var i=0; i<cardData.length; i++) {
+    for (i=0; i<cardData.length; i++) {
 
         // Set properties of new card
         var newCard = new Card(cardData[i].Card.id, this.id, cardData[i].Card.question, cardData[i].Card.answer);
 
         // Check for rating in cardRatingsData
         if(cardData[i].Rating.rating) {
+            var r = cardData[i].Rating.rating;
             newCard.setRatingId(cardData[i].Rating.id);
-            newCard.setRating(cardData[i].Rating.rating);
+            newCard.setRating(r);
         }
 
         // Check for result in cardResultsData
@@ -288,6 +293,30 @@
 
   Deck.prototype.getNumCards = function() {
     return this.numTotalCards;
+  }
+
+  // Find the number of cards in each rating
+  Deck.prototype.getRatingCounts = function() {
+
+    // Initialize ratingCounts
+    var i;
+    var ratingCounts = new Array();
+    for(i=0; i<this.RATING_MAP.length; i++) {
+        ratingCounts[i] = 0;
+    }
+
+    // Count ratings
+    var i = 0;
+    var r = null;
+    for(i=0; i<this.unviewedCards.length; i++) {
+        r = this.unviewedCards[i].rating;
+        ratingCounts[r]++;
+    }
+    for(i=0; i<this.viewedCards.length; i++) {
+        r = this.viewedCards[i].rating;
+        ratingCounts[r]++;
+    }
+    return ratingCounts;
   }
 
   /**

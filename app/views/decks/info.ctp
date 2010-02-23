@@ -24,29 +24,10 @@
     $deckDesc = $deckData['Deck']['description'];
 
     // Labels for checkboxes
-    $easyLabel = "Easy ($cardsRatingsCount[$EASY])";
-    $mediumLabel = "Medium ($cardsRatingsCount[$MEDIUM])";
-    $hardLabel = "Hard ($cardsRatingsCount[$HARD])";
+    $easyLabel = "Easy";
+    $mediumLabel = "Medium";
+    $hardLabel = "Hard";
 
-    // Autoselect if only cards of one rating exists
-    // otherwise select 'Hard' cards
-    $hasOneRating = false;
-    $selected = array();
-    if($cardsRatingsCount[$EASY] == $cardsRatingsCount[$TOTAL]) {
-        $selected = array($EASY);
-        $hasOneRating = true;
-    }
-    else if($cardsRatingsCount[$MEDIUM] == $cardsRatingsCount[$TOTAL]) {
-        $selected = array($MEDIUM);
-        $hasOneRating = true;
-    }
-    else if($cardsRatingsCount[$HARD] == $cardsRatingsCount[$TOTAL]) {
-        $selected = array($HARD);
-        $hasOneRating = true;
-    }
-    else {
-        $selected = array($HARD);
-    }
 ?>
 
 <script type="text/javascript">
@@ -85,8 +66,9 @@
         else if($assocCreated) {
             echo $html->link('Edit Deck', array('controller'=>'decks', 'action'=>'edit', $deckId));
         }
-        else if($assocViewed) {}
-        else if($assocSaved) {}
+        // TODO: Other cases available
+        //else if($assocViewed) {}
+        //else if($assocSaved) {}
     ?>
 </div>
 
@@ -100,21 +82,10 @@
     <div id="category_select">
         <p>1. Select difficulty:</p>
 
-        <?php
-            echo "<input type=\"checkbox\" id=\"select_all_checkbox\" ";
-            if($hasOneRating) {
-                echo "disabled=\"true\"";
-            }
-            echo ">";
-            echo "<label for=\"select_all_checkbox\" ";
-            if($hasOneRating) {
-                echo "class=\"disabled\"";
-            }
-            echo ">";
-            echo "All (";
-            echo $cardsRatingsCount[$TOTAL];
-            echo ")</label>";
+        <input type="checkbox" id="select_all_checkbox" \>
+        <label for="select_all_checkbox">All</label>
 
+        <?php
             // Create checkbox form item
             $options = array('' => array(
                             $EASY => $easyLabel,
@@ -122,11 +93,12 @@
                             $HARD => $hardLabel));
             echo $form->input('RatingsSelected', array('type' => 'select', 'label' => '',
                                                        'options' => $options, 'multiple' => 'checkbox',
-                                                       'disabled' => array(1,2), 'selected' => $selected));
+                                                       'disabled' => array(1,2)));
+                                                       //'disabled' => array(1,2), 'selected' => $selected));
 
             // Hidden form field to pass deckId
             echo $form->hidden('deckId', array('value' => $deckId));
-    ?>
+        ?>
 
     </div>
 
@@ -162,31 +134,49 @@
         <ul>
             <li>Created: <?php echo $deckData['Deck']['created']; ?></li>
             <li>Quizzed: <?php echo $userQuizCount . " times"; ?></li>
+            <li>Tags: </li>
         </ul>
     </div>
 
     <div id="cards_tab">
+
+        <!-- Static table header -->
         <table class="deck_table">
-        <col class="col_num"/>
-        <col class="col_term_defn"/>
-        <col class="col_rating"/>
-        <col class="col_rating_edit"/>
-        <thead>
-            <tr>
-                <th class="ord"></th>
-                <th>Term and Definition</th>
-                <th class="edit_rating">Edit Ratings</th>
-            </tr>
-        </thead>
-        <tbody>
+            <col class="col_num"/>
+            <col class="col_term_defn"/>
+            <col class="col_rating"/>
+            <col class="col_rating_edit"/>
+            <thead>
+                <tr>
+                    <th class="ord"></th>
+                    <th>Question and Answer</th>
+                    <th class="edit_rating">
+                        <button type="button" class="btn"><span><span><b>&nbsp;</b><u>Edit Difficulties</u></span></span></button>
+
+                    </th>
+                </tr>
+            </thead>
+        </table>
+
+        <!-- Card list table in scrollable div -->
+        <div id="table_scroll">
+        <table class="deck_table">
+            <col class="col_num"/>
+            <col class="col_term_defn"/>
+            <col class="col_rating"/>
+            <col class="col_rating_edit"/>
+            <tbody>
             <?php
                 // Iterate cards for table
                 foreach($cards as $card) {
+                    // Store values
                     $id = $card['Card']['id'];
                     $order = $card['Card']['card_order'];
                     $term = $card['Card']['question'];
                     $defn = $card['Card']['answer'];
                     $rating = $card['Rating']['rating'];
+
+                    // Output row
                     echo "<tr class=\"card_row id_" . $id . "\">";
                     echo "<td class=\"ord\">$order</td>";
                     echo "<td>";
@@ -197,16 +187,15 @@
                     if(!isset($ratingStr)) {
                         $ratingStr = $DEFAULT_RATING;
                     }
-                    //echo "<td class=\"rating\">$RATING_MAP[$ratingStr]</td>";
-                    //echo "<td class=\"rts_col\"></td>";
                     echo "<td class=\"rts_col\">";
                     echo "<span class=\"rating\">$RATING_MAP[$ratingStr]</span>";
                     echo "</td>";
                     echo "</tr>";
                 }
             ?>
-        </tbody>
+            </tbody>
         </table>
+        </div><!-- end table_scroll -->
     </div>
 
     <!-- Results tab, if applicable -->
