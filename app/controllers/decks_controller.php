@@ -1210,6 +1210,7 @@ class DecksController extends AppController {
             if(!$edit) {    
                 $this->data['MyDeck']['deck_id'] = $deckId;
                 $this->data['MyDeck']['user_id'] = $userId;
+                $this->data['MyDeck']['type'] = 2; //user created deck
                 $this->MyDeck->save($this->data); 
             }
 

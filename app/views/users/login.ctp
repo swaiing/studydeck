@@ -59,3 +59,4 @@
     <div class="clear_div">&nbsp;</div>
 	</div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->
+
