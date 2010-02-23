@@ -2,9 +2,23 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-ALTER TABLE `flashcards`.`decks` DROP COLUMN `view_count` , ADD COLUMN `quiz_count` INT(11) NOT NULL  AFTER `created` ;
+ALTER TABLE `flashcards`.`my_decks` DROP FOREIGN KEY `user_id_md` ;
 
-ALTER TABLE `flashcards`.`my_decks` DROP COLUMN `study_count` , ADD COLUMN `quiz_count` INT(11) NOT NULL  AFTER `modified` ;
+ALTER TABLE `flashcards`.`my_decks` 
+  ADD CONSTRAINT `user_id_md`
+  FOREIGN KEY (`user_id` )
+  REFERENCES `flashcards`.`users` (`id` )
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `flashcards`.`ratings` DROP FOREIGN KEY `user_id_r` ;
+
+ALTER TABLE `flashcards`.`ratings` 
+  ADD CONSTRAINT `user_id_r`
+  FOREIGN KEY (`user_id` )
+  REFERENCES `flashcards`.`users` (`id` )
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

@@ -85,7 +85,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`my_decks` (
   CONSTRAINT `user_id_md`
     FOREIGN KEY (`user_id` )
     REFERENCES `flashcards`.`users` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `deck_id_md`
     FOREIGN KEY (`deck_id` )
@@ -132,7 +132,7 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`ratings` (
   CONSTRAINT `user_id_r`
     FOREIGN KEY (`user_id` )
     REFERENCES `flashcards`.`users` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `card_id_r`
     FOREIGN KEY (`card_id` )
