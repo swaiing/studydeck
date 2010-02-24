@@ -205,12 +205,17 @@ class UsersController extends AppController {
 		//pulls all decks the user has in the mydecks table
         $colSortBy = 'MyDeck.modified DESC';
 		if($sortBy == 'bycount') {
-            $colSortBy = 'MyDeck.quiz_count DESC';
+            $colSortBy = array('MyDeck.quiz_count DESC', 'MyDeck.modified DESC');
         }
         
-		$allMyDecksParams = array('conditions' => array('MyDeck.user_id' => $currentUserId),'order'=> $colSortBy);
-		$allMyDecks = $this->MyDeck->find ('all',$allMyDecksParams);
-		
+		$quizDecksParams = array('conditions' => array('MyDeck.user_id' => $currentUserId, 'MyDeck.quiz_count >' => 0),'order'=> $colSortBy);
+		$quizMyDecks = $this->MyDeck->find ('all',$quizDecksParams);
+        
+        $noQuizDecksParams = array('conditions' => array('MyDeck.user_id' => $currentUserId, 'MyDeck.quiz_count' => 0),'order'=> 'MyDeck.modified DESC');
+        $noQuizDecks = $this->MyDeck->find ('all',$noQuizDecksParams);
+        
+		$allMyDecks = array_merge($quizMyDecks,$noQuizDecks);
+        
 		//traverses each of mydecks
 		foreach ($allMyDecks as $myDeck) {
             $deckId = $myDeck['MyDeck']['deck_id'];
