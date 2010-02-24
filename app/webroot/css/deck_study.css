@@ -91,7 +91,6 @@ div.middle_button {
 div.left_button {
     text-align: center;
     height: 40px;
-    width: 20%;
     border-right: 1px solid #000000;
     position: absolute;
     top: 0;
@@ -103,7 +102,6 @@ div.left_button {
 div.right_button {
     text-align: center;
     height: 40px;
-    width: 20%;
     border-left: 1px solid #000000;
     position: absolute;
     top: 0;
@@ -114,15 +112,18 @@ div.right_button {
 
 div#prev_button, div#next_button {
     background-color: #b9c9fe;
+    width: 20%;
     padding: 0;
     margin: 0;
 }
 div#correct_button {
+    width: 40%;
     background-color: #029c2e;
     padding: 0;
     margin: 0;
 }
 div#incorrect_button {
+    width: 40%;
     background-color: #b30000;
     padding: 0;
     margin: 0;

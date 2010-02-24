@@ -582,6 +582,11 @@ class DecksController extends AppController {
      */
     function learn($id)
     {
+        // Call assocations
+        // Binds $assocSaved, $assocCreated, $assocViewed, $assocNope
+        // Deck is in dashboard (i.e. in my_decks table)
+        $this->bindAssocations($id);
+
         // Call private study function
         // Difference between study/quiz in JavaScript
         $this->study($id);
@@ -594,6 +599,11 @@ class DecksController extends AppController {
      */
     function quiz($id)
     {
+        // Call assocations
+        // Binds $assocSaved, $assocCreated, $assocViewed, $assocNope
+        // Deck is in dashboard (i.e. in my_decks table)
+        $this->bindAssocations($id);
+
         // Call private study function
         // Difference between study/quiz in JavaScript
         $this->study($id);

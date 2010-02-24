@@ -141,8 +141,8 @@ var MODE_QUIZ = "quiz";
     'resetButtons':function() {
 
         // Revert styles of correct/incorrect buttons
-        $("#incorrect_button").css("background","red");
-        $("#correct_button").css("background","green");
+        //$("#incorrect_button").css("background","red");
+        //$("#correct_button").css("background","green");
 
     },
 

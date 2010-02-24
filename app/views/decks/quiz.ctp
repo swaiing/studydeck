@@ -1,7 +1,6 @@
 <!-- File: /app/views/views/quiz.ctp -->
 
 <?php
-    //echo $javascript->link('jquery-1.2.6.min',false) . "\n";
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
     echo $javascript->link('deck_class',false) . "\n";;
     echo $javascript->link('deck_study',false) . "\n";;
@@ -19,9 +18,26 @@
 ?>
 </script>
 
-<!-- <pre><?php //print_r($debug); ?></pre> -->
-
 <div id="middle_wrapper_content">
+
+<div class="crumb">
+    <?php
+        // If not in dashboard show explore link, otherwise 'dashboard' link
+        if($assocNope) {
+            echo $html->link('Explore', array('controller'=>'decks', 'action'=>'explore'));
+        }
+        else {
+            echo $html->link('Dashboard', array('controller'=>'users', 'action'=>'dashboard'));
+        }
+    ?>
+    &gt;
+    <?php
+        $deckName = $deckData['Deck']['deck_name'];
+        echo $html->link($deckName, array('controller'=>'decks', 'action'=>'info', $deckId));
+    ?>
+    &gt;
+    <span class="you_are_here">Learn</span>
+</div>
 
 <!-- JS rendered title -->
 <div id="title_wrap">

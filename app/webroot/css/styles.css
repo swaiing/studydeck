@@ -65,6 +65,7 @@ div#top_logo {
   margin: 0;
   padding: 0;
   float: left;
+  clear: left;
 }
 
 div#top_logo h1 {
@@ -165,10 +166,9 @@ div#middle_bar h2 {
 
 /***** generic breadcrumb ****/
 div.crumb {
-    margin: 0 0 1em 0;
+    width: 700px;
+    margin: 0 auto;
     padding: 0;
-    float: left;
-    clear: left;
     clear: both;
 }
 
@@ -217,12 +217,12 @@ table.deck_table tr:hover td {
 
 /***** generic links *****/
 
-div#middle_bar a {
+div#middle_wrapper_content a {
     color: #0066CC;
     text-decoration: none;
 }
 
-div#middle_bar  a:hover {
+div#middle_wrapper_content  a:hover {
     color: #DB6A00;
     text-decoration: underline;
 }
