@@ -3,7 +3,7 @@
 $(document).ready(function(){
 
     //uses jquery autocomplete plug in
-    $("#autoComplete").autocomplete("/studydeck/tags/autoComplete",
+    $("#autoComplete").autocomplete("/tags/autoComplete",
     {
         minChars: 1,
         cacheLength: 10,

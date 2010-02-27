@@ -75,36 +75,37 @@
   </div>
   <div id="footer_nav">
     <ul id="list_nav_footer">
-      <li><a href="/studydeck/">Home</a> | </li>
+      <li><a href="/">Home</a> | </li>
       <li><a href="#">About</a> | </li>
       <li><a href="#">Terms of Use</a> | </li>
       <li><a href="#">Contact</a></li>
     </ul>
   </div>
 </div> <!-- end footer -->
-<script type="text/javascript">
-var uservoiceOptions = {
-  /* required */
-  key: 'studydeck',
-  host: 'studydeck.uservoice.com', 
-  forum: '42041',
-  showTab: true,  
-  /* optional */
-  alignment: 'left',
-  background_color:'#f00', 
-  text_color: 'white',
-  hover_color: '#06C',
-  lang: 'en'
-};
 
-function _loadUserVoice() {
-  var s = document.createElement('script');
-  s.setAttribute('type', 'text/javascript');
-  s.setAttribute('src', ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js");
-  document.getElementsByTagName('head')[0].appendChild(s);
-}
-_loadSuper = window.onload;
-window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
+<script type="text/javascript">
+    var uservoiceOptions = {
+      /* required */
+      key: 'studydeck',
+      host: 'studydeck.uservoice.com', 
+      forum: '42041',
+      showTab: true,  
+      /* optional */
+      alignment: 'left',
+      background_color:'#004D99', 
+      text_color: 'white',
+      hover_color: '#06C',
+      lang: 'en'
+    };
+
+    function _loadUserVoice() {
+      var s = document.createElement('script');
+      s.setAttribute('type', 'text/javascript');
+      s.setAttribute('src', ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js");
+      document.getElementsByTagName('head')[0].appendChild(s);
+    }
+    _loadSuper = window.onload;
+    window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
 </script>
 </body>
 </html>

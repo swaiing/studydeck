@@ -376,7 +376,8 @@ class UsersController extends AppController {
         $baseUrl = FULL_BASE_URL;
         $prodUrlTestStr = "://studydeck";
         if(substr_compare($baseUrl, $prodUrlTestStr, -strlen($prodUrlTestStr), strlen($prodUrlTestStr)) != 0) {
-            $baseUrl = $baseUrl."/studydeck";
+            //$baseUrl = $baseUrl."/studydeck";
+            $baseUrl = $baseUrl;
         }
         $loginLink = $baseUrl.$urlSuffix;
 		$this->set('loginLink', $loginLink);

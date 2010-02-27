@@ -14,7 +14,7 @@
 	
 		<h1>Welcome <?php echo $activeUser; ?>!</h1>
         <br/>    
-		<div>Sort Decks By: <a href="/studydeck/users/dashboard">Last Quizzed</a> &nbsp <a href="/studydeck/users/dashboard/bycount">Times Quizzed</a></div>
+		<div>Sort Decks By: <a href="/users/dashboard">Last Quizzed</a> &nbsp <a href="/users/dashboard/bycount">Times Quizzed</a></div>
 		
 		<h2>Created By Me</h2>
 		<?php if(count($userCreatedDecks)) { ?>

@@ -17,7 +17,7 @@ $(document).ready(function(){
 //Removes a public deck from the user dashboard
 
 function deletePublicDeck(deckId){
-	$.post("/studydeck/my_decks/delete",{id:deckId},function(){$("#publicDeckRow"+ deckId).hide("fast");});   
+	$.post("/my_decks/delete",{id:deckId},function(){$("#publicDeckRow"+ deckId).hide("fast");});   
 }
 
 

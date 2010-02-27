@@ -15,10 +15,6 @@
 	
     </div>
 
-
-
-
-	<!--<div><a href="/studydeck/decks/explore">All Decks</a></div>-->
     <div id="show_all">
         <?php echo $html->link('All Decks', array('controller'=>'decks', 'action'=>'explore')); ?>
     </div>

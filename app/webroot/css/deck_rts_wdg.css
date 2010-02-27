@@ -4,7 +4,7 @@
     position: relative;
     width: 224px;
     height: 33px;
-    background: url(/studydeck/img/rts.jpg) no-repeat;
+    background: url(/img/rts.jpg) no-repeat;
     /*background-color: #b9c9fe;*/
     margin: 0 auto 0 auto;
     padding: 0;
@@ -32,11 +32,11 @@
     left: 0;
     width: 74px;
     height: 33px;
-    background: transparent url(/studydeck/img/rts.jpg) 0 -34px no-repeat;
+    background: transparent url(/img/rts.jpg) 0 -34px no-repeat;
     /*background-color: #011d83;*/
 }
 .rts-easy-click {
-    background: transparent url(/studydeck/img/rts.jpg) 0 -68px no-repeat;
+    background: transparent url(/img/rts.jpg) 0 -68px no-repeat;
     /*background-color: #029c2e;*/
 }
 
@@ -47,11 +47,11 @@
     left: 75px;
     width: 74px;
     height: 33px;
-    background: transparent url(/studydeck/img/rts.jpg) -75px -34px no-repeat;
+    background: transparent url(/img/rts.jpg) -75px -34px no-repeat;
     /*background-color: #011d83;*/
 }
 .rts-medium-click {
-    background: transparent url(/studydeck/img/rts.jpg) -75px -68px no-repeat;
+    background: transparent url(/img/rts.jpg) -75px -68px no-repeat;
     /*background-color: #fcd854;*/
 }
 
@@ -63,13 +63,13 @@
     left: 149px;
     width: 74px;
     height: 33px;
-    background: transparent url(/studydeck/img/rts.jpg) -150px -34px no-repeat;
+    background: transparent url(/img/rts.jpg) -150px -34px no-repeat;
     /*
     background-color: #011d83;
     */
 }
 .rts-hard-click {
-    background: transparent url(/studydeck/img/rts.jpg) -150px -68px no-repeat;
+    background: transparent url(/img/rts.jpg) -150px -68px no-repeat;
     /*
     background-color: #b30000;
     */

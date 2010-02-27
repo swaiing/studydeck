@@ -123,7 +123,7 @@
 
     $.ajax({
         type: "GET",
-        url: "/studydeck/decks/updateRating",
+        url: "/decks/updateRating",
         data: dataStr,
         success: function(msg) {
             //newWindow.document.write(msg);
@@ -150,7 +150,7 @@
 
     $.ajax({
         type: "GET",
-        url: "/studydeck/decks/updateResult",
+        url: "/decks/updateResult",
         data: dataStr,
         success: function(msg) {
             //newWindow.document.write(msg);
@@ -338,7 +338,7 @@
 
     $.ajax({
         type: "GET",
-        url: "/studydeck/decks/updateSave",
+        url: "/decks/updateSave",
         data: dataStr,
         success: function(msg) {
             //newWindow.document.write(msg);
