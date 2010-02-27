@@ -190,9 +190,9 @@ while getopts "st:c:" opt; do
         exit 0
 
       elif [ "$OPTARG" = "build_app" ]; then
-	clean
+    	clean
         build
-	copy_prd_config
+    	copy_prd_config
         exit 0
 
       elif [ "$OPTARG" = "all" ]; then
