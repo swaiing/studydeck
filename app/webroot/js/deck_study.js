@@ -23,6 +23,10 @@ var MODE_QUIZ = "quiz";
     isShowingAnswer:0,
     mode:MODE_STUDY,
     rts:null,
+    QUIZ_BTNS_CLASS:"crs",
+    INC_BTN_CLASS:"inc_btn",
+    COR_BTN_CLASS:"cor_btn",
+
 
     // Bootstrap intialize function
     'init':function() {
@@ -45,24 +49,21 @@ var MODE_QUIZ = "quiz";
         // Call build UI functions
         if(MODE == MODE_STUDY) {
           this.mode = MODE_STUDY;
-          this.renderStudyWindows();
+          //this.renderStudyWindows();
 
           // Initialize new RatingSelector object
-          this.rts = new RatingSelector("#card_rating");
+          this.rts = new RatingSelector("#row_bottom");
         }
         else if(MODE == MODE_QUIZ) {
           this.mode = MODE_QUIZ;
           this.renderQuizButtons();
         }
 
+        // Hide bottom row
+        $("#row_bottom").children().hide();
+
         // Load first card
         this.showCard(firstCard);
-    },
-
-    // Builds correct/incorrect buttons for quiz mode
-    'renderQuizButtons':function() {
-        $("#row_bottom").prepend("<div id=\"incorrect_button\" class=\"left_button\">incorrect</div>");
-        $("#row_bottom").prepend("<div id=\"correct_button\" class=\"right_button\">correct</div>");
     },
 
     // Builds left-side windows for learn mode
@@ -84,6 +85,85 @@ var MODE_QUIZ = "quiz";
                         .append(statsTable)
                         .prependTo('#left_margin_wrap');
 
+    },
+
+    // Builds correct/incorrect buttons for quiz mode
+    'renderQuizButtons':function() {
+
+        // Set variable for scope within closure
+        var obj = this;
+
+        // Append Quiz buttons
+        var buttonEltStr = "<ul class=\"" + this.QUIZ_BTNS_CLASS + "\">";
+        buttonEltStr += "<li class=\"" + this.INC_BTN_CLASS + "\"></li>";
+        buttonEltStr += "<li class=\"" + this.COR_BTN_CLASS + "\"></li>";
+        buttonEltStr += "</ul>";
+        $("#row_bottom").prepend(buttonEltStr);
+
+        // Bind keyboard commands
+        $(document).bind('keydown', 'up', function() {
+            obj.selectQuizButton(obj.INC_BTN_CLASS, $("ul." + obj.QUIZ_BTNS_CLASS + " li." + obj.INC_BTN_CLASS));
+            return false;
+        });
+        $(document).bind('keydown', 'down', function() {
+            DeckViewerUI.selectQuizButton(obj.COR_BTN_CLASS, $("ul." + obj.QUIZ_BTNS_CLASS + " li." + obj.COR_BTN_CLASS));
+            return false;
+        });
+
+        // Set correct/incorrect button effects
+        $("ul.crs").children().each(function() {
+            
+            // <li> element class atribute
+            var classAttr = $(this).attr('class');
+        
+            $(this).mouseover(function() {
+                // Check if 'clicked'
+                var divClassClicked = "div." + classAttr + "-click";
+                if(!$(this).prev().is(divClassClicked)) {
+                    var overlay = "<div class='" + classAttr + "-hover'></div>";
+                    $(this).before(overlay)
+                                  .prev().css({display:"none"})
+                                  .fadeIn(100);
+                }
+                              
+            }).mouseout(function() {
+                // Check if hovered on
+                var divClassHovered = "div." + classAttr + "-hover";
+                if($(this).prev().is(divClassHovered)) {
+                    $(this).prev().fadeOut(100, function() {
+                        $(this).remove();
+                    });
+                }
+
+            }).click(function() {
+                // Call selectQuizButton function
+                obj.selectQuizButton(classAttr, this);
+            });
+
+        });
+        return true;
+    },
+
+    // Selects correct/incorrect button
+    'selectQuizButton':function(classAttr, buttonElt) {
+
+        // Remove hover div
+        $(buttonElt).siblings("div").remove();
+
+        // Set overlay
+        var overlay = "<div class='" + classAttr + "-click'></div>";
+        $(buttonElt).before(overlay)
+                      .prev().css({display:"none"})
+                      .fadeIn(100);      
+
+        // Fire correct/incorrect button on delay
+        if(classAttr == this.COR_BTN_CLASS) {
+            setTimeout('DeckViewerUI.correct()', 500);
+        }
+        else if(classAttr = this.INC_BTN_CLASS) {
+            setTimeout('DeckViewerUI.incorrect()', 500);
+        }
+        return true;
     },
 
     // Helper functions
@@ -136,13 +216,18 @@ var MODE_QUIZ = "quiz";
         // Show answer field
        $("#card_answer").fadeIn("fast");
 
+       // Show quiz buttons
+       $("#row_bottom").children().fadeIn("fast");
+
     },
 
     'resetButtons':function() {
 
+        // Hide quiz buttons
+        $("#row_bottom").children().hide();
+
         // Revert styles of correct/incorrect buttons
-        //$("#incorrect_button").css("background","red");
-        //$("#correct_button").css("background","green");
+        $("ul." + this.QUIZ_BTNS_CLASS + " div").remove();
 
     },
 
@@ -163,8 +248,8 @@ var MODE_QUIZ = "quiz";
         }
         // End of deck
         else {
-            $("#card_question").text('End of StudyDeck');
-            $("#card_answer").text('');
+            $("#card_question").text("You've reached the end.");
+            $("#card_answer").text("");
         }
     },
 
@@ -185,8 +270,7 @@ var MODE_QUIZ = "quiz";
         this.deck.getCard().setCorrect();
 
         // Change style of correct button
-        //this.resetButtons();
-        //$("#correct_button").css("background","#B3ECFF");
+        this.resetButtons();
 
         // Advance to next card
         this.next();
@@ -198,8 +282,7 @@ var MODE_QUIZ = "quiz";
         this.deck.getCard().setIncorrect();
         
         // Change style of incorrect button
-        //this.resetButtons();
-        //$("#incorrect_button").css("background","#B3ECFF");
+        this.resetButtons();
 
         // Advance to next card
         this.next();
@@ -229,22 +312,31 @@ var MODE_QUIZ = "quiz";
 
     /**
      *  Bind event handlers
+     *  Bind keyboard events
      */
 
     // Previous button
     $("#prev_button").click(function(event) { DeckViewerUI.previous(); });
+    $(document).bind('keydown', 'left', function(){ DeckViewerUI.previous(); return false; });
 
     // Next button
     $("#next_button").click(function(event) { DeckViewerUI.next(); });
+    $(document).bind('keydown', 'right', function(){ DeckViewerUI.next(); return false; });
 
     // Reveal answer click
     $("#row_body").click(function(event) { DeckViewerUI.showAnswer(); });
+    $(document).bind('keydown', 'space', function(){ DeckViewerUI.showAnswer(); return false; });
 
+    // Bind effects to buttons
     // Set correct button
+    /*
     $("#correct_button").click(function(event) { DeckViewerUI.correct(); });
+    $(document).bind('keydown', 'up', function(){ DeckViewerUI.correct(); return false; });
 
     // Set incorrect button
     $("#incorrect_button").click(function(event) { DeckViewerUI.incorrect(); });
+    $(document).bind('keydown', 'down', function(){ DeckViewerUI.incorrect(); return false; });
+    */
 
     // Set incorrect button
     $("#show_answer_checkbox").click(function(event) { DeckViewerUI.showAnswerToggle(); });

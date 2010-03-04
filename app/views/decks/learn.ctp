@@ -1,10 +1,14 @@
 <!-- File: /app/views/decks/learn.ctp -->
 
 <?php
+    // Javascript lib includes
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
-    echo $javascript->link('deck_class',false);
-    echo $javascript->link('deck_study',false);
-    echo $javascript->link('deck_rts_wdg',false);
+    echo $javascript->link('deck_class',false);                     // deck object classes
+    echo $javascript->link('deck_rts_wdg',false);                   // rating selector widget
+    echo $javascript->link('jquery.hotkeys-0.7.9.min.js',false);    // key-binding widget
+    echo $javascript->link('deck_study',false);                     // main
+
+    // CSS includes
     echo $html->css('deck_study',null,null,false);
     echo $html->css('deck_rts_wdg',null,null,false);
 ?>

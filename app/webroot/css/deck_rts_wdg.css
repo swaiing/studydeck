@@ -5,17 +5,16 @@
     width: 224px;
     height: 33px;
     background: url(/img/rts.jpg) no-repeat;
-    /*background-color: #b9c9fe;*/
     margin: 0 auto 0 auto;
     padding: 0;
     cursor: pointer;
 }
 
 .rts li {
+    position: absolute;
     margin: 0;
     padding: 0;
     list-style: none;
-    position: absolute;
 }
 .rts li, .rts a {
     height: 33px;

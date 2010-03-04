@@ -324,6 +324,65 @@ button.pill-r span {
     color:#000;
 }
 
+/*****  white-drop shadow box *****/
+
+.dialog {
+    position: relative;
+    margin: 0px auto;
+    min-width: 8em;
+    max-width: 760px; /* based on image dimensions */
+    z-index: 1;
+    margin-left: 10px; /* default, width of left corner */
+    margin-bottom: 0.5em; /* spacing under dialog */
+}
+
+.dialog .content,
+.dialog .t,
+.dialog .b,
+.dialog .b div {
+     background: transparent url("/img/whitebox_back.png") no-repeat top right;
+}
+
+.dialog .content {
+    position:relative;
+    zoom:1;
+    padding:0px 10px 0px 0px;
+}
+
+.dialog .t {
+    /* top+left vertical slice */
+    position:absolute;
+    left:0px;
+    top:0px;
+    width:12px; /* top slice width */
+    margin-left:-12px;
+    height:100%;
+    background-position:top left;
+}
+
+.dialog .b {
+    /* bottom */
+    position:relative;
+    width:100%;
+}
+
+    .dialog .b,
+    .dialog .b div {
+    height:30px; /* height of bottom cap/shade */
+    font-size:1px;
+}
+
+.dialog .b {
+    background-position:bottom right;
+}
+
+.dialog .b div {
+    position:relative;
+    width:12px; /* bottom corner width */
+    margin-left:-12px;
+    background-position:bottom left;
+}
+
 /*****  footer *****/
 
 div#footer {
