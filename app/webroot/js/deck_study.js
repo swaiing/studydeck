@@ -9,6 +9,66 @@ var VERACITY_MAP = new Array("incorrect","correct");
 var MODE_STUDY = "study";
 var MODE_QUIZ = "quiz";
 
+// Bind rollover effects to buttons
+function ThreeStateButton(elt, fnStr) {
+
+    this.elt = $(elt);
+    this.classAttr = this.elt.attr('class');
+
+    // Set variable for scope within closure
+    var obj = this;
+    this.clickFnStr = fnStr;
+
+    this.elt.mouseover(function() {
+
+        // Check if 'clicked'
+        var divClassClicked = "div." + obj.classAttr + "-click";
+        if(!$(this).prev().is(divClassClicked)) {
+            var overlay = "<div class='" + obj.classAttr + "-hover'></div>";
+            $(this).before(overlay)
+                          .prev().css({display:"none"})
+                          .fadeIn(100);
+        }
+                      
+    }).mouseout(function() {
+
+        // Check if hovered on
+        var divClassHovered = "div." + obj.classAttr + "-hover";
+        if($(this).prev().is(divClassHovered)) {
+            $(this).prev().fadeOut(100, function() {
+                $(this).remove();
+            });
+        }
+
+    }).click(function() {
+
+        // Call selectQuizButton function
+        obj.selectButton();
+    });
+    return true;
+}
+// Events for when the button is clicked
+ThreeStateButton.prototype.selectButton = function() {
+
+    // Remove hover div
+    this.reset();
+
+    // Set overlay
+    var overlay = "<div class='" + this.classAttr + "-click'></div>";
+    $(this.elt).before(overlay)
+                  .prev().css({display:"none"})
+                  .fadeIn(100);      
+
+    // Call callback
+    setTimeout(this.clickFnStr, 500);
+
+    return true;
+}
+// Remove overlay divs
+ThreeStateButton.prototype.reset = function() {
+    $(this.elt).siblings("div").remove();
+}
+
   /**
   *
   * DeckViewerUI Object
@@ -18,15 +78,24 @@ var MODE_QUIZ = "quiz";
   */
   DeckViewerUI = {
 
+    // Constants
+    QUIZ_BTNS_CLASS:"crs",
+    INC_BTN_CLASS:"inc_btn",
+    COR_BTN_CLASS:"cor_btn",
+    PREV_BTN_CLASS:"prev_btn",
+    NEXT_BTN_CLASS:"next_btn",
+
     // Instance variables
     deck:null,
     isShowingAnswer:0,
     mode:MODE_STUDY,
-    rts:null,
-    QUIZ_BTNS_CLASS:"crs",
-    INC_BTN_CLASS:"inc_btn",
-    COR_BTN_CLASS:"cor_btn",
 
+    // Button elements
+    rts:null,
+    prevBtn:null,
+    nextBtn:null,
+    corBtn:null,
+    incBtn:null,
 
     // Bootstrap intialize function
     'init':function() {
@@ -38,9 +107,11 @@ var MODE_QUIZ = "quiz";
         var firstCard = this.deck.getNextCard();
 
         // Set the title
-        //$("h1.title").text(this.deck.deckName);
-        // TODO: Workaround for HTML entity references
         $("h1.title").html(this.deck.deckName);
+
+        // Bind actions to buttons
+        this.prevBtn = new ThreeStateButton("ul." + this.PREV_BTN_CLASS + " li", 'DeckViewerUI.previous()');
+        this.nextBtn = new ThreeStateButton("ul." + this.NEXT_BTN_CLASS + " li", 'DeckViewerUI.next()');
 
         // Reset form items
         $("#show_answer_checkbox").attr('checked',true);
@@ -56,7 +127,15 @@ var MODE_QUIZ = "quiz";
         }
         else if(MODE == MODE_QUIZ) {
           this.mode = MODE_QUIZ;
+
+          // Insert elements for buttons
           this.renderQuizButtons();
+          
+          // Bind actions to buttons
+          this.corBtn = new ThreeStateButton("ul." + this.QUIZ_BTNS_CLASS + " li." + this.COR_BTN_CLASS,
+                                                'DeckViewerUI.correct()');
+          this.incBtn = new ThreeStateButton("ul." + this.QUIZ_BTNS_CLASS + " li." + this.INC_BTN_CLASS,
+                                                'DeckViewerUI.incorrect()');
         }
 
         // Hide bottom row
@@ -90,9 +169,6 @@ var MODE_QUIZ = "quiz";
     // Builds correct/incorrect buttons for quiz mode
     'renderQuizButtons':function() {
 
-        // Set variable for scope within closure
-        var obj = this;
-
         // Append Quiz buttons
         var buttonEltStr = "<ul class=\"" + this.QUIZ_BTNS_CLASS + "\">";
         buttonEltStr += "<li class=\"" + this.INC_BTN_CLASS + "\"></li>";
@@ -100,47 +176,6 @@ var MODE_QUIZ = "quiz";
         buttonEltStr += "</ul>";
         $("#row_bottom").prepend(buttonEltStr);
 
-        // Bind keyboard commands
-        $(document).bind('keydown', 'up', function() {
-            obj.selectQuizButton(obj.INC_BTN_CLASS, $("ul." + obj.QUIZ_BTNS_CLASS + " li." + obj.INC_BTN_CLASS));
-            return false;
-        });
-        $(document).bind('keydown', 'down', function() {
-            DeckViewerUI.selectQuizButton(obj.COR_BTN_CLASS, $("ul." + obj.QUIZ_BTNS_CLASS + " li." + obj.COR_BTN_CLASS));
-            return false;
-        });
-
-        // Set correct/incorrect button effects
-        $("ul.crs").children().each(function() {
-            
-            // <li> element class atribute
-            var classAttr = $(this).attr('class');
-        
-            $(this).mouseover(function() {
-                // Check if 'clicked'
-                var divClassClicked = "div." + classAttr + "-click";
-                if(!$(this).prev().is(divClassClicked)) {
-                    var overlay = "<div class='" + classAttr + "-hover'></div>";
-                    $(this).before(overlay)
-                                  .prev().css({display:"none"})
-                                  .fadeIn(100);
-                }
-                              
-            }).mouseout(function() {
-                // Check if hovered on
-                var divClassHovered = "div." + classAttr + "-hover";
-                if($(this).prev().is(divClassHovered)) {
-                    $(this).prev().fadeOut(100, function() {
-                        $(this).remove();
-                    });
-                }
-
-            }).click(function() {
-                // Call selectQuizButton function
-                obj.selectQuizButton(classAttr, this);
-            });
-
-        });
         return true;
     },
 
@@ -169,7 +204,7 @@ var MODE_QUIZ = "quiz";
     // Helper functions
     'showCard':function(card) {
         if(!card) {
-            alert("Null card in DeckViewerUI.showCard");
+            //alert("Null card in DeckViewerUI.showCard");
             return;
         }
 
@@ -191,12 +226,10 @@ var MODE_QUIZ = "quiz";
 
         // Set question field
         //$("#card_question").text(card.question);
-        // TODO: Workaround for HTML entity references
         $("#card_question").html(card.question);
 
         // Set answer field
         //$("#card_answer").text(card.answer);
-        // TODO: Workaround for HTML entity references
         $("#card_answer").html(card.answer);
 
         // Update deck progress
@@ -227,8 +260,12 @@ var MODE_QUIZ = "quiz";
         $("#row_bottom").children().hide();
 
         // Revert styles of correct/incorrect buttons
-        $("ul." + this.QUIZ_BTNS_CLASS + " div").remove();
+        window.DeckViewerUI.corBtn && DeckViewerUI.corBtn.reset();
+        window.DeckViewerUI.incBtn && DeckViewerUI.incBtn.reset();
 
+        // Revert styles of next/previous buttons
+        window.DeckViewerUI.prevBtn && DeckViewerUI.prevBtn.reset();
+        window.DeckViewerUI.nextBtn && DeckViewerUI.nextBtn.reset();
     },
 
     // Event handling functions
@@ -236,10 +273,6 @@ var MODE_QUIZ = "quiz";
         
         // Get the next card
         var success = this.deck.getNextCard();
-
-        // Animation card transition
-        //$("div#mask").show();
-        //$("div#mask").slideUp('fast');
 
         // Reset the display and show the card
         if(success) {
@@ -315,13 +348,19 @@ var MODE_QUIZ = "quiz";
      *  Bind keyboard events
      */
 
-    // Previous button
+    // Next/previous button
+    /*
     $("#prev_button").click(function(event) { DeckViewerUI.previous(); });
-    $(document).bind('keydown', 'left', function(){ DeckViewerUI.previous(); return false; });
-
-    // Next button
     $("#next_button").click(function(event) { DeckViewerUI.next(); });
-    $(document).bind('keydown', 'right', function(){ DeckViewerUI.next(); return false; });
+    */
+    $(document).bind('keydown', 'left', function() {
+        DeckViewerUI.prevBtn.elt.click();
+        return false;
+    });
+    $(document).bind('keydown', 'right', function() {
+        DeckViewerUI.nextBtn.elt.click();
+        return false;
+    });
 
     // Reveal answer click
     $("#row_body").click(function(event) { DeckViewerUI.showAnswer(); });
@@ -329,6 +368,15 @@ var MODE_QUIZ = "quiz";
 
     // Bind effects to buttons
     // Set correct button
+    // Bind keyboard commands
+    $(document).bind('keydown', 'up', function() {
+        DeckViewerUI.corBtn.elt.click();
+        return false;
+    });
+    $(document).bind('keydown', 'down', function() {
+        DeckViewerUI.incBtn.elt.click();
+        return false;
+    });
     /*
     $("#correct_button").click(function(event) { DeckViewerUI.correct(); });
     $(document).bind('keydown', 'up', function(){ DeckViewerUI.correct(); return false; });

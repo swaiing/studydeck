@@ -265,11 +265,11 @@
             // Push card on viewed cards stack
             this.viewedCards.push(this.curCard);
         }
-
         this.curCard = this.unviewedCards.pop();
     } 
     else {
-        return null;
+        this.viewedCards.push(this.curCard);
+        this.curCard = null;
     }
     return this.curCard;
   }

@@ -6,6 +6,7 @@
 <head>
   <title><?php echo $title_for_layout?></title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/reset/reset-min.css">
   <?php
     // Include default styles
     echo $html->css('styles');

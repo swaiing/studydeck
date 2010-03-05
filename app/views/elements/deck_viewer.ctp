@@ -11,8 +11,8 @@
 <!-- Top-row content -->
 
 <div id="row_top">
-    <div id="prev_button" class="left_button">previous</div>
-    <div id="next_button" class="right_button">next</div>
+    <div id="prev_button"><ul class="prev_btn"><li class="prev"></li></ul></div>
+    <div id="next_button"><ul class="next_btn"><li class="next"></li></ul></div>
     <div id="card_rating" class="middle_button"></div>
 </div>
 

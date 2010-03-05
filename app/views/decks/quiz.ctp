@@ -39,7 +39,7 @@
         echo $html->link($deckName, array('controller'=>'decks', 'action'=>'info', $deckId));
     ?>
     &gt;
-    <span class="you_are_here">Learn</span>
+    <span class="you_are_here">Quiz</span>
 </div>
 
 <!-- JS rendered title -->
