@@ -82,8 +82,6 @@ ThreeStateButton.prototype.reset = function() {
     QUIZ_BTNS_CLASS:"crs",
     INC_BTN_CLASS:"inc_btn",
     COR_BTN_CLASS:"cor_btn",
-    PREV_BTN_CLASS:"prev_btn",
-    NEXT_BTN_CLASS:"next_btn",
 
     // Instance variables
     deck:null,
@@ -92,8 +90,6 @@ ThreeStateButton.prototype.reset = function() {
 
     // Button elements
     rts:null,
-    prevBtn:null,
-    nextBtn:null,
     corBtn:null,
     incBtn:null,
 
@@ -109,10 +105,6 @@ ThreeStateButton.prototype.reset = function() {
         // Set the title
         $("h1.title").html(this.deck.deckName);
 
-        // Bind actions to buttons
-        this.prevBtn = new ThreeStateButton("ul." + this.PREV_BTN_CLASS + " li", 'DeckViewerUI.previous()');
-        this.nextBtn = new ThreeStateButton("ul." + this.NEXT_BTN_CLASS + " li", 'DeckViewerUI.next()');
-
         // Reset form items
         $("#show_answer_checkbox").attr('checked',true);
         this.showAnswerToggle();
@@ -120,7 +112,7 @@ ThreeStateButton.prototype.reset = function() {
         // Call build UI functions
         if(MODE == MODE_STUDY) {
           this.mode = MODE_STUDY;
-          //this.renderStudyWindows();
+          this.renderStudyWindows();
 
           // Initialize new RatingSelector object
           this.rts = new RatingSelector("#row_bottom");
@@ -148,12 +140,13 @@ ThreeStateButton.prototype.reset = function() {
     // Builds left-side windows for learn mode
     'renderStudyWindows':function() {
 
-      var optionsBox = $('<div class=\"margin_box\"></div>')
-                        .append("<span class=\"title\">Options</span>")
-                        .append("<label for=\"show_answer_checkbox\">Show Answer?</label>")
+      var optionsBox = $('<div id=\"box\"></div>')
+                        .append('<div class=\"item\"></div>')
                         .append("<input type=\"checkbox\" id=\"show_answer_checkbox\" name=\"show_answer\" value=\"show_answer\" />")
-                        .prependTo('#left_margin_wrap');
+                        .append("<label for=\"show_answer_checkbox\">Show Answer</label>")
+                        .prependTo('#top_controls');
 
+/*
       var statsTable = $("<table class=\"quiz_history\">")
                         .append("<tr><td># Times Correct</td><td id=\"card_total_correct\"></td></tr>")
                         .append("<tr><td># Times Incorrect</td><td id=\"card_total_incorrect\"></td></tr>")
@@ -162,7 +155,8 @@ ThreeStateButton.prototype.reset = function() {
       var cardHistoryBox = $('<div class=\"margin_box\"></div>')
                         .append("<span class=\"title\">Card Quiz History</span>") 
                         .append(statsTable)
-                        .prependTo('#left_margin_wrap');
+                        .prependTo('#top_controls');
+*/
 
     },
 
@@ -258,14 +252,6 @@ ThreeStateButton.prototype.reset = function() {
 
         // Hide quiz buttons
         $("#row_bottom").children().hide();
-
-        // Revert styles of correct/incorrect buttons
-        window.DeckViewerUI.corBtn && DeckViewerUI.corBtn.reset();
-        window.DeckViewerUI.incBtn && DeckViewerUI.incBtn.reset();
-
-        // Revert styles of next/previous buttons
-        window.DeckViewerUI.prevBtn && DeckViewerUI.prevBtn.reset();
-        window.DeckViewerUI.nextBtn && DeckViewerUI.nextBtn.reset();
     },
 
     // Event handling functions
@@ -294,7 +280,6 @@ ThreeStateButton.prototype.reset = function() {
         // Reset the display and show the card
         this.resetButtons();
         this.showCard(this.deck.getCard());
-    
     },
 
     'correct':function() {
@@ -349,18 +334,10 @@ ThreeStateButton.prototype.reset = function() {
      */
 
     // Next/previous button
-    /*
-    $("#prev_button").click(function(event) { DeckViewerUI.previous(); });
-    $("#next_button").click(function(event) { DeckViewerUI.next(); });
-    */
-    $(document).bind('keydown', 'left', function() {
-        DeckViewerUI.prevBtn.elt.click();
-        return false;
-    });
-    $(document).bind('keydown', 'right', function() {
-        DeckViewerUI.nextBtn.elt.click();
-        return false;
-    });
+    $("#prev a").click(function(event) { DeckViewerUI.previous(); });
+    $(document).bind('keydown', 'left', function(){ DeckViewerUI.previous(); return false; });
+    $("#next a").click(function(event) { DeckViewerUI.next(); });
+    $(document).bind('keydown', 'right', function(){ DeckViewerUI.next(); return false; });
 
     // Reveal answer click
     $("#row_body").click(function(event) { DeckViewerUI.showAnswer(); });
@@ -377,17 +354,8 @@ ThreeStateButton.prototype.reset = function() {
         DeckViewerUI.incBtn.elt.click();
         return false;
     });
-    /*
-    $("#correct_button").click(function(event) { DeckViewerUI.correct(); });
-    $(document).bind('keydown', 'up', function(){ DeckViewerUI.correct(); return false; });
-
-    // Set incorrect button
-    $("#incorrect_button").click(function(event) { DeckViewerUI.incorrect(); });
-    $(document).bind('keydown', 'down', function(){ DeckViewerUI.incorrect(); return false; });
-    */
 
     // Set incorrect button
     $("#show_answer_checkbox").click(function(event) { DeckViewerUI.showAnswerToggle(); });
-
 
   });  // end $(document).ready(function()

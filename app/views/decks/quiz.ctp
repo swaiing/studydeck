@@ -24,33 +24,32 @@
 <div id="middle_wrapper_content">
 
 <div class="crumb">
-    <?php
-        // If not in dashboard show explore link, otherwise 'dashboard' link
-        if($assocNope) {
-            echo $html->link('Explore', array('controller'=>'decks', 'action'=>'explore'));
-        }
-        else {
-            echo $html->link('Dashboard', array('controller'=>'users', 'action'=>'dashboard'));
-        }
-    ?>
-    &gt;
-    <?php
-        $deckName = $deckData['Deck']['deck_name'];
-        echo $html->link($deckName, array('controller'=>'decks', 'action'=>'info', $deckId));
-    ?>
-    &gt;
-    <span class="you_are_here">Quiz</span>
+    <div id="crumb_wrap">
+        <?php
+            // If not in dashboard show explore link, otherwise 'dashboard' link
+            if($assocNope) {
+                echo $html->link('Explore', array('controller'=>'decks', 'action'=>'explore'));
+            }
+            else {
+                echo $html->link('Dashboard', array('controller'=>'users', 'action'=>'dashboard'));
+            }
+        ?>
+        &gt;
+        <?php
+            $deckName = $deckData['Deck']['deck_name'];
+            echo $html->link($deckName, array('controller'=>'decks', 'action'=>'info', $deckId));
+        ?>
+        &gt;
+        <span class="you_are_here">Quiz</span>
+    </div>
+    <div id="crumb_quit">
+        <?php
+            echo $html->link("[Quit]", array('controller'=>'decks','action'=>'quit',$deckId,'COMMIT_RESULT'),
+                              array('class'=>'top_link'));
+        ?>
+    </div>
 </div>
 
-<!-- JS rendered title -->
-<div id="title_wrap">
-  <h1 class="title"></h1>
-  <?php
-        echo $html->link('End Quiz',
-                          array('controller'=>'decks','action'=>'quit',$deckId,'COMMIT_RESULT'),
-                          array('class'=>'top_link'));
-  ?>
-</div>
+<div id="title_wrap"><h1 class="title"></h1></div>
 
-<!-- Insert deck_viewer presentation -->
 <?php echo $this->element('deck_viewer'); ?>
