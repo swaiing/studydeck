@@ -215,6 +215,9 @@ ThreeStateButton.prototype.reset = function() {
         if(!this.isShowingAnswer) {
             this.hideAnswer();
         }
+        else {
+            this.showAnswer();
+        }
 
         // Set rating field
         if(this.rts) {
@@ -332,7 +335,8 @@ ThreeStateButton.prototype.reset = function() {
 
     // Hide/Show answer
     'showAnswerToggle':function() {
-        if($("input#show_ans_chk").is(':checked')) {
+        var chkbox = $("input#show_ans_chk");
+        if(chkbox.is(':checked')) {
             this.isShowingAnswer = 1;
             this.showAnswer();
         }
@@ -356,13 +360,13 @@ ThreeStateButton.prototype.reset = function() {
      *  Bind keyboard events
      */
     // Next/previous button
-    $("#prev a").click(function(event) { DeckViewerUI.previous(); });
+    $("#prev a").click(function() { DeckViewerUI.previous(); });
     $(document).bind('keydown', 'left', function(){ DeckViewerUI.previous(); return false; });
-    $("#next a").click(function(event) { DeckViewerUI.next(); });
+    $("#next a").click(function() { DeckViewerUI.next(); });
     $(document).bind('keydown', 'right', function(){ DeckViewerUI.next(); return false; });
 
     // Reveal answer click
-    $("div#row_body").click(function(event) { DeckViewerUI.showAnswer(); });
+    $("div#row_body").click(function() { DeckViewerUI.showAnswer(); });
     $(document).bind('keydown', 'space', function(){ DeckViewerUI.showAnswer(); return false; });
 
     // Key bindings for learn/quiz mode
@@ -381,6 +385,9 @@ ThreeStateButton.prototype.reset = function() {
             DeckViewerUI.rts.eltHard.click();
             return false;
         });
+
+        // Handler for 'Show Answer' checkbox
+        $("input#show_ans_chk").click(function() { DeckViewerUI.showAnswerToggle(); });
     }
     else if(MODE == MODE_QUIZ) {
 
@@ -393,9 +400,6 @@ ThreeStateButton.prototype.reset = function() {
             DeckViewerUI.incBtn.elt.click();
             return false;
         });
-
-        // Set incorrect button
-        $("input#show_ans_chk").click(function(event) { DeckViewerUI.showAnswerToggle(); });
     }
 
   });  // end $(document).ready(function()
