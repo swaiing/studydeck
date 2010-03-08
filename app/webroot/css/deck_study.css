@@ -37,6 +37,16 @@ div#card_wrap {
     cursor: pointer;
 }
 
+div#row_body_mask {
+    font-size: 16px;
+    text-align: center;
+    height: 260px;
+    display: none;
+}
+div#row_body_mask div#end {
+    padding-top: 130px;
+}
+
 div#row_body {}
 
 div#row_question {
@@ -85,11 +95,11 @@ div#row_bottom {
 }
 
 /** incorrect button style effects **/
-.inc_btn { left: 0; width: 250px; }
+.inc_btn { left: 0; width: 249px; }
 .inc_btn-hover, .inc_btn-click {
     position: absolute;
     left: 0;
-    width: 250px;
+    width: 249px;
     height: 50px;
     padding: 0;
     margin: 0;
@@ -100,21 +110,22 @@ div#row_bottom {
 }
 
 /** correct button style effects **/
-.cor_btn { left: 250px; width: 250px; }
+.cor_btn { left: 251px; width: 249px; }
 .cor_btn-hover, .cor_btn-click {
     position: absolute;
-    left: 250px;
-    width: 250px;
+    left: 251px;
+    width: 249px;
     height: 50px;
     padding: 0;
     margin: 0;
-    background: transparent url("/img/mark_btn.png") -250px -50px no-repeat;
+    background: transparent url("/img/mark_btn.png") -251px -50px no-repeat;
 }
 .cor_btn-click {
-    background: transparent url("/img/mark_btn.png") -250px -100px no-repeat;
+    background: transparent url("/img/mark_btn.png") -251px -100px no-repeat;
 }
 
 /****** control box ******/
+
 div#bottom_controls {
     font-size: 14px;
     height: 30px;
@@ -127,11 +138,6 @@ div#bottom_controls div.center {
     margin: 0 auto;
     text-align: center;       
 }
-div#bottom_controls div.center div#card_rating {
-    border: 1px solid #cecece;
-    padding: 5px;
-}
-
 div#bottom_controls div.left {
     width: 50px;
     text-align: left;
@@ -145,40 +151,30 @@ div#bottom_controls div.right {
 
 /****** learn mode box ******/
 
-div#top_controls #box{
-    width: 500px;
-    height: 30px;
+div#top_controls #control_wrap{
+    width: 460px;
+    overflow: auto;
     border: 1px solid #004D99;
     margin: 10px auto;
     padding: 10px;
     background-color: #CCE6FF;
 }
 
-
-/****** generic margin box styles ******/
-
-/*
-div#left_margin_wrap {
-    position: absolute;
-    right: 77%;
-    width: 18%;
-    min-height: 100px; 
+div.ctrl_box {
+    width: 150px;
+    float: left;
+    text-align: center;
 }
-
-div#right_margin_wrap {
-    position: absolute;
-    left: 77%;
-    width: 18%;
-    min-height: 100px; 
-}
-
-div.margin_box {
-    border: 1px solid #000000;
-    margin: 0 0 10px 0;
-    padding: 10px;
-}
-
-div.margin_box span.title {
+div.ctrl_box h3 {
     font-weight: bold;
-    display: block;
+    margin-bottom: 5px;
+}
+div.ctrl_box label {
+    margin-left: 5px;
+}
+div.ctrl_box input#show_ans_chk {
+    vertical-align: bottom;
+}
+div.ctrl_box span#ans_corr {
+    font-size: 14px;
 }

@@ -6,7 +6,7 @@
  *
  */
 
-function RatingSelector(elt) {
+function RatingSelector(elt, fnStr) {
 
     // Check for empty div card
     if(!elt) {
@@ -19,6 +19,10 @@ function RatingSelector(elt) {
     // Set properties
     this.RTS_CLASS = "rts";
     this.card = null;
+    this.clickFnStr = fnStr;
+    this.eltEasy = null;
+    this.eltMedium = null;
+    this.eltHard = null;
 
     // String of HTML for component
     this.domStr = '<ul class=\"' + this.RTS_CLASS + '\">';
@@ -32,6 +36,11 @@ function RatingSelector(elt) {
 
     // Insert into DOM unordered list
     this.rtsDom = $(this.domStr).prependTo(elt);
+
+    // Store refernces to each expected element
+    this.eltEasy = $("li.easy", elt);
+    this.eltMedium = $("li.medium", elt);
+    this.eltHard = $("li.hard", elt);
 
     // Attach mouse-events for each of the list elements
     $(this.rtsDom).children().each(function() {
@@ -67,12 +76,18 @@ function RatingSelector(elt) {
         }).click(function() {
 
             // Set selected div overlay
-            obj.showSelected(classAttr, this);
+            obj.selectButton(classAttr, this);
 
             // Set new rating
             if(obj && obj.card) {
                 obj.card.setRatingFromStr(classAttr);
             }
+
+            // Callback
+            if(obj.clickFnStr) {
+                setTimeout(obj.clickFnStr, 500);
+            }
+
 
         });
 
@@ -82,7 +97,7 @@ function RatingSelector(elt) {
 }
 
 // Method which highlights clicked button 
-RatingSelector.prototype.showSelected = function(classAttr, buttonElt) {
+RatingSelector.prototype.selectButton = function(classAttr, buttonElt) {
 
     // Remove hover divs
     $(buttonElt).siblings("div").remove();
@@ -91,7 +106,8 @@ RatingSelector.prototype.showSelected = function(classAttr, buttonElt) {
     var clickDiv = this.RTS_CLASS + "-" + classAttr + "-click";
     $(buttonElt).before('<div class="' + clickDiv + '"></div>');
     $(clickDiv).css({display:"none"}).fadeIn(100);
-    return false;
+
+    return true;
 }
 
 // Return formatted text to display rating
@@ -126,7 +142,7 @@ RatingSelector.prototype.setCard = function(card) {
 
         // Mark selected difficulty if rating matches
         if(obj.card.getRatingStr() == classAttr) {
-            obj.showSelected(classAttr, this);
+            obj.selectButton(classAttr, this);
         }
     });
     return false;

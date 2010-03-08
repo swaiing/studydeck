@@ -5,9 +5,10 @@
 
 
 // Constants
-var VERACITY_MAP = new Array("incorrect","correct");
-var MODE_STUDY = "study";
+var VERACITY_MAP = new Array("Incorrect","Correct");
+var MODE_LEARN = "study";
 var MODE_QUIZ = "quiz";
+var FIN_TEXT = "End of StudyDeck";
 
 // Bind rollover effects to buttons
 function ThreeStateButton(elt, fnStr) {
@@ -59,8 +60,10 @@ ThreeStateButton.prototype.selectButton = function() {
                   .prev().css({display:"none"})
                   .fadeIn(100);      
 
-    // Call callback
-    setTimeout(this.clickFnStr, 500);
+    // Callback
+    if(this.clickFnStr) {
+        setTimeout(this.clickFnStr, 500);
+    }
 
     return true;
 }
@@ -86,7 +89,7 @@ ThreeStateButton.prototype.reset = function() {
     // Instance variables
     deck:null,
     isShowingAnswer:0,
-    mode:MODE_STUDY,
+    mode:MODE_LEARN,
 
     // Button elements
     rts:null,
@@ -105,17 +108,19 @@ ThreeStateButton.prototype.reset = function() {
         // Set the title
         $("h1.title").html(this.deck.deckName);
 
-        // Reset form items
-        $("#show_answer_checkbox").attr('checked',true);
-        this.showAnswerToggle();
+        // Enter text for final card div
+        $("div#row_body_mask").html("<div id=\"end\">" + FIN_TEXT + "</div>");
 
         // Call build UI functions
-        if(MODE == MODE_STUDY) {
-          this.mode = MODE_STUDY;
-          this.renderStudyWindows();
+        if(MODE == MODE_LEARN) {
+          this.mode = MODE_LEARN;
 
-          // Initialize new RatingSelector object
-          this.rts = new RatingSelector("#row_bottom");
+          // Insert learn mode box
+          this.renderLearnWindows();
+          this.showAnswerToggle();
+
+          // Initialize new RatingSelector object and insert in bottom row
+          this.rts = new RatingSelector("div#row_bottom", 'DeckViewerUI.next()');
         }
         else if(MODE == MODE_QUIZ) {
           this.mode = MODE_QUIZ;
@@ -130,33 +135,37 @@ ThreeStateButton.prototype.reset = function() {
                                                 'DeckViewerUI.incorrect()');
         }
 
-        // Hide bottom row
-        $("#row_bottom").children().hide();
-
         // Load first card
         this.showCard(firstCard);
     },
 
     // Builds left-side windows for learn mode
-    'renderStudyWindows':function() {
+    'renderLearnWindows':function() {
+        var chkboxStr = "<input type=\"checkbox\" id=\"show_ans_chk\" ";
+            chkboxStr += "name=\"show_answer\" value=\"show_answer\" ";
+            chkboxStr += "checked=\"true\"/>";
 
-      var optionsBox = $('<div id=\"box\"></div>')
-                        .append('<div class=\"item\"></div>')
-                        .append("<input type=\"checkbox\" id=\"show_answer_checkbox\" name=\"show_answer\" value=\"show_answer\" />")
-                        .append("<label for=\"show_answer_checkbox\">Show Answer</label>")
-                        .prependTo('#top_controls');
+        var optionsBox = $('<div class=\"ctrl_box\">')
+                         .append("<h3>Options</h3>")
+                         .append(chkboxStr)
+                         .append("<label for=\"show_ans_chk\">Show Answer</label>");
 
-/*
-      var statsTable = $("<table class=\"quiz_history\">")
-                        .append("<tr><td># Times Correct</td><td id=\"card_total_correct\"></td></tr>")
-                        .append("<tr><td># Times Incorrect</td><td id=\"card_total_incorrect\"></td></tr>")
-                        .append("<tr><td>Last Answer</td><td id=\"card_last_answer\"></td></tr>");
+        var statsBox = $('<div class=\"ctrl_box\">')
+                         .append("<h3>Card Quiz History</h3>")
+                         .append("<span id=\"ans_corr\">75% (3/4)</span>");
 
-      var cardHistoryBox = $('<div class=\"margin_box\"></div>')
-                        .append("<span class=\"title\">Card Quiz History</span>") 
-                        .append(statsTable)
-                        .prependTo('#top_controls');
-*/
+        var lastAnswer = $('<div class=\"ctrl_box\">')
+                         .append("<h3>Last Answer</h3>")
+                         .append("<span id=\"last_ans\">Correct</span>");
+
+        var controlWrap = $('<div id=\"control_wrap\"></div>')
+                         .prependTo('#top_controls')
+                         .append(optionsBox)
+                         .append(statsBox)
+                         .append(lastAnswer);
+
+        // Round corners
+        controlWrap.corner();
 
     },
 
@@ -204,7 +213,7 @@ ThreeStateButton.prototype.reset = function() {
 
         // Hide answer field if showAnswer bit set false
         if(!this.isShowingAnswer) {
-            $("#card_answer").hide();
+            this.hideAnswer();
         }
 
         // Set rating field
@@ -213,9 +222,9 @@ ThreeStateButton.prototype.reset = function() {
             this.rts.setCard(card);
         }
         else {
-            // Display
-            var eltStr = "<div class=\"rating_str\">" + card.getRatingStr() + "</div>";
-            $("#card_rating").html(eltStr);
+            // TODO: Display rating somewhere in Quiz mode when there is no RTS?
+            //var eltStr = "<div class=\"rating_str\">" + card.getRatingStr() + "</div>";
+            //$("#card_rating").html(eltStr);
         }
 
         // Set question field
@@ -230,28 +239,35 @@ ThreeStateButton.prototype.reset = function() {
         var progressStr = this.deck.getNumViewed() + "/" + this.deck.getNumCards();
         $("#deck_progress").text(progressStr);
 
-        // Set card metrics
-        $("#card_total_correct").text(card.totalCorrect);
-        $("#card_total_incorrect").text(card.totalIncorrect);
+        // Update card metrics
+        var totalAns = parseInt(card.totalCorrect) + parseInt(card.totalIncorrect);
+        var percentCorrect = (totalAns > 0) ? Math.round((card.totalCorrect/totalAns)*100) : null;
+        var quizHistoryStr = "";
+        if(percentCorrect != null) {
+            quizHistoryStr += percentCorrect + "% ";
+        }
+        quizHistoryStr += "(" + card.totalCorrect + "/" + totalAns + ")";
         var lastAnswerStr = VERACITY_MAP[card.lastAnswer];
-        $("#card_last_answer").text(lastAnswerStr);
-
+        $("span#ans_corr").text(quizHistoryStr);
+        $("span#last_ans").text(lastAnswerStr);
     },
 
+    // Hide answer div and rating/quiz buttons
+    'hideAnswer':function() {
+        $("span#card_answer").hide();
+        $("#row_bottom ul").hide();
+    },
+
+    // Show answer div and rating/quiz buttons
     'showAnswer':function() {
-        
-        // Show answer field
-       $("#card_answer").fadeIn("fast");
-
-       // Show quiz buttons
-       $("#row_bottom").children().fadeIn("fast");
-
+       $("span#card_answer").fadeIn("fast");
+       $("#row_bottom ul").fadeIn("fast");
     },
 
     'resetButtons':function() {
-
-        // Hide quiz buttons
-        $("#row_bottom").children().hide();
+        // Revert styles of correct/incorrect buttons
+        window.DeckViewerUI.corBtn && DeckViewerUI.corBtn.reset();
+        window.DeckViewerUI.incBtn && DeckViewerUI.incBtn.reset();
     },
 
     // Event handling functions
@@ -265,10 +281,11 @@ ThreeStateButton.prototype.reset = function() {
             this.resetButtons();
             this.showCard(this.deck.getCard());
         }
-        // End of deck
+        // End of deck, show special div
         else {
-            $("#card_question").text("You've reached the end.");
-            $("#card_answer").text("");
+            this.hideAnswer();
+            $("div#row_body").hide();
+            $("div#row_body_mask").show();
         }
     },
 
@@ -276,6 +293,13 @@ ThreeStateButton.prototype.reset = function() {
 
         // Get the previous card
         this.deck.getPreviousCard();
+
+        // If the 'end of deck' div is showing, reset
+        var bodyHidden = ($("div#row_body").css('display') == 'none');
+        if(bodyHidden) {
+            $("div#row_body").show();
+            $("div#row_body_mask").hide();
+        }
 
         // Reset the display and show the card
         this.resetButtons();
@@ -306,16 +330,15 @@ ThreeStateButton.prototype.reset = function() {
         this.next();
     },
 
+    // Hide/Show answer
     'showAnswerToggle':function() {
-
-        // Hide/Show answer
-        if($("#show_answer_checkbox").is(':checked')) {
+        if($("input#show_ans_chk").is(':checked')) {
             this.isShowingAnswer = 1;
-            $("#card_answer").fadeIn("fast");
+            this.showAnswer();
         }
         else {
             this.isShowingAnswer = 0;
-            $("#card_answer").hide();
+            this.hideAnswer();
         }
     }
 
@@ -332,7 +355,6 @@ ThreeStateButton.prototype.reset = function() {
      *  Bind event handlers
      *  Bind keyboard events
      */
-
     // Next/previous button
     $("#prev a").click(function(event) { DeckViewerUI.previous(); });
     $(document).bind('keydown', 'left', function(){ DeckViewerUI.previous(); return false; });
@@ -340,22 +362,40 @@ ThreeStateButton.prototype.reset = function() {
     $(document).bind('keydown', 'right', function(){ DeckViewerUI.next(); return false; });
 
     // Reveal answer click
-    $("#row_body").click(function(event) { DeckViewerUI.showAnswer(); });
+    $("div#row_body").click(function(event) { DeckViewerUI.showAnswer(); });
     $(document).bind('keydown', 'space', function(){ DeckViewerUI.showAnswer(); return false; });
 
-    // Bind effects to buttons
-    // Set correct button
-    // Bind keyboard commands
-    $(document).bind('keydown', 'up', function() {
-        DeckViewerUI.corBtn.elt.click();
-        return false;
-    });
-    $(document).bind('keydown', 'down', function() {
-        DeckViewerUI.incBtn.elt.click();
-        return false;
-    });
+    // Key bindings for learn/quiz mode
+    if(MODE == MODE_LEARN) {
 
-    // Set incorrect button
-    $("#show_answer_checkbox").click(function(event) { DeckViewerUI.showAnswerToggle(); });
+        // Easy-medium-hard buttons
+        $(document).bind('keydown', '1', function() {
+            DeckViewerUI.rts.eltEasy.click();
+            return false;
+        });
+        $(document).bind('keydown', '2', function() {
+            DeckViewerUI.rts.eltMedium.click();
+            return false;
+        });
+        $(document).bind('keydown', '3', function() {
+            DeckViewerUI.rts.eltHard.click();
+            return false;
+        });
+    }
+    else if(MODE == MODE_QUIZ) {
+
+        // Bind effects to up/down buttons
+        $(document).bind('keydown', 'up', function() {
+            DeckViewerUI.corBtn.elt.click();
+            return false;
+        });
+        $(document).bind('keydown', 'down', function() {
+            DeckViewerUI.incBtn.elt.click();
+            return false;
+        });
+
+        // Set incorrect button
+        $("input#show_ans_chk").click(function(event) { DeckViewerUI.showAnswerToggle(); });
+    }
 
   });  // end $(document).ready(function()

@@ -1,10 +1,6 @@
 <!-- File: /app/views/elements/deck_viewer.ctp -->
 
-<!-- Margin elements -->
-<!--
-<div id="left_margin_wrap"></div>
-<div id="right_margin_wrap"></div>
--->
+<!-- Container for learn mode controls -->
 <div id="top_controls"></div>
 
 <!-- Card wrapper -->
@@ -12,6 +8,8 @@
     <div class="content">
     <div class="t"></div>
 
+        <div id="row_body_mask"></div>
+        
         <div id="row_body">
             <div id="row_question">
                 <span id="card_question"></span>

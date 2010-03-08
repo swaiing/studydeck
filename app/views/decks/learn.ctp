@@ -3,6 +3,7 @@
 <?php
     // Javascript lib includes
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
+    echo $javascript->link('jquery.corner',false);
     echo $javascript->link('deck_class',false);                     // deck object classes
     echo $javascript->link('deck_rts_wdg',false);                   // rating selector widget
     echo $javascript->link('jquery.hotkeys-0.7.9.min.js',false);    // key-binding widget
@@ -10,7 +11,7 @@
 
     // CSS includes
     echo $html->css('deck_study',null,null,false);
-    echo $html->css('deck_rts_wdg',null,null,false);
+    echo $html->css('deck_rts_wdg_learn',null,null,false);
 ?>
 
 <script type="text/javascript">
@@ -20,7 +21,7 @@
     echo "var cardResultsData = " . $javascript->object($cardsResults) . ";\n";
 
     // Set variable to set study mode
-    echo "var MODE = MODE_STUDY;\n";
+    echo "var MODE = MODE_LEARN;\n";
 ?>
 </script>
 
