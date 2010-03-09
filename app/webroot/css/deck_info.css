@@ -24,16 +24,6 @@ div#middle {
     border: 1px solid #cecece;
 }
 
-div#middle input {
-    float: left;
-    clear: left;
-}
-
-div#middle label {
-    float: left;
-    clear: right;
-}
-
 div#category_select {
     width: 50%;
     margin: 10px 0 10px 0;
@@ -41,15 +31,20 @@ div#category_select {
     float: left;
     clear: left;
 }
-
 div#category_select p {
-    margin-left: 20px;
+    margin: 0 0 10px 20px;
 }
 
 div#category_select input {
-    margin-left: 40px;
+    float: left;
+    clear: left;
+    margin: 5px 5px 5px 50px;
 }
-
+div#category_select label {
+    float: left;
+    clear: right;
+    margin: 5px 0 5px 0;
+}
 div#category_select .disabled {
     color: #cecece;
 }
@@ -61,8 +56,11 @@ div#mode_select {
     float: left;
     clear: right;
 }
-    
 div#mode_select input {
+    margin: 10px;
+}
+div#mode_select label {}
+div#mode_select input#learn_button, div#mode_select input#quiz_button {
    width: 100px;
    height: 30px;
    margin: 0 20px 0 0 ;
@@ -109,7 +107,11 @@ div#results_tab table.deck_table col.col_correct { width: 5% }
 div#results_tab table.deck_table col.col_num { width: 5% }
 div#results_tab table.deck_table col.col_term_defn { width: 45% }
 div#results_tab table.deck_table col.col_history { width: 20% }
-div#results_tab table.deck_table td.history { text-align: center }
+div#results_tab table.deck_table td.history { text-align: center; }
+div#results_tab table.deck_table td.history img {
+    display: block;
+    margin: 0 auto;
+}
 div#results_tab table.deck_table col.col_rating { width: 25% }
 
 div#summary {

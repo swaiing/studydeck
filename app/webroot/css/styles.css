@@ -1,8 +1,6 @@
 body {
   font-family: verdana, helvetica, sans-serif;
   font-size: 11px;
-  margin: 0;
-  padding: 0;
 }
 
 /*****  top-level divs *****/
@@ -11,7 +9,6 @@ div#top_bar {
   height: 50px;
   width: 750px;
   margin: 0 auto 0 auto;
-  padding: 0;
 }
 
 div#middle_wrapper {
@@ -36,6 +33,8 @@ div#footer {
   width: 750px;
   margin: 10px auto 0 auto;
   padding: 0;
+  clear: both;
+  text-align: center;
 }
 
 div.left {
@@ -53,24 +52,28 @@ div.clear_div {
 /*****  top_bar *****/
 
 div#top_nav {
-    float: left;
-    clear: none;
+    float: right;
+    clear: right;
     width: 500px;
     margin: 10px 0 0 0;
     padding-top: 15px;
+    font-size: 1.1em;
 }
 
 div#top_logo {
-  margin: 0;
-  padding: 0;
   float: left;
   clear: left;
+  margin: 10px 0;
+  width: 200px;
+  height: 30px;
+  border: 1px solid #000;
+  text-align: center;
+  background-color: #cecece;
 }
 
 div#top_logo h1 {
-  font-size: 24px;
+  font-size: 2.1em;
   margin: 10px 0 0 0 0;
-  padding: 0;
 }
 
 div#top_logo h1 a {
@@ -153,13 +156,14 @@ div#middle_wrapper_content h1 {
   font-size: 20px; 
   color: #003366;
   font-weight: bold;
+  clear: both;
 }
 
 div#middle_wrapper_content h2 {
   font-family: "Century Gothic", "Apple Gothic", "Lucida Grande", helvetica, arial, sans-serif;
   font-size: 16px; 
   color: #003366;
-  font-weight: bold;
+  clear: both;
 }
 
 /***** generic breadcrumb ****/
@@ -277,10 +281,6 @@ div#middle_wrapper_content  a:hover {
 }
 
 /*****  footer *****/
-
-div#footer {
-    text-align: center;
-}
 
 div#footer_copyright {
     margin: 0;

@@ -34,6 +34,7 @@ class SD_Global
     public static $SESSION_RATING_VAL_KEY = 'rating';
     public static $SESSION_RESULT_VAL_KEY = 'last_guess';
     public static $SESSION_RATINGS_SELECTED_KEY = 'sess_ratings_selected';
+    public static $SESSION_SHUFFLE_DECK_KEY = 'sess_shuffle_deck';
 
     // Constants for Model field names
     public static $MODEL_ID = 'id';

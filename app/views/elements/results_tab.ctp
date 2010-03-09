@@ -76,8 +76,8 @@
     $p = round(($totalCorrect/$totalAnswered)*100);
     // remainder out of 100
     $r = 100 - $p;
-    //http://chart.apis.google.com/chart?cht=bhs&chco=00FF00,FF0000&chs=150x40&chd=t:30|70
-    $correctImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=00FF00,FF0000&chs=100x15&chd=t:$p|$r";
+    //http://chart.apis.google.com/chart?cht=bhs&chbh=r,0&chco=00FF00,FF0000&chs=150x40&chd=t:30|70
+    $correctImgStr = "http://chart.apis.google.com/chart?cht=bhs&chbh=r,0&chco=00FF00,FF0000&chs=100x15&chd=t:$p|$r";
 
     // Icon for correct/incorrect
     if(strcmp($correct, '1') == 0) {

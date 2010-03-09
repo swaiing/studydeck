@@ -289,6 +289,9 @@ ThreeStateButton.prototype.reset = function() {
             this.hideAnswer();
             $("div#row_body").hide();
             $("div#row_body_mask").show();
+
+            // Unbind space bar
+            $(document).unbind('keydown', 'space', function(){ DeckViewerUI.showAnswer(); return false; });
         }
     },
 
@@ -302,6 +305,9 @@ ThreeStateButton.prototype.reset = function() {
         if(bodyHidden) {
             $("div#row_body").show();
             $("div#row_body_mask").hide();
+
+            // Re-bind space bar
+            $(document).bind('keydown', 'space', function(){ DeckViewerUI.showAnswer(); return false; });
         }
 
         // Reset the display and show the card
@@ -311,26 +317,37 @@ ThreeStateButton.prototype.reset = function() {
 
     'correct':function() {
 
+        var card = this.deck.getCard();
+
         // Set the card correct flag
-        this.deck.getCard().setCorrect();
+        if(card) {
 
-        // Change style of correct button
-        this.resetButtons();
+            // Set correct bit
+            card.setCorrect();
 
-        // Advance to next card
-        this.next();
+            // Change style of correct button
+            this.resetButtons();
+
+            // Advance to next card
+            this.next();
+        }
     },
 
     'incorrect':function() {
 
-        // Set the card incorrect flag
-        this.deck.getCard().setIncorrect();
-        
-        // Change style of incorrect button
-        this.resetButtons();
+        var card = this.deck.getCard();
 
-        // Advance to next card
-        this.next();
+        // Set the card incorrect flag
+        if(card) {
+
+            card.setIncorrect();
+            
+            // Change style of incorrect button
+            this.resetButtons();
+
+            // Advance to next card
+            this.next();
+        }                
     },
 
     // Hide/Show answer

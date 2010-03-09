@@ -30,17 +30,16 @@
         $LINE_SEP = " | ";
 
         // For a logged in user,
-        // There are links for: 'Dashboard' | 'Explore Decks' | 'Create Deck' | 'Help'
+        // There are links for: 'Dashboard' | 'Explore' | 'Create'
         if(isset($activeUser)) {
             echo "<li>" . $html->link('Dashboard',array('controller'=>'users','action'=>'dashboard')) . $LINE_SEP . "</li>";
         }
 
         // For an anonymous user,
-        // There are links for: 'Explore Decks' | 'Create Deck' | 'Help'
-        echo "<li>" . $html->link('Explore Decks',array('controller'=>'decks','action'=>'explore')) . $LINE_SEP . "</li>";
-        echo "<li>" . $html->link('Create Deck',array('controller'=>'decks','action'=>'create')) . $LINE_SEP . "</li>";
+        // There are links for: 'Explore' | 'Create'
+        echo "<li>" . $html->link('Explore',array('controller'=>'decks','action'=>'explore')) . $LINE_SEP . "</li>";
+        echo "<li>" . $html->link('Create',array('controller'=>'decks','action'=>'create')) . "</li>";
     ?>
-        <li><a href="#">Help</a></li>
     </ul>
 </div>
 
@@ -77,9 +76,11 @@
   <div id="footer_nav">
     <ul id="list_nav_footer">
       <li><a href="/">Home</a> | </li>
+      <li><a href="#">Help</a> | </li>
       <li><a href="#">About</a> | </li>
-      <li><a href="#">Terms of Use</a> | </li>
       <li><a href="#">Contact</a></li>
+      <li><a href="#">Terms of Use</a> | </li>
+      <li><a href="#">Privacy Policy</a> | </li>
     </ul>
   </div>
 </div> <!-- end footer -->

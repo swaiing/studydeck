@@ -104,6 +104,11 @@
     <div id="mode_select">
         <p>2. Select mode:</p>
         <?php
+            // Checkbox to shuffle deck
+            $shuffleOptions = array('' => array('1'=>'Shuffle deck'));
+            echo $form->input('ShuffleDeck', array('type' => 'select', 'multiple' => 'checkbox',
+                                                      'label' => '', 'options' => $shuffleOptions));
+
             // Hidden form field to record bit storing whether the Quiz button was clicked
             // Javascript on-click handler bound to 'Quiz' button
             echo $form->hidden('isQuizMode', array('value' => '0'));

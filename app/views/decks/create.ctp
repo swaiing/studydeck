@@ -17,7 +17,7 @@
 <div id="middle_wrapper_content">
 <div id="middle_bar">
 
-<h1>Create a new deck</h1>
+<h1>Create</h1>
 
 <?php
     echo $this->element('save_deck', array('edit' => false));

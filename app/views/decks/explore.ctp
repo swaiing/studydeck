@@ -3,7 +3,7 @@
 <div id="middle_wrapper_content">
 <div id="middle_bar">
 
-    <h1>Explore Decks</h1>
+    <h1>Explore</h1>
 
     
     <div id="search_box">

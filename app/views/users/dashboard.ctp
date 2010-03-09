@@ -12,7 +12,8 @@
 <div id="middle_wrapper_content">
 	<div id="middle_bar">
 	
-		<h1>Welcome <?php echo $activeUser; ?>!</h1>
+		<h1>Dashboard</h1>
+		<h2>Welcome <?php echo $activeUser; ?>!</h2>
         <br/>    
 		<div>Sort Decks By: <a href="/users/dashboard">Last Quizzed</a> &nbsp <a href="/users/dashboard/bycount">Times Quizzed</a></div>
 		
@@ -51,7 +52,14 @@
                     $easyPercent = ($ucDeck['Easy']/$totalCards)*100;
                     $mediumPercent = ($ucDeck['Medium']/$totalCards)*100;
                     $hardPercent = ($ucDeck['Hard']/$totalCards)*100;
-                    $progressImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=00FF00,FFFF00,FF0000&chs=150x40&chd=t:".$easyPercent."|".$mediumPercent."|".$hardPercent;
+
+                    // Old chart format
+                    //$progressImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=00FF00,FFFF00,FF0000&chs=150x40&chd=t:".$easyPercent."|".$mediumPercent."|".$hardPercent;
+
+                    // New chart format with gradients
+                    // http://chart.apis.google.com/chart?cht=bhs&chco=FCFF08,FF7B00,FF000A&chs=130x25&chd=t:30|40|30&chf=b0,lg,180,FCFF08,0,FCFF66,1|b1,lg,180,FF7B00,0,FFB077,1|b2,lg,180,FF000A,0,FF6167,1&chbh=r,0
+                    $barChartUrl = "http://chart.apis.google.com/chart?cht=bhs&chco=FCFF08,FF7B00,FF000A&chs=130x25&chf=b0,lg,180,FCFF08,0,FCFF66,1|b1,lg,180,FF7B00,0,FFB077,1|b2,lg,180,FF000A,0,FF6167,1&chbh=r,0&chd=t:";
+                    $progressImgStr = $barChartUrl . $easyPercent . "|" . $mediumPercent . "|" . $hardPercent;
                 }
                 ?>
                 <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>
@@ -104,7 +112,8 @@
                     $easyPercent = ($pDeck['Easy']/$totalCards)*100;
                     $mediumPercent = ($pDeck['Medium']/$totalCards)*100;
                     $hardPercent = ($pDeck['Hard']/$totalCards)*100;
-                    $progressImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=00FF00,FFFF00,FF0000&chs=150x40&chd=t:".$easyPercent."|".$mediumPercent."|".$hardPercent;
+                    //$progressImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=00FF00,FFFF00,FF0000&chs=150x40&chd=t:".$easyPercent."|".$mediumPercent."|".$hardPercent;
+                    $progressImgStr = $barChartUrl . $easyPercent . "|" . $mediumPercent . "|" . $hardPercent;
                 }
                 ?>
                 <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>

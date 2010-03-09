@@ -534,6 +534,8 @@ class DecksController extends AppController {
     {
         // Params passed by form
         $ratingsSelected = $this->data['Deck']['RatingsSelected'];
+        $shuffleDeck = $this->data['Deck']['ShuffleDeck'];
+        $isShuffleDeck = array_pop($shuffleDeck);
         $isQuizMode = (int) $this->data['Deck']['isQuizMode'];
         $deckId = (int) $this->data['Deck']['deckId'];
         $userId = $this->Auth->user('id');
@@ -543,10 +545,21 @@ class DecksController extends AppController {
 
         // Debug
         //$this->log($LOG_PREFIX . "empty: " . empty($ratingsSelected), LOG_DEBUG);
+        //$this->log($LOG_PREFIX . "shuffleDeck: " . $shuffleDeck, LOG_DEBUG);
 
+        // Write bit to session to shuffle
+        if($isShuffleDeck) {
+
+            // Clear the session contents
+            $this->Session->delete(SD_Global::$SESSION_SHUFFLE_DECK_KEY);
+
+            // Write shuffle deck bit
+            $this->Session->write(SD_Global::$SESSION_SHUFFLE_DECK_KEY, 1);
+        }
 
         // Write the selected ratings in session
         if(!empty($ratingsSelected)) {
+
             // Clear the session contents
             $this->Session->delete(SD_Global::$SESSION_RATINGS_SELECTED_KEY);
 
@@ -627,6 +640,9 @@ class DecksController extends AppController {
         // Read selected ratings from session
         $ratingsSelected = $this->Session->read(SD_Global::$SESSION_RATINGS_SELECTED_KEY);
 
+        // Read selected ratings from session
+        $shuffleDeck = $this->Session->read(SD_Global::$SESSION_SHUFFLE_DECK_KEY);
+
         // Clear the session contents
         //$this->Session->delete(SD_Global::$SESSION_RATINGS_SELECTED_KEY);
 
@@ -666,6 +682,13 @@ class DecksController extends AppController {
 
         // Sanitize array
         $cardRecords = Sanitize::clean($cardRecords, $sanitizeParams);
+
+        // Shuffle array
+        if($shuffleDeck) {
+            shuffle($cardRecords);
+        }
+
+        // Resort cards by Id
         $indexedCardRecords = $this->indexByCardId($cardRecords);
 
         // Call helpers to post-process data
