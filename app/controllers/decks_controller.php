@@ -315,6 +315,35 @@ class DecksController extends AppController {
     }
 
   /*
+   * Helper which returns deck fields
+   *
+   */
+    private function getDeck($deckId)
+    {
+        // Import sanitize library
+        // TODO: Explore the effects of every parameter here.
+        // i.e. What characters are we losing?
+        App::import('Sanitize');
+        $sanitizeParams = array('connection'=>'default',
+                        'odd_spaces'=>'true',
+                        'encode'=>true,
+                        'dollar'=>true,
+                        'carriage'=>true,
+                        'unicode'=>true,
+                        'escape'=>true,
+                        'backslash'=>true
+        );
+
+        // Set $deckRecord
+        $this->Deck->id = $deckId;
+        $this->Deck->recursive = -1;
+        $deckRecord = $this->Deck->read();
+
+        // Sanitize array
+        return Sanitize::clean($deckRecord, $sanitizeParams);
+    }
+
+  /*
    * Helper which returns cards given a deck.
    *
    */
@@ -370,7 +399,20 @@ class DecksController extends AppController {
         // Run SQL
         $cardRecords = $this->Deck->Card->query($query);
 
-        return $cardRecords;
+        // Sanitize records
+        App::import('Sanitize');
+        $sanitizeParams = array('connection'=>'default',
+                        'odd_spaces'=>'true',
+                        'encode'=>true,
+                        'dollar'=>true,
+                        'carriage'=>true,
+                        'unicode'=>true,
+                        'escape'=>true,
+                        'backslash'=>true
+        );
+
+        // Sanitize and return
+        return Sanitize::clean($cardRecords, $sanitizeParams);
     }
 
 
@@ -513,9 +555,24 @@ class DecksController extends AppController {
         // Deck is in dashboard (i.e. in my_decks table)
         $this->bindAssocations($deckId);
 
-        // Call study method
-        // Binds $deckId, $deckData, $cards, $cardsRatingsCount, and $cardsResults to view
-        $this->study($deckId);
+        // Call helper to retrieve deck info
+        $deckRecord = $this->getDeck($deckId);
+
+        // Call helper to retrieve array of cards
+        $cardRecords = $this->getCards($deckId, null);
+
+        // Resort cards by Id
+        $indexedCardRecords = $this->indexByCardId($cardRecords);
+
+        // Call helpers to post-process data
+        $cardIds = $this->getCardIds($cardRecords);
+
+        // Deprecated?
+        //$ratingsCount = $this->getRatingsCount($cardRecords);
+        //$this->set('cardsRatingsCount',$ratingsCount);
+
+        // Call helper to retrieve results
+        $resultMap = $this->getResults($cardIds);
 
         // Call quizResults method to bind session data
         // Binds $quiz to current session data for this deck
@@ -523,6 +580,13 @@ class DecksController extends AppController {
 
         // Set quiz count
         $myDeckResults = $this->getQuizCount($deckId);
+
+        // Set variables for view
+        $this->set('deckId',$deckRecord['Deck']['id']);
+        $this->set('deckData',$deckRecord);
+        $this->set('cards',$cardRecords);
+        $this->set('cardsIndexed',$indexedCardRecords);
+        $this->set('cardsResults',$resultMap);
         $this->set('userQuizCount', $myDeckResults['MyDeck']['quiz_count']);
     }
 
@@ -547,11 +611,11 @@ class DecksController extends AppController {
         //$this->log($LOG_PREFIX . "empty: " . empty($ratingsSelected), LOG_DEBUG);
         //$this->log($LOG_PREFIX . "shuffleDeck: " . $shuffleDeck, LOG_DEBUG);
 
+        // Clear the session contents
+        $this->Session->delete(SD_Global::$SESSION_SHUFFLE_DECK_KEY);
+
         // Write bit to session to shuffle
         if($isShuffleDeck) {
-
-            // Clear the session contents
-            $this->Session->delete(SD_Global::$SESSION_SHUFFLE_DECK_KEY);
 
             // Write shuffle deck bit
             $this->Session->write(SD_Global::$SESSION_SHUFFLE_DECK_KEY, 1);
@@ -643,9 +707,6 @@ class DecksController extends AppController {
         // Read selected ratings from session
         $shuffleDeck = $this->Session->read(SD_Global::$SESSION_SHUFFLE_DECK_KEY);
 
-        // Clear the session contents
-        //$this->Session->delete(SD_Global::$SESSION_RATINGS_SELECTED_KEY);
-
         // Debug
         /*
         if(isset($ratingsSelected)) {
@@ -655,55 +716,33 @@ class DecksController extends AppController {
         }
         */
 
-        // Import sanitize library
-        // TODO: Explore the effects of every parameter here.
-        // i.e. What characters are we losing?
-        App::import('Sanitize');
-        $sanitizeParams = array('connection'=>'default',
-                        'odd_spaces'=>'true',
-                        'encode'=>true,
-                        'dollar'=>true,
-                        'carriage'=>true,
-                        'unicode'=>true,
-                        'escape'=>true,
-                        'backslash'=>true
-        );
-
-        // Set $deckRecord
-        $this->Deck->id = $id;
-        $this->Deck->recursive = -1;
-        $deckRecord = $this->Deck->read();
-
-        // Sanitize array
-        $deckRecord = Sanitize::clean($deckRecord, $sanitizeParams);
+        // Call helper to retrieve deck info
+        $deckRecord = $this->getDeck($id);
 
         // Call helper to retrieve array of cards
         $cardRecords = $this->getCards($id, $ratingsSelected);
-
-        // Sanitize array
-        $cardRecords = Sanitize::clean($cardRecords, $sanitizeParams);
-
-        // Shuffle array
-        if($shuffleDeck) {
-            shuffle($cardRecords);
-        }
 
         // Resort cards by Id
         $indexedCardRecords = $this->indexByCardId($cardRecords);
 
         // Call helpers to post-process data
         $cardIds = $this->getCardIds($cardRecords);
-        $ratingsCount = $this->getRatingsCount($cardRecords);
+        //$ratingsCount = $this->getRatingsCount($cardRecords);
 
         // Call helper to retrieve results
         $resultMap = $this->getResults($cardIds);
+
+        // Shuffle deck if bit is set
+        if($shuffleDeck) {
+            shuffle($cardRecords);
+        }
 
         // Set variables for view
         $this->set('deckId',$deckRecord['Deck']['id']);
         $this->set('deckData',$deckRecord);
         $this->set('cards',$cardRecords);
         $this->set('cardsIndexed',$indexedCardRecords);
-        $this->set('cardsRatingsCount',$ratingsCount);
+        //$this->set('cardsRatingsCount',$ratingsCount);
         $this->set('cardsResults',$resultMap);
         return true;
     }
