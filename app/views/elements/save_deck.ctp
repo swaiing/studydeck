@@ -1,12 +1,12 @@
-<!-- File: /app/views/elements/deck_viewer.ctp -->
-<?php
+<!-- File: /app/views/elements/save_deck.ctp -->
 
+<?php
     // Default attributes
     $DETAIL_FS = 45;
     $DETAIL_LENGTH = 75;
-    $TERM_FS = 25;
+    $TERM_FS = 20;
     $TERM_LENGTH = 75;
-    $DEFINITION_FS = 50;
+    $DEFINITION_FS = 45;
     $DEFINITION_LENGTH = 168;
     $UPLOAD_FS = 25;
     $UPLOAD_LENGTH = 75;
@@ -38,8 +38,6 @@
         }
     }
 
-    
-
     $privacyOptions = array($PRIVATE_FLAG => $PRIVATE_LABEL, $PUBLIC_FLAG=>$PUBLIC_LABEL);
     $privacyAttributes = array('legend'=>false, 'label'=>'Privacy:', 'default'=> $DEFAULT_PRIVACY);
 
@@ -47,7 +45,6 @@
     $cardDefinitionOptions = array('type'=>'text', 'label'=>false, 'size'=>$DEFINITION_FS, 'maxlength'=>$DEFINITION_LENGTH);
 
     // Create the form 
-    
     echo $form->create('Deck', array('action' => $controllerAction));
 
     // Deck detail fields
@@ -66,7 +63,10 @@
     echo "<li>" . $form->input('Tag.tag',array('label'=>'Tags:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH, 'id'=>'autoComplete', 'value' => $tagList)) . "</li>\n";
  
     // Privacy radio
-    echo "<li class=\"privacyOptions\">" . $form->radio('privacy', $privacyOptions, $privacyAttributes);
+    echo "<li class=\"privacy_options\">";
+    echo "<span class=\"label\">Visibility:</span>";
+    echo $form->radio('privacy', $privacyOptions, $privacyAttributes);
+    echo "</li>";
 
     // Description
     echo "<li>" . $form->input('Deck.description',array('label'=>'Description:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH, 'value' => $deckDescription)) . "</li>\n";
@@ -78,8 +78,8 @@
 
     // Row header
     echo "<li>";
-    echo "<div id=\"term_header\">Term</div>";
-    echo "<div id=\"definition_header\">Definition</div>";
+    echo "<div id=\"term_header\">Question</div>";
+    echo "<div id=\"definition_header\">Answer</div>";
     echo "</li>";
 
     // List card rows
@@ -113,20 +113,13 @@
     echo "</div>\n";    // div#card_inputs
     echo "</div>\n";    // div#deck_inputs
     echo "<div id=\"submit_deck\">";
-    $submitButtonText = 'Create Deck';
+    $submitButtonText = 'Create Studydeck';
     if($edit) {
         $submitButtonText = 'Update Deck';
     }
     echo $form->button($submitButtonText, array('type'=>'submit'));
     echo "</div>";
     echo $form->end();
-    
-        
-    
-
 ?>
-
-</legend>
-</fieldset>
 
 <div id="deleteCardDialog" title="Remove card"></div>

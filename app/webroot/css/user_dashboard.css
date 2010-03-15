@@ -1,0 +1,29 @@
+/*** user_dashboard.css ***/
+
+div#sort_actions {
+    overflow: auto;
+    margin: 0 0 10px 0;
+}
+
+#sort_actions ul {
+    float: right;
+    clear: right;
+}
+
+#sort_actions li {
+    display: inline;
+    margin-left: 10px;
+}
+
+div#created_me {
+}
+
+div#created_others {
+    margin: 20px 0 0 0;
+}
+
+div#displaying {
+    margin: 10px 0 0 0;
+    color: #363636;
+}
+

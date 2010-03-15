@@ -8,7 +8,8 @@
 ?>
 
 <div id="middle_wrapper_content">
-<div id="middle_bar">
+<div id="middle_bar" class="box">
+<div class="box_content">
 
 <div id="confirm_box">
 <?php
@@ -35,6 +36,7 @@
 ?>
 </div>
 
+</div> <!-- end box_content -->
 </div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->
 <div class="clear_div">&nbsp;</div>

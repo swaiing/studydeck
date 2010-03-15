@@ -15,15 +15,17 @@
 ?>
 
 <div id="middle_wrapper_content">
-<div id="middle_bar">
+<div id="middle_bar" class="box">
+<div class="box_content">
 
-<h1>Edit your deck</h1>
+<h1>Edit Studydeck</h1>
+<div class="description">Make changes to your studydeck.</div>
 <?php
+    // Call Cake element
     echo $this->element('save_deck', array('edit' => true));
 ?>
 
-
-
+</div> <!-- end box_content -->
 </div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->
 <div class="clear_div">&nbsp;</div>

@@ -40,7 +40,8 @@
 
 <!-- Begin view content -->
 <div id="middle_wrapper_content">
-<div id="middle_bar">
+<div id="middle_bar" class="box">
+<div class="box_content">
 
 <div class="crumb">
     <?php
@@ -74,7 +75,7 @@
 
 <div id="heading">
     <h1><?php echo $deckName; ?></h1>
-    <p><?php echo $deckDesc; ?></p>
+    <div class="description"><?php echo $deckDesc; ?></div>
 </div>
 
 <div id="middle">
@@ -204,6 +205,7 @@
 
 </div> <!-- end bottom div -->
 
-</div>
+</div> <!-- end box_content -->
+</div> <!-- end middle_bar -->
 </div>
 <!-- End view content -->

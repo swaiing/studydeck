@@ -8,7 +8,8 @@
 ?>
 
 <div id="middle_wrapper_content">
-	<div id="middle_bar">
+	<div id="middle_bar" class="box">
+    <div class="box_content"
 
     <div id="register_ad_box">
         <h2>Not a member?</h2>
@@ -25,7 +26,7 @@
 	<?php
 
     	// Field attributes
-    	$FIELD_SIZE = 25;
+    	$FIELD_SIZE = 20;
         $FIELD_LENGTH = 50;
     	$modedUrl = str_replace('/','_',$prevUrl);
    
@@ -57,6 +58,7 @@
 
 
     <div class="clear_div">&nbsp;</div>
+	</div> <!-- end box_content -->
 	</div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->
 

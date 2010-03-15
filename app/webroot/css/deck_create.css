@@ -1,51 +1,55 @@
 /****** deck_create.css ******/
 
+/** deck meta container **/
+
 div#deck_inputs {
     margin: 10px 0 0 0;
     padding: 0;
 }
 
-div#deck_inputs ol {
+#deck_inputs ol {
     padding: 1em 1em 0 1em;
-    list-style: none;
 }
 
-div#deck_inputs li {
+#deck_inputs li {
     padding-bottom: 1em;
 }
 
-legend {
-    margin-left: 1em;
-    color: #000000;
-    font-weight: bold;
-}
-
-label {
+#deck_inputs label, #deck_inputs span.label {
+    font-size: 1.2em;
     float: left;
     width: 6em;
     margin-right: 1em;
     text-align: left;
 }
 
-div#deck_inputs li {
+#deck_inputs li {
     float: left;
     clear: left;
     width: 100%;
     padding-bottom: 1em;
 }
 
-li.privacyOptions {
-    margin-left: 6em;
+#deck_inputs li.privacy_options {
 }
 
-li.privacyOptions label {
+#deck_inputs li.privacy_options label {
     float: none;
     margin-left: 1em;
 }
 
+#deck_inputs li input, #upload_box input {
+    font-size: 1.3em;
+}
+
+/** card input container **/
+
 div#card_inputs {
-    margin: 0;
     padding-bottom: 1em;
+}
+
+div#card_inputs label {
+    text-align: right;
 }
 
 div#card_inputs input {
@@ -54,15 +58,15 @@ div#card_inputs input {
 }
 
 div#card_inputs #term_header {
-    font-weight: bold;
+    font-size: 1.2em;
     float: left;
     clear: left;
-    width: 18em;
-    margin-left: 8em;
+    width: 14em;
+    margin-left: 7em;
 }
 
 div#card_inputs #definition_header {
-    font-weight: bold;
+    font-size: 1.2em;
     float: left;
     width: 20em;
 }
@@ -77,25 +81,31 @@ div.plus, div.minus {
 }
 
 div.plus {
-  background-image:url('../img/add.png');
+  background-image:url('/img/add.png');
 }
 div.minus {
-  background-image:url('../img/delete.png');
+  background-image:url('/img/delete.png');
 }
 
 div#submit_deck {
-    padding: 1em 0 1em 0;
+    padding: 2em 0;
 }
 
-div#submit_deck input {
+#submit_deck input, input#upload_button {
+    font-size: 1.3em;
+    height: 30px;
+    width: 170px;
 }
 
-input#upload_button {
-}
+/** CSV input container **/
+
 div#upload_box {
-    margin: 0 0 10px 0;
     padding: 10px;
     border: 1px solid #cecece;
+}
+
+#upload_box div.input {
+    margin: 1em auto;
 }
 
 /*** auto complete CSS ***/

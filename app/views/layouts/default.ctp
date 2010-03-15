@@ -1,5 +1,4 @@
 <?php header('Content-type:text/html; charset=UTF-8'); ?>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
         "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -15,75 +14,88 @@
   ?>
 </head>
 <body>
-<div id="top_bar">
-<div id="top_logo">
-    <h1>
-        <?php echo $html->link('StudyDeck',"/"); ?>
-    </h1>
-</div>
+<div id="content">
+<div id="header">
 
-<div id="top_nav">
-<div id="nav_left_links">
-    <ul id="list_nav_main">
-    <?php
-        // Line separator character
-        $LINE_SEP = " | ";
+    <div id="site_id">
+        <h1><?php echo $html->link('studydeck',"/"); ?></h1>
+        <span class="tagline">Online flashcards made simple.</span>
+    </div>
 
-        // For a logged in user,
-        // There are links for: 'Dashboard' | 'Explore' | 'Create'
-        if(isset($activeUser)) {
-            echo "<li>" . $html->link('Dashboard',array('controller'=>'users','action'=>'dashboard')) . $LINE_SEP . "</li>";
-        }
+    <div id="nav">
 
-        // For an anonymous user,
-        // There are links for: 'Explore' | 'Create'
-        echo "<li>" . $html->link('Explore',array('controller'=>'decks','action'=>'explore')) . $LINE_SEP . "</li>";
-        echo "<li>" . $html->link('Create',array('controller'=>'decks','action'=>'create')) . "</li>";
-    ?>
-    </ul>
-</div>
+        <div id="login">
+            <ul>
+            <?php
+               // For a logged in user,
+               // The current user logged in is displayed: Hello steve | 'Logout'
+               if(isset($activeUser)) {
+                    //echo "<li>" . $activeUser . "</li>";
+                    //echo "<li>|</li>";
+                    //echo "<li>" . $html->link('Settings',array('controller'=>'users','action'=>'account')) . "</li>";
+                    echo "<li>" . $html->link($activeUser,array('controller'=>'users','action'=>'account')) . "</li>";
+                    echo "<li>|</li>";
+                    echo "<li>" . $html->link('Logout',array('controller'=>'users','action'=>'logout')) . "</li>";
+                }
+                else {        
+                    // For an anonymous user,
+                    // There are links for: 'Register' | 'Login'
+                    echo "<li>" . $html->link('Register',array('controller'=>'users','action'=>'register')) . "</li>";
+                    echo "<li>|</li>";
+                    echo "<li>" . $html->link('Login',array('controller'=>'users','action'=>'login')) . "</li>";
+                }
+            ?>
+            </ul>
+        </div> <!-- end login -->
 
-<div id="nav_right_login">
-    <ul id="list_nav_login">
-    <?php
+        <div id="row">
+        <div id="nav_left">
+            <ul>
+            <?php
+                // For a logged in user,
+                // There are links for: 'Dashboard' | 'Explore' | 'Create'
+                if(isset($activeUser)) {
+                    echo "<li class=\"button\">" . $html->link('Dashboard',array('controller'=>'users','action'=>'dashboard')) . "</li>";
+                }
+                // For an anonymous user,
+                // There are links for: 'Explore' | 'Create'
+                echo "<li class=\"button\">" . $html->link('Explore',array('controller'=>'decks','action'=>'explore')) . "</li>";
+                echo "<li class=\"button\">" . $html->link('Create',array('controller'=>'decks','action'=>'create')) . "</li>";
+            ?>
+            </ul>
+        </div>
 
-       // For a logged in user,
-       // The current user logged in is displayed: Hello steve | 'Logout'
-       if(isset($activeUser)) {
-            echo "<li>" . $activeUser . $LINE_SEP . "</li>";
-            echo "<li>" . $html->link('Logout',array('controller'=>'users','action'=>'logout')) . "</li>";
-        }
-        else {        
-            // For an anonymous user,
-            // There are links for: 'Register' | 'Login'
-            echo "<li>" . $html->link('Register',array('controller'=>'users','action'=>'register')) . $LINE_SEP . "</li>";
-            echo "<li>" . $html->link('Login',array('controller'=>'users','action'=>'login')) . "</li>";
-        }
-    ?>
-    </ul>
-</div>
-</div> <!-- end top_nav -->
+        <div id="nav_right">
+            <input type="text" name="search" />
+            <button title="Search" type="submit" />
+        </div>
+        </div>
 
-</div> <!-- end top_bar -->
+    </div> <!-- end nav -->
+
+</div> <!-- end header -->
 
 <!-- Render view here -->
 <?php echo $content_for_layout ?>
 
+<div id="footer_wrap">
 <div id="footer">
   <div id="footer_copyright">
-    <span class="copyright">Copyright 2009 StudyDeck. Build Version: BUILD_NUM. All rights reserved.</span>
+    <span class="copyright">Copyright 2010 StudyDeck. Build Version: BUILD_NUM. All rights reserved.</span>
   </div>
   <div id="footer_nav">
     <ul id="list_nav_footer">
       <li><a href="/">Home</a> | </li>
-      <li><a href="#">Help</a> | </li>
       <li><a href="#">About</a> | </li>
       <li><a href="#">Contact</a> | </li>
+      <li><a href="#">Help</a> | </li>
       <li><a href="#">Terms of Use</a> | </li>
-      <li><a href="#">Privacy Policy</a> | </li>
+      <li><a href="#">Privacy Policy</a></li>
     </ul>
   </div>
 </div> <!-- end footer -->
+</div> <!-- end footer_wrap -->
+</div> <!-- end content -->
 
 <script type="text/javascript">
     var uservoiceOptions = {
@@ -94,9 +106,9 @@
       showTab: true,  
       /* optional */
       alignment: 'left',
-      background_color:'#004D99', 
+      background_color:'#363636', 
       text_color: 'white',
-      hover_color: '#06C',
+      hover_color: '#89A7D7',
       lang: 'en'
     };
 

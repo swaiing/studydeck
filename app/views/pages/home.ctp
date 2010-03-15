@@ -1,5 +1,5 @@
-<div id="middle_wrapper">
-<div id="middle_bar">
+<div id="middle_bar" class="box">
+<div class="box_content">
 
   <h2>StudyDeck lets you create a deck of flashcards to help you learn.</h2>
 
@@ -15,5 +15,5 @@
 
 <div class="clear_div">&nbsp;</div>
 
-</div> <!-- end middle_bar -->
+</div> <!-- end box_content -->
 </div> <!-- end middle_wrapper -->

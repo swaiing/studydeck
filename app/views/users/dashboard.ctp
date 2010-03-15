@@ -1,22 +1,32 @@
 <!-- /app/views/users/dashboard.ctp -->
+
 <?php
 	// Javascript includes
-    //echo $javascript->link('jquery-1.2.6.min',false);
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js',false);
     echo $javascript->link('user_dashboard',false);
+
+    // CSS includes
+    echo $html->css('user_dashboard',null,null,false);
     echo $html->css('jquery-ui-1.7.2.custom.gray',null,null,false);
-    //echo $html->css('jquery-ui-1.7.2.custom',null,null,false);
 ?>
 
 <div id="middle_wrapper_content">
-	<div id="middle_bar">
+	<div id="middle_bar" class="box">
+	<div class="box_content">
 	
 		<h1>Dashboard</h1>
-		<h2>Welcome <?php echo $activeUser; ?>!</h2>
-        <br/>    
-		<div>Sort Decks By: <a href="/users/dashboard">Last Quizzed</a> &nbsp <a href="/users/dashboard/bycount">Times Quizzed</a></div>
+        <div class="description">Learn studydecks you have created or favorited here.</div>
+		<!--<h2>Welcome <?php //echo $activeUser; ?>!</h2>-->
+
+		<div id="sort_actions">
+            <ul>
+                <li><?php echo $html->link("Recently Quizzed","/users/dashboard"); ?></li>
+                <li><?php echo $html->link("Times Quizzed","/users/dashboard/bycount"); ?></li>
+            </ul>
+        </div>
 		
+        <div id="created_me">
 		<h2>Created By Me</h2>
 		<?php if(count($userCreatedDecks)) { ?>
 		<table class="deck_table">
@@ -26,13 +36,11 @@
 				<th>Times Quizzed</th>
 				<th>Last Quizzed</th>				
                 <th>Progress</th>
-                <th>Remove</th>
+                <th></th>
 			</tr>
 			<?php foreach ($userCreatedDecks as $ucDeck):
-     		echo "<tr id= \"userDeckRow".$ucDeck['Deck']['id']."\">";
-
+     		    echo "<tr id= \"userDeckRow".$ucDeck['Deck']['id']."\">";
 			?>
-
 				<td>
                     <?php echo $html->link(html_entity_decode($ucDeck['Deck']['deck_name']),"/decks/info/".$ucDeck['Deck']['id']); ?>
                     <div><?php echo $ucDeck['Deck']['description']; ?></div>
@@ -63,7 +71,7 @@
                 }
                 ?>
                 <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>
-                <td><?php echo $html->link("x","#",array('onclick' => "userDeleteDialog(".$ucDeck['Deck']['id'].",\"".$ucDeck['Deck']['deck_name']."\")"));?></td>
+                <td><?php echo $html->link("Remove","#",array('onclick' => "userDeleteDialog(".$ucDeck['Deck']['id'].",\"".$ucDeck['Deck']['deck_name']."\")"));?></td>
                  
             </tr>
 			<?php endforeach; ?>
@@ -77,6 +85,9 @@
             echo "</div>";
 		}
 		?>
+        </div>
+
+        <div id="created_others">
         <h2>Created By Others</h2>
 		<?php if(count($publicDecks)) { ?>
 		<table class="deck_table">
@@ -86,7 +97,7 @@
 				<th>Times Quizzed</th>
 				<th>Last Quizzed</th>				
                 <th>Progress</th>
-                <th>Remove</th>
+                <th></th>
 			</tr>
 			<?php 
 				foreach ($publicDecks as $pDeck):
@@ -117,7 +128,7 @@
                 }
                 ?>
                 <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>
-                <td><?php echo $html->link("x","#",array('onclick' => "publicDeleteDialog(".$pDeck['Deck']['id'].",\"".$pDeck['Deck']['deck_name']."\")"));?></td>            
+                <td><?php echo $html->link("Remove","#",array('onclick' => "publicDeleteDialog(".$pDeck['Deck']['id'].",\"".$pDeck['Deck']['deck_name']."\")"));?></td>            
             </tr>
 			<?php endforeach; ?>
 
@@ -130,13 +141,14 @@
             echo "<br/>";
 		}
 		?>
+        </div>
         
-        <div>Displaying <?php echo $numDecksStudied ?> decks</div>
+        <div id="displaying">Displaying <?php echo $numDecksStudied ?> decks</div>
+
+        <!-- javascript dialog boxes -->
         <div id="publicDeleteDialog" title="Remove From Dashboard"></div>
         <div id="userDeleteDialog" title="Remove Your Deck"></div>
         
-				
-       
+		</div> <!-- end box_content -->
 		</div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->
-<div class="clear_div">&nbsp;</div>

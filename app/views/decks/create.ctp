@@ -15,23 +15,28 @@
 ?>
 
 <div id="middle_wrapper_content">
-<div id="middle_bar">
+<div id="middle_bar" class="box">
+<div class="box_content">
 
 <h1>Create</h1>
-
+<div class="description">Fill in the fields below to create a new studydeck.</div>
 <?php
+    // Cake element for deck edit fields
     echo $this->element('save_deck', array('edit' => false));
     
-    $UPLOAD_FS = 25;
+    // CSV Upload
+    $UPLOAD_FS = 50;
     $UPLOAD_LENGTH = 75;
     echo "<div id=\"upload_box\">";
+    echo "<h2>CSV File Upload</h2>";
+    echo "<div class=\"description\">Upload a CSV file (i.e. comma-separated) to enter a lot of cards quickly.</div>";
     echo $form->create('Deck', array('id'=>'upload_csv_form', 'type'=>'file', 'action'=>'uploadCSV'));
-    echo $form->input('csv_file', array('label'=>'File:', 'type'=>'file', 'size'=>$UPLOAD_FS, 'maxlength'=>$UPLOAD_LENGTH));  
-    echo $form->button('Upload', array('id'=>'upload_button', 'onClick'=>'uploadCsv()'));
+    echo $form->input('csv_file', array('label'=>false, 'type'=>'file', 'size'=>$UPLOAD_FS, 'maxlength'=>$UPLOAD_LENGTH));  
+    echo $form->button('Upload CSV File', array('id'=>'upload_button', 'onClick'=>'uploadCsv()'));
     echo $form->end();
     echo "</div>";
 ?>
 
+</div> <!-- end box_content -->
 </div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->
-<div class="clear_div">&nbsp;</div>

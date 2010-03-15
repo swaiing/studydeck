@@ -8,11 +8,12 @@
 ?>
 
 <div id="middle_wrapper_content">
-	<div id="middle_bar">
+	<div id="middle_bar" class="box">
+    <div class="box_content">
 
 	<?php
     	// Field attributes
-    	$FIELD_SIZE = 35;
+    	$FIELD_SIZE = 30;
     	$FIELD_LENGTH = 50;
 
     	echo "<div id=\"forgot_box\" class=\"form_box\">\n";
@@ -25,7 +26,7 @@
     	}
 
      	if($validationError != '') {
-    	  	echo "<br/><div>Error: ".$validationError."</div>\n";
+    	  	echo "<p><span class=\"error\">".$validationError."</span></p>";
 	  	}
 
     	if($success) {
@@ -43,5 +44,6 @@
 	?>
 
     <div class="clear_div">&nbsp;</div>
+	</div> <!-- end box_content -->
 	</div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->

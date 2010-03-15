@@ -8,11 +8,12 @@
 ?>
 
 <div id="middle_wrapper_content">
-	<div id="middle_bar">
+	<div id="middle_bar" class="box">
+    <div class="box_content">
 
 	<?php
     	// Field attributes
-    	$FIELD_SIZE = 35;
+    	$FIELD_SIZE = 30;
         $FIELD_LENGTH = 50;
 
     	echo "<div id=\"register_box\" class=\"form_box\">\n";
@@ -49,5 +50,6 @@
     </div>
 
     <div class="clear_div">&nbsp;</div>
+	</div> <!-- end box_content -->
 	</div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->

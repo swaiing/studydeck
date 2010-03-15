@@ -73,12 +73,12 @@ div#mode_select input#learn_button, div#mode_select input#quiz_button {
 
 div#bottom {
     font-size: 12px;
-    margin: 15px 0 15px 0;
+    margin: 15px 0 0 0;
     padding: .2em;
 }
 
 div#stats_tab, div#cards_tab, div#results_tab {
-    margin: 0;
+    height: 530px;
     padding: 10px;
     clear: both;
 }
