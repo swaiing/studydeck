@@ -15,12 +15,14 @@
     $FIELD_SIZE = 25;
     echo "<h1>Account Settings</h1>";
     //echo "<p>Username: ".$user['User']['username']."</p>";
+    /*
 	if($validationError != '') {
     	  echo "<br/><div>Error: ".$validationError."</div>\n";
     }
 	if($success) {
     	echo "<div>Your password has been changed!</div>";
     }
+    */
     echo $form->create('User', array('action' => 'account'));
     echo "<div id=\"change_email_box\" class=\"form_box\">";
     echo "<h2>Change Your Email</h2>";
