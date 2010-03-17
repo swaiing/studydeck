@@ -174,7 +174,7 @@ div#nav_right {
     background: url("/img/search.png") no-repeat;
 }
 
-/*****  middle_bar generic *****/
+/*****  middle_bar homepage *****/
 div.howto_box {
   float: left;
   margin: 10px;
@@ -196,10 +196,19 @@ div.howto_box a {
   color: #004D99;
   text-decoration: none;
 }
-
 div.howto_box a:hover {
   color: #004D99;
   text-decoration: underline;
+}
+div#blurb p, div#iphone p {
+    font-size: 14px;
+}
+div#iphone {
+    border: 1px solid #004D99;
+    width: 250px;
+    margin: 0 auto;
+    clear: both;
+    text-align: center;
 }
 
 /***** generic headings *****/
@@ -294,6 +303,7 @@ div.box:after {
 div.box_content {
     padding: 0 25px 0 20px;
     background: url("/img/rs-right.png") right repeat-y;
+    overflow-y: auto;
 }
 
 /*****  white-drop shadow box *****/

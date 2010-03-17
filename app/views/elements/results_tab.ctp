@@ -76,8 +76,14 @@
     $p = round(($totalCorrect/$totalAnswered)*100);
     // remainder out of 100
     $r = 100 - $p;
+
+    // No gradient not great colors
     //http://chart.apis.google.com/chart?cht=bhs&chbh=r,0&chco=00FF00,FF0000&chs=150x40&chd=t:30|70
-    $correctImgStr = "http://chart.apis.google.com/chart?cht=bhs&chbh=r,0&chco=00FF00,FF0000&chs=100x15&chd=t:$p|$r";
+    //$correctImgStr = "http://chart.apis.google.com/chart?cht=bhs&chbh=r,0&chco=00FF00,FF0000&chs=100x15&chd=t:$p|$r";
+
+    // Better gradient with colors
+    //http://chart.apis.google.com/chart?cht=bhs&chco=228B22,FF000A,&chs=130x25&chd=t:50|50&chf=b0,lg,180,228B22,0,2CB52C,1|b1,lg,180,FF000A,0,FF6167,1&chbh=r,0
+    $correctImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=228B22,FF000A,&chs=130x20&chd=t:$p|$r&chf=b0,lg,180,228B22,0,2CB52C,1|b1,lg,180,FF000A,0,FF6167,1&chbh=r,0";
 
     // Icon for correct/incorrect
     if(strcmp($correct, '1') == 0) {
@@ -115,6 +121,7 @@
     //http://chart.apis.google.com/chart?cht=p3&chd=t:3,8&chco=00FF00,FF0000&chs=350x100&chl=Correct(3)|Incorrect(8)
     $pieChartImgUrl = "http://chart.apis.google.com/chart?cht=p3&chd=t:" . $correctCount . "," . $incorrectCount .
                       "&chco=00FF00,FF0000&chs=350x100&chl=Correct(" . $correctCount . ")|" . "Incorrect(" . $incorrectCount . ")";
+
 ?>
 
 <div id="summary">
