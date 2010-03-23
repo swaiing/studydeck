@@ -163,7 +163,7 @@ div#nav_right {
     display: inline-block;
 }
 
-#nav_right button {
+#nav_right input.submit {
     position: absolute;
     display: block;
     top: 0;
@@ -214,13 +214,13 @@ div#iphone {
 /***** generic headings *****/
 
 div#middle_bar h1 {
-    font-size: 20px; 
+    font-size: 18px; 
     color: #003366;
     clear: both;
 }
 
 div#middle_bar h2 {
-    font-size: 16px; 
+    font-size: 14px; 
     color: #003366;
     clear: both;
 }
@@ -234,7 +234,7 @@ div.description {
 
 div.crumb {
     position: relative;
-    width: 750px;
+    width: 740px;
     margin: 0 auto;
     clear: both;
     font-size: 12px;
@@ -303,7 +303,7 @@ div.box:after {
 div.box_content {
     padding: 0 25px 0 20px;
     background: url("/img/rs-right.png") right repeat-y;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 /*****  white-drop shadow box *****/

@@ -118,9 +118,10 @@
 
     // Build Google Chart: http://code.google.com/apis/chart/types.html#pie_charts
     // For distribution of correct/incorrect for the quiz
+    //http://chart.apis.google.com/chart?cht=bhs&chco=228B22,FF000A,&chs=130x25&chd=t:50|50&chf=b0,lg,180,228B22,0,2CB52C,1|b1,lg,180,FF000A,0,FF6167,1&chbh=r,0
     //http://chart.apis.google.com/chart?cht=p3&chd=t:3,8&chco=00FF00,FF0000&chs=350x100&chl=Correct(3)|Incorrect(8)
     $pieChartImgUrl = "http://chart.apis.google.com/chart?cht=p3&chd=t:" . $correctCount . "," . $incorrectCount .
-                      "&chco=00FF00,FF0000&chs=350x100&chl=Correct(" . $correctCount . ")|" . "Incorrect(" . $incorrectCount . ")";
+                      "&chco=2CB52C,FF000A&chs=350x100&chl=Correct(" . $correctCount . ")|" . "Incorrect(" . $incorrectCount . ")";
 
 ?>
 

@@ -28,6 +28,14 @@ div#crumb_quit {
     color: #000;
 }
 
+div#middle_wrapper_content h1 {
+    font-size: 14px;
+    font-weight: bold;
+    color: #003366;
+    margin: 10px 0;
+}
+
+
 /****** question/answer box ******/
 
 div#card_wrap {

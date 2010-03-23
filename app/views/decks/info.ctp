@@ -119,8 +119,6 @@
     </div>
 
     <?php echo $form->end(); ?>
-
-    <div class="clear_div">&nbsp;</div>
 </div>
 
 <div id="bottom">

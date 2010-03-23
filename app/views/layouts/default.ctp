@@ -66,8 +66,12 @@
         </div>
 
         <div id="nav_right">
-            <input type="text" name="search" />
-            <button title="Search" type="submit" />
+            <?php
+                echo $form->create("Deck", array('controller' => 'decks', 'action' => 'explore'));
+                echo $form->input("searchQuery", array('label' => false));
+                echo "<input title=\"Search\" type=\"submit\" class=\"submit\" value=\"\"/>";
+                echo $form->end();
+            ?>
         </div>
         </div>
 

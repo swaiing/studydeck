@@ -22,6 +22,7 @@ div#deck_utils {
 div#middle {
     font-size: 12px;
     border: 1px solid #cecece;
+    overflow: auto;
 }
 
 div#category_select {
@@ -90,17 +91,40 @@ div.table_scroll {
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
+div.table_scroll table.deck_table td {
+    padding: 0;
+}
+div.table_scroll table.deck_table th {
+    padding: 0;
+}
+
 table.deck_table th.edit_rating, table.deck_table th.history {
     text-align: center;
 }
 table.deck_table td.rts_col { text-align: center }
 table.deck_table td div.term { font-weight: bold }
-table.deck_table td.ord { text-align: center }
+table.deck_table td.ord { text-align: center; }
 
 /*** card list tab ***/
-div#cards_tab table.deck_table col.col_num { width: 5% }
-div#cards_tab table.deck_table col.col_term_defn { width: 50% }
-div#cards_tab table.deck_table col.col_rating { width: 45% }
+div#cards_tab table.deck_table col.col_num {
+    width: 20px;
+    /*
+    border: 1px solid red;
+    */
+}
+div#cards_tab table.deck_table col.col_term_defn {
+    width: 300px;
+    /*
+    border: 1px solid blue;
+    */
+}
+div#cards_tab table.deck_table col.col_rating {
+    width: 200px;
+    /*
+    border: 1px solid green;
+    */
+}
 
 /*** quiz review tab ***/
 div#results_tab table.deck_table col.col_correct { width: 5% }

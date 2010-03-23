@@ -10,6 +10,7 @@
 
     <h1>Explore</h1>
     <div class="description">Find new studydecks created by others.</div>
+
     <!--<div id="search_box">-->
 	<?php
         // Search to be integrated into navigation
