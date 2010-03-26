@@ -92,62 +92,101 @@ div.table_scroll {
     overflow-x: hidden;
 }
 
-div.table_scroll table.deck_table td {
-    padding: 0;
-}
-div.table_scroll table.deck_table th {
-    padding: 0;
+/** override default table padding and widths **/
+div.table_header table.deck_table {}
+div.table_header table.deck_table th { padding: 5px 0 }
+div.table_header table.deck_table td { padding: 0 }
+
+div.table_scroll table.deck_table { width: 670px }
+div.table_scroll table.deck_table th { padding: 0 }
+div.table_scroll table.deck_table td { padding: 10px 0 }
+div.table_scroll table.deck_table tr.shaded { background-color: #E8E8E8 }
+
+table.deck_table th.edit_rating,
+table.deck_table th.history { text-align: center }
+
+table.deck_table td.ord { text-align: center }
+table.deck_table td.term_defn {}
+table.deck_table td.rts_col { text-align: center }
+
+table.deck_table td.token { text-align: center; }
+table.deck_table td.token img {
+    display: block;
+    margin: 0 auto;
 }
 
-table.deck_table th.edit_rating, table.deck_table th.history {
-    text-align: center;
-}
-table.deck_table td.rts_col { text-align: center }
+/* bold question */
 table.deck_table td div.term { font-weight: bold }
-table.deck_table td.ord { text-align: center; }
 
 /*** card list tab ***/
+
 div#cards_tab table.deck_table col.col_num {
-    width: 20px;
+    width: 40px;
+}
+div#cards_tab table.deck_table col.col_term_defn {
+    width: 420px;
+}
+div#cards_tab table.deck_table col.col_rating {
+    width: 210px;
+}
+
+/*** quiz review tab ***/
+
+div#results_tab table.deck_table col.col_correct {
+    width: 40px;
     /*
     border: 1px solid red;
     */
 }
-div#cards_tab table.deck_table col.col_term_defn {
-    width: 300px;
+div#results_tab table.deck_table col.col_num {
+    width: 40px;
     /*
     border: 1px solid blue;
     */
 }
-div#cards_tab table.deck_table col.col_rating {
-    width: 200px;
+div#results_tab table.deck_table col.col_term_defn {
+    width: 230px;
     /*
-    border: 1px solid green;
+    border: 1px solid red;
+    */
+}
+div#results_tab table.deck_table col.col_history {
+    width: 150;
+    /*
+    border: 1px solid blue;
+    */
+}
+div#results_tab table.deck_table col.col_rating {
+    width: 210px;
+    /*
+    border: 1px solid red;
     */
 }
 
-/*** quiz review tab ***/
-div#results_tab table.deck_table col.col_correct { width: 5% }
-div#results_tab table.deck_table col.col_num { width: 5% }
-div#results_tab table.deck_table col.col_term_defn { width: 45% }
-div#results_tab table.deck_table col.col_history { width: 20% }
-div#results_tab table.deck_table td.history { text-align: center; }
-div#results_tab table.deck_table td.history img {
-    display: block;
-    margin: 0 auto;
-}
-div#results_tab table.deck_table col.col_rating { width: 25% }
+/** summary section end of quiz review **/
 
 div#summary {
     font-size: 30px;
     font-weight: bold;
-    width: 450px;
-    margin: 10px auto 0 auto;
+    width: 350px;
+    margin: 20px auto;
+    overflow: auto;
+    text-align: center;
 }
 div#summary img {
+    margin: 10px 0;
     float: left;
 }
 div#summary div#grade {
     float: left;
     margin: 40px 0 0 0;
 }
+
+/*** stats tab ***/
+
+div#stats_tab h3 {
+    font-weight: bold;
+    font-size: 14px;
+    display: inline;
+}
+

@@ -18,6 +18,7 @@
     <col class="col_term_defn"/>
     <col class="col_history"/>
     <col class="col_rating"/>
+    <col/>
     <thead>
         <tr class="header_row">
             <th></th>
@@ -25,9 +26,9 @@
             <th>Question and Answer</th>
             <th class="history">History</th>
             <th class="edit_rating">
-                <button type="button" class="btn"><span><span><b>&nbsp;</b><u>Edit Difficulties</u></span></span></button>
+                <button type="button" class="btn">Edit Difficulties</button>
             </th>
-
+            <th></th>
         </tr>
     </thead>
     </table>
@@ -43,6 +44,7 @@
         <tbody>
 
 <?php
+  $i = 0;
   foreach($quiz as $id => $card) {
 
     // Confirm $correct is 0 or 1
@@ -63,6 +65,12 @@
     }
     $ratingStr = $RATING_MAP[$rating];
 
+    // Shade row
+    $shadeClass = "";
+    if($i%2 == 1) {
+        $shadeClass = "shaded";    
+    }
+    
     // Build Google Chart: http://code.google.com/apis/chart/types.html#bar_charts
     // From data in $ratingMap and $resultMap arrays
     $totalCorrect = 0;
@@ -77,11 +85,7 @@
     // remainder out of 100
     $r = 100 - $p;
 
-    // No gradient not great colors
-    //http://chart.apis.google.com/chart?cht=bhs&chbh=r,0&chco=00FF00,FF0000&chs=150x40&chd=t:30|70
-    //$correctImgStr = "http://chart.apis.google.com/chart?cht=bhs&chbh=r,0&chco=00FF00,FF0000&chs=100x15&chd=t:$p|$r";
-
-    // Better gradient with colors
+    // Gradient chart with colors
     //http://chart.apis.google.com/chart?cht=bhs&chco=228B22,FF000A,&chs=130x25&chd=t:50|50&chf=b0,lg,180,228B22,0,2CB52C,1|b1,lg,180,FF000A,0,FF6167,1&chbh=r,0
     $correctImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=228B22,FF000A,&chs=130x20&chd=t:$p|$r&chf=b0,lg,180,228B22,0,2CB52C,1|b1,lg,180,FF000A,0,FF6167,1&chbh=r,0";
 
@@ -96,18 +100,22 @@
     }
 
     // Output cell html
-    echo "<tr class=\"card_row id_" . $id . "\">";
-    echo "<td>" . $correctIconImg . "</td>";
-    echo "<td>" . $order . "</td>";
-    echo "<td>";
+    echo "<tr class=\"card_row id_" . $id . " " . $shadeClass . "\">";
+    echo "<td class=\"token\">" . $correctIconImg . "</td>";
+    echo "<td class=\"ord\">" . $order . "</td>";
+    echo "<td class=\"term_defn\">";
     echo "<div class=\"term\">$term</div>";
     echo "<div class=\"defn\">$defn</div>";
     echo "</td>";
-    echo "<td class=\"history\">" . $totalCorrect . "/" . $totalAnswered . "<img src=\"" . $correctImgStr . "\" alt=\"Correct distribution\" /></td>";
+    echo "<td class=\"token\">" . $totalCorrect . "/" . $totalAnswered . "<img src=\"" . $correctImgStr . "\" alt=\"Correct distribution\" /></td>";
     echo "<td class=\"rts_col\">";
     echo "<span class=\"rating\">$ratingStr</span>";
     echo "</td>";
+    echo "<td></td>";   // filler row
     echo "</tr>";
+
+    // Increment for shading
+    $i++;
   }
 ?>
     </tbody>
@@ -119,16 +127,14 @@
     // Build Google Chart: http://code.google.com/apis/chart/types.html#pie_charts
     // For distribution of correct/incorrect for the quiz
     //http://chart.apis.google.com/chart?cht=bhs&chco=228B22,FF000A,&chs=130x25&chd=t:50|50&chf=b0,lg,180,228B22,0,2CB52C,1|b1,lg,180,FF000A,0,FF6167,1&chbh=r,0
-    //http://chart.apis.google.com/chart?cht=p3&chd=t:3,8&chco=00FF00,FF0000&chs=350x100&chl=Correct(3)|Incorrect(8)
     $pieChartImgUrl = "http://chart.apis.google.com/chart?cht=p3&chd=t:" . $correctCount . "," . $incorrectCount .
                       "&chco=2CB52C,FF000A&chs=350x100&chl=Correct(" . $correctCount . ")|" . "Incorrect(" . $incorrectCount . ")";
 
 ?>
 
 <div id="summary">
+    <h3>You got a <?php echo $grade ?>%</h3>
     <img src="<?php echo $pieChartImgUrl; ?>" alt="Quiz Results Distribution" />
-    <div id="grade"><?php echo $grade; ?>%</div>
-    <div class="clear_div">&nbsp;</div>
 </div>
 
 </div> <!-- end div.table_scroll -->

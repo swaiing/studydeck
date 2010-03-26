@@ -10,6 +10,7 @@ DeckInfoUI = {
     table:null,
     resultsTable:null,
     RATING_MAP:new Array("unrated","easy","medium","hard"),
+    CARD_ID_INDEX:1,
 
     'init':function() {
         // Pass global deck JSON data
@@ -46,7 +47,7 @@ DeckInfoUI = {
 
             // Get ID of card from class attribute
             var cArr = ($(this).attr("class")).split(" ");
-            var idArr = cArr[cArr.length-1].split("_");
+            var idArr = cArr[obj.CARD_ID_INDEX].split("_");
             var id = idArr[idArr.length-1];
 
             // Insert widget into DOM
@@ -98,14 +99,15 @@ DeckInfoUI = {
                 label.text(labelStr);
                 $("input", this).removeAttr('disabled');
                 $("label", this).removeAttr('class');
-                if(ratingCount == totalCards) {
-                    $("input", this).attr('checked','checked');
+                $("input", this).attr('checked','checked');     // auto-select
+                // Uncheck previous if there is medium or hard
+                if(ratingStr == 'medium') {
+                    $("input", $(this).prev()).attr('checked','');
                 }
-                /*
-                else {
-                    $("input", this).removeAttr('checked');
+                if(ratingStr == 'hard') {
+                    $("input", $(this).prev()).attr('checked','');
+                    $("input", $(this).prev().prev()).attr('checked','');
                 }
-                */
             }
             else {
                 labelStr = origLabelStr + " (0)";
@@ -144,7 +146,7 @@ DeckInfoUI = {
         var modeEdit = true;
 
         // Change 'Edit' text
-        var ctrlElt = $("span span u", obj);
+        var ctrlElt = $(obj);
         var text = ctrlElt.text();
         if(text == editTxt) {
             ctrlElt.text(updateTxt);

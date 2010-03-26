@@ -28,6 +28,9 @@
     $mediumLabel = "Medium";
     $hardLabel = "Hard";
 
+    // Human-readable time
+    $rt = new RelativeTimeHelper();
+    $readableCreatedTime = $rt->getRelativeTime(html_entity_decode($deckData['Deck']['created']));
 ?>
 
 <script type="text/javascript">
@@ -123,8 +126,8 @@
 
 <div id="bottom">
     <ul>
-        <li><a href="#cards_tab">Cards</a></li>
         <li><a href="#stats_tab">Stats</a></li>
+        <li><a href="#cards_tab">Cards</a></li>
         <?php
             // Display results tab only if quizzed
             if(isset($quiz)) {
@@ -135,29 +138,43 @@
 
     <div id="stats_tab">
         <ul>
-            <li>Created: <?php echo $deckData['Deck']['created']; ?></li>
-            <li>Quizzed: <?php echo $userQuizCount . " times"; ?></li>
-            <li>Tags: </li>
+            <li><h3>Created:</h3> <?php echo $readableCreatedTime ?></li>
+            <li><h3>Quizzed:</h3> <?php echo $userQuizCount ?> times</li>
+            <li><h3>Tags:</h3>
+            <?php
+                $numTags = count($tags);
+                for($i = 0; $i < $numTags; $i++) {
+                    echo $tags[$i];
+                    if($i < ($numTags - 1)) {
+                        echo ", ";
+                    }
+                }
+            ?>
+            </li>
         </ul>
     </div>
 
     <div id="cards_tab">
 
         <!-- Static table header -->
+        <div class="table_header">
         <table class="deck_table">
             <col class="col_num"/>
             <col class="col_term_defn"/>
             <col class="col_rating"/>
+            <col/>
             <thead>
                 <tr>
                     <th class="ord"></th>
                     <th>Question and Answer</th>
                     <th class="edit_rating">
-                        <button type="button" class="btn"><span><span><b>&nbsp;</b><u>Edit Difficulties</u></span></span></button>
+                        <button type="button" class="btn">Edit Difficulties</button>
                     </th>
+                    <th></th>
                 </tr>
             </thead>
         </table>
+        </div>
 
         <!-- Card list table in scrollable div -->
         <div class="table_scroll">
@@ -165,9 +182,11 @@
             <col class="col_num"/>
             <col class="col_term_defn"/>
             <col class="col_rating"/>
+            <col/>
             <tbody>
             <?php
                 // Iterate cards for table
+                $i = 0;
                 foreach($cards as $card) {
                     // Store values
                     $id = $card['Card']['id'];
@@ -177,9 +196,14 @@
                     $rating = $card['Rating']['rating'];
 
                     // Output row
-                    echo "<tr class=\"card_row id_" . $id . "\">";
+                    $shadeClass = "";
+                    if($i%2 == 1) {
+                        $shadeClass = "shaded";
+                    }
+                    echo "<tr class=\"card_row id_" . $id . " " . $shadeClass . "\">";
+                    //echo "<tr class=\"card_row id_" . $id . "\">";
                     echo "<td class=\"ord\">$order</td>";
-                    echo "<td>";
+                    echo "<td class=\"term_defn\">";
                     echo "<div class=\"term\">$term</div>";
                     echo "<div class=\"defn\">$defn</div>";
                     echo "</td>";
@@ -190,7 +214,10 @@
                     echo "<td class=\"rts_col\">";
                     echo "<span class=\"rating\">$RATING_MAP[$ratingStr]</span>";
                     echo "</td>";
+                    echo "<td></td>";   // filler row
                     echo "</tr>";
+
+                    $i++;
                 }
             ?>
             </tbody>

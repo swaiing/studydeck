@@ -2,9 +2,9 @@
 
 .rts {
     position: relative;
-    width: 224px;
-    height: 33px;
-    background: url(/img/rts.jpg) no-repeat;
+    width: 195px;
+    height: 25px;
+    background: url("/img/rts_info.png") no-repeat;
     margin: 0 auto 0 auto;
     padding: 0;
     cursor: pointer;
@@ -17,7 +17,7 @@
     list-style: none;
 }
 .rts li, .rts a {
-    height: 33px;
+    height: 25px;
     display: block;
     text-decoration: none;
     font-weight: bold;
@@ -25,51 +25,41 @@
 }
 
 /** easy button style effects **/
-.easy   { left: 0; width: 74px; }
+.easy   { left: 0; width: 65px; }
 .rts-easy, .rts-easy-click {
     position: absolute;
     left: 0;
-    width: 74px;
-    height: 33px;
-    background: transparent url(/img/rts.jpg) 0 -34px no-repeat;
-    /*background-color: #011d83;*/
+    width: 65px;
+    height: 25px;
+    background: transparent url("/img/rts_info.png") 0 -25px no-repeat;
 }
 .rts-easy-click {
-    background: transparent url(/img/rts.jpg) 0 -68px no-repeat;
-    /*background-color: #029c2e;*/
+    background: transparent url("/img/rts_info.png") 0 -50px no-repeat;
 }
 
 /** medium button style effects **/
-.medium { left: 75px; width: 74px; }
+.medium { left: 65px; width: 65px; }
 .rts-medium, .rts-medium-click {
     position: absolute;
-    left: 75px;
-    width: 74px;
-    height: 33px;
-    background: transparent url(/img/rts.jpg) -75px -34px no-repeat;
-    /*background-color: #011d83;*/
+    left: 65px;
+    width: 65px;
+    height: 25px;
+    background: transparent url("/img/rts_info.png") -65px -25px no-repeat;
 }
 .rts-medium-click {
-    background: transparent url(/img/rts.jpg) -75px -68px no-repeat;
-    /*background-color: #fcd854;*/
+    background: transparent url("/img/rts_info.png") -65px -50px no-repeat;
 }
 
 
 /** hard button style effects **/
-.hard   { left: 149px; width: 74px; }
+.hard   { left: 130px; width: 65px; }
 .rts-hard, .rts-hard-click {
     position: absolute;
-    left: 149px;
-    width: 74px;
-    height: 33px;
-    background: transparent url(/img/rts.jpg) -150px -34px no-repeat;
-    /*
-    background-color: #011d83;
-    */
+    left: 130px;
+    width: 65px;
+    height: 25px;
+    background: transparent url("/img/rts_info.png") -130px -25px no-repeat;
 }
 .rts-hard-click {
-    background: transparent url(/img/rts.jpg) -150px -68px no-repeat;
-    /*
-    background-color: #b30000;
-    */
+    background: transparent url("/img/rts_info.png") -130px -50px no-repeat;
 }

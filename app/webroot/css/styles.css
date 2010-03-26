@@ -258,8 +258,8 @@ table.deck_table th {
     padding: 3px;
     background: #B7C9E6;
     color: #039;
-    border-top: 1px solid #003366;
-    border-bottom: 1px solid #003366;
+    border-top: 1px solid #E8E8E8;
+    border-bottom: 1px solid #E8E8E8;
 }
 
 table.deck_table td {

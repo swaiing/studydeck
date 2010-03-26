@@ -116,7 +116,7 @@ class DecksController extends AppController {
     }
 
 	//action for exploring decks
-	function explore($sortBy = null,$page = null,$query = null)
+	function explore($sortBy = null, $page = null, $query = null)
     {   
     
         App::import('Sanitize');
@@ -535,6 +535,40 @@ class DecksController extends AppController {
     }
 
     /*
+     * Get tags for a deck
+     */
+    private function getTags($deckId)
+    {
+        // Close recursive associations
+        $this->Deck->DeckTag->recursive = -1;
+        $this->Tag->recursive = -1;
+
+        // Get tag Ids
+        $dtParams = array(
+                        'conditions' => array('DeckTag.deck_id' => $deckId),
+                        'fields' => array('DeckTag.id', 'DeckTag.tag_id'));
+        $dtRecords = $this->Deck->DeckTag->find('all', $dtParams);
+
+        $tagIds = array();
+        foreach($dtRecords as $dt) {
+           array_push($tagIds, $dt['DeckTag']['tag_id']); 
+        }
+
+        // Get tags
+        $tParams = array(
+                        'conditions' => array('Tag.id' => $tagIds),
+                        'fields' => array('Tag.id', 'Tag.tag'));
+        $tRecords = $this->Tag->find('all', $tParams);
+
+        $tags = array();
+        foreach($tRecords as $t) {
+            array_push($tags, $t['Tag']['tag']);
+        }
+        return $tags;
+
+    }
+
+    /*
     * Deck landing page
     *
     */
@@ -567,6 +601,9 @@ class DecksController extends AppController {
         // Call helpers to post-process data
         $cardIds = $this->getCardIds($cardRecords);
 
+        // Get tags
+        $tags = $this->getTags($deckId);
+
         // Deprecated?
         //$ratingsCount = $this->getRatingsCount($cardRecords);
         //$this->set('cardsRatingsCount',$ratingsCount);
@@ -588,6 +625,7 @@ class DecksController extends AppController {
         $this->set('cardsIndexed',$indexedCardRecords);
         $this->set('cardsResults',$resultMap);
         $this->set('userQuizCount', $myDeckResults['MyDeck']['quiz_count']);
+        $this->set('tags', $tags);
     }
 
   /*
