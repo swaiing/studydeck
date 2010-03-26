@@ -2,7 +2,7 @@
 
 .rts {
     position: relative;
-    width: 195px;
+    width: 197px;
     height: 25px;
     background: url("/img/rts_info.png") no-repeat;
     margin: 0 auto 0 auto;
@@ -38,28 +38,28 @@
 }
 
 /** medium button style effects **/
-.medium { left: 65px; width: 65px; }
+.medium { left: 66px; width: 65px; }
 .rts-medium, .rts-medium-click {
     position: absolute;
-    left: 65px;
+    left: 66px;
     width: 65px;
     height: 25px;
-    background: transparent url("/img/rts_info.png") -65px -25px no-repeat;
+    background: transparent url("/img/rts_info.png") -66px -25px no-repeat;
 }
 .rts-medium-click {
-    background: transparent url("/img/rts_info.png") -65px -50px no-repeat;
+    background: transparent url("/img/rts_info.png") -66px -50px no-repeat;
 }
 
 
 /** hard button style effects **/
-.hard   { left: 130px; width: 65px; }
+.hard   { left: 132px; width: 65px; }
 .rts-hard, .rts-hard-click {
     position: absolute;
-    left: 130px;
+    left: 132px;
     width: 65px;
     height: 25px;
-    background: transparent url("/img/rts_info.png") -130px -25px no-repeat;
+    background: transparent url("/img/rts_info.png") -132px -25px no-repeat;
 }
 .rts-hard-click {
-    background: transparent url("/img/rts_info.png") -130px -50px no-repeat;
+    background: transparent url("/img/rts_info.png") -132px -50px no-repeat;
 }
