@@ -19,15 +19,21 @@
 TARGET_STR="----> TARGET:"
 DATE=`date`
 ROOT_DIR=`dirname $0`
-BUILD_DIR=/var/www/html
 
 EXPORT_SVN=true
+PRD_BUILD=false
 SVN_USER=webadm
 APP_REPOS=svn+ssh://${SVN_USER}@studydeck.hopto.org/home/svn/studydeck/trunk/app
 APP_TMP=/tmp/app
 APP_REPOS_OUT=/tmp/app_repos.svn
 LAYOUT_TMP=/tmp/layout.tmp.`whoami`
 
+PRD_STG=~/stage
+HOST_USER=studydec
+HOST_SERVER=studydeck.com
+HOST_STAGE_DIR=/home4/studydec/stage
+
+BUILD_DIR=/var/www/html
 BUILD_NUM_STR="BUILD_NUM"
 DB_SCRIPT=$ROOT_DIR/../db/scripts/build-db.sh
 CAKE_BUILD=cake_1.2.3.8166
@@ -36,14 +42,7 @@ CAKE_INSTALL=$ROOT_DIR/../media/${CAKE_BUILD}.tar.gz
 TMP=/tmp
 CAKE_INSTALL_TMP=${TMP}/${CAKE_BUILD}.tar.gz
 CAKE_BUILD_TMP=${TMP}/${CAKE_BUILD}
-
 CAKE_ROOT=$BUILD_DIR/$PROJECT_BUILD
-CAKE_LAYOUT=$BUILD_DIR/$PROJECT_BUILD/app/views/layouts/default.ctp
-CAKE_TMP=$BUILD_DIR/$PROJECT_BUILD/app/tmp
-CAKE_CACHE=$BUILD_DIR/$PROJECT_BUILD/app/tmp/cache
-CAKE_LOGS=$BUILD_DIR/$PROJECT_BUILD/app/tmp/logs
-CAKE_SESSIONS=$BUILD_DIR/$PROJECT_BUILD/app/tmp/sessions
-CAKE_CONFIG=$BUILD_DIR/$PROJECT_BUILD/app/config
 
 # ----Apache user must be in this group!
 GROUP_OWNER=webadm
@@ -79,6 +78,23 @@ build() {
   echo ""
   echo "  $TARGET_STR build"
   echo "  Starting Build $DATE"
+
+  # Check if $BUILD_DIR has been passed
+  if [ ! -z ${1} ]; then
+    echo "  Setting BUILD_DIR to ${1}"
+    BUILD_DIR=${1}
+    [ ! -d ${BUILD_DIR} ] && mkdir -p ${BUILD_DIR}
+  fi
+
+  # Set some directory locations since BUILD_DIR has been established
+  CAKE_ROOT=$BUILD_DIR/$PROJECT_BUILD
+  PACKAGE_INFO=$BUILD_DIR/$PROJECT_BUILD/BUILD_README
+  CAKE_LAYOUT=$BUILD_DIR/$PROJECT_BUILD/app/views/layouts/default.ctp
+  CAKE_TMP=$BUILD_DIR/$PROJECT_BUILD/app/tmp
+  CAKE_CACHE=$BUILD_DIR/$PROJECT_BUILD/app/tmp/cache
+  CAKE_LOGS=$BUILD_DIR/$PROJECT_BUILD/app/tmp/logs
+  CAKE_SESSIONS=$BUILD_DIR/$PROJECT_BUILD/app/tmp/sessions
+  CAKE_CONFIG=$BUILD_DIR/$PROJECT_BUILD/app/config
 
   # Check if $BUILD_DIR is writeable
   if [ ! -d $BUILD_DIR ] || [ ! -w $BUILD_DIR ]; then
@@ -125,13 +141,25 @@ build() {
   chmod g+rwx $CAKE_LOGS
   chmod g+rwx $CAKE_SESSIONS
 
-  # Insert SVN revision number
-  if [ "$EXPORT_SVN" = "true" ]; then
-    echo "  Inserting build revision"
-    revision=`tail -1 $APP_REPOS_OUT | sed "s/\(Exported revision \)\([0-9]*\)/\2/" | cut -d . -f1`
-    sed s/${BUILD_NUM_STR}/${revision}/g ${CAKE_LAYOUT} > $LAYOUT_TMP
+  # Remove "BUILD_NUM_STR" from layout
+  revision=`tail -1 $APP_REPOS_OUT | sed "s/\(Exported revision \)\([0-9]*\)/\2/" | cut -d . -f1`
+  if [ "$PRD_BUILD" = "true" ]; then
+    echo "  Removing ${BUILD_NUM_STR} from layout"
+    match="Build Version: ${BUILD_NUM_STR}\. "
+    sed s/"${match}"//g ${CAKE_LAYOUT} > $LAYOUT_TMP
     cp $LAYOUT_TMP $CAKE_LAYOUT
+  else
+      # Insert SVN revision number if doing non-production build
+      if [ "$EXPORT_SVN" = "true" ]; then
+        echo "  Inserting build revision"
+        sed s/${BUILD_NUM_STR}/${revision}/g ${CAKE_LAYOUT} > $LAYOUT_TMP
+        cp $LAYOUT_TMP $CAKE_LAYOUT
+      fi
   fi
+
+  # Create PACKAGE_INFO file
+  echo $DATE > $PACKAGE_INFO
+  cat $APP_REPOS_OUT >> $PACKAGE_INFO
 
   # Remove unpacked install
   echo "  Cleaning staged install"
@@ -140,6 +168,23 @@ build() {
   rm -rf $APP_TMP
   rm -rf $APP_REPOS_OUT
   rm -rf $LAYOUT_TMP
+}
+
+package() {
+  PKG_NAME="studydeck-${revision}.tgz"
+  echo ""
+  echo "  Creating package tarball, ${PKG_NAME}"
+  cd ${PRD_STG}
+  tar czf $PKG_NAME ${PROJECT_BUILD}
+
+  echo "  Removing stage dir ${PROJECT_BUILD}"
+  rm -rf ${PROJECT_BUILD}
+}
+
+deploy() {
+  echo ""
+  echo "  Transferring package (${PKG_NAME}) to studydeck.com"
+  scp ${PRD_STG}/${PKG_NAME} ${HOST_USER}@${HOST_SERVER}:${HOST_STAGE_DIR}
 }
 
 copy_prd_config() {
@@ -193,6 +238,14 @@ while getopts "st:c:" opt; do
     	clean
         build
     	copy_prd_config
+        exit 0
+
+      elif [ "$OPTARG" = "prd" ]; then
+        PRD_BUILD=true
+        build ${PRD_STG}
+    	copy_prd_config
+        package
+        deploy
         exit 0
 
       elif [ "$OPTARG" = "all" ]; then
