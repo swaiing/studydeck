@@ -10,11 +10,11 @@
 # To create $MYSQL_USER in mysql, login as the root user ($ mysql -u root -p) and run:
 # 
 # mysql> CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
-# mysql> GRANT ALL PRIVILEGES ON 'database_name'.* to 'username'@"localhost" IDENTIFIED BY 'username';
+# mysql> GRANT SELECT, INSERT, UPDATE, DELETE ON 'database_name'.* to 'username'@"localhost" IDENTIFIED BY 'username';
 # 
 # Example for this script:
 # mysql> CREATE USER 'mysqldev'@'localhost' IDENTIFIED BY 'mysqldev';
-# mysql> GRANT ALL PRIVILEGES ON studydeckdev.* to mysqldev@"localhost" IDENTIFIED BY 'mysqldev';
+# mysql> GRANT SELECT, INSERT, UPDATE, DELETE ON studydeckdev.* to mysqldev@"localhost" IDENTIFIED BY 'mysqldev';
 #
 # Example usage: 
 # ./build-db.sh 

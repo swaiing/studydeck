@@ -82,9 +82,9 @@ class DATABASE_CONFIG {
 		'driver' => 'mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'studydec_app',
-		'password' => 'saraCeno71',
-		'database' => 'studydec_alpha',
+		'login' => 'mysqldev',
+		'password' => 'mysqldev',
+		'database' => 'studydeckdev',
 		'prefix' => ''
 	);
 

@@ -14,6 +14,7 @@ HOSTNAME=`hostname`
 
 PRD_ROOT=$ROOT_DIR/../public_html
 ALPHA_ROOT=$PRD_ROOT/alpha
+SD_ROOT=$ALPHA_ROOT/studydeck
 
 usage() {
     echo ""
@@ -25,7 +26,10 @@ usage() {
 deploy() {
     echo ""
     echo "----> $USERNAME@$HOSTNAME - DEPLOY"
-    echo "Starting Deploy $DATE"
+    echo "  Starting Deploy $DATE"
+
+    echo "  Cleaning $SD_ROOT"
+    rm -rf $SD_ROOT
 
     TARGET_ENV=${1}
     PACKAGE_NAME=${2}

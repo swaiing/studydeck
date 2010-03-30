@@ -54,14 +54,6 @@ GROUP_OWNER=webadm
 DB_CFG=$ROOT_DIR/database.php
 CORE_CFG=$ROOT_DIR/core.php
 
-# ----Steve's config
-DB_CFG_SHW=$ROOT_DIR/database.php.shw
-CORE_CFG_SHW=$ROOT_DIR/core.php.shw
-
-# ----Nicolo's config
-DB_CFG_NHG=$ROOT_DIR/database.php.nhg
-CORE_CFG_NHG=$ROOT_DIR/core.php.nhg
-
 usage() {
   echo ""
   echo "Usage: `basename $0` [-s] -t [build_db|build_app|clean|build|all|host_alpha|host_prd] [-c [nicolo|steve]]"
@@ -210,25 +202,39 @@ unpack() {
   ssh ${HOST_USER}@${HOST_SERVER} "~/scripts/deploy.sh -t ${ENV_TOKEN} -f ${PKG_NAME}"
 }
 
+copy_alpha_config() {
+  # Copy production config files
+  echo "  Copying production config files"
+  cp ${DB_CFG}.alpha $CAKE_CONFIG/database.php
+  cp ${CORE_CFG}.alpha $CAKE_CONFIG/core.php
+}
+
 copy_prd_config() {
   # Copy production config files
   echo "  Copying production config files"
-  cp $DB_CFG $CAKE_CONFIG/database.php
-  cp $CORE_CFG $CAKE_CONFIG/core.php
+  cp ${DB_CFG}.prd $CAKE_CONFIG/database.php
+  cp ${CORE_CFG}.prd $CAKE_CONFIG/core.php
+}
+
+copy_dev_config() {
+  # Copy production config files
+  echo "  Copying production config files"
+  cp ${DB_CFG}.dev $CAKE_CONFIG/database.php
+  cp ${CORE_CFG}.dev $CAKE_CONFIG/core.php
 }
 
 copy_shw_config() {
   # Copy Steve's config files
   echo "  Copying Steve's config files"
-  cp $DB_CFG_SHW $CAKE_CONFIG/database.php
-  cp $CORE_CFG_SHW $CAKE_CONFIG/core.php
+  cp ${DB_CFG}.shw $CAKE_CONFIG/database.php
+  cp ${CORE_CFG}.shw $CAKE_CONFIG/core.php
 }
 
 copy_nhg_config() {
   # Copy Nicolo's config files
   echo "  Copying Nicolo's config files"
-  cp $DB_CFG_NHG $CAKE_CONFIG/database.php
-  cp $CORE_CFG_NHG $CAKE_CONFIG/core.php
+  cp ${DB_CFG}.nhg $CAKE_CONFIG/database.php
+  cp ${CORE_CFG}.nhg $CAKE_CONFIG/core.php
 }
 
 build_db() {
@@ -260,7 +266,7 @@ while getopts "st:c:" opt; do
       elif [ "$OPTARG" = "build_app" ]; then
     	clean
         build
-    	copy_prd_config
+    	copy_dev_config
         exit 0
 
       elif [ "$OPTARG" = "host_prd" ]; then
@@ -275,7 +281,7 @@ while getopts "st:c:" opt; do
       elif [ "$OPTARG" = "host_alpha" ]; then
         HOSTED_BUILD=true
         build ${STAGING}
-    	copy_prd_config
+    	copy_alpha_config
         package
         sendpkg
         unpack $ALPHA_TOKEN
@@ -285,7 +291,7 @@ while getopts "st:c:" opt; do
         build_db
         clean
         build
-        copy_prd_config
+        copy_dev_config
         exit 0
 
       else
