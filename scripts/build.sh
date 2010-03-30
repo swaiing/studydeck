@@ -16,22 +16,25 @@
 # ./build.sh -s -t all -c steve
 
 
-TARGET_STR="----> TARGET:"
 DATE=`date`
+DATESTAMP=`date "+%Y%m%d.%H%M"`
 ROOT_DIR=`dirname $0`
+TARGET_STR="----> TARGET:"
 
 EXPORT_SVN=true
-PRD_BUILD=false
+HOSTED_BUILD=false
 SVN_USER=webadm
 APP_REPOS=svn+ssh://${SVN_USER}@studydeck.hopto.org/home/svn/studydeck/trunk/app
 APP_TMP=/tmp/app
 APP_REPOS_OUT=/tmp/app_repos.svn
 LAYOUT_TMP=/tmp/layout.tmp.`whoami`
 
-PRD_STG=~/stage
+STAGING=~/stage
 HOST_USER=studydec
 HOST_SERVER=studydeck.com
 HOST_STAGE_DIR=/home4/studydec/stage
+PRD_TOKEN=prd
+ALPHA_TOKEN=alpha
 
 BUILD_DIR=/var/www/html
 BUILD_NUM_STR="BUILD_NUM"
@@ -61,7 +64,7 @@ CORE_CFG_NHG=$ROOT_DIR/core.php.nhg
 
 usage() {
   echo ""
-  echo "Usage: `basename $0` [-s] -t [build_db|build_app|clean|build|all] [-c [nicolo|steve]]"
+  echo "Usage: `basename $0` [-s] -t [build_db|build_app|clean|build|all|host_alpha|host_prd] [-c [nicolo|steve]]"
   echo ""
 }
 
@@ -143,13 +146,14 @@ build() {
 
   # Remove "BUILD_NUM_STR" from layout
   revision=`tail -1 $APP_REPOS_OUT | sed "s/\(Exported revision \)\([0-9]*\)/\2/" | cut -d . -f1`
-  if [ "$PRD_BUILD" = "true" ]; then
+  if [ "$HOSTED_BUILD" = "true" ]; then
     echo "  Removing ${BUILD_NUM_STR} from layout"
     match="Build Version: ${BUILD_NUM_STR}\. "
     sed s/"${match}"//g ${CAKE_LAYOUT} > $LAYOUT_TMP
     cp $LAYOUT_TMP $CAKE_LAYOUT
+
+  # Insert SVN revision number if doing non-production build
   else
-      # Insert SVN revision number if doing non-production build
       if [ "$EXPORT_SVN" = "true" ]; then
         echo "  Inserting build revision"
         sed s/${BUILD_NUM_STR}/${revision}/g ${CAKE_LAYOUT} > $LAYOUT_TMP
@@ -171,20 +175,39 @@ build() {
 }
 
 package() {
-  PKG_NAME="studydeck-${revision}.tgz"
   echo ""
+  echo "  $TARGET_STR package"
+
+  PKG_NAME="studydeck-${revision}.tgz"
   echo "  Creating package tarball, ${PKG_NAME}"
-  cd ${PRD_STG}
+  cd ${STAGING}
   tar czf $PKG_NAME ${PROJECT_BUILD}
 
   echo "  Removing stage dir ${PROJECT_BUILD}"
   rm -rf ${PROJECT_BUILD}
 }
 
-deploy() {
+sendpkg() {
   echo ""
+  echo "  $TARGET_STR sendpkg"
   echo "  Transferring package (${PKG_NAME}) to studydeck.com"
-  scp ${PRD_STG}/${PKG_NAME} ${HOST_USER}@${HOST_SERVER}:${HOST_STAGE_DIR}
+  scp ${STAGING}/${PKG_NAME} ${HOST_USER}@${HOST_SERVER}:${HOST_STAGE_DIR}
+}
+
+unpack() {
+  echo ""
+  echo "  $TARGET_STR unpack"
+  echo "  Invoking deploy.sh on host to unpack"
+
+  # Validate $TOKEN
+  ENV_TOKEN=${1}
+  if [ $ENV_TOKEN != "$ALPHA_TOKEN" ] && [ $ENV_TOKEN != "$PRD_TOKEN" ]; then
+    echo "  [ERROR] Environment: $ENV_TOKEN undefined"
+    exit 1
+  fi
+
+  # Call script
+  ssh ${HOST_USER}@${HOST_SERVER} "~/scripts/deploy.sh -t ${ENV_TOKEN} -f ${PKG_NAME}"
 }
 
 copy_prd_config() {
@@ -240,12 +263,22 @@ while getopts "st:c:" opt; do
     	copy_prd_config
         exit 0
 
-      elif [ "$OPTARG" = "prd" ]; then
-        PRD_BUILD=true
-        build ${PRD_STG}
+      elif [ "$OPTARG" = "host_prd" ]; then
+        HOSTED_BUILD=true
+        build ${STAGING}
     	copy_prd_config
         package
-        deploy
+        sendpkg
+        unpack $PRD_TOKEN
+        exit 0
+
+      elif [ "$OPTARG" = "host_alpha" ]; then
+        HOSTED_BUILD=true
+        build ${STAGING}
+    	copy_prd_config
+        package
+        sendpkg
+        unpack $ALPHA_TOKEN
         exit 0
 
       elif [ "$OPTARG" = "all" ]; then
@@ -272,7 +305,7 @@ while getopts "st:c:" opt; do
     ;;
     :)
 
-      echo "  Option -$OPTARG requires and argument."
+      echo "  Option -$OPTARG requires an argument."
       usage
       exit 1    
     ;;
@@ -280,4 +313,4 @@ while getopts "st:c:" opt; do
 done
 
 usage
-exit 0
+exit 1
