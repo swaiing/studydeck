@@ -365,9 +365,9 @@ class UsersController extends AppController {
     //sets base email attributes and builds link
     private function setEmailAttributes($to = null, $urlSuffix = null) {
         $this->SwiftMailer->smtpType = 'tls';
-        $this->SwiftMailer->smtpHost = 'smtp.gmail.com';
+        $this->SwiftMailer->smtpHost = 'mail.studydeck.com';
         $this->SwiftMailer->smtpPort = 465;
-        $this->SwiftMailer->smtpUsername = 'noreply@studydeck.com';
+        $this->SwiftMailer->smtpUsername = 'donotreply@studydeck.com';
         $this->SwiftMailer->smtpPassword = 'GoGate7';
         $this->SwiftMailer->sendAs = 'html';
         $this->SwiftMailer->from = 'noreply@studydeck.com';
