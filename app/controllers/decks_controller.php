@@ -165,7 +165,8 @@ class DecksController extends AppController {
 			$exploreDecksParams = array('conditions'=> array('Deck.privacy'=> SD_Global::$PUBLIC_DECK),'limit' => 20,'page' => $page,'order'=> $sortBy);
 			$exploreDecks = $this->Deck->find('all',$exploreDecksParams);
             
-            $exploreDecks = Sanitize::clean($exploreDecks, $sanitizeParams);
+            // TODO: Modify call so that it only deck_titles are sanitized
+            //$exploreDecks = Sanitize::clean($exploreDecks, $sanitizeParams);
 	       	$this->set('decks',$exploreDecks);
 			
 			//sets the pages count, 20 results per page
@@ -205,7 +206,8 @@ class DecksController extends AppController {
 			$exploreDecks = $this->Deck->find('all',$exploreDecksParams);
             
             
-            $exploreDecks = Sanitize::clean($exploreDecks, $sanitizeParams);
+            // TODO: Modify call so that it only deck_titles are sanitized
+            //$exploreDecks = Sanitize::clean($exploreDecks, $sanitizeParams);
 			$this->set('decks',$exploreDecks); 
 
 			$findDeckCount = $this->Deck->find('count',array('conditions'=> array('Deck.id' => $arrayOfDeckIds,'Deck.privacy' => SD_Global::$PUBLIC_DECK)));
