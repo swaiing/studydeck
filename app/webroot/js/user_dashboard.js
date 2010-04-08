@@ -6,39 +6,28 @@ $(document).ready(function(){
     $("#userDeleteDialog").dialog({
         bgiframe: true, autoOpen: false, height: 100, width: 360, modal: true
     });
-    
-
-	
-
-
-
 });
 
 //Removes a public deck from the user dashboard
-
 function deletePublicDeck(deckId){
 	$.post("/my_decks/delete",{id:deckId},function(){$("#publicDeckRow"+ deckId).hide("fast");});   
 }
-
-
 
 //Either removes a user deck from their dashboard or
 //deletes the user deck permenantly
 function deleteUserDeck(deckId, permanently){
 	if (permanently) {
-		$.post("/studydeck/decks/delete",{id:deckId},function(){$("#userDeckRow"+ deckId).hide("fast");});
+		$.post("/decks/delete",{id:deckId},function(){$("#userDeckRow"+ deckId).hide("fast");});
 	}
  	else {
-        $.post("/studydeck/my_decks/delete",{id:deckId},function(){$("#userDeckRow"+ deckId).hide("fast");});
+        $.post("/my_decks/delete",{id:deckId},function(){$("#userDeckRow"+ deckId).hide("fast");});
     }
-	    
 }
 
 //launches the remove public deck dialog box
 function publicDeleteDialog(deckId, deckTitle) {
     
     $("#publicDeleteDialog").html("Are you sure you want to delete " + deckTitle + " from your dashboard?");
-    
     
     $("#publicDeleteDialog").dialog('option','buttons', { 
         No:function(){
@@ -52,7 +41,7 @@ function publicDeleteDialog(deckId, deckTitle) {
     $("#publicDeleteDialog").dialog('open');
 }
 
-//launches the remove user created deck dialog box
+// Launches the remove user created deck dialog box
 function userDeleteDialog(deckId, deckTitle) {
     $("#userDeleteDialog").html(deckTitle);
     $("#userDeleteDialog").dialog('option','buttons', { 

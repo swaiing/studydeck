@@ -1330,30 +1330,38 @@ class DecksController extends AppController {
         }
     }
 
+    // Called when uploading a CSV file
     function uploadCSV(){
-    	    
-    //disable need for a view		
-    $this->autoRender=false;
+                
+        // Disable need for a view		
+        $this->autoRender = false;
+        
+        // Set property to true so it reads Macintosh newlines
+        ini_set('auto_detect_line_endings', TRUE);
 
-	
-	$file = new File($this->data['Deck']['csv_file']['tmp_name']);
-	
-	Configure::write ('debug',0);
-	$row = 1;
-	$handle=fopen($this->data['Deck']['csv_file']['tmp_name'],"r");
-	$csvReturn=array();
-	while($fileContents = fgetcsv($handle)){
-		$csvReturn[$row]['q'] = $fileContents[0];
-		$csvReturn[$row]['a'] = $fileContents[1];
-		$row++;
-	}
-	fclose($handle);
-	
-	$csvReturn['totalCount'] = count($csvReturn);
-	$result = json_encode($csvReturn);
-	
-	
-	echo $result;
+        // Create File object
+        $file = new File($this->data['Deck']['csv_file']['tmp_name']);
+        
+        // I have no idea why this is necessary but it doesn't work
+        // without it
+        Configure::write('debug',0);
+
+        $row = 1;
+        $handle = fopen($this->data['Deck']['csv_file']['tmp_name'],"r");
+        $csvReturn = array();
+        while($fileContents = fgetcsv($handle)){
+            $csvReturn[$row]['q'] = $fileContents[0];
+            $csvReturn[$row]['a'] = $fileContents[1];
+            $row++;
+        }
+        fclose($handle);
+        
+        // Set property to true so it reads Macintosh newlines
+        ini_set('auto_detect_line_endings', FALSE);
+
+        $csvReturn['totalCount'] = count($csvReturn);
+        $result = json_encode($csvReturn);
+        echo $result;
     }
 
 	function view($id = null)
