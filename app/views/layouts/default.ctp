@@ -19,7 +19,7 @@
 
     <div id="site_id">
         <h1><?php echo $html->link('studydeck',"/"); ?></h1>
-        <span class="tagline">Online flashcards made simple.</span>
+        <!--<span class="tagline">Online flashcards made simple.</span>-->
     </div>
 
     <div id="nav">
