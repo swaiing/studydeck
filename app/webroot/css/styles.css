@@ -7,7 +7,7 @@ body {
 /*****  top-level divs *****/
 
 div#content {
-    background: transparent url("/img/body_bg.png") repeat-x;
+    background: transparent url("/img/body_bg.jpg") repeat-x;
 }
 
 div#header {
@@ -177,9 +177,12 @@ div#nav_right {
 /*****  middle_bar homepage *****/
 
 div#blurb {
+    /*
     background-color: #003366;
     border-top: 2px solid #fff;
     border-bottom: 2px solid #fff;
+    */
+    background: url("/img/blurb_bg.png") repeat-y center top;
 }
 
 div#blurb_content {
@@ -193,7 +196,13 @@ div#more {
     height: 100px;
     width: 100%;
     margin: 0 auto;
-    background-color: #cecece;
+    background: url("/img/more_bg.png") repeat-y center top;
+}
+
+div#more_bottom {
+    height: 45px;
+    margin: 0 auto;
+    background: url("/img/more_bg_bottom.png") no-repeat center;
 }
 
 div#panels {
@@ -201,12 +210,35 @@ div#panels {
     margin: 0 auto;
 }
 
-#signup, #explore, #iphone {
+#panels h3 a:link, #panels h3 a:visited {
+    color: #000;
+    text-decoration: none;
+}
+#panels h3 a:hover {
+    text-decoration: underline;
+}
+
+#panels h3 {
+    font-family: helvetica, verdana, sans-serif;
     font-size: 2em;
+    margin: 0 0 5px 0;
+}
+
+#signup, #explore {
     width: 300px;
     float: left;
-    text-align: center;
     margin: 20px 10px 0 0;
+    padding: 0 0 0 10px;
+}
+
+#iphone {
+    width: 300px;
+    float: left;
+    margin: 20px 10px 0 0;
+}
+#iphone img {
+    float: right;
+    margin: 0 10px 0 0;
 }
 
 /***** generic headings *****/
