@@ -8,21 +8,21 @@
 ?>
 
 <div id="middle_wrapper_content">
-	<div id="middle_bar" class="box">
-    <div class="box_content">
+	<div id="middle_bar" class="sbox">
+    <div class="sbox_content">
 
 	<?php
     	// Field attributes
     	$FIELD_SIZE = 30;
     	$FIELD_LENGTH = 50;
 
-    	echo "<div id=\"forgot_box\" class=\"form_box\">\n";
+    	echo "<div id=\"forgot_box\" class=\"sbox_inner\">\n";
     	echo "<h2>Forgot your password?</h2>";
     
     	$session->flash();
 
     	if($success != true) {
-    		echo "<p>Enter your email address and we will set it to a temporary password which we will email you.</p>";
+    		echo "<p>We'll set a temporary password for you and send you an email.</p>";
     	}
 
      	if($validationError != '') {
@@ -35,7 +35,7 @@
     	else {
 			echo $form->create('User', array('action' => 'forgotPassword'));
     		echo "<ol>\n";
-    		echo "<li>" . $form->input('User.email',array('label'=>'Email:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
+    		echo "<li>" . $form->input('User.email',array('label'=>'Email', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
             echo "</ol>\n";
      		echo $form->end('Email me');
      	}

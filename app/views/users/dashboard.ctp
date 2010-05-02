@@ -9,6 +9,11 @@
     // CSS includes
     echo $html->css('user_dashboard',null,null,false);
     echo $html->css('jquery-ui-1.7.2.custom.gray',null,null,false);
+
+    // Chart constant
+    // New chart format with gradients
+    // http://chart.apis.google.com/chart?cht=bhs&chco=FCFF08,FF7B00,FF000A&chs=130x25&chd=t:30|40|30&chf=b0,lg,180,FCFF08,0,FCFF66,1|b1,lg,180,FF7B00,0,FFB077,1|b2,lg,180,FF000A,0,FF6167,1&chbh=r,0
+    $BAR_CHART_URL = "http://chart.apis.google.com/chart?cht=bhs&chco=FCFF08,FF7B00,FF000A&chs=130x25&chf=b0,lg,180,FCFF08,0,FCFF66,1|b1,lg,180,FF7B00,0,FFB077,1|b2,lg,180,FF000A,0,FF6167,1&chbh=r,0&chd=t:";
 ?>
 
 <div id="middle_wrapper_content">
@@ -30,6 +35,13 @@
 		<h2>Created By Me</h2>
 		<?php if(count($userCreatedDecks)) { ?>
 		<table class="deck_table">
+            <col class="deck"/>
+            <col class="num_cards"/>
+            <col class="num_quizzed"/>
+            <col class="last_quizzed"/>
+            <col class="progress"/>
+            <col class="remove"/>
+            <thead>
 			<tr>
 				<th>Deck</th>
                 <th>Total Cards</th>
@@ -38,6 +50,7 @@
                 <th>Progress</th>
                 <th></th>
 			</tr>
+            </thead>
 			<?php foreach ($userCreatedDecks as $ucDeck):
      		    echo "<tr id= \"userDeckRow".$ucDeck['Deck']['id']."\">";
 			?>
@@ -61,13 +74,7 @@
                     $mediumPercent = ($ucDeck['Medium']/$totalCards)*100;
                     $hardPercent = ($ucDeck['Hard']/$totalCards)*100;
 
-                    // Old chart format
-                    //$progressImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=00FF00,FFFF00,FF0000&chs=150x40&chd=t:".$easyPercent."|".$mediumPercent."|".$hardPercent;
-
-                    // New chart format with gradients
-                    // http://chart.apis.google.com/chart?cht=bhs&chco=FCFF08,FF7B00,FF000A&chs=130x25&chd=t:30|40|30&chf=b0,lg,180,FCFF08,0,FCFF66,1|b1,lg,180,FF7B00,0,FFB077,1|b2,lg,180,FF000A,0,FF6167,1&chbh=r,0
-                    $barChartUrl = "http://chart.apis.google.com/chart?cht=bhs&chco=FCFF08,FF7B00,FF000A&chs=130x25&chf=b0,lg,180,FCFF08,0,FCFF66,1|b1,lg,180,FF7B00,0,FFB077,1|b2,lg,180,FF000A,0,FF6167,1&chbh=r,0&chd=t:";
-                    $progressImgStr = $barChartUrl . $easyPercent . "|" . $mediumPercent . "|" . $hardPercent;
+                    $progressImgStr = $BAR_CHART_URL . $easyPercent . "|" . $mediumPercent . "|" . $hardPercent;
                 }
                 ?>
                 <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>
@@ -79,9 +86,8 @@
 		</table>
 		<?php }
 		else {
-			echo "<div class=\"nodecks\">You have not created any decks yet";
-            echo "<br/>";
-            echo $html->link("Create a deck!", array('controller'=>'decks', 'action'=>'create'));
+			echo "<div class=\"nodecks\">You have not created any Studydecks.  ";
+            echo $html->link("Create a Studydeck", array('controller'=>'decks', 'action'=>'create')) . ".";
             echo "</div>";
 		}
 		?>
@@ -91,6 +97,13 @@
         <h2>Created By Others</h2>
 		<?php if(count($publicDecks)) { ?>
 		<table class="deck_table">
+            <col class="deck"/>
+            <col class="num_cards"/>
+            <col class="num_quizzed"/>
+            <col class="last_quizzed"/>
+            <col class="progress"/>
+            <col class="remove"/>
+            <thead>
 			<tr>
 				<th>Deck</th>
                 <th>Total Cards</th>
@@ -99,6 +112,7 @@
                 <th>Progress</th>
                 <th></th>
 			</tr>
+            </thead>
 			<?php 
 				foreach ($publicDecks as $pDeck):
       				echo "<tr id=\"publicDeckRow".$pDeck['Deck']['id']."\">";
@@ -123,8 +137,7 @@
                     $easyPercent = ($pDeck['Easy']/$totalCards)*100;
                     $mediumPercent = ($pDeck['Medium']/$totalCards)*100;
                     $hardPercent = ($pDeck['Hard']/$totalCards)*100;
-                    //$progressImgStr = "http://chart.apis.google.com/chart?cht=bhs&chco=00FF00,FFFF00,FF0000&chs=150x40&chd=t:".$easyPercent."|".$mediumPercent."|".$hardPercent;
-                    $progressImgStr = $barChartUrl . $easyPercent . "|" . $mediumPercent . "|" . $hardPercent;
+                    $progressImgStr = $BAR_CHART_URL . $easyPercent . "|" . $mediumPercent . "|" . $hardPercent;
                 }
                 ?>
                 <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>
@@ -135,10 +148,9 @@
 		</table>
 		<?php }
 		else {
-			echo "<div class=\"nodecks\">";
-            echo $html->link("Explore existing decks!", array('controller'=>'decks', 'action'=>'explore'));           
+			echo "<div class=\"nodecks\">You have not favorited any Studydecks. ";
+            echo $html->link("Explore the Studydeck library", array('controller'=>'decks', 'action'=>'explore')) . ".";
             echo "</div>";
-            echo "<br/>";
 		}
 		?>
         </div>

@@ -1,27 +1,53 @@
 /*****  login/register *****/
 
-/** login box **/
-div#login_box {
-    font-size: 12px;
-    float: right;
-    clear: right;
-    width: 300px;
-    margin: 0 0 40px 0;
-    padding: 10px;
-    border: 1px solid #89A7D7;
-}
-#login_box div.submit input {
-    width: 100px;
+
+/** login box, forgot password box **/
+div.sbox_content div.sbox_inner {
+    font-size: 1.5em;
+    color: #ECEFF5;
+    margin: 0;
+    padding: 0 10px;
+    overflow-y: auto;
 }
 
-div#register_ad_box {
-    font-size: 12px;
+div#login_box h2, div#forgot_box h2, div#confirm_box h2 {
+    font-size: 1.7em;
+    color: #89A7D7;
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
+div.sbox_content input[type="text"],
+div.sbox_content input[type="password"] {
+    margin: 10px 0 20px 0;
+    font-size: 1.7em;
+    width: 370px;
+    display: block;
+    border: 2px solid #89A7D7;
+    background-color: #EDF2F7; 
+}
+
+div.sbox_content input[type="text"]:focus,
+div.sbox_content input[type="password"]:focus,
+div.sbox_content input[type="text"]:active,
+div.sbox_content input[type="password"]:active {
+    background-color: #F9F8E4; 
+}
+
+div.sbox_content div.submit input {
+    font-size: 1.5em;
+    padding: 0 1em;
     float: left;
-    clear: left;
-    width: 360px;
-    margin: 0 0 40px 0;
-    padding: 10px;
-    border: 1px solid #89A7D7;
+    margin: 0;
+}
+
+div.sbox_content div.sbox_inner p {
+    margin: 1em 0;
+}
+
+div#login_box li.forgot_password {
+    font-size: 1em;
+    float: right;
 }
 
 /** register boxes **/
@@ -43,16 +69,6 @@ div#register_priv_box {
     margin: 0 0 40px 0;
     padding: 10px;
     border: 1px solid #89A7D7;
-}
-
-/** forgot password **/
-div#forgot_box {
-    font-size: 12px;
-    width: 360px;
-    margin: 0 auto;
-    padding: 10px;
-    border: 1px solid #89A7D7;
-    overflow: auto;
 }
 
 /** settings boxes **/
@@ -126,7 +142,7 @@ div#register_ad_box li, div#register_priv_box li {
     list-style-type: circle;
 }
 
-#register_ad_box p, #register_box p, #confirm_box p{
+#register_ad_box p, #register_box p {
     margin-top: 10px;
 }
 
@@ -141,10 +157,6 @@ div.form_box li {
 
 div.form_box li.separator {
     text-align: center;
-}
-
-div.form_box li.forgot_password {
-   text-align: right;
 }
 
 div.form_box p {
@@ -176,10 +188,9 @@ div.form_box div.submit input {
 
 /*** error messages ***/
 div#flashMessage, div#authMessage, span.error {
-    font-weight: bold;
-    color: #B3863D;
-    margin: 10px 0;
+    color: #FF3366;
+    margin: 0 0 10px 0;
 }
 div.error-message {
-    color: #B3863D;
+    color: #FF3366;
 }

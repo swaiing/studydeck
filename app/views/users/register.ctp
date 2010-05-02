@@ -49,7 +49,6 @@
         <ul>
     </div>
 
-    <div class="clear_div">&nbsp;</div>
 	</div> <!-- end box_content -->
 	</div> <!-- end middle_bar -->
 </div> <!-- end middle_wrapper -->

@@ -2,14 +2,21 @@
 
 <?php
     // Default attributes
+    /*
     $DETAIL_FS = 45;
-    $DETAIL_LENGTH = 75;
     $TERM_FS = 20;
-    $TERM_LENGTH = 75;
     $DEFINITION_FS = 35;
-    $DEFINITION_LENGTH = 168;
     $UPLOAD_FS = 25;
+    */
+
+    $DETAIL_LENGTH = 75;
+    $TERM_LENGTH = 75;
+    $DEFINITION_LENGTH = 168;
     $UPLOAD_LENGTH = 75;
+
+    $DETAIL_CLASS = 'input_detail';
+    $TERM_CLASS = 'input_term';
+    $DEFINITION_CLASS = 'input_defn';
 
     $PRIVATE_FLAG = 0;
     $PUBLIC_FLAG = 1;
@@ -31,8 +38,7 @@
         $deckTitle = $existingDeck['Deck']['deck_name'];
         $deckDescription = $existingDeck['Deck']['description'];
         
-        //build current tag list
-        
+        // Build current tag list
         foreach($existingTags as $tempTag) {
             $tagList = $tagList.$tempTag['Tag']['tag']." ";
         }
@@ -40,9 +46,6 @@
 
     $privacyOptions = array($PRIVATE_FLAG => $PRIVATE_LABEL, $PUBLIC_FLAG=>$PUBLIC_LABEL);
     $privacyAttributes = array('legend'=>false, 'label'=>'Privacy:', 'default'=> $DEFAULT_PRIVACY);
-
-    $cardTermOptions = array('type'=>'text', 'label'=>false, 'size'=>$TERM_FS, 'maxlength'=>$TERM_LENGTH);
-    $cardDefinitionOptions = array('type'=>'text', 'label'=>false, 'size'=>$DEFINITION_FS, 'maxlength'=>$DEFINITION_LENGTH);
 
     // Create the form 
     echo $form->create('Deck', array('action' => $controllerAction));
@@ -57,10 +60,10 @@
     }
     
     // Title
-    echo "<li>" . $form->input('Deck.deck_name',array('label'=>'Title:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH, 'value' => $deckTitle)) . "</li>\n";
+    echo "<li>" . $form->input('Deck.deck_name',array('label'=>'Title:', 'class'=>$DETAIL_CLASS, 'maxlength'=>$DETAIL_LENGTH, 'value' => $deckTitle)) . "</li>\n";
     
     // Tags/Categories
-    echo "<li>" . $form->input('Tag.tag',array('label'=>'Tags:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH, 'id'=>'autoComplete', 'value' => $tagList)) . "</li>\n";
+    echo "<li>" . $form->input('Tag.tag',array('label'=>'Tags:', 'class'=>$DETAIL_CLASS, 'maxlength'=>$DETAIL_LENGTH, 'id'=>'autoComplete', 'value' => $tagList)) . "</li>\n";
  
     // Privacy radio
     echo "<li class=\"privacy_options\">";
@@ -69,7 +72,7 @@
     echo "</li>";
 
     // Description
-    echo "<li>" . $form->input('Deck.description',array('label'=>'Description:', 'size'=>$DETAIL_FS, 'maxlength'=>$DETAIL_LENGTH, 'value' => $deckDescription)) . "</li>\n";
+    echo "<li>" . $form->input('Deck.description',array('label'=>'Description:', 'class'=>$DETAIL_CLASS, 'maxlength'=>$DETAIL_LENGTH, 'value' => $deckDescription)) . "</li>\n";
     echo "</ol>\n";
 
     // Card inputs
@@ -77,7 +80,7 @@
     echo "<ol id=\"card_list\">\n";
 
     // Row header
-    echo "<li>";
+    echo "<li><label>&nbsp;</label>";
     echo "<div id=\"term_header\">Question</div>";
     echo "<div id=\"definition_header\">Answer</div>";
     echo "</li>";
@@ -97,13 +100,13 @@
             $cardAnswer = $existingCards[$i]['Card']['answer'];            
         }
         // Hidden form to store card order    
-        echo $form->hidden($card.".card_order", array('type'=>'text', 'label'=>false, 'size'=> 4, 'maxlength'=> 4, 'value' => $cardOrder));
+        echo $form->hidden($card.".card_order", array('type'=>'text', 'label'=>false, 'maxlength'=> 4, 'value' => $cardOrder));
         
         if($edit) {
             echo $form->hidden($card.".id", array('type'=>'text', 'label'=>false,'value' => $existingCards[$i]['Card']['id']));
         }
-        echo $form->input($card.".question",array('type'=>'text','label'=>$i+1,'size'=>$TERM_FS, 'value' => $cardQuestion));
-        echo $form->input($card.".answer",array('type'=>'text', 'label'=>false, 'size'=>$DEFINITION_FS, 'maxlength'=>$DEFINITION_LENGTH, 'value' => $cardAnswer));
+        echo $form->input($card.".question",array('type'=>'text','label'=>$i+1, 'value'=>$cardQuestion, 'class'=>$TERM_CLASS, 'maxlength'=>$TERM_LENGTH));
+        echo $form->input($card.".answer",array('type'=>'text', 'label'=>false, 'value' => $cardAnswer, 'class'=>$DEFINITION_CLASS, 'maxlength'=>$DEFINITION_LENGTH));
         echo "<div class = \"plus\"></div>";
 		echo "<div class = \"minus\"></div>";
         echo "</li>\n";

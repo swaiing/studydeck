@@ -224,7 +224,14 @@ div#panels {
     margin: 0 0 5px 0;
 }
 
-#signup, #explore {
+#signup {
+    width: 300px;
+    float: left;
+    margin: 20px 10px 0 0;
+    padding: 0 0 0 10px;
+}
+
+#explore {
     width: 300px;
     float: left;
     margin: 20px 10px 0 0;
@@ -312,6 +319,13 @@ div#middle_wrapper_content  a:hover {
     color: #DB6A00;
     text-decoration: underline;
 }
+ 
+/***** generic form *****/
+
+input[type="text"]:focus, input[type="text"]:active,
+input[type="password"]:focus, input[type="password"]:active {
+    background-color: #F9F8E4;
+}
 
 /*****  main page rounded-shadow box *****/
 
@@ -333,6 +347,27 @@ div.box:after {
 div.box_content {
     padding: 0 25px 0 20px;
     background: url("/img/rs-right.png") right repeat-y;
+    overflow: auto;
+}
+
+div.sbox {
+    max-width: 440px;
+}
+div.sbox:before {
+    display: block;
+    line-height: 0;
+    background: url("/img/s-topright.png") top right no-repeat;
+    content: url("/img/s-topleft.png");
+}
+div.sbox:after {
+    display: block;
+    line-height: 0;
+    background: url("/img/s-bottomright.png") bottom right no-repeat;
+    content: url("/img/s-bottomleft.png");
+}
+div.sbox_content {
+    padding: 0 25px 0 20px;
+    background: url("/img/s-right.png") right repeat-y;
     overflow: auto;
 }
 

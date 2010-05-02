@@ -8,17 +8,17 @@ div#deck_inputs {
 }
 
 #deck_inputs ol {
-    padding: 1em 1em 0 1em;
+    padding: 10px 10px 10px 0;
 }
 
 #deck_inputs li {
-    padding-bottom: 1em;
+    padding-bottom: 10px;
 }
 
 #deck_inputs label, #deck_inputs span.label {
-    font-size: 1.2em;
+    font-size: 1.3em;
     float: left;
-    width: 6em;
+    width: 100px;
     margin-right: 1em;
     text-align: left;
 }
@@ -42,6 +42,11 @@ div#deck_inputs {
     font-size: 1.3em;
 }
 
+#deck_inputs li input.input_detail {
+    font-size: 1.3em;
+    width: 350px;
+}
+
 /** card input container **/
 
 div#card_inputs {
@@ -52,23 +57,29 @@ div#card_inputs label {
     text-align: right;
 }
 
-div#card_inputs input {
+div#card_inputs input.input_term {
     float: left;
+    width: 150px;
+    margin-right: 1em;
+}
+
+div#card_inputs input.input_defn {
+    float: left;
+    width: 300px;
     margin-right: 1em;
 }
 
 div#card_inputs #term_header {
-    font-size: 1.2em;
     float: left;
-    clear: left;
-    width: 14em;
-    margin-left: 7em;
+    font-size: 1.2em;
+    width: 150px;
+    margin-right: 1em;
 }
 
 div#card_inputs #definition_header {
     font-size: 1.2em;
     float: left;
-    width: 20em;
+    width: 300px;
 }
 
 div.plus, div.minus {
@@ -97,6 +108,7 @@ div#submit_deck {
     width: 170px;
 }
 
+
 /** CSV input container **/
 
 div#upload_box {
@@ -104,10 +116,10 @@ div#upload_box {
     border: 1px solid #cecece;
 }
 
-#upload_box div.input {
-    margin: 1em auto;
+#upload_box input.input_upload {
+    margin: 10px auto;
+    width: 500px;
 }
-
 /*** auto complete CSS ***/
 .ac_results {
 	padding: 0px;
