@@ -7,7 +7,6 @@ div.sbox_content div.sbox_inner {
     color: #ECEFF5;
     margin: 0;
     padding: 0 10px;
-    overflow-y: auto;
 }
 
 div#login_box h2, div#forgot_box h2, div#confirm_box h2 {
