@@ -201,6 +201,7 @@ class UsersController extends AppController {
 
 		//pulls the current user id
 		$currentUserId = $this->Auth->user('id');
+		$currentUserName = $this->Auth->user('username');
 
 		//pulls all decks the user has in the mydecks table
         $colSortBy = 'MyDeck.modified DESC';
@@ -293,7 +294,8 @@ class UsersController extends AppController {
 		$this->set('publicDecks', $publicDecks);
 		$this->set('numDecksStudied', count($allMyDecks));
 		 
-		 
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_DASHBOARD . $currentUserName . "'s dashboard";
 	}
 
 

@@ -6,7 +6,7 @@ div.sbox_content div.sbox_inner {
     font-size: 1.5em;
     color: #ECEFF5;
     margin: 0;
-    padding: 0 10px;
+    padding: 0 10px 10px 10px;
 }
 
 div#login_box h2, div#forgot_box h2, div#confirm_box h2 {
@@ -36,7 +36,6 @@ div.sbox_content input[type="password"]:active {
 div.sbox_content div.submit input {
     font-size: 1.5em;
     padding: 0 1em;
-    float: left;
     margin: 0;
 }
 

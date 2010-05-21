@@ -26,6 +26,8 @@ class DecksController extends AppController {
     // Create deck method
 	function create()
     {
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_CREATE;
 
         if(!empty($this->data)) {
             $editDeck = false;
@@ -95,8 +97,8 @@ class DecksController extends AppController {
             $tagsParams = array('conditions' =>  array('Tag.id' => $deckTags),'fields' => array('Tag.id','Tag.tag'));
             $tags = $this->Tag->find('all',$tagsParams);
             
-            App::import('Sanitize');
             /*
+            App::import('Sanitize');
             $tags = Sanitize::clean($tags);	
             $deck = Sanitize::clean($deck);	
             
@@ -107,6 +109,10 @@ class DecksController extends AppController {
             $this->set('existingDeck', $deck);
             $this->set('existingCards', $cards);
         
+            // Set page title
+            $deckName = $deck['Deck']['deck_name'];
+            $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_EDIT . $deckName;
+
         }
         else {
             $editDeck = true;
@@ -119,6 +125,9 @@ class DecksController extends AppController {
 	function explore($sortBy = null, $page = null, $query = null)
     {   
     
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_EXPLORE;
+
         App::import('Sanitize');
         $sanitizeParams = array('connection'=>'default',
                     'odd_spaces'=>'true',
@@ -628,6 +637,11 @@ class DecksController extends AppController {
         $this->set('cardsResults',$resultMap);
         $this->set('userQuizCount', $myDeckResults['MyDeck']['quiz_count']);
         $this->set('tags', $tags);
+
+        // Set page title
+        $deckName = $deckRecord['Deck']['deck_name'];
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_INFO . $deckName;
+
     }
 
   /*
@@ -699,6 +713,9 @@ class DecksController extends AppController {
      */
     function learn($id)
     {
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_LEARN;
+
         // Call assocations
         // Binds $assocSaved, $assocCreated, $assocViewed, $assocNope
         // Deck is in dashboard (i.e. in my_decks table)
@@ -716,6 +733,9 @@ class DecksController extends AppController {
      */
     function quiz($id)
     {
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_QUIZ;
+
         // Call assocations
         // Binds $assocSaved, $assocCreated, $assocViewed, $assocNope
         // Deck is in dashboard (i.e. in my_decks table)

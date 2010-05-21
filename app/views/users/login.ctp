@@ -53,6 +53,7 @@
 
         echo "</ol>\n";
     	echo $form->end('Login');
+        //echo "<div class='clear_div'></div>";
     	echo "</div>\n";
     ?>
 

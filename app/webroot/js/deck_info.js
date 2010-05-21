@@ -197,8 +197,8 @@ $(document).ready( function() {
     DeckInfoUI.refreshCheckboxCounts();
 
     // Round corners
-    $("div#middle").corner();
-    $("div#bottom").corner();
+    //$("div#middle").corner();
+    //$("div#bottom").corner();
 
     // Setup tabs
     $("#bottom").tabs();

@@ -59,5 +59,18 @@ class SD_Global
     public static $USER_CREATED = 2;
     public static $USER_SAVED = 3;
 
+    // Page titles
+    // Hard-coded in /app/views/pages/home.ctp
+    //public static $PAGE_TITLE_HOME = "Studydeck | Online flashcards made simple";
+    public static $PAGE_TITLE_DASHBOARD = "Studydeck | ";
+
+    public static $PAGE_TITLE_EXPLORE = "Studydeck | Explore";
+    public static $PAGE_TITLE_INFO = "Studydeck | ";
+    public static $PAGE_TITLE_LEARN = "Studydeck | Learn";
+    public static $PAGE_TITLE_QUIZ = "Studydeck | Quiz";
+    public static $PAGE_TITLE_CREATE = "Studydeck | Create";
+    public static $PAGE_TITLE_EDIT = "Studydeck | Edit ";
+    
+    //public static $PAGE_TITLE_HELP = "Help – Studydeck | Help";
 }
 ?>

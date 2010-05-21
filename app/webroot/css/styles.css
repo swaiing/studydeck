@@ -1,7 +1,9 @@
-body {
+html, body {
     font-family: verdana, helvetica, sans-serif;
     font-size: 11px;
-    background: #ECEFF5;
+    background-color: #ECEFF5;
+    height: 100%;
+    min-height: 100%;
 }
 
 /*****  top-level divs *****/
@@ -224,27 +226,15 @@ div#panels {
     margin: 0 0 5px 0;
 }
 
-#signup {
+#signup, #explore, #iphone {
     width: 300px;
     float: left;
     margin: 20px 10px 0 0;
     padding: 0 0 0 10px;
 }
 
-#explore {
-    width: 300px;
+#iphone img, #signup img, #explore img {
     float: left;
-    margin: 20px 10px 0 0;
-    padding: 0 0 0 10px;
-}
-
-#iphone {
-    width: 300px;
-    float: left;
-    margin: 20px 10px 0 0;
-}
-#iphone img {
-    float: right;
     margin: 0 10px 0 0;
 }
 
@@ -366,9 +356,9 @@ div.sbox:after {
     content: url("/img/s-bottomleft.png");
 }
 div.sbox_content {
-    padding: 0 25px 0 20px;
     background: url("/img/s-right.png") right repeat-y;
     overflow: auto;
+    padding: 0 25px 0 20px;
 }
 
 /*****  white-drop shadow box *****/
