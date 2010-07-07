@@ -6,15 +6,25 @@
 # auto-populate with data.
 #
 # Prerequisite: $MYSQL_USER must exist so script can login and create database.
-# This user must have privileges on $MYSQL_DB.
+# This user must have all privileges on $MYSQL_DB.  Another user must also be created 
+# as the application user with only SELECT, INSERT, UPDATE and DELETE privileges.
+#
 # To create $MYSQL_USER in mysql, login as the root user ($ mysql -u root -p) and run:
-# 
+#
+# Script User:
+# mysql> CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+# mysql> GRANT ALL PRIVILEGES ON 'database_name'.* to 'username'@"localhost" IDENTIFIED BY 'username';
+#
+# Application User:
 # mysql> CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
 # mysql> GRANT SELECT, INSERT, UPDATE, DELETE ON 'database_name'.* to 'username'@"localhost" IDENTIFIED BY 'username';
 # 
 # Example for this script:
+# mysql> CREATE USER 'mysqladm'@'localhost' IDENTIFIED BY 'mysqladm';
+# mysql> GRANT ALL PRIVILEGES ON studydeck.* to mysqladm@"localhost" IDENTIFIED BY 'mysqladm';
+#
 # mysql> CREATE USER 'mysqldev'@'localhost' IDENTIFIED BY 'mysqldev';
-# mysql> GRANT SELECT, INSERT, UPDATE, DELETE ON studydeckdev.* to mysqldev@"localhost" IDENTIFIED BY 'mysqldev';
+# mysql> GRANT SELECT, INSERT, UPDATE, DELETE ON studydeck.* to mysqldev@"localhost" IDENTIFIED BY 'mysqldev';
 #
 # Example usage: 
 # ./build-db.sh 
@@ -24,9 +34,9 @@ SCHEMA_SQL_ORIG=$ROOTDIR/../flashcards.sql
 SCHEMA_DB_ORIG_NAME=flashcards
 SCHEMA_SQL_TMP=/tmp/studydeck.sql
 
-MYSQL_USER=mysqldev
-MYSQL_PASSWORD=mysqldev
-MYSQL_DB=studydeckdev
+MYSQL_USER=mysqladm
+MYSQL_PASSWORD=mysqladm
+MYSQL_DB=studydeck
 MYSQL_EXEC="mysql -u $MYSQL_USER -p${MYSQL_PASSWORD}" 
 
 TMP_DATA_SQL=/tmp/populate_data.sql
