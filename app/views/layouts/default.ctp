@@ -18,8 +18,7 @@
 <div id="header">
 
     <div id="site_id">
-        <h1><?php echo $html->link('studydeck',"/"); ?></h1>
-        <!--<span class="tagline">Online flashcards made simple.</span>-->
+	<img src="/img/sd_logo.png" alt="Studydeck"/>
     </div>
 
     <div id="nav">
