@@ -18,7 +18,9 @@
 <div id="header">
 
     <div id="site_id">
-	<img src="/img/sd_logo.png" alt="Studydeck"/>
+	<a href="/">
+	    <img src="/img/sd_logo.png" alt="Studydeck"/>
+	</a>
     </div>
 
     <div id="nav">
