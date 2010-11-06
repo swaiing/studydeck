@@ -1,0 +1,65 @@
+/****** rating selector widget ******/
+
+.rts {
+    position: relative;
+    width: 499px;
+    height: 50px;
+    background: url("/img/rts_learn.png") no-repeat;
+    margin: 0 auto 0 auto;
+    padding: 0;
+    cursor: pointer;
+}
+
+.rts li {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.rts li, .rts a {
+    height: 50px;
+    display: block;
+    text-decoration: none;
+    font-weight: bold;
+    color: #000;
+}
+
+/** easy button style effects **/
+.easy   { left: 0; width: 165px; }
+.rts-easy, .rts-easy-click {
+    position: absolute;
+    left: 0;
+    width: 165px;
+    height: 50px;
+    background: transparent url("/img/rts_learn.png") 0 -50px no-repeat;
+}
+.rts-easy-click {
+    background: transparent url("/img/rts_learn.png") 0 -100px no-repeat;
+}
+
+/** medium button style effects **/
+.medium { left: 167px; width: 165px; }
+.rts-medium, .rts-medium-click {
+    position: absolute;
+    left: 167px;
+    width: 165px;
+    height: 50px;
+    background: transparent url("/img/rts_learn.png") -167px -50px no-repeat;
+}
+.rts-medium-click {
+    background: transparent url("/img/rts_learn.png") -167px -100px no-repeat;
+}
+
+
+/** hard button style effects **/
+.hard   { left: 334px; width: 165px; }
+.rts-hard, .rts-hard-click {
+    position: absolute;
+    left: 334px;
+    width: 165px;
+    height: 50px;
+    background: transparent url("/img/rts_learn.png") -334px -50px no-repeat;
+}
+.rts-hard-click {
+    background: transparent url(/img/rts_learn.png) -334px -100px no-repeat;
+}

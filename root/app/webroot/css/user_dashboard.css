@@ -1,0 +1,64 @@
+/*** user_dashboard.css ***/
+
+div#sort_actions {
+    overflow: auto;
+    margin: 0 0 10px 0;
+}
+
+#sort_actions ul {
+    float: right;
+    clear: right;
+}
+
+#sort_actions li {
+    display: inline;
+    margin-left: 10px;
+}
+
+div#created_me {
+}
+
+div#created_others {
+    margin: 20px 0 0 0;
+}
+
+div.nodecks {
+    font-size: 12px;
+    margin: 20px 0;
+}
+
+div#displaying {
+    margin: 10px 0 0 0;
+    color: #363636;
+}
+
+/** table styles **/
+div#created_me table.deck_table,
+div#created_others table.deck_table {
+    width: 700px;
+}
+
+div#created_me table.deck_table col.deck,
+div#created_others table.deck_table col.deck {
+    width: 300px;
+}
+div#created_me table.deck_table col.num_cards,
+div#created_others table.deck_table col.num_cards {
+    width: 60px;
+}
+div#created_me table.deck_table col.num_quizzed,
+div#created_others table.deck_table col.num_quizzed {
+    width: 60px;
+}
+div#created_me table.deck_table col.last_quizzed,
+div#created_others table.deck_table col.last_quizzed {
+    width: 90px;
+}
+div#created_me table.deck_table col.progress,
+div#created_others table.deck_table col.progress {
+    width: 140px;
+}
+div#created_me table.deck_table col.remove,
+div#created_others table.deck_table col.remove {
+    width: 50px;
+}
