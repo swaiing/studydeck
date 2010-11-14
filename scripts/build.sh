@@ -9,11 +9,11 @@
 #
 # Examples:
 #
-# 1)  Builds database and entire project minus .svn dirs.
+# 1)  Builds database and entire project minus
 # ./build.sh -t all
 #
-# 2) Builds project and copies over Steve's config with .svn directories
-# ./build.sh -s -t all -c steve
+# 2) Builds project and copies over Steve's config
+# ./build.sh -t all -c steve
 
 
 DATE=`date`
@@ -21,13 +21,16 @@ DATESTAMP=`date "+%Y%m%d.%H%M"`
 ROOT_DIR=`dirname $0`
 TARGET_STR="----> TARGET:"
 
-EXPORT_SVN=true
+# Removed for SVN
+#EXPORT_SVN=true
+#SVN_USER=webadm
+#APP_REPOS=svn+ssh://${SVN_USER}@studydeck.hopto.org/home/svn/studydeck/trunk/app
+#APP_REPOS_OUT=/tmp/app_repos.svn
+
 HOSTED_BUILD=false
-SVN_USER=webadm
-APP_REPOS=svn+ssh://${SVN_USER}@studydeck.hopto.org/home/svn/studydeck/trunk/app
 APP_TMP=/tmp/app
-APP_REPOS_OUT=/tmp/app_repos.svn
 LAYOUT_TMP=/tmp/layout.tmp.`whoami`
+APP_HOME=$ROOT_DIR/../app
 
 STAGING=~/stage
 HOST_USER=studydec
@@ -56,7 +59,7 @@ CORE_CFG=$ROOT_DIR/core.php
 
 usage() {
   echo ""
-  echo "Usage: `basename $0` [-s] -t [build_db|build_app|clean|build|all|host_alpha|host_prd] [-c [nicolo|steve]]"
+  echo "Usage: `basename $0` -t [build_db|build_app|clean|build|all|host_alpha|host_prd] [-c [nicolo|steve]]"
   echo ""
 }
 
@@ -119,11 +122,8 @@ build() {
 
   # Copy /app over cake install
   echo "  Exporting source /app root to $CAKE_ROOT"
-  if [ "$EXPORT_SVN" = "true" ]; then
-    svn export --force $APP_REPOS $APP_TMP > $APP_REPOS_OUT
-  else
-    svn checkout $APP_REPOS $APP_TMP > $APP_REPOS_OUT
-  fi
+  cp -r $APP_HOME $APP_TMP
+
   echo "  Copying $APP_TMP to $CAKE_ROOT"
   cp -r $APP_TMP $CAKE_ROOT
 
@@ -136,8 +136,10 @@ build() {
   chmod g+rwx $CAKE_LOGS
   chmod g+rwx $CAKE_SESSIONS
 
-  # Remove "BUILD_NUM_STR" from layout
-  revision=`tail -1 $APP_REPOS_OUT | sed "s/\(Exported revision \)\([0-9]*\)/\2/" | cut -d . -f1`
+  # TODO: Remove "BUILD_NUM_STR" from layout
+  #revision=`tail -1 $APP_REPOS_OUT | sed "s/\(Exported revision \)\([0-9]*\)/\2/" | cut -d . -f1`
+  revision=someRevision
+
   if [ "$HOSTED_BUILD" = "true" ]; then
     echo "  Removing ${BUILD_NUM_STR} from layout"
     match="Build Version: ${BUILD_NUM_STR}\. "
@@ -147,6 +149,7 @@ build() {
   # Insert SVN revision number if doing non-production build
   else
       if [ "$EXPORT_SVN" = "true" ]; then
+	# TODO: Get an actual build revision number
         echo "  Inserting build revision"
         sed s/${BUILD_NUM_STR}/${revision}/g ${CAKE_LAYOUT} > $LAYOUT_TMP
         cp $LAYOUT_TMP $CAKE_LAYOUT
@@ -155,7 +158,8 @@ build() {
 
   # Create PACKAGE_INFO file
   echo $DATE > $PACKAGE_INFO
-  cat $APP_REPOS_OUT >> $PACKAGE_INFO
+  # TODO: More information about package
+  #cat $APP_REPOS_OUT >> $PACKAGE_INFO
 
   # Remove unpacked install
   echo "  Cleaning staged install"
@@ -247,9 +251,6 @@ build_db() {
 # Get options
 while getopts "st:c:" opt; do
   case $opt in
-    s)
-      EXPORT_SVN=false 
-    ;;
     t)
       if [ "$OPTARG" = "clean" ]; then
         clean
