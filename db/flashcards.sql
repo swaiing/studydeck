@@ -2,13 +2,11 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-CREATE SCHEMA IF NOT EXISTS `flashcards` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ;
-USE `flashcards` ;
 
 -- -----------------------------------------------------
--- Table `flashcards`.`users`
+-- Table `studydeck`.`users`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`users` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `email` VARCHAR(127) NOT NULL ,
   `password` VARCHAR(45) NOT NULL ,
@@ -21,9 +19,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`products`
+-- Table `studydeck`.`products`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`products` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`products` (
   `id` INT NOT NULL ,
   `deck_id` INT NULL ,
   `name` VARCHAR(127) NOT NULL ,
@@ -32,16 +30,16 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`products` (
   INDEX `deck_id_p` (`deck_id` ASC) ,
   CONSTRAINT `deck_id_p`
     FOREIGN KEY (`deck_id` )
-    REFERENCES `flashcards`.`decks` (`id` )
+    REFERENCES `studydeck`.`decks` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`decks`
+-- Table `studydeck`.`decks`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`decks` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`decks` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `deck_name` VARCHAR(127) NOT NULL ,
   `privacy` INT NOT NULL ,
@@ -56,21 +54,21 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`decks` (
   INDEX `product_id_d` (`product_id` ASC) ,
   CONSTRAINT `user_id_d`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `product_id_d`
     FOREIGN KEY (`product_id` )
-    REFERENCES `flashcards`.`products` (`id` )
+    REFERENCES `studydeck`.`products` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`deck_comments`
+-- Table `studydeck`.`deck_comments`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`deck_comments` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`deck_comments` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `comment` TEXT NOT NULL ,
   `created` DATETIME NOT NULL ,
@@ -82,21 +80,21 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`deck_comments` (
   INDEX `deck_id_dc` (`deck_id` ASC) ,
   CONSTRAINT `user_id_dc`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `deck_id_dc`
     FOREIGN KEY (`deck_id` )
-    REFERENCES `flashcards`.`decks` (`id` )
+    REFERENCES `studydeck`.`decks` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`my_decks`
+-- Table `studydeck`.`my_decks`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`my_decks` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`my_decks` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `user_id` INT NOT NULL ,
   `deck_id` INT NOT NULL ,
@@ -109,21 +107,21 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`my_decks` (
   INDEX `deck_id_md` (`deck_id` ASC) ,
   CONSTRAINT `user_id_md`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `deck_id_md`
     FOREIGN KEY (`deck_id` )
-    REFERENCES `flashcards`.`decks` (`id` )
+    REFERENCES `studydeck`.`decks` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`cards`
+-- Table `studydeck`.`cards`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`cards` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`cards` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `card_order` INT NOT NULL ,
   `question` TEXT NOT NULL ,
@@ -135,16 +133,16 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`cards` (
   INDEX `deck_id_c` (`deck_id` ASC) ,
   CONSTRAINT `deck_id_c`
     FOREIGN KEY (`deck_id` )
-    REFERENCES `flashcards`.`decks` (`id` )
+    REFERENCES `studydeck`.`decks` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`ratings`
+-- Table `studydeck`.`ratings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`ratings` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`ratings` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `rating` INT NOT NULL ,
   `card_id` INT NOT NULL ,
@@ -156,21 +154,21 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`ratings` (
   INDEX `card_id_r` (`card_id` ASC) ,
   CONSTRAINT `user_id_r`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `card_id_r`
     FOREIGN KEY (`card_id` )
-    REFERENCES `flashcards`.`cards` (`id` )
+    REFERENCES `studydeck`.`cards` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`groups`
+-- Table `studydeck`.`groups`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`groups` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`groups` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `group_name` VARCHAR(127) NOT NULL ,
   `created` DATETIME NOT NULL ,
@@ -180,16 +178,16 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`groups` (
   INDEX `user_id_g` (`user_id` ASC) ,
   CONSTRAINT `user_id_g`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`group_decks`
+-- Table `studydeck`.`group_decks`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`group_decks` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`group_decks` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `group_id` INT NOT NULL ,
   `deck_id` INT NOT NULL ,
@@ -202,26 +200,26 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`group_decks` (
   INDEX `user_id_gd` (`user_id` ASC) ,
   CONSTRAINT `group_id_gd`
     FOREIGN KEY (`group_id` )
-    REFERENCES `flashcards`.`groups` (`id` )
+    REFERENCES `studydeck`.`groups` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `deck_id_gd`
     FOREIGN KEY (`deck_id` )
-    REFERENCES `flashcards`.`decks` (`id` )
+    REFERENCES `studydeck`.`decks` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `user_id_gd`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`group_members`
+-- Table `studydeck`.`group_members`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`group_members` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`group_members` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `group_id` INT NOT NULL ,
   `user_id` INT NOT NULL ,
@@ -231,21 +229,21 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`group_members` (
   INDEX `user_id_gm` (`user_id` ASC) ,
   CONSTRAINT `group_id_gm`
     FOREIGN KEY (`group_id` )
-    REFERENCES `flashcards`.`groups` (`id` )
+    REFERENCES `studydeck`.`groups` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `user_id_gm`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`hints`
+-- Table `studydeck`.`hints`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`hints` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`hints` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `user_id` INT NOT NULL ,
   `card_id` INT NOT NULL ,
@@ -257,21 +255,21 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`hints` (
   INDEX `card_id_h` (`card_id` ASC) ,
   CONSTRAINT `user_id_h`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `card_id_h`
     FOREIGN KEY (`card_id` )
-    REFERENCES `flashcards`.`cards` (`id` )
+    REFERENCES `studydeck`.`cards` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`results`
+-- Table `studydeck`.`results`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`results` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`results` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `card_id` INT NOT NULL ,
   `user_id` INT NOT NULL ,
@@ -285,21 +283,21 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`results` (
   INDEX `card_id_rs` (`card_id` ASC) ,
   CONSTRAINT `user_id_rs`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `card_id_rs`
     FOREIGN KEY (`card_id` )
-    REFERENCES `flashcards`.`cards` (`id` )
+    REFERENCES `studydeck`.`cards` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`my_answers`
+-- Table `studydeck`.`my_answers`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`my_answers` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`my_answers` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `user_id` INT NOT NULL ,
   `card_id` INT NOT NULL ,
@@ -311,21 +309,21 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`my_answers` (
   INDEX `card_id_ma` (`card_id` ASC) ,
   CONSTRAINT `user_id_ma`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `card_id_ma`
     FOREIGN KEY (`card_id` )
-    REFERENCES `flashcards`.`cards` (`id` )
+    REFERENCES `studydeck`.`cards` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`tags`
+-- Table `studydeck`.`tags`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`tags` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`tags` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `tag` VARCHAR(127) NOT NULL ,
   `created` DATETIME NOT NULL ,
@@ -335,9 +333,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`deck_tags`
+-- Table `studydeck`.`deck_tags`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`deck_tags` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`deck_tags` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `deck_id` INT NOT NULL ,
   `tag_id` INT NOT NULL ,
@@ -348,21 +346,21 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`deck_tags` (
   INDEX `tag_id_dt` (`tag_id` ASC) ,
   CONSTRAINT `deck_id_dt`
     FOREIGN KEY (`deck_id` )
-    REFERENCES `flashcards`.`decks` (`id` )
+    REFERENCES `studydeck`.`decks` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `tag_id_dt`
     FOREIGN KEY (`tag_id` )
-    REFERENCES `flashcards`.`tags` (`id` )
+    REFERENCES `studydeck`.`tags` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`search_index`
+-- Table `studydeck`.`search_index`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`search_index` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`search_index` (
   `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `association_key` INT(11) NOT NULL ,
   `model` VARCHAR(128) NOT NULL ,
@@ -376,9 +374,9 @@ COLLATE = utf8_unicode_ci;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`temp_users`
+-- Table `studydeck`.`temp_users`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`temp_users` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`temp_users` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `email` VARCHAR(127) NOT NULL ,
   `password` VARCHAR(45) NOT NULL ,
@@ -392,9 +390,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`payments`
+-- Table `studydeck`.`payments`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`payments` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`payments` (
   `id` INT NOT NULL ,
   `user_id` INT NOT NULL ,
   `amount` DECIMAL NOT NULL ,
@@ -403,16 +401,16 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`payments` (
   INDEX `user_id_p` (`user_id` ASC) ,
   CONSTRAINT `user_id_p`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `flashcards`.`products_purchased`
+-- Table `studydeck`.`products_purchased`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `flashcards`.`products_purchased` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`products_purchased` (
   `id` INT NOT NULL ,
   `payment_id` INT NOT NULL ,
   `product_id` INT NOT NULL ,
@@ -423,17 +421,17 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`products_purchased` (
   INDEX `user_id_pr` (`user_id` ASC) ,
   CONSTRAINT `payment_id_p`
     FOREIGN KEY (`payment_id` )
-    REFERENCES `flashcards`.`payments` (`id` )
+    REFERENCES `studydeck`.`payments` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `product_id_p`
     FOREIGN KEY (`product_id` )
-    REFERENCES `flashcards`.`products` (`id` )
+    REFERENCES `studydeck`.`products` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `user_id_pr`
     FOREIGN KEY (`user_id` )
-    REFERENCES `flashcards`.`users` (`id` )
+    REFERENCES `studydeck`.`users` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
