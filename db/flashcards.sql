@@ -3,7 +3,7 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
 CREATE SCHEMA IF NOT EXISTS `flashcards` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ;
-USE `flashcards`;
+USE `flashcards` ;
 
 -- -----------------------------------------------------
 -- Table `flashcards`.`users`
@@ -15,8 +15,26 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`users` (
   `created` DATETIME NOT NULL ,
   `username` VARCHAR(45) NOT NULL ,
   `modified` DATETIME NOT NULL ,
-  `list_of_fears` VARCHAR(255) NULL ,
+  `list_of_fears` VARCHAR(255) NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `flashcards`.`products`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `flashcards`.`products` (
+  `id` INT NOT NULL ,
+  `deck_id` INT NULL ,
+  `name` VARCHAR(127) NOT NULL ,
+  `price` DECIMAL NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `deck_id_p` (`deck_id` ASC) ,
+  CONSTRAINT `deck_id_p`
+    FOREIGN KEY (`deck_id` )
+    REFERENCES `flashcards`.`decks` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -31,12 +49,19 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`decks` (
   `quiz_count` INT NOT NULL ,
   `user_id` INT NOT NULL ,
   `modified` DATETIME NOT NULL ,
-  `description` VARCHAR(255) NULL ,
+  `description` VARCHAR(255) NULL DEFAULT NULL ,
+  `product_id` INT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `user_id_d` (`user_id` ASC) ,
+  INDEX `product_id_d` (`product_id` ASC) ,
   CONSTRAINT `user_id_d`
     FOREIGN KEY (`user_id` )
     REFERENCES `flashcards`.`users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `product_id_d`
+    FOREIGN KEY (`product_id` )
+    REFERENCES `flashcards`.`products` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -360,9 +385,57 @@ CREATE  TABLE IF NOT EXISTS `flashcards`.`temp_users` (
   `created` DATETIME NOT NULL ,
   `username` VARCHAR(45) NOT NULL ,
   `modified` DATETIME NOT NULL ,
-  `list_of_fears` VARCHAR(255) NULL ,
+  `list_of_fears` VARCHAR(255) NULL DEFAULT NULL ,
   `confirmation_code` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`id`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `flashcards`.`payments`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `flashcards`.`payments` (
+  `id` INT NOT NULL ,
+  `user_id` INT NOT NULL ,
+  `amount` DECIMAL NOT NULL ,
+  `transaction_id` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `user_id_p` (`user_id` ASC) ,
+  CONSTRAINT `user_id_p`
+    FOREIGN KEY (`user_id` )
+    REFERENCES `flashcards`.`users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `flashcards`.`products_purchased`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `flashcards`.`products_purchased` (
+  `id` INT NOT NULL ,
+  `payment_id` INT NOT NULL ,
+  `product_id` INT NOT NULL ,
+  `user_id` INT NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `payment_id_p` (`payment_id` ASC) ,
+  INDEX `product_id_p` (`product_id` ASC) ,
+  INDEX `user_id_pr` (`user_id` ASC) ,
+  CONSTRAINT `payment_id_p`
+    FOREIGN KEY (`payment_id` )
+    REFERENCES `flashcards`.`payments` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `product_id_p`
+    FOREIGN KEY (`product_id` )
+    REFERENCES `flashcards`.`products` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `user_id_pr`
+    FOREIGN KEY (`user_id` )
+    REFERENCES `flashcards`.`users` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
