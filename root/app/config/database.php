@@ -84,7 +84,7 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'mysqldev',
 		'password' => 'mysqldev',
-		'database' => 'studydeck',
+		'database' => 'studydeckdev',
 		'prefix' => ''
 	);
 
