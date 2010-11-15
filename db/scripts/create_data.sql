@@ -4,10 +4,20 @@ INSERT INTO users (email, password, username) VALUES ("scott@studydeck.com", "59
 INSERT INTO users (email, password, username) VALUES ("nicolo@studydeck.com", "5911211b41ad0fc56b09e05fe73ee5cedd42ca23", "nicolo");
 
 -- CREATE DECK
-INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("SAN Terms", 1, 0, 1, "Storage Area Networks terms and definitions.", NOW());
+INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("SAN Terms", 1, 0, 2, "Storage Area Networks terms and definitions.", NOW());
 INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("State Capitals", 1, 0, 2, "All 50 states of the United States and the respective capital cities.", NOW());
 INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("SAT Words", 1, 0, 3, "SAT prep words and definitions.", NOW());
-INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("Types of Wine", 1, 0, 1, "Different types of red and white wine.", NOW());
+INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("Types of Wine", 1, 0, 3, "Different types of red and white wine.", NOW());
+-- Product decks
+INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("Studydeck Top 500", 0, 0, 1, "Top 500 premium Studydeck GRE words.", NOW());
+INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("Latin Roots", 0, 0, 1, "Premium Studydeck Latin roots.", NOW());
+
+-- CREATE PRODUCTS
+INSERT INTO products (deck_id, name, price) VALUES (5, "Studydeck Top 500", 9.99);
+UPDATE decks SET decks.product_id=0 WHERE decks.id=5;
+
+-- INSERT INTO products (deck_id, name, price) VALUES (6, "Studydeck Latin Roots", 4.99);
+-- UPDATE decks SET decks.product_id=1 WHERE decks.id=6;
 
 -- CREATE SOME TAGS
 INSERT INTO tags (tag, created) VALUES ("storage", NOW());
@@ -18,18 +28,29 @@ INSERT INTO tags (tag, created) VALUES ("vocabulary", NOW());
 INSERT INTO tags (tag, created) VALUES ("sat", NOW());
 
 -- ADD NECESSARY ASSOCIATIONS (for dashboard)
+-- Steve user
 INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (1,1,2,0,NOW());
-INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (1,4,2,0,NOW());
 INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (1,2,3,0,NOW());
 INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (1,3,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (1,4,2,0,NOW());
+-- Top 500 deck, Latin Roots
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (1,5,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (1,6,3,0,NOW());
 
-INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (2,2,2,0,NOW());
-INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (2,1,3,0,NOW());
-INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (2,3,3,0,NOW());
+-- Scott user
+-- INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (2,1,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (2,1,2,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (2,2,3,0,NOW());
+-- Top 500 deck, Latin Roots
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (2,5,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (2,6,3,0,NOW());
 
-INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (3,3,2,0,NOW());
-INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (3,1,3,0,NOW());
-INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (3,1,3,0,NOW());
+-- Nicolo user
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (3,3,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (3,4,2,0,NOW());
+-- Top 500 deck, Latin Roots
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (3,5,3,0,NOW());
+INSERT INTO my_decks (user_id, deck_id, type, quiz_count, created) VALUES (3,6,3,0,NOW());
 
 -- CREATE TAG ASSOCIATIONS
 INSERT INTO deck_tags (deck_id, tag_id, created) VALUES (1, 1, NOW());
@@ -203,3 +224,17 @@ INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"Cabernet Sa
 INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"Merlot", "Red - another red wine of Bordeaux, mellower from the start so more ready to drink at an earlier age.  A smooth and lively fine wine, a splendid partner for roast lamb or duck, grilled steak, lamb or beef stew, and braised meat in reduced sauces.", 4);
 INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"Zinfandel", "Red - (the original deep red wine, not to be confused with white zinfandel) was long known as \"California's mystery grape\" because no one knew where it had originated.  The mystery has been solved, it has descended from a southern Italian variety known as Primitivo.  It has been a very successful transplant indeed--robust in every way, bursting with ripe blackberry jam flavor, vibrantly acidic and fairly high in alcohol with a bracing jolt of astringent tannin.  A well-made Zinfandel will be superb five years after the vintage date and can easily age for at least ten years.  A good match for hearty food such as roast pork with gravy or rich sauce, osso bucco, and slow-braised lamb shanks, as well as pasta with spicy sausages, tomato-based chicken fricasses, and even first-rate cheeseburgers.", 4);
 INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"Pinot Noir", "Red - for many winemakers and connoisseurs this is the ultimate wine.  Originally from Burgunday in France, it has been celebrated for nearly a thousand years.  It is smooth and relatively light, but with a persistent lingering flavor, a unique combination of delicacy and power, often characterized as an iron fist in a velvet glove.  Classically paired with a rare roast beef.  Also dark-meat poultry is another favorite, especially duck and quail, while it's lightness makes it a good red for turkey.", 4);
+
+-- deck 5: Studydeck Top 500
+INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"word", "def", 5);
+INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"word", "def", 5);
+INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"word", "def", 5);
+INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"word", "def", 5);
+INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"word", "def", 5);
+
+-- deck 6: Latin Roots
+INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"word", "def", 6);
+INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"word", "def", 6);
+INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"word", "def", 6);
+INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"word", "def", 6);
+INSERT INTO cards (card_order, question, answer, deck_id) VALUES (1,"word", "def", 6);

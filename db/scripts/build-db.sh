@@ -65,7 +65,7 @@ rename_schema() {
 create_schema() { 
     # Run mysqldump to setup empty tables
     echo "  Creating schema"
-    $MYSQL_EXEC < $SCHEMA_SQL_TMP
+    $MYSQL_EXEC < $SCHEMA_SQL_ORIG
 } 
 
 populate() {
@@ -80,13 +80,18 @@ populate() {
 cleanup() {
   # Clean tmp files
   echo "  Cleaning temporary files"
-  rm $SCHEMA_SQL_TMP
-  rm $TMP_DATA_SQL
+  if [ -e $SCHEMA_SQL_TMP ]; then
+    rm $SCHEMA_SQL_TMP
+  fi
+  if [ -e $TMP_DATA_SQL ]; then
+    rm $TMP_DATA_SQL
+  fi
 }
 
 # Main
 drop_recreate
-rename_schema
+# SHW - Nov 14, 2010 - Removed rename
+#rename_schema
 create_schema
 populate
 cleanup
