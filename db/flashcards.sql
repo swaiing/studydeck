@@ -2,6 +2,8 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
+CREATE SCHEMA IF NOT EXISTS `studydeck` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ;
+USE `studydeck` ;
 
 -- -----------------------------------------------------
 -- Table `studydeck`.`users`
@@ -22,7 +24,7 @@ ENGINE = InnoDB;
 -- Table `studydeck`.`products`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `studydeck`.`products` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `deck_id` INT NULL ,
   `name` VARCHAR(127) NOT NULL ,
   `price` DECIMAL NULL ,
@@ -393,7 +395,7 @@ ENGINE = InnoDB;
 -- Table `studydeck`.`payments`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `studydeck`.`payments` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `user_id` INT NOT NULL ,
   `amount` DECIMAL NOT NULL ,
   `transaction_id` VARCHAR(45) NOT NULL ,
@@ -411,7 +413,7 @@ ENGINE = InnoDB;
 -- Table `studydeck`.`products_purchased`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `studydeck`.`products_purchased` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `payment_id` INT NOT NULL ,
   `product_id` INT NOT NULL ,
   `user_id` INT NOT NULL ,
