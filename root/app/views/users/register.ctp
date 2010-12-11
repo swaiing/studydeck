@@ -29,20 +29,19 @@
     	echo "<li>" . $form->input('TempUser.password_confirm', array('type' => 'password', 'label'=>'Repeat:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
 
         echo "</ol>\n";
-        $recaptcha->display_form('echo');
+		  $recaptcha->display_form('echo');
         if($recaptchaFailed) {
             echo "<div>Captcha input has failed!";
             echo "</div>\n"; 
         }
     	echo $form->end('Create my account');
     	echo "</div>\n"; 
-        
+		echo $button
 	?>
 
     <div id="register_priv_box">
         <h2>Good to knows</h2>
         <ul>
-            <li>StudyDeck is a free service.</li>
             <li>We will not sell your personal info to third-parties.</li>
             <li>Read our <a href="scott_write_this_plz">privacy policy.</a></li>
             <li>We will not spam you.</li>

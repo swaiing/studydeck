@@ -1,5 +1,8 @@
 <?php 
 include 'sd_global.php';
+require_once "constants.php";
+require_once "paypal/EWPServices.php";
+
 
 class UsersController extends AppController {
 	var $name = 'Users';
@@ -388,7 +391,42 @@ class UsersController extends AppController {
 	function register() {
     	//declares recaptchaFail variable for view
       	$this->set('recaptchaFailed',false);
-      	        
+      	 
+		//paypal
+		$buttonParams = array(	"cmd"			=> "_xclick",
+						"business" 		=> 'seller_1292086026_biz@studydeck.com',
+						"cert_id"		=> 'P3AUVEYDF6AQU',
+						"charset"		=> "UTF-8",
+						"item_name"		=> 'latin roots',
+						"item_number"	=> '1',
+						"amount"		=> '4',
+						"currency_code"	=> 'USD',
+						"return"		=> 'http://www.studydeck.com',
+						"cancel_return"	=> 'http://www.studydeck.com',
+						"notify_url"	=> 'http://www.studydeck.com',
+						"custom"		=> "PayPal EWP Sample");
+
+		$envURL = "https://www.sandbox.paypal.com";
+
+$buttonReturn = EWPServices::encryptButton(	$buttonParams,
+											'certs/studydeck_pubcert.pem',
+											'certs/studydeck_prvkey.pem',
+											DEFAULT_EWP_PRIVATE_KEY_PWD,
+											'certs/sandbox_cert.pem',
+											$envURL,
+											BUTTON_IMAGE);
+
+/*
+if(!$buttonReturn["status"]) {
+	Utils::PPError($buttonReturn["error_msg"], $buttonReturn["error_no"]);
+	exit;
+}*/
+
+$button = $buttonReturn["encryptedButton"];
+$this->set('button', $button);
+
+
+		 
       	if (!empty($this->data)) {
 	    	$this->TempUser->set($this->data);
 	       	if ($this->TempUser->validates()) {
