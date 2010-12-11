@@ -23,10 +23,9 @@
     	echo "<p>" . $html->link('Already have an account?', array('controller'=>'users', 'action'=>'login')) . "</p>\n";
 
     	echo "<ol>\n";
-    	echo "<li>" . $form->input('TempUser.username',array('label'=>'Username:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
-    	echo "<li>" . $form->input('TempUser.email',array('label'=>'Email:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
-    	echo "<li>" . $form->input('TempUser.password',array('label'=>'Password:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
-    	echo "<li>" . $form->input('TempUser.password_confirm', array('type' => 'password', 'label'=>'Repeat:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
+    	echo "<li>" . $form->input('User.email',array('label'=>'Email:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
+    	echo "<li>" . $form->input('User.password',array('label'=>'Password:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
+    	echo "<li>" . $form->input('User.password_confirm', array('type' => 'password', 'label'=>'Repeat:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
 
         echo "</ol>\n";
 		  $recaptcha->display_form('echo');
@@ -36,7 +35,6 @@
         }
     	echo $form->end('Create my account');
     	echo "</div>\n"; 
-		echo $button
 	?>
 
     <div id="register_priv_box">

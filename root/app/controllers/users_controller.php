@@ -392,7 +392,44 @@ class UsersController extends AppController {
     	//declares recaptchaFail variable for view
       	$this->set('recaptchaFailed',false);
       	 
-		//paypal
+      	if (!empty($this->data)) {
+	    	$this->User->set($this->data);
+	       	if ($this->User->validates()) {
+                if($this->Recaptcha->valid($this->params['form'])){
+					$this->User->create();
+                    //encrypts the password
+					$pre_encrypt = $this->data['User']['password'];
+                    $this->data['User']['password'] = $this->Auth->password($pre_encrypt);
+                
+                    //creates the user in the temp user table
+                    //skips validation because it should already be done
+                    $new_user = $this->User->save($this->data,false);
+					debug($new_user, $showHTML = false, $showFrom = true);
+                    if($this->Auth->login($this->data)) {
+						//directs them to a page where alerting them that the email has been sent
+						$this->redirect(array('action' => '/paypalSubmit'));
+					}
+                }
+                else {
+                    $this->set('recaptchaFailed',true);
+                    unset($this->data['User']['password']);
+                    unset($this->data['User']['password_confirm']);
+                }
+
+                
+            }
+            else {
+                unset($this->data['User']['password']);
+                unset($this->data['User']['password_confirm']);
+            
+            }
+            
+   		}
+
+	}
+	
+	function paypalSubmit() {
+				//paypal
 		$buttonParams = array(	"cmd"			=> "_xclick",
 						"business" 		=> 'seller_1292086026_biz@studydeck.com',
 						"cert_id"		=> 'P3AUVEYDF6AQU',
@@ -401,83 +438,27 @@ class UsersController extends AppController {
 						"item_number"	=> '1',
 						"amount"		=> '4',
 						"currency_code"	=> 'USD',
-						"return"		=> 'http://www.studydeck.com',
+						"return"		=> 'http://www.studydeck.com/dashboard',
 						"cancel_return"	=> 'http://www.studydeck.com',
-						"notify_url"	=> 'http://www.studydeck.com',
+						"notify_url"	=> 'http://www.studydeck.com/purchase/uid',
 						"custom"		=> "PayPal EWP Sample");
 
 		$envURL = "https://www.sandbox.paypal.com";
 
-$buttonReturn = EWPServices::encryptButton(	$buttonParams,
+		$buttonReturn = EWPServices::encryptButton(	$buttonParams,
 											'certs/studydeck_pubcert.pem',
 											'certs/studydeck_prvkey.pem',
 											DEFAULT_EWP_PRIVATE_KEY_PWD,
 											'certs/sandbox_cert.pem',
 											$envURL,
-											BUTTON_IMAGE);
-
-/*
-if(!$buttonReturn["status"]) {
-	Utils::PPError($buttonReturn["error_msg"], $buttonReturn["error_no"]);
-	exit;
-}*/
-
-$button = $buttonReturn["encryptedButton"];
-$this->set('button', $button);
+											'');
 
 
-		 
-      	if (!empty($this->data)) {
-	    	$this->TempUser->set($this->data);
-	       	if ($this->TempUser->validates()) {
-                if($this->Recaptcha->valid($this->params['form'])){
-                
-                    //generates a confirmation code
-                    $confirmationCode =  substr(md5(rand()),0,44);
-                    //encrypts the password
-                    $this->data['TempUser']['password'] = $this->Auth->password($this->data['TempUser']['password']);
-                    $this->data['TempUser']['confirmation_code'] = $confirmationCode;
-                
-                    //creates the user in the temp user table
-                    //skips validation because it should already be done
-                    $this->TempUser->save($this->data,false);
 
-                
-                    $this->setEmailAttributes($this->data['TempUser']['email'],'/users/confirmation/'.$confirmationCode);
-                    
-                    //set variables to template as usual
-                    $this->set('userName',$this->data['TempUser']['username']);
-                    
-                    //email confirmationCode
-                    try {
-                        if(!$this->SwiftMailer->send('confirmation', 'StudyDeck Confirmation')) {
-                            $this->log("Error sending email");
-                        }
-                    }
-                    catch(Exception $e) {
-                        $this->log("Failed to send email: ".$e->getMessage());
-
-                    }
-                    //directs them to a page where alerting them that the email has been sent
-                    $this->redirect(array('action' => '/confirmation/registered'));
-                }
-                else {
-                    $this->set('recaptchaFailed',true);
-                    unset($this->data['TempUser']['password']);
-                    unset($this->data['TempUser']['password_confirm']);
-                }
-
-                
-            }
-            else {
-                unset($this->data['TempUser']['password']);
-                unset($this->data['TempUser']['password_confirm']);
-            
-            }
-            
-   		}
-
+		$button = $buttonReturn["encryptedButton"];
+		$this->set('button', $button);
 	}
+
 
 	//function for debuging probably should be removed eventually
 	function view() {

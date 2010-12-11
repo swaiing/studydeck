@@ -56,10 +56,10 @@ class EWPServices
 		 */
 		$encryptedData = "-----BEGIN PKCS7-----".$encryptedDataReturn["encryptedData"]."-----END PKCS7-----";
 		$encryptedButton = <<<PPHTML
-<FORM ACTION="${destinationUrl_}/cgi-bin/webscr" METHOD="post">
+<FORM ACTION="${destinationUrl_}/cgi-bin/webscr" METHOD="post" id="paypal_form">
 <INPUT TYPE="hidden" NAME="cmd" VALUE="_s-xclick">
 <INPUT TYPE="hidden" NAME="encrypted" VALUE="$encryptedData">
-<INPUT TYPE="image" SRC="$buttonImageUrl_" BORDER="0" NAME="submit" ALT="Make Payments with PayPal -- it's fast, free and secure!">
+<INPUT TYPE="image" SRC="$buttonImageUrl_" BORDER="0" NAME="submit" ALT="Redirecting to paypal">
 </FORM>
 PPHTML;
 		return array("status" => true, "encryptedButton" => $encryptedButton);
