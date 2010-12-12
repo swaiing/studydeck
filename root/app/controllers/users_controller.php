@@ -397,6 +397,7 @@ class UsersController extends AppController {
 	       	if ($this->User->validates()) {
                 if($this->Recaptcha->valid($this->params['form'])){
 					$this->User->create();
+					$this->data['User']['username'] = 'temp1';
                     //encrypts the password
 					$pre_encrypt = $this->data['User']['password'];
                     $this->data['User']['password'] = $this->Auth->password($pre_encrypt);
