@@ -19,7 +19,7 @@ class UsersController extends AppController {
 		 'username' => 'email',
 		 'password' => 'password');
 		//list of actions that do not need authentication
-		$this->Auth->allow('register','view','customLogin','confirmation','forgotPassword','paypalIPN');
+		$this->Auth->allow('register','view','customLogin','confirmation','forgotPassword','paypalIpn');
         
 		//variable used for handling redirection	       
         $this->set('prevUrl', $this->Session->read('Auth.redirect'));
@@ -407,7 +407,7 @@ class UsersController extends AppController {
                     //creates the user in the temp user table
                     //skips validation because it should already be done
                     $new_user = $this->User->save($this->data,false);
-					debug($new_user, $showHTML = false, $showFrom = true);
+					
                     if($this->Auth->login($this->data)) {
 						//directs them to a page where alerting them that the email has been sent
 						$this->redirect(array('action' => '/paypalSubmit'));
@@ -433,18 +433,18 @@ class UsersController extends AppController {
 	
 	function paypalSubmit() {
 				//paypal
-		$buttonParams = array(	"cmd"			=> "_xclick",
+		$buttonParams = array(	"cmd"			=> "_cart",
 						"business" 		=> 'seller_1292086026_biz@studydeck.com',
 						"cert_id"		=> 'P3AUVEYDF6AQU',
 						"charset"		=> "UTF-8",
-						"item_name"		=> 'latin roots',
-						"item_number"	=> '1',
-						"amount"		=> '4',
+						"upload"		=> '1',
 						"currency_code"	=> 'USD',
 						"return"		=> 'http://www.studydeck.com/dashboard',
 						"cancel_return"	=> 'http://www.studydeck.com',
-						"notify_url"	=> 'http://www.studydeck.com/purchase/uid',
-						"custom"		=> "PayPal EWP Sample");
+						"notify_url"	=> 'http://www.studydeck.com/paypalIpn/4');
+						
+	$buttonParams = array_merge($buttonParams,array("item_name_1"=> 'latin roots',"item_number_1"	=> '1',"quantity_1"	=> '1',	"amount_1"		=> '4'),
+		array("item_name_2"	=> 'base words',"item_number_2"	=> '2',	"amount_2"		=> '7',	"quantity_2"	=> '1'));
 
 		$envURL = "https://www.sandbox.paypal.com";
 
@@ -462,8 +462,15 @@ class UsersController extends AppController {
 		$this->set('button', $button);
 	}
 	
-	function paypalIPN() {
-	
+	function paypalIpn() {
+		debug($this->params['pass'][0], $showHTML = false, $showFrom = true);
+		debug($this->params['url'], $showHTML = false, $showFrom = true);
+		$paypal_params = $this->params['url'];
+		$items_in_cart = $paypal_params['num_cart_items'];
+		for($x = 1; $x <= $items_in_cart; $x++) {
+			debug($paypal_params['item_name'.$x], $showHTML = false, $showFrom = true);
+		}
+		$a =1;
 	}
 
 
