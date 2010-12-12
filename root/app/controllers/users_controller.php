@@ -504,9 +504,10 @@ class UsersController extends AppController {
 						"currency_code"	=> 'USD',
 						"return"		=> 'http://www.studydeck.com/dashboard',
 						"cancel_return"	=> 'http://www.studydeck.com',
-						"notify_url"	=> 'http://www.studydeck.com/paypalIpn/4');
+						"notify_url"	=> 'http://www.studydeck.com/users/paypalIpn/4/oob3b0VKEyLY');
 						
-	$buttonParams = array_merge($buttonParams,array("item_name_1"=> 'latin roots',"item_number_1"	=> '1',"quantity_1"	=> '1',	"amount_1"		=> '4'),
+		$buttonParams = array_merge($buttonParams,
+		array("item_name_1"=> 'latin roots',"item_number_1"	=> '1',"quantity_1"	=> '1',	"amount_1"		=> '4'),
 		array("item_name_2"	=> 'base words',"item_number_2"	=> '2',	"amount_2"		=> '7',	"quantity_2"	=> '1'));
 
 		$envURL = "https://www.sandbox.paypal.com";
@@ -526,22 +527,36 @@ class UsersController extends AppController {
 	}
 	
 	function paypalIpn() {
-		debug($this->params['pass'][0], $showHTML = false, $showFrom = true);
+		debug($this->params['pass'][1], $showHTML = false, $showFrom = true);
 		debug($this->params['url'], $showHTML = false, $showFrom = true);
 		$user_id = $this->params['pass'][0];
-		$this->ProductsPurchased->set(array(
-			'user_id' => $user_id,
-			'product_id' => false
-		));
-		$this->ProductsPurchased->save();
+		
 		
 		
 		$paypal_params = $this->params['url'];
 		$items_in_cart = $paypal_params['num_cart_items'];
 		for($x = 1; $x <= $items_in_cart; $x++) {
 			debug($paypal_params['item_name'.$x], $showHTML = false, $showFrom = true);
+			$product = $this->Product->find('first', array('conditions' => array('Product.id' => $paypal_params['item_number'.$x])));
+			if($product['Product']['price'] ==  $paypal_params['mc_gross_'.$x]){
+				/*
+				$this->PurchasedProduct->set(array(
+					'user_id' => $user_id,
+					'product_id' => $product['Product']['id'],
+					'payment_id' => $payment['Payment']['id']
+				));
+				$this->PurchasedProduct->save();
+				*/
+			}
+			
 		}
-		$a =1;
+		$this->Payment->set(array(
+			'user_id' => $user_id,
+			'amount' => $paypal_params['payment_gross'],
+			'transaction_id' => $paypal_params['txn_id']
+		));
+		$payment = $this->Payment->save();
+		
 	}
 
 
