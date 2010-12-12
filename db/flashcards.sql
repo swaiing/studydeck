@@ -410,9 +410,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `studydeck`.`products_purchased`
+-- Table `studydeck`.`purchased_products`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `studydeck`.`products_purchased` (
+CREATE  TABLE IF NOT EXISTS `studydeck`.`purchased_products` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `payment_id` INT NOT NULL ,
   `product_id` INT NOT NULL ,
