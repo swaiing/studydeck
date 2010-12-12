@@ -9,7 +9,7 @@ class UsersController extends AppController {
 	var $scaffold;
 	var $components =array('Auth','SwiftMailer','Recaptcha');
 	var $helpers = array('Html','Javascript','RelativeTime');
-	var $uses = array('User','MyDeck','Deck','Rating','TempUser','Card');
+	var $uses = array('User','MyDeck','Deck','Rating','TempUser','Card','Payment','PurchasedProduct');
 
 	function beforeFilter() {
       
@@ -19,7 +19,7 @@ class UsersController extends AppController {
 		 'username' => 'email',
 		 'password' => 'password');
 		//list of actions that do not need authentication
-		$this->Auth->allow('register','view','customLogin','confirmation','forgotPassword');
+		$this->Auth->allow('register','view','customLogin','confirmation','forgotPassword','paypalIPN');
         
 		//variable used for handling redirection	       
         $this->set('prevUrl', $this->Session->read('Auth.redirect'));
@@ -460,6 +460,10 @@ class UsersController extends AppController {
 
 		$button = $buttonReturn["encryptedButton"];
 		$this->set('button', $button);
+	}
+	
+	function paypalIPN() {
+	
 	}
 
 
