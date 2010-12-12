@@ -1,20 +1,26 @@
 <?php 
 include 'sd_global.php';
+require_once "constants.php";
+require_once "paypal/EWPServices.php";
+
 
 class UsersController extends AppController {
 	var $name = 'Users';
 	var $scaffold;
 	var $components =array('Auth','SwiftMailer','Recaptcha');
 	var $helpers = array('Html','Javascript','RelativeTime');
-	var $uses = array('User','MyDeck','Deck','Rating','TempUser','Card', 'Product');
+	var $uses = array('User','MyDeck','Deck','Rating','TempUser','Card','Product','Payment','PurchasedProduct');
+
 
 	function beforeFilter() {
       
         // Call AppConroller::beforeFilter()
     	parent::beforeFilter();
-
+		 $this->Auth->fields = array(
+		 'username' => 'email',
+		 'password' => 'password');
 		//list of actions that do not need authentication
-		$this->Auth->allow('register','view','customLogin','confirmation','forgotPassword');
+		$this->Auth->allow('register','view','customLogin','confirmation','forgotPassword','paypalIpn');
         
 		//variable used for handling redirection	       
         $this->set('prevUrl', $this->Session->read('Auth.redirect'));
@@ -173,7 +179,7 @@ class UsersController extends AppController {
 
                 //if email is found try to authenticate user
                 if ($findUser != null) {               
-                    $this->data['User']['username'] = $findUser['User']['username'];
+                    //$this->data['User']['username'] = $findUser['User']['username'];
                     $this->data['User']['email'] = $findUser['User']['email'];
                     $this->customAuth($this->data['User'],$modedUrl);         
                 }
@@ -452,56 +458,84 @@ class UsersController extends AppController {
 
         // Check submitted data
       	if (!empty($this->data)) {
-	    	$this->TempUser->set($this->data);
-	       	if ($this->TempUser->validates()) {
+	    	$this->User->set($this->data);
+	       	if ($this->User->validates()) {
                 if($this->Recaptcha->valid($this->params['form'])){
-                
-                    //generates a confirmation code
-                    $confirmationCode =  substr(md5(rand()),0,44);
+					$this->User->create();
+					//$this->data['User']['username'] = 'temp1';
                     //encrypts the password
-                    $this->data['TempUser']['password'] = $this->Auth->password($this->data['TempUser']['password']);
-                    $this->data['TempUser']['confirmation_code'] = $confirmationCode;
+					$pre_encrypt = $this->data['User']['password'];
+                    $this->data['User']['password'] = $this->Auth->password($pre_encrypt);
                 
                     //creates the user in the temp user table
                     //skips validation because it should already be done
-                    $this->TempUser->save($this->data,false);
-
-                
-                    $this->setEmailAttributes($this->data['TempUser']['email'],'/users/confirmation/'.$confirmationCode);
-                    
-                    //set variables to template as usual
-                    $this->set('userName',$this->data['TempUser']['username']);
-                    
-                    //email confirmationCode
-                    try {
-                        if(!$this->SwiftMailer->send('confirmation', 'StudyDeck Confirmation')) {
-                            $this->log("Error sending email");
-                        }
-                    }
-                    catch(Exception $e) {
-                        $this->log("Failed to send email: ".$e->getMessage());
-
-                    }
-                    //directs them to a page where alerting them that the email has been sent
-                    $this->redirect(array('action' => '/confirmation/registered'));
+                    $new_user = $this->User->save($this->data,false);
+					
+                    if($this->Auth->login($this->data)) {
+						//directs them to a page where alerting them that the email has been sent
+						$this->redirect(array('action' => '/paypalSubmit'));
+					}
                 }
                 else {
                     $this->set('recaptchaFailed',true);
-                    unset($this->data['TempUser']['password']);
-                    unset($this->data['TempUser']['password_confirm']);
+                    unset($this->data['User']['password']);
+                    unset($this->data['User']['password_confirm']);
                 }
 
                 
             }
             else {
-                unset($this->data['TempUser']['password']);
-                unset($this->data['TempUser']['password_confirm']);
+                unset($this->data['User']['password']);
+                unset($this->data['User']['password_confirm']);
             
             }
             
    		}
 
 	}
+	
+	function paypalSubmit() {
+				//paypal
+		$buttonParams = array(	"cmd"			=> "_cart",
+						"business" 		=> 'seller_1292086026_biz@studydeck.com',
+						"cert_id"		=> 'P3AUVEYDF6AQU',
+						"charset"		=> "UTF-8",
+						"upload"		=> '1',
+						"currency_code"	=> 'USD',
+						"return"		=> 'http://www.studydeck.com/dashboard',
+						"cancel_return"	=> 'http://www.studydeck.com',
+						"notify_url"	=> 'http://www.studydeck.com/paypalIpn/4');
+						
+	$buttonParams = array_merge($buttonParams,array("item_name_1"=> 'latin roots',"item_number_1"	=> '1',"quantity_1"	=> '1',	"amount_1"		=> '4'),
+		array("item_name_2"	=> 'base words',"item_number_2"	=> '2',	"amount_2"		=> '7',	"quantity_2"	=> '1'));
+
+		$envURL = "https://www.sandbox.paypal.com";
+
+		$buttonReturn = EWPServices::encryptButton(	$buttonParams,
+											'certs/studydeck_pubcert.pem',
+											'certs/studydeck_prvkey.pem',
+											DEFAULT_EWP_PRIVATE_KEY_PWD,
+											'certs/sandbox_cert.pem',
+											$envURL,
+											'');
+
+
+
+		$button = $buttonReturn["encryptedButton"];
+		$this->set('button', $button);
+	}
+	
+	function paypalIpn() {
+		debug($this->params['pass'][0], $showHTML = false, $showFrom = true);
+		debug($this->params['url'], $showHTML = false, $showFrom = true);
+		$paypal_params = $this->params['url'];
+		$items_in_cart = $paypal_params['num_cart_items'];
+		for($x = 1; $x <= $items_in_cart; $x++) {
+			debug($paypal_params['item_name'.$x], $showHTML = false, $showFrom = true);
+		}
+		$a =1;
+	}
+
 
 	//function for debuging probably should be removed eventually
 	function view() {
