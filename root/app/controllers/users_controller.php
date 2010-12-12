@@ -20,7 +20,7 @@ class UsersController extends AppController {
 		 'username' => 'email',
 		 'password' => 'password');
 		//list of actions that do not need authentication
-		$this->Auth->allow('register','view','customLogin','confirmation','forgotPassword','paypalIpn');
+		$this->Auth->allow('register','view','customLogin','confirmation','forgotPassword','paypalIpn','registerSubmit');
         
 		//variable used for handling redirection	       
         $this->set('prevUrl', $this->Session->read('Auth.redirect'));
@@ -168,13 +168,13 @@ class UsersController extends AppController {
     	$modedUrl = str_replace('_','/',$redirect);
 		
 		if(!empty($this->data)) {
-		
+			//$this->data['User']['password'] = $this->Auth->password($this->data['User']['password']);
 			//tries to authenticate user assuming username given
 	   		if (!$this->customAuth($this->data['User'], $modedUrl)) {
 			
                 //if authentication fails assume user tried to use email address for login
                 //this finds user associated with email
-                $findUserParams = array('conditions' => array('User.email' => $this->data['User']['username']));
+                $findUserParams = array('conditions' => array('User.email' => $this->data['User']['email']));
                 $findUser = $this->User->find('first', $findUserParams);
 
                 //if email is found try to authenticate user
@@ -465,7 +465,7 @@ class UsersController extends AppController {
 					//$this->data['User']['username'] = 'temp1';
                     //encrypts the password
 					$pre_encrypt = $this->data['User']['password'];
-                    $this->data['User']['password'] = $this->Auth->password($pre_encrypt);
+                    //$this->data['User']['password'] = $this->Auth->password($pre_encrypt);
                 
                     //creates the user in the temp user table
                     //skips validation because it should already be done
@@ -528,6 +528,14 @@ class UsersController extends AppController {
 	function paypalIpn() {
 		debug($this->params['pass'][0], $showHTML = false, $showFrom = true);
 		debug($this->params['url'], $showHTML = false, $showFrom = true);
+		$user_id = $this->params['pass'][0];
+		$this->ProductsPurchased->set(array(
+			'user_id' => $user_id,
+			'product_id' => false
+		));
+		$this->ProductsPurchased->save();
+		
+		
 		$paypal_params = $this->params['url'];
 		$items_in_cart = $paypal_params['num_cart_items'];
 		for($x = 1; $x <= $items_in_cart; $x++) {
