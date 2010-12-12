@@ -15,7 +15,9 @@ class UsersController extends AppController {
       
         // Call AppConroller::beforeFilter()
     	parent::beforeFilter();
-
+		 $this->Auth->fields = array(
+		 'username' => 'email',
+		 'password' => 'password');
 		//list of actions that do not need authentication
 		$this->Auth->allow('register','view','customLogin','confirmation','forgotPassword');
         
@@ -176,7 +178,7 @@ class UsersController extends AppController {
 
                 //if email is found try to authenticate user
                 if ($findUser != null) {               
-                    $this->data['User']['username'] = $findUser['User']['username'];
+                    //$this->data['User']['username'] = $findUser['User']['username'];
                     $this->data['User']['email'] = $findUser['User']['email'];
                     $this->customAuth($this->data['User'],$modedUrl);         
                 }
@@ -397,7 +399,7 @@ class UsersController extends AppController {
 	       	if ($this->User->validates()) {
                 if($this->Recaptcha->valid($this->params['form'])){
 					$this->User->create();
-					$this->data['User']['username'] = 'temp1';
+					//$this->data['User']['username'] = 'temp1';
                     //encrypts the password
 					$pre_encrypt = $this->data['User']['password'];
                     $this->data['User']['password'] = $this->Auth->password($pre_encrypt);
