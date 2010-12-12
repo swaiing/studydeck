@@ -16,10 +16,10 @@ div#sort_actions {
 }
 
 div#created_me {
+    margin: 20px 0 0 0;
 }
 
 div#created_others {
-    margin: 20px 0 0 0;
 }
 
 div.nodecks {

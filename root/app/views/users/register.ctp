@@ -11,6 +11,42 @@
 	<div id="middle_bar" class="box">
     <div class="box_content">
 
+    <?php
+    	echo $form->create('User', array('action' => 'registerSubmit'));
+    ?>
+        
+    <h2>Order Confirmation</h2>
+    <table id="products_table" border="1" cellspacing="10">
+    <thead>
+        <tr>
+            <td>Product</td>
+            <td>Price</td>
+        </tr>
+    </thead>
+    <tbody>
+    <?php
+        foreach ($productsOrdered as $product) {
+            $price = $product['Product']['price'];
+            $id = $product['Product']['id'];
+            $name = $product['Product']['name'];
+            
+            // Output hidden form field
+            echo $form->input('ProductsOrdered',array('value'=>$id,'type'=>'hidden'));
+    ?>
+        <tr id="product_id_<?php echo $id; ?>">
+            <td class="name"><?php echo $name; ?></td>
+            <td class="price">$<?php echo $price; ?></td>
+        </tr>
+    <?php
+        }
+    ?>
+        <tr>
+            <td>Total</td>
+            <td><?php echo $orderTotal; ?>
+        </tr>
+    </tbody>
+    </table>
+
 	<?php
     	// Field attributes
     	$FIELD_SIZE = 30;
@@ -19,7 +55,6 @@
     	echo "<div id=\"register_box\" class=\"form_box\">\n";
     	echo "<h2>Register with StudyDeck</h2>\n";
 
-    	echo $form->create('User', array('action' => 'register'));
     	echo "<p>" . $html->link('Already have an account?', array('controller'=>'users', 'action'=>'login')) . "</p>\n";
 
     	echo "<ol>\n";
