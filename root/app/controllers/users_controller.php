@@ -20,7 +20,7 @@ class UsersController extends AppController {
 		 'username' => 'email',
 		 'password' => 'password');
 		//list of actions that do not need authentication
-		$this->Auth->allow('register','view','customLogin','confirmation','forgotPassword','paypalIpn');
+		$this->Auth->allow('register','view','customLogin','confirmation','forgotPassword','paypalIpn','registerSubmit');
         
 		//variable used for handling redirection	       
         $this->set('prevUrl', $this->Session->read('Auth.redirect'));
@@ -168,13 +168,13 @@ class UsersController extends AppController {
     	$modedUrl = str_replace('_','/',$redirect);
 		
 		if(!empty($this->data)) {
-		
+			//$this->data['User']['password'] = $this->Auth->password($this->data['User']['password']);
 			//tries to authenticate user assuming username given
 	   		if (!$this->customAuth($this->data['User'], $modedUrl)) {
 			
                 //if authentication fails assume user tried to use email address for login
                 //this finds user associated with email
-                $findUserParams = array('conditions' => array('User.email' => $this->data['User']['username']));
+                $findUserParams = array('conditions' => array('User.email' => $this->data['User']['email']));
                 $findUser = $this->User->find('first', $findUserParams);
 
                 //if email is found try to authenticate user
@@ -463,7 +463,7 @@ class UsersController extends AppController {
 					//$this->data['User']['username'] = 'temp1';
                     //encrypts the password
 					$pre_encrypt = $this->data['User']['password'];
-                    $this->data['User']['password'] = $this->Auth->password($pre_encrypt);
+                    //$this->data['User']['password'] = $this->Auth->password($pre_encrypt);
                 
                     //creates the user in the temp user table
                     //skips validation because it should already be done
@@ -502,9 +502,10 @@ class UsersController extends AppController {
 						"currency_code"	=> 'USD',
 						"return"		=> 'http://www.studydeck.com/dashboard',
 						"cancel_return"	=> 'http://www.studydeck.com',
-						"notify_url"	=> 'http://www.studydeck.com/paypalIpn/4');
+						"notify_url"	=> 'http://www.studydeck.com/users/paypalIpn/4/oob3b0VKEyLY');
 						
-	$buttonParams = array_merge($buttonParams,array("item_name_1"=> 'latin roots',"item_number_1"	=> '1',"quantity_1"	=> '1',	"amount_1"		=> '4'),
+		$buttonParams = array_merge($buttonParams,
+		array("item_name_1"=> 'latin roots',"item_number_1"	=> '1',"quantity_1"	=> '1',	"amount_1"		=> '4'),
 		array("item_name_2"	=> 'base words',"item_number_2"	=> '2',	"amount_2"		=> '7',	"quantity_2"	=> '1'));
 
 		$envURL = "https://www.sandbox.paypal.com";
@@ -524,14 +525,36 @@ class UsersController extends AppController {
 	}
 	
 	function paypalIpn() {
-		debug($this->params['pass'][0], $showHTML = false, $showFrom = true);
+		debug($this->params['pass'][1], $showHTML = false, $showFrom = true);
 		debug($this->params['url'], $showHTML = false, $showFrom = true);
+		$user_id = $this->params['pass'][0];
+		
+		
+		
 		$paypal_params = $this->params['url'];
 		$items_in_cart = $paypal_params['num_cart_items'];
 		for($x = 1; $x <= $items_in_cart; $x++) {
 			debug($paypal_params['item_name'.$x], $showHTML = false, $showFrom = true);
+			$product = $this->Product->find('first', array('conditions' => array('Product.id' => $paypal_params['item_number'.$x])));
+			if($product['Product']['price'] ==  $paypal_params['mc_gross_'.$x]){
+				/*
+				$this->PurchasedProduct->set(array(
+					'user_id' => $user_id,
+					'product_id' => $product['Product']['id'],
+					'payment_id' => $payment['Payment']['id']
+				));
+				$this->PurchasedProduct->save();
+				*/
+			}
+			
 		}
-		$a =1;
+		$this->Payment->set(array(
+			'user_id' => $user_id,
+			'amount' => $paypal_params['payment_gross'],
+			'transaction_id' => $paypal_params['txn_id']
+		));
+		$payment = $this->Payment->save();
+		
 	}
 
 
