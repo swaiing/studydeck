@@ -397,17 +397,17 @@ class UsersController extends AppController {
 
         // Logging
         $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
-
     	// Declares recaptchaFail variable for view
       	$this->set('recaptchaFailed', false);
-      	        
+        
         if (empty($this->data)) {
             $this->log($LOG_PREFIX . "No product form data passed to register page!");
         }
         else {
             // Iterate purchased deck IDs
+			
             $formSubmittedData = $this->data['Users'];
-
+			print_r($formSubmittedData);
             // Holds data
             $productIdsSelected = array();
             $totalViewed = 0;
@@ -443,6 +443,36 @@ class UsersController extends AppController {
 
            $this->set('productsOrdered', $productsOrdered); 
            $this->set('orderTotal', $totalViewed);
+		   
+		   $this->User->set($this->data);
+	       	if ($this->User->validates()) {
+				print_r($this->params['form']); 
+                if($this->Recaptcha->valid($this->params['form'])){
+					$this->User->create();
+                               
+
+                    //creates the user in the temp user table
+                    //skips validation because it should already be done
+                    $new_user = $this->User->save($this->data,false);
+					
+                    if($this->Auth->login($this->data)) {
+						//directs them to a page where alerting them that the email has been sent
+						$this->redirect(array('action' => '/paypalSubmit'));
+					}
+                }
+                else {
+                    $this->set('recaptchaFailed',true);
+                    unset($this->data['User']['password']);
+                    unset($this->data['User']['password_confirm']);
+                }
+
+                
+            }
+            else {
+                unset($this->data['User']['password']);
+                unset($this->data['User']['password_confirm']);
+            
+            }
 
         } // end else
 
@@ -453,7 +483,7 @@ class UsersController extends AppController {
 
     	// Declares recaptchaFail variable for view
       	$this->set('recaptchaFailed', false);
-
+		$this->log($this->data,LOG_DEBUG);
         // Check submitted data
 
       	if (!empty($this->data)) {
@@ -485,8 +515,9 @@ class UsersController extends AppController {
                 unset($this->data['User']['password_confirm']);
             
             }
-            
+           $this->redirect('/users/register'); 
    		}
+		
 
 	}
 	

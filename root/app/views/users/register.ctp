@@ -13,7 +13,7 @@
 
     <div id="register_box" class="form_box">
     <?php
-    	echo $form->create('User', array('action' => 'registerSubmit'));
+    	echo $form->create('User', array('action' => 'register'));
     ?>
         
     <h2>Order Confirmation</h2>
@@ -26,13 +26,15 @@
     </thead>
     <tbody>
     <?php
+	$count = 1;
         foreach ($productsOrdered as $product) {
             $price = $product['Product']['price'];
             $id = $product['Product']['id'];
             $name = $product['Product']['name'];
             
             // Output hidden form field
-            echo $form->input('ProductsOrdered',array('value'=>$id,'type'=>'hidden'));
+            echo $form->input($count,array('value'=>$id,'type'=>'hidden'));
+			$count++;
     ?>
         <tr id="product_id_<?php echo $id; ?>">
             <td class="name"><?php echo $name; ?></td>
