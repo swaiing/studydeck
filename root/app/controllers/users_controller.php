@@ -6,7 +6,7 @@ class UsersController extends AppController {
 	var $scaffold;
 	var $components =array('Auth','SwiftMailer','Recaptcha');
 	var $helpers = array('Html','Javascript','RelativeTime');
-	var $uses = array('User','MyDeck','Deck','Rating','TempUser','Card');
+	var $uses = array('User','MyDeck','Deck','Rating','TempUser','Card', 'Product');
 
 	function beforeFilter() {
       
@@ -384,11 +384,73 @@ class UsersController extends AppController {
         $loginLink = $baseUrl.$urlSuffix;
 		$this->set('loginLink', $loginLink);
     }
-    
-	function register() {
-    	//declares recaptchaFail variable for view
-      	$this->set('recaptchaFailed',false);
+
+    // Action for view and order confirmation
+    function register()
+    {
+
+        // Logging
+        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+
+    	// Declares recaptchaFail variable for view
+      	$this->set('recaptchaFailed', false);
       	        
+        if (empty($this->data)) {
+            $this->log($LOG_PREFIX . "No product form data passed to register page!");
+        }
+        else {
+            //$this->set('foo', $this->data);
+
+            // Iterate purchased deck IDs
+            $formSubmittedData = $this->data['Users'];
+
+            // Holds data
+            $productIdsSelected = array();
+            $totalViewed = 0;
+
+            foreach ($formSubmittedData as $key => $value) {
+                // Key is product ID
+                if (is_int($key)) {
+
+                    $this->log($LOG_PREFIX . "Key is " . $key . ". Value is " . $value);
+                    if ($value) {
+                        $productIdsSelected[$key] = true;
+                    }
+                }
+                // Key indicates total
+                else if (strcmp($key,"total") == 0) {
+                    $this->log($LOG_PREFIX . "Total is " . $value);
+                    $totalViewed = $value;
+                }
+            } // end foreach
+
+            // Query products
+            $this->Product->recursive = -1;
+            $allProducts = $this->Product->find('all');
+
+            $productsOrdered = array();
+
+            foreach ($allProducts as $product) {
+                $id = $product['Product']['id'];
+                if (array_key_exists($id, $productIdsSelected) && $productIdsSelected[$id]) {
+                    array_push($productsOrdered, $product);
+                }
+            }
+
+           $this->set('productsOrdered', $productsOrdered); 
+           $this->set('orderTotal', $totalViewed);
+
+        } // end else
+
+    }
+    
+    // Action for form submission on register page
+	function registerSubmit() {
+
+    	// Declares recaptchaFail variable for view
+      	$this->set('recaptchaFailed', false);
+
+        // Check submitted data
       	if (!empty($this->data)) {
 	    	$this->TempUser->set($this->data);
 	       	if ($this->TempUser->validates()) {

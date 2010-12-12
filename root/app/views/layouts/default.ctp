@@ -25,16 +25,30 @@
 
     <div id="nav">
 
-        <div id="login">
+        <div id="row">
+        <div id="nav_left">
             <ul>
+            <?php
+                // For a logged in user,
+                // Dashboard | Store | Create
+                if(isset($activeUser)) {
+                    echo "<li class=\"button\">" . $html->link('Dashboard',array('controller'=>'users','action'=>'dashboard')) . "</li>";
+                    // No more explore
+                    //echo "<li class=\"button\">" . $html->link('Explore',array('controller'=>'decks','action'=>'explore')) . "</li>";
+                    echo "<li class=\"button\">" . $html->link('Store',array('controller'=>'products','action'=>'view')) . "</li>";
+                    echo "<li class=\"button\">" . $html->link('Create',array('controller'=>'decks','action'=>'create')) . "</li>";
+                }
+            ?>
+            </ul>
+        </div>
+
+        <div id="nav_right">
+
             <?php
                // For a logged in user,
                // The current user logged in is displayed: Hello steve | 'Logout'
                if(isset($activeUser)) {
-                    //echo "<li>" . $activeUser . "</li>";
-                    //echo "<li>|</li>";
-                    //echo "<li>" . $html->link('Settings',array('controller'=>'users','action'=>'account')) . "</li>";
-                    echo "<li>" . $html->link($activeUser,array('controller'=>'users','action'=>'account')) . "</li>";
+                    echo "<li>" . $html->link("Settings",array('controller'=>'users','action'=>'account')) . "</li>";
                     echo "<li>|</li>";
                     echo "<li>" . $html->link('Logout',array('controller'=>'users','action'=>'logout')) . "</li>";
                 }
@@ -47,31 +61,13 @@
                 }
             ?>
             </ul>
-        </div> <!-- end login -->
 
-        <div id="row">
-        <div id="nav_left">
-            <ul>
             <?php
-                // For a logged in user,
-                // There are links for: 'Dashboard' | 'Explore' | 'Create'
-                if(isset($activeUser)) {
-                    echo "<li class=\"button\">" . $html->link('Dashboard',array('controller'=>'users','action'=>'dashboard')) . "</li>";
-                }
-                // For an anonymous user,
-                // There are links for: 'Explore' | 'Create'
-                echo "<li class=\"button\">" . $html->link('Explore',array('controller'=>'decks','action'=>'explore')) . "</li>";
-                echo "<li class=\"button\">" . $html->link('Create',array('controller'=>'decks','action'=>'create')) . "</li>";
-            ?>
-            </ul>
-        </div>
-
-        <div id="nav_right">
-            <?php
-                echo $form->create("Deck", array('controller' => 'decks', 'action' => 'explore'));
-                echo $form->input("searchQuery", array('label' => false));
-                echo "<input title=\"Search\" type=\"submit\" class=\"submit\" value=\"\"/>";
-                echo $form->end();
+                // Removed search for redesign
+                //echo $form->create("Deck", array('controller' => 'decks', 'action' => 'explore'));
+                //echo $form->input("searchQuery", array('label' => false));
+                //echo "<input title=\"Search\" type=\"submit\" class=\"submit\" value=\"\"/>";
+                //echo $form->end();
             ?>
         </div>
         </div>
