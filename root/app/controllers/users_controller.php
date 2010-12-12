@@ -457,16 +457,14 @@ class UsersController extends AppController {
       	$this->set('recaptchaFailed', false);
 
         // Check submitted data
+
       	if (!empty($this->data)) {
 	    	$this->User->set($this->data);
 	       	if ($this->User->validates()) {
                 if($this->Recaptcha->valid($this->params['form'])){
 					$this->User->create();
-					//$this->data['User']['username'] = 'temp1';
-                    //encrypts the password
-					$pre_encrypt = $this->data['User']['password'];
-                    //$this->data['User']['password'] = $this->Auth->password($pre_encrypt);
-                
+                               
+
                     //creates the user in the temp user table
                     //skips validation because it should already be done
                     $new_user = $this->User->save($this->data,false);
