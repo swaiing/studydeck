@@ -55,7 +55,7 @@
                 else {        
                     // For an anonymous user,
                     // There are links for: 'Register' | 'Login'
-                    echo "<li>" . $html->link('Register',array('controller'=>'users','action'=>'register')) . "</li>";
+                    echo "<li>" . $html->link('Register',array('controller'=>'products','action'=>'view')) . "</li>";
                     echo "<li>|</li>";
                     echo "<li>" . $html->link('Login',array('controller'=>'users','action'=>'login')) . "</li>";
                 }
