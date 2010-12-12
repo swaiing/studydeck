@@ -11,6 +11,7 @@
 	<div id="middle_bar" class="box">
     <div class="box_content">
 
+    <div id="register_box" class="form_box">
     <?php
     	echo $form->create('User', array('action' => 'registerSubmit'));
     ?>
@@ -52,10 +53,9 @@
     	$FIELD_SIZE = 30;
         $FIELD_LENGTH = 50;
 
-    	echo "<div id=\"register_box\" class=\"form_box\">\n";
-    	echo "<h2>Register with StudyDeck</h2>\n";
+    	echo "<h2>User Registration</h2>\n";
 
-    	echo "<p>" . $html->link('Already have an account?', array('controller'=>'users', 'action'=>'login')) . "</p>\n";
+    	//echo "<p>" . $html->link('Already have an account?', array('controller'=>'users', 'action'=>'login')) . "</p>\n";
 
     	echo "<ol>\n";
     	echo "<li>" . $form->input('User.email',array('label'=>'Email:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
@@ -72,6 +72,7 @@
     	echo "</div>\n"; 
 	?>
 
+<!--
     <div id="register_priv_box">
         <h2>Good to knows</h2>
         <ul>
@@ -80,6 +81,7 @@
             <li>We will not spam you.</li>
         <ul>
     </div>
+-->
 
 	</div> <!-- end box_content -->
 	</div> <!-- end middle_bar -->

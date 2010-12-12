@@ -56,7 +56,7 @@ div#register_box {
     width: 360px;
     margin: 0 0 40px 0;
     padding: 10px;
-    border: 1px solid #89A7D7;
+    /*border: 1px solid #89A7D7;*/
 }
 
 div#register_priv_box {
@@ -67,6 +67,24 @@ div#register_priv_box {
     margin: 0 0 40px 0;
     padding: 10px;
     border: 1px solid #89A7D7;
+}
+
+table#products_table {
+    border: 1px solid #89A7D7;
+    width: 300px;
+    font-size: 1em;
+    margin: 10px 0;
+}
+
+table#products_table td {
+    padding: 5px;
+}
+
+table#products_table input.checkbox {
+    width: 13px;
+    height: 13px;
+    vertical-align: bottom;
+    position: relative;
 }
 
 /** settings boxes **/

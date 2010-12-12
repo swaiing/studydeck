@@ -405,8 +405,6 @@ class UsersController extends AppController {
             $this->log($LOG_PREFIX . "No product form data passed to register page!");
         }
         else {
-            //$this->set('foo', $this->data);
-
             // Iterate purchased deck IDs
             $formSubmittedData = $this->data['Users'];
 

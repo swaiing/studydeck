@@ -1,0 +1,50 @@
+/**
+ * product_view.css
+ *
+ */
+
+h1 {
+    font-size: 3em;
+}
+
+div#products_wrapper {
+    margin: 0 0 10px 0;
+}
+
+table#products_table {
+    border: 1px solid #003366;
+    width: 500px;
+    font-size: 1.5em;
+    margin: 10px auto
+}
+
+table#products_table td {
+    padding: 10px;
+}
+
+table#products_table input.checkbox {
+    width: 13px;
+    height: 13px;
+    vertical-align: bottom;
+    position: relative;
+}
+
+div.submit {
+    width: 350px;
+    margin: 0 auto;
+}
+
+div.submit input {
+    font-size: 2em;
+    width: 250px;
+}
+
+div#submit_button {
+    width: 250px;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 2em;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid #003366;
+}
