@@ -562,27 +562,34 @@ class UsersController extends AppController {
 		
 		$paypal_params = $this->params['url'];
 		$items_in_cart = $paypal_params['num_cart_items'];
+		
+		
+		$this->Payment->set(array(
+			'user_id' => $user_id,
+			'amount' => $paypal_params['payment_gross'],
+			'transaction_id' => $paypal_params['txn_id']
+		));
+		$this->Payment->save();
+		
+		debug($this->Payment->id, $showHTML = false, $showFrom = true);
 		for($x = 1; $x <= $items_in_cart; $x++) {
-			debug($paypal_params['item_name'.$x], $showHTML = false, $showFrom = true);
 			$product = $this->Product->find('first', array('conditions' => array('Product.id' => $paypal_params['item_number'.$x])));
-			if($product['Product']['price'] ==  $paypal_params['mc_gross_'.$x]){
-				/*
+			//debug(number_format($product['Product']['price'], 2, '.', ''), $showHTML = false, $showFrom = true);
+			//debug($paypal_params['mc_gross_'.$x], $showHTML = false, $showFrom = true);
+
+			if(number_format($product['Product']['price'], 2, '.', '') ==  $paypal_params['mc_gross_'.$x]){
+			//debug('here', $showHTML = false, $showFrom = true);
+				
 				$this->PurchasedProduct->set(array(
 					'user_id' => $user_id,
 					'product_id' => $product['Product']['id'],
 					'payment_id' => $payment['Payment']['id']
 				));
 				$this->PurchasedProduct->save();
-				*/
+				
 			}
 			
 		}
-		$this->Payment->set(array(
-			'user_id' => $user_id,
-			'amount' => $paypal_params['payment_gross'],
-			'transaction_id' => $paypal_params['txn_id']
-		));
-		$payment = $this->Payment->save();
 		
 	}
 
