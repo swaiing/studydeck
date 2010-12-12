@@ -13,10 +13,10 @@ INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created
 INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("Latin Roots", 0, 0, 1, "Premium Studydeck Latin roots.", NOW());
 
 -- CREATE PRODUCTS
-INSERT INTO products (id, deck_id, name, price) VALUES (1, 5, "Studydeck Top 500", 9.99);
+INSERT INTO products (deck_id, name, price) VALUES (5, "Studydeck Top 500", 9.99);
 UPDATE decks SET decks.product_id=1 WHERE decks.id=5;
 
-INSERT INTO products (id, deck_id, name, price) VALUES (2, 6, "Studydeck Latin Roots", 4.99);
+INSERT INTO products (deck_id, name, price) VALUES ( 6, "Studydeck Latin Roots", 4.99);
 UPDATE decks SET decks.product_id=2 WHERE decks.id=6;
 
 -- CREATE SOME TAGS
