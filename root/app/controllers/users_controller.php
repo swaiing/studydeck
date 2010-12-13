@@ -448,8 +448,6 @@ class UsersController extends AppController {
             // [1] => Array ( [Product] => Array ( [id] => 2 [deck_id] => 6 [name] => Studydeck Latin Roots [price] => 5 )
             // ) ) 
 
-           // Debug
-           print_r($productsOrdered);
 
            $this->set('productsOrdered', $productsOrdered); 
            $this->set('orderTotal', $totalViewed);
@@ -474,7 +472,9 @@ class UsersController extends AppController {
 					
                     if($this->Auth->login($this->data)) {
 						//directs them to a page where alerting them that the email has been sent
-						$this->redirect(array('action' => '/paypalSubmit'));
+						$this->Session->write('products', $productsOrdered);
+						$this->redirect(array('action' => 'paypalSubmit'));
+						
 					}
                 }
                 else {
@@ -494,48 +494,6 @@ class UsersController extends AppController {
 
     }
     
-    // Action for form submission on register page
-	function registerSubmit() {
-
-    	// Declares recaptchaFail variable for view
-      	$this->set('recaptchaFailed', false);
-		$this->log($this->data,LOG_DEBUG);
-        // Check submitted data
-
-      	if (!empty($this->data)) {
-	    	$this->User->set($this->data);
-	       	if ($this->User->validates()) {
-                if($this->Recaptcha->valid($this->params['form'])){
-					$this->User->create();
-                               
-
-                    //creates the user in the temp user table
-                    //skips validation because it should already be done
-                    $new_user = $this->User->save($this->data,false);
-					
-                    if($this->Auth->login($this->data)) {
-						//directs them to a page where alerting them that the email has been sent
-						$this->redirect(array('action' => '/paypalSubmit'));
-					}
-                }
-                else {
-                    $this->set('recaptchaFailed',true);
-                    unset($this->data['User']['password']);
-                    unset($this->data['User']['password_confirm']);
-                }
-
-                
-            }
-            else {
-                unset($this->data['User']['password']);
-                unset($this->data['User']['password_confirm']);
-            
-            }
-           $this->redirect('/users/register'); 
-   		}
-		
-
-	}
 	
 	function paypalSubmit() {
 	 // Set user id
@@ -550,10 +508,16 @@ class UsersController extends AppController {
 						"return"		=> FULL_BASE_URL . '/users/dashboard',
 						"cancel_return"	=> FULL_BASE_URL,
 						"notify_url"	=> FULL_BASE_URL . '/users/paypalIpn/'.$userId.'/oob3b0VKEyLY');
-						
-		$buttonParams = array_merge($buttonParams,
-		array("item_name_1"=> 'latin roots',"item_number_1"	=> '1',"quantity_1"	=> '1',	"amount_1"		=> '4'),
-		array("item_name_2"	=> 'base words',"item_number_2"	=> '2',	"amount_2"		=> '7',	"quantity_2"	=> '1'));
+	
+		$products = $this->Session->read('products');
+	
+		$count = 1;
+		foreach ($products as $product) {
+                $buttonParams = array_merge($buttonParams,
+				array("item_name_".$count => $product['Product']['name'],"item_number_".$count => $product['Product']['id'],"quantity_".$count	=> '1',	"amount_".$count => $product['Product']['price']));
+				$count++;
+         }
+	
 
 		$envURL = "https://www.sandbox.paypal.com";
 
@@ -588,8 +552,6 @@ class UsersController extends AppController {
 				'transaction_id' => $paypal_params['txn_id']
 			));
 			$this->Payment->save();
-			
-			debug($this->Payment->id, $showHTML = false, $showFrom = true);
 			for($x = 1; $x <= $items_in_cart; $x++) {
 				$product = $this->Product->find('first', array('conditions' => array('Product.id' => $paypal_params['item_number'.$x])));
 
