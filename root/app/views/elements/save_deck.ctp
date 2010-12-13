@@ -61,15 +61,7 @@
     
     // Title
     echo "<li>" . $form->input('Deck.deck_name',array('label'=>'Title:', 'class'=>$DETAIL_CLASS, 'maxlength'=>$DETAIL_LENGTH, 'value' => $deckTitle)) . "</li>\n";
-    
-    // Tags/Categories
-    echo "<li>" . $form->input('Tag.tag',array('label'=>'Tags:', 'class'=>$DETAIL_CLASS, 'maxlength'=>$DETAIL_LENGTH, 'id'=>'autoComplete', 'value' => $tagList)) . "</li>\n";
- 
-    // Privacy radio
-    echo "<li class=\"privacy_options\">";
-    echo "<span class=\"label\">Visibility:</span>";
-    echo $form->radio('privacy', $privacyOptions, $privacyAttributes);
-    echo "</li>";
+
 
     // Description
     echo "<li>" . $form->input('Deck.description',array('label'=>'Description:', 'class'=>$DETAIL_CLASS, 'maxlength'=>$DETAIL_LENGTH, 'value' => $deckDescription)) . "</li>\n";
@@ -79,7 +71,7 @@
     echo "<div id=\"card_inputs\">\n";
     echo "<ol id=\"card_list\">\n";
 
-    // Row header
+    // Row header . "</
     echo "<li><label>&nbsp;</label>";
     echo "<div id=\"term_header\">Question</div>";
     echo "<div id=\"definition_header\">Answer</div>";

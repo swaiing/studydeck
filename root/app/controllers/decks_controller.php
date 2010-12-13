@@ -1257,6 +1257,9 @@ class DecksController extends AppController {
                 }
             }
         }
+		
+		//all decks private
+		$this->data['Deck']['privacy'] = SD_GLOBAL::$PRIVATE_DECK; 
 
         if($this->Deck->saveAll($this->data,array('validate' => 'only'))) {
            
