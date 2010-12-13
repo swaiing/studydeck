@@ -1274,7 +1274,7 @@ class DecksController extends AppController {
             }
             
             $deckId = $this->Deck->id;
-
+			/*
             $tagList = $this->data['Tag']['tag'];
             $newTagArray = array();
             $deckTagArray = array();
@@ -1339,7 +1339,7 @@ class DecksController extends AppController {
                 }
                 
                 
-            }
+            } */
             
             //if newly created deck add to mydecks 
             if(!$edit) {    
