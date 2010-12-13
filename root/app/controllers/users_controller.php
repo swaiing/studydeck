@@ -522,16 +522,18 @@ class UsersController extends AppController {
 	}
 	
 	function paypalSubmit() {
-				//paypal
+	 // Set user id
+        $userId = $this->Auth->user('id');
+		//paypal	
 		$buttonParams = array(	"cmd"			=> "_cart",
 						"business" 		=> 'seller_1292086026_biz@studydeck.com',
 						"cert_id"		=> 'P3AUVEYDF6AQU',
 						"charset"		=> "UTF-8",
 						"upload"		=> '1',
 						"currency_code"	=> 'USD',
-						"return"		=> 'http://www.studydeck.com/dashboard',
-						"cancel_return"	=> 'http://www.studydeck.com',
-						"notify_url"	=> 'http://www.studydeck.com/users/paypalIpn/4/oob3b0VKEyLY');
+						"return"		=> FULL_BASE_URL . '/users/dashboard',
+						"cancel_return"	=> FULL_BASE_URL,
+						"notify_url"	=> FULL_BASE_URL . '/users/paypalIpn/'.$userId.'/oob3b0VKEyLY');
 						
 		$buttonParams = array_merge($buttonParams,
 		array("item_name_1"=> 'latin roots',"item_number_1"	=> '1',"quantity_1"	=> '1',	"amount_1"		=> '4'),

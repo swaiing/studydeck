@@ -1,6 +1,7 @@
 <?php
 class SD_Global
 {
+
     // Constants for deck privacy values
     public static $PRIVATE_DECK = 0;
     public static $PUBLIC_DECK = 1;
