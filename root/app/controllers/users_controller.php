@@ -563,6 +563,12 @@ class UsersController extends AppController {
 						'payment_id' => $this->Payment->id
 					));
 					$this->PurchasedProduct->save();
+					$this->MyDeck->create();
+					$this->MyDeck->set(array(
+						'user_id' => $user_id,
+						'deck_id' => $product['Product']['deck_id'],
+					));
+					$this->MyDeck->save();					
 					
 				}
 				
