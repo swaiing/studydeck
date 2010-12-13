@@ -15,7 +15,7 @@
 <h1>Select a Studydeck</h1>
 
 <?php
-    echo $form->create('Users', array('action' => 'register', 'name' => 'ProductOrderForm'));
+    echo $form->create('User', array('action' => 'register', 'name' => 'ProductOrderForm'));
 ?>
 <table id="products_table" border="1">
 <tbody>
