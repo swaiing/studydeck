@@ -1,1 +1,3 @@
 root/app/tmp/
+*.log
+
