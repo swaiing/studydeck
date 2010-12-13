@@ -404,14 +404,17 @@ class UsersController extends AppController {
             $this->log($LOG_PREFIX . "No product form data passed to register page!");
         }
         else {
-            // Iterate purchased deck IDs
-			
-            $formSubmittedData = $this->data['Users'];
-			print_r($formSubmittedData);
+
+            // Debug
+			//print_r($this->data);
+
+            $formSubmittedData = $this->data['User'];
+
             // Holds data
             $productIdsSelected = array();
             $totalViewed = 0;
 
+            // Iterate purchased deck IDs
             foreach ($formSubmittedData as $key => $value) {
                 // Key is product ID
                 if (is_int($key)) {
@@ -431,9 +434,7 @@ class UsersController extends AppController {
             // Query products
             $this->Product->recursive = -1;
             $allProducts = $this->Product->find('all');
-
             $productsOrdered = array();
-
             foreach ($allProducts as $product) {
                 $id = $product['Product']['id'];
                 if (array_key_exists($id, $productIdsSelected) && $productIdsSelected[$id]) {
@@ -441,15 +442,31 @@ class UsersController extends AppController {
                 }
             }
 
+            // productsOrdered output
+            // Array (
+            // [0] => Array ( [Product] => Array ( [id] => 1 [deck_id] => 5 [name] => Studydeck Top 500 [price] => 10 ) )
+            // [1] => Array ( [Product] => Array ( [id] => 2 [deck_id] => 6 [name] => Studydeck Latin Roots [price] => 5 )
+            // ) ) 
+
+           // Debug
+           print_r($productsOrdered);
+
            $this->set('productsOrdered', $productsOrdered); 
            $this->set('orderTotal', $totalViewed);
+           
+           // Skip rest of method because it was originally forwared from
+           // /products/view
+           if ($totalViewed != 0) {
+                return;
+           }
 		   
+           // Validate user registration fields
 		   $this->User->set($this->data);
 	       	if ($this->User->validates()) {
-				print_r($this->params['form']); 
-                if($this->Recaptcha->valid($this->params['form'])){
+
+				//print_r($this->params['form']); 
+                if($this->Recaptcha->valid($this->params['form'])) {
 					$this->User->create();
-                               
 
                     //creates the user in the temp user table
                     //skips validation because it should already be done
@@ -461,12 +478,11 @@ class UsersController extends AppController {
 					}
                 }
                 else {
-                    $this->set('recaptchaFailed',true);
+                    $this->set('recaptchaFailed', true);
                     unset($this->data['User']['password']);
                     unset($this->data['User']['password_confirm']);
                 }
 
-                
             }
             else {
                 unset($this->data['User']['password']);

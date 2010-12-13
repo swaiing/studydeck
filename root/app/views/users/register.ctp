@@ -26,15 +26,13 @@
     </thead>
     <tbody>
     <?php
-	$count = 1;
         foreach ($productsOrdered as $product) {
             $price = $product['Product']['price'];
             $id = $product['Product']['id'];
             $name = $product['Product']['name'];
             
             // Output hidden form field
-            echo $form->input($count,array('value'=>$id,'type'=>'hidden'));
-			$count++;
+            echo $form->input($id, array('value' => true, 'type' => 'hidden'));
     ?>
         <tr id="product_id_<?php echo $id; ?>">
             <td class="name"><?php echo $name; ?></td>
@@ -45,7 +43,7 @@
     ?>
         <tr>
             <td>Total</td>
-            <td><?php echo $orderTotal; ?>
+            <td>$<?php echo $orderTotal; ?>
         </tr>
     </tbody>
     </table>
@@ -65,7 +63,8 @@
     	echo "<li>" . $form->input('User.password_confirm', array('type' => 'password', 'label'=>'Repeat:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
 
         echo "</ol>\n";
-		  $recaptcha->display_form('echo');
+
+		$recaptcha->display_form('echo');
         if($recaptchaFailed) {
             echo "<div>Captcha input has failed!";
             echo "</div>\n"; 
