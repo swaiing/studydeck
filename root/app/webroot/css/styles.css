@@ -183,12 +183,16 @@ div#nav_right {
 /*****  middle_bar homepage *****/
 
 div#blurb {
-    /*
-    background-color: #003366;
-    border-top: 2px solid #fff;
-    border-bottom: 2px solid #fff;
-    */
+    text-align: center;
+    padding: 50px 0 30px 0;
     background: url("/img/blurb_bg.png") repeat-y center top;
+    color: #ECEFF5;
+}
+
+#blurb h2 {
+    font-family: trebuchet ms, verdana, sans-serif;
+    font-size: 3.5em;
+    text-shadow: 2px 2px 2px #000;
 }
 
 div#blurb_content {
@@ -196,6 +200,16 @@ div#blurb_content {
     height: 445px;
     width: 960px;
     background: url("/img/blurb.jpg") no-repeat;
+}
+
+div#slider {
+    margin: 20px auto;
+    height: 250px;
+    width: 500px;
+    box-shadow: 3px 3px 4px #000;
+    -moz-box-shadow: 3px 3px 4px #000;
+    -webkit-box-shadow: 3px 3px 4px #000;
+
 }
 
 div#more {
