@@ -536,13 +536,11 @@ class UsersController extends AppController {
 	}
 	
 	function paypalIpn() {
-		//debug($this->params['pass'][1], $showHTML = false, $showFrom = true);
-		//debug($this->params['url'], $showHTML = false, $showFrom = true);
 		$user_id = $this->params['pass'][0];
 		
 		
 		if ($this->params['pass'][1] == 'oob3b0VKEyLY') {
-			$paypal_params = $this->params['url'];
+			$paypal_params = $this->params['form'];
 			$items_in_cart = $paypal_params['num_cart_items'];
 			
 			
