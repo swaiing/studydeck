@@ -15,7 +15,19 @@
 <h1>Select a Studydeck</h1>
 
 <?php
-    echo $form->create('User', array('action' => 'register', 'name' => 'ProductOrderForm'));
+
+    // If user logged in then do not display inactive products, send form directly to Paypal
+    if (isset($productsOwned)) {
+
+        // Create form
+        echo $form->create('User', array('action' => 'registerSubmitPaypal', 'name' => 'ProductOrderForm'));
+    }
+    // If user not logged in then display all products, send form to register page
+    else {
+
+        // Create form
+        echo $form->create('User', array('action' => 'register', 'name' => 'ProductOrderForm'));
+    }
 ?>
 <table id="products_table" border="1">
 <tbody>
@@ -24,15 +36,19 @@
         $price = $product['Product']['price'];
         $id = $product['Product']['id'];
         $name = $product['Product']['name'];
+        $deckId = $product['Product']['deck_id'];
 ?>
     <tr id="product_id_<?php echo $id; ?>">
         <td class="selected">
-            <?php echo $form->input($id,
-                                    array('class'=>'checkbox',
-                                          'type'=>'checkbox',
-                                          'multiple'=>'true',
-                                          'label'=>false
-                                    )); ?>
+<?php
+        if (isset($productsOwned) && $productsOwned[$deckId]) {
+            echo "purchased";
+        }
+        else {
+            echo $form->input($id, array('class'=>'checkbox', 'type'=>'checkbox', 
+                                        'multiple'=>'true', 'label'=>false));
+        }
+?>
         </td>
         <td class="name"><?php echo $name; ?></td>
         <td class="price">$<?php echo $price; ?></td>
@@ -41,7 +57,7 @@
     }
 ?>
     <tr style="background-color:#cecece">
-        <td><input class="checkbox" type="checkbox" disabled="true" />
+        <td></td>
         <td>Create your own deck</td>
         <td>Free!</td>
     </tr>

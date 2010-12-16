@@ -28,31 +28,34 @@ class ProductsController extends AppController {
         $this->Deck->recursive = -1;
         $this->Deck->MyDeck->recursive = -1;
         $this->Product->recursive = -1;
+        $userId = $this->Auth->user('id');
 
         // Query products
         $products = $this->Product->find('all');
-
-        // Find products which are already purchased
-        $userId = $this->Auth->user('id');
-
-        // Bind to view
+        $productDeckIdsMap = array();
+        foreach ($products as $product) {
+            $dId = $product['Product']['deck_id'];
+            $productDeckIdsMap[$dId] = true;
+        }
         $this->set('allProducts', $products);
-    }
 
-    // Forwards to Order Summary page
-    function confirmOrder() {
+        // Do not continue if NOT logged in
+        if (!isset($userId)) {
+            return;
+        }
 
-        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
-        $this->log($LOG_PREFIX . "Confirming order now");
-
-        $this->set('foo', $this->data);
-
-        // Iterate purchased deck IDs
-
-        // If logged in user, send directly to Paypal
-
-        // If user is new, send to user registration/order confirmation page
-
+        // User is logged in
+        // Find Product decks which are already associated with user
+        $productDecksOwned = array();
+        $params = array('conditions' => array('MyDeck.user_id' => $userId));
+        $myDecks = $this->MyDeck->find ('all', $params);
+        foreach ($myDecks as $deck) {
+            $deckId = $deck['MyDeck']['deck_id'];
+            if (array_key_exists($deckId, $productDeckIdsMap) && $productDeckIdsMap[$deckId]) {
+                $productDecksOwned[$deckId] = true;
+            }
+        }
+        $this->set('productsOwned', $productDecksOwned);
     }
 
 }

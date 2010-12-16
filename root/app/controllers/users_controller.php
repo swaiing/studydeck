@@ -397,6 +397,7 @@ class UsersController extends AppController {
 
         // Logging
         $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+
     	// Declares recaptchaFail variable for view
       	$this->set('recaptchaFailed', false);
         
@@ -416,9 +417,9 @@ class UsersController extends AppController {
 
             // Iterate purchased deck IDs
             foreach ($formSubmittedData as $key => $value) {
+
                 // Key is product ID
                 if (is_int($key)) {
-
                     $this->log($LOG_PREFIX . "Key is " . $key . ". Value is " . $value);
                     if ($value) {
                         $productIdsSelected[$key] = true;
@@ -450,7 +451,7 @@ class UsersController extends AppController {
 
 
            $this->set('productsOrdered', $productsOrdered); 
-           $this->set('orderTotal', $totalViewed);
+           //$this->set('orderTotal', $totalViewed);
            
            // Skip rest of method because it was originally forwared from
            // /products/view

@@ -26,10 +26,12 @@
     </thead>
     <tbody>
     <?php
+        $total = 0;
         foreach ($productsOrdered as $product) {
             $price = $product['Product']['price'];
             $id = $product['Product']['id'];
             $name = $product['Product']['name'];
+            $total += $price;
             
             // Output hidden form field
             echo $form->input($id, array('value' => true, 'type' => 'hidden'));
@@ -43,7 +45,7 @@
     ?>
         <tr>
             <td>Total</td>
-            <td>$<?php echo $orderTotal; ?>
+            <td>$<?php echo $total; ?>
         </tr>
     </tbody>
     </table>

@@ -13,7 +13,13 @@
     // Chart constant
     // New chart format with gradients
     // http://chart.apis.google.com/chart?cht=bhs&chco=FCFF08,FF7B00,FF000A&chs=130x25&chd=t:30|40|30&chf=b0,lg,180,FCFF08,0,FCFF66,1|b1,lg,180,FF7B00,0,FFB077,1|b2,lg,180,FF000A,0,FF6167,1&chbh=r,0
-    $BAR_CHART_URL = "http://chart.apis.google.com/chart?cht=bhs&chco=FCFF08,FF7B00,FF000A&chs=130x25&chf=b0,lg,180,FCFF08,0,FCFF66,1|b1,lg,180,FF7B00,0,FFB077,1|b2,lg,180,FF000A,0,FF6167,1&chbh=r,0&chd=t:";
+
+    // Old single bar chart
+    //$BAR_CHART_URL = "http://chart.apis.google.com/chart?cht=bhs&chco=FCFF08,FF7B00,FF000A&chs=130x25&chf=b0,lg,180,FCFF08,0,FCFF66,1|b1,lg,180,FF7B00,0,FFB077,1|b2,lg,180,FF000A,0,FF6167,1&chbh=r,0&chd=t:";
+
+    // New multi-bar chart
+    // http://chart.apis.google.com/chart?cht=bvg&chco=FCFF08|FF7B00|FF000A&chxt=x&chl=Easy|Med|Hard&chs=100x50&chd=t:50,20,30
+    $BAR_CHART_URL = "http://chart.apis.google.com/chart?cht=bvg&chco=FCFF08|FF7B00|FF000A&chxt=x&chl=Easy|Med|Hard&chs=100x50&chd=t:";
 ?>
 
 <div id="middle_wrapper_content">
@@ -74,7 +80,8 @@
                     $easyPercent = ($pDeck['Easy']/$totalCards)*100;
                     $mediumPercent = ($pDeck['Medium']/$totalCards)*100;
                     $hardPercent = ($pDeck['Hard']/$totalCards)*100;
-                    $progressImgStr = $BAR_CHART_URL . $easyPercent . "|" . $mediumPercent . "|" . $hardPercent;
+                    //$progressImgStr = $BAR_CHART_URL . $easyPercent . "|" . $mediumPercent . "|" . $hardPercent;
+                    $progressImgStr = $BAR_CHART_URL . $easyPercent . "," . $mediumPercent . "," . $hardPercent;
                 }
                 ?>
                 <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>
@@ -134,8 +141,8 @@
                     $easyPercent = ($ucDeck['Easy']/$totalCards)*100;
                     $mediumPercent = ($ucDeck['Medium']/$totalCards)*100;
                     $hardPercent = ($ucDeck['Hard']/$totalCards)*100;
-
-                    $progressImgStr = $BAR_CHART_URL . $easyPercent . "|" . $mediumPercent . "|" . $hardPercent;
+                    //$progressImgStr = $BAR_CHART_URL . $easyPercent . "|" . $mediumPercent . "|" . $hardPercent;
+                    $progressImgStr = $BAR_CHART_URL . $easyPercent . "," . $mediumPercent . "," . $hardPercent;
                 }
                 ?>
                 <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>
