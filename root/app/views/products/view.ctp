@@ -15,18 +15,13 @@
 <h1>Select a Studydeck</h1>
 
 <?php
+    // Create form
+    echo $form->create('User', array('action' => 'register', 'name' => 'ProductOrderForm'));
 
-    // If user logged in then do not display inactive products, send form directly to Paypal
-    if (isset($productsOwned)) {
-
-        // Create form
-        echo $form->create('User', array('action' => 'registerSubmitPaypal', 'name' => 'ProductOrderForm'));
-    }
-    // If user not logged in then display all products, send form to register page
-    else {
-
-        // Create form
-        echo $form->create('User', array('action' => 'register', 'name' => 'ProductOrderForm'));
+    // Add hidden parameter to indicate form should post directly to Paypal process
+    // rather than continue to order confirmation page
+    if (isset($userLoggedIn)) {
+        echo $form->input('postPaypal', array('id'=>'postPaypal','type'=>'hidden','label'=>false));
     }
 ?>
 <table id="products_table" border="1">
@@ -41,7 +36,7 @@
     <tr id="product_id_<?php echo $id; ?>">
         <td class="selected">
 <?php
-        if (isset($productsOwned) && $productsOwned[$deckId]) {
+        if (isset($productsOwned) && array_key_exists($deckId, $productsOwned) && $productsOwned[$deckId]) {
             echo "purchased";
         }
         else {
@@ -66,7 +61,8 @@
         <td>Total:</td>
         <td>
             <span id="total">$0</span>
-            <?php echo $form->input('total', array('id'=>'total','type'=>'hidden','label'=>false)); ?>
+            <?php //echo $form->input('total', array('id'=>'total','type'=>'hidden','label'=>false)); ?>
+            <?php echo $form->input('sentFromView', array('id'=>'sentFromView','type'=>'hidden','label'=>false)); ?>
         </td>
     </tr>
 </tbody>

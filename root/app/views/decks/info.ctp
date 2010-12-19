@@ -122,37 +122,21 @@
     </div>
 
     <?php echo $form->end(); ?>
+    <h3>Quizzed:</h3> <?php echo $userQuizCount ?> times
 </div>
 
 <div id="bottom">
     <ul>
-        <li><a href="#stats_tab">Stats</a></li>
-        <li><a href="#cards_tab">Cards</a></li>
         <?php
             // Display results tab only if quizzed
             if(isset($quiz)) {
                 echo "<li><a href=\"#results_tab\">Quiz Review</a></li>";
             }
         ?>
+        <li><a href="#cards_tab">Cards</a></li>
     </ul>
 
-    <div id="stats_tab">
-        <ul>
-            <li><h3>Created:</h3> <?php echo $readableCreatedTime ?></li>
-            <li><h3>Quizzed:</h3> <?php echo $userQuizCount ?> times</li>
-            <li><h3>Tags:</h3>
-            <?php
-                $numTags = count($tags);
-                for($i = 0; $i < $numTags; $i++) {
-                    echo $tags[$i];
-                    if($i < ($numTags - 1)) {
-                        echo ", ";
-                    }
-                }
-            ?>
-            </li>
-        </ul>
-    </div>
+
 
     <div id="cards_tab">
 

@@ -413,7 +413,8 @@ class UsersController extends AppController {
 
             // Holds data
             $productIdsSelected = array();
-            $totalViewed = 0;
+            $sentFromView = false;
+            $postPaypal = false;
 
             // Iterate purchased deck IDs
             foreach ($formSubmittedData as $key => $value) {
@@ -425,10 +426,12 @@ class UsersController extends AppController {
                         $productIdsSelected[$key] = true;
                     }
                 }
-                // Key indicates total
-                else if (strcmp($key,"total") == 0) {
-                    $this->log($LOG_PREFIX . "Total is " . $value);
-                    $totalViewed = $value;
+                // Key flag indicating forwarded from view
+                else if (strcmp($key,"sentFromView") == 0) {
+                    $sentFromView = true;
+                }
+                else if (strcmp($key,"postPaypal") == 0) {
+                    $postPaypal = true;
                 }
             } // end foreach
 
@@ -451,14 +454,23 @@ class UsersController extends AppController {
 
 
            $this->set('productsOrdered', $productsOrdered); 
-           //$this->set('orderTotal', $totalViewed);
+
+           // Post directly to Paypal
+           if ($postPaypal) {
+                //if($this->Auth->login($this->data)) {
+                    // directs them to a page where alerting them that the email has been sent
+                    $this->Session->write('products', $productsOrdered);
+                    $this->redirect(array('action' => 'paypalSubmit'));
+                //}
+           }
            
-           // Skip rest of method because it was originally forwared from
-           // /products/view
-           if ($totalViewed != 0) {
+           // Skip rest of method because it was originally forwared from products/view
+           if ($sentFromView) {
                 return;
            }
 		   
+           // Function continues because we are already on the register page
+
            // Validate user registration fields
 		   $this->User->set($this->data);
 	       	if ($this->User->validates()) {
@@ -494,8 +506,7 @@ class UsersController extends AppController {
         } // end else
 
     }
-    
-	
+
 	function paypalSubmit() {
 	 // Set user id
         $userId = $this->Auth->user('id');

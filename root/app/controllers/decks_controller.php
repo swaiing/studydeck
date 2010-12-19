@@ -653,11 +653,15 @@ class DecksController extends AppController {
         // Params passed by form
         $ratingsSelected = $this->data['Deck']['RatingsSelected'];
         $shuffleDeck = $this->data['Deck']['ShuffleDeck'];
-        $isShuffleDeck = array_pop($shuffleDeck);
         $isQuizMode = (int) $this->data['Deck']['isQuizMode'];
         $deckId = (int) $this->data['Deck']['deckId'];
         $userId = $this->Auth->user('id');
 
+        // Added check for PHP 5.3 version on goodspeed
+        $isShuffleDeck = false;
+        if(is_array($shuffleDeck)) {
+            $isShuffleDeck = array_pop($shuffleDeck);
+        }
         // Set log info
         $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
 

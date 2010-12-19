@@ -27,15 +27,8 @@
 	<div class="box_content">
 	
 		<h1>Dashboard</h1>
-        <div class="description">Learn studydecks you have created or favorited here.</div>
+        <div class="description">Studydecks you have purchased or created will be displayed here.</div>
 
-		<div id="sort_actions">
-            <ul>
-                <li><?php echo $html->link("Recently Quizzed","/users/dashboard"); ?></li>
-                <li><?php echo $html->link("Times Quizzed","/users/dashboard/bycount"); ?></li>
-            </ul>
-        </div>
-		
         <div id="created_others">
         <h2>Premium Studydecks</h2>
 		<?php if(count($publicDecks)) { ?>
@@ -92,8 +85,7 @@
 		</table>
 		<?php }
 		else {
-			echo "<div class=\"nodecks\">You have not favorited any Studydecks. ";
-            echo $html->link("Explore the Studydeck library", array('controller'=>'decks', 'action'=>'explore')) . ".";
+			echo "<div class=\"nodecks\">You have not purchased any Studydecks. If you have, please contact us at support@studydeck.com";
             echo "</div>";
 		}
 		?>

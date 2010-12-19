@@ -43,6 +43,7 @@ class ProductsController extends AppController {
         if (!isset($userId)) {
             return;
         }
+        $this->set('userLoggedIn', true);
 
         // User is logged in
         // Find Product decks which are already associated with user
