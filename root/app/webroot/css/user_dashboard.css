@@ -60,5 +60,5 @@ div#created_others table.deck_table col.progress {
 }
 div#created_me table.deck_table col.remove,
 div#created_others table.deck_table col.remove {
-    width: 50px;
+    width: 54px;
 }

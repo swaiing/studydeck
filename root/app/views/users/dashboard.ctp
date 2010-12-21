@@ -81,7 +81,6 @@
                         <img src="<?php echo $progressImgStr; ?>" alt="">
                     <?php } ?>
                 </td>
-                <td><?php echo $html->link("Remove","#",array('onclick' => "publicDeleteDialog(".$pDeck['Deck']['id'].",\"".$pDeck['Deck']['deck_name']."\")"));?></td>            
             </tr>
 			<?php endforeach; ?>
 
