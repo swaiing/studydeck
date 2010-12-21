@@ -4,7 +4,7 @@ include 'sd_global.php';
 
 class TempUsersController extends AppController {
 	var $name = 'TempUsers';
-	var $scaffold;
+	//var $scaffold;
 	var $components = array('Auth');
 	var $helpers = array('Time');
 

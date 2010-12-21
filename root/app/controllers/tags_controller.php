@@ -3,7 +3,7 @@ class TagsController extends AppController {
     var $name = 'Tags';
     var $helpers = array('Html','Javascript','Form','Ajax');
     var $uses = array('Tag','SearchIndex');
-    var $scaffold;
+    //var $scaffold;
     
     
     function add() {
