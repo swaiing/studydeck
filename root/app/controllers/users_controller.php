@@ -44,6 +44,10 @@ class UsersController extends AppController {
         //pulls the current user id
         $currentUserId = $this->Auth->user('id');
         $this->User->recursive = -1;
+
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_SETTINGS;
+
             
         if (!empty($this->data)) {
             //sets user id to update
@@ -83,6 +87,7 @@ class UsersController extends AppController {
             }
             
         }        
+
         //get user information
         $userParams = array('conditions' => array('User.id' => $currentUserId), 'fields' => array('User.username','User.email','User.password'));
         $user = $this->User->find('first', $userParams);
@@ -209,6 +214,9 @@ class UsersController extends AppController {
 		$currentUserId = $this->Auth->user('id');
 		$currentUserName = $this->Auth->user('username');
 
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_DASHBOARD;
+		 
 		//pulls all decks the user has in the mydecks table
         $colSortBy = 'MyDeck.modified DESC';
 		if($sortBy == 'bycount') {
@@ -294,14 +302,11 @@ class UsersController extends AppController {
 			}
 			 
 		}
-		 
+
 		//sets variable used by view
 		$this->set('userCreatedDecks', $userCreatedDecks);
 		$this->set('publicDecks', $publicDecks);
 		$this->set('numDecksStudied', count($allMyDecks));
-		 
-        // Set page title
-        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_DASHBOARD . $currentUserName . "'s dashboard";
 	}
 
 
@@ -361,7 +366,9 @@ class UsersController extends AppController {
 
 	function login(){
         // Intentionally blank
-      
+
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_LOGIN;
     }
 
 	function logout() {
@@ -397,6 +404,9 @@ class UsersController extends AppController {
 
         // Logging
         $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_REGISTER;
 
     	// Declares recaptchaFail variable for view
       	$this->set('recaptchaFailed', false);

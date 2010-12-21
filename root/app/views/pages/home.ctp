@@ -1,6 +1,6 @@
 <?php
     // Set default homepage title
-    $this->pageTitle = "Studydeck | Online flashcards made simple";
+    $this->pageTitle = "Studydeck | The Best Way to Study GRE Vocabulary Online";
 
     // Javascript/CSS includes
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);

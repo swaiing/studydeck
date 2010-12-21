@@ -122,7 +122,9 @@ class DecksController extends AppController {
     }
 
 	//action for exploring decks
-	function explore($sortBy = null, $page = null, $query = null)
+    // Changed to private visibility
+    // No explore in GRE studydeck
+	private function explore($sortBy = null, $page = null, $query = null)
     {   
     
         // Set page title
@@ -323,6 +325,8 @@ class DecksController extends AppController {
         $this->set('assocCreated', $assocCreated);
         $this->set('assocSaved', $assocSaved);
         $this->set('assocNope', $assocNope);
+
+        return $assocSaved || $assocCreated;
     }
 
   /*
@@ -717,13 +721,19 @@ class DecksController extends AppController {
      */
     function learn($id)
     {
-        // Set page title
-        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_LEARN;
-
         // Call assocations
         // Binds $assocSaved, $assocCreated, $assocViewed, $assocNope
         // Deck is in dashboard (i.e. in my_decks table)
-        $this->bindAssocations($id);
+        $validAssociation = $this->bindAssocations($id);
+
+        if (!$validAssociation) {
+            // Redirect to dashboard
+            $this->redirect(array('controller'=>'users', 'action'=>'dashboard'));
+        }
+
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_LEARN;
+
 
         // Call private study function
         // Difference between study/quiz in JavaScript
@@ -737,13 +747,18 @@ class DecksController extends AppController {
      */
     function quiz($id)
     {
-        // Set page title
-        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_QUIZ;
-
         // Call assocations
         // Binds $assocSaved, $assocCreated, $assocViewed, $assocNope
         // Deck is in dashboard (i.e. in my_decks table)
         $this->bindAssocations($id);
+
+        if (!$validAssociation) {
+            // Redirect to dashboard
+            $this->redirect(array('controller'=>'users', 'action'=>'dashboard'));
+        }
+
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_QUIZ;
 
         // Call private study function
         // Difference between study/quiz in JavaScript
@@ -1390,20 +1405,6 @@ class DecksController extends AppController {
         $result = json_encode($csvReturn);
         echo $result;
     }
-
-	function view($id = null)
-    {
-        // Set deck meta info
-        $this->Deck->id = $id;
-        $this->set('deckInfo', $this->Deck->read());
-
-        // Retrieve cards in deck by deck_id
-        $findParams = array(
-                            'conditions' => array('Card.deck_id' => $this->Deck->id),
-                            'fields' => array('Card.question', 'Card.answer','Card.card_order'));
-        $this->set('deck', $this->Card->find('all',$findParams));
-    }
-
 }
 
 ?>

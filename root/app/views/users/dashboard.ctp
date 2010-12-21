@@ -87,7 +87,7 @@
 		</table>
 		<?php }
 		else {
-			echo "<div class=\"nodecks\">You have not purchased any Studydecks. If you have, please contact us at support@studydeck.com";
+			echo "<div class=\"nodecks\">Please refresh the page to see your premium Studydecks.  If you continue to have problems, please contact us at support@studydeck.com";
             echo "</div>";
 		}
 		?>

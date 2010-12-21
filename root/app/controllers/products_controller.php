@@ -30,6 +30,9 @@ class ProductsController extends AppController {
         $this->Product->recursive = -1;
         $userId = $this->Auth->user('id');
 
+        // Set page title
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_PRODUCTS;
+
         // Query products
         $products = $this->Product->find('all');
         $productDeckIdsMap = array();
