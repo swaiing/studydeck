@@ -59,7 +59,7 @@ class EWPServices
 <FORM ACTION="${destinationUrl_}/cgi-bin/webscr" METHOD="post" id="paypal_form">
 <INPUT TYPE="hidden" NAME="cmd" VALUE="_s-xclick">
 <INPUT TYPE="hidden" NAME="encrypted" VALUE="$encryptedData">
-<INPUT TYPE="image" SRC="$buttonImageUrl_" BORDER="0" NAME="submit" ALT="Redirecting to paypal">
+<INPUT TYPE="image" SRC="$buttonImageUrl_" BORDER="0" NAME="submit" ALT="">
 </FORM>
 PPHTML;
 		return array("status" => true, "encryptedButton" => $encryptedButton);

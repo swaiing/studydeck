@@ -10,9 +10,9 @@
 <div id="middle_wrapper_content">
 	<div id="middle_bar" class="box">
     <div class="box_content">
-
+	<h1>Redirecting to PayPal...</h1>
 	<?php
-
+		
 		echo $button
 	?>
 	
