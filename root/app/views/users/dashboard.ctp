@@ -77,7 +77,10 @@
                     $progressImgStr = $BAR_CHART_URL . $easyPercent . "," . $mediumPercent . "," . $hardPercent;
                 }
                 ?>
-                <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>
+                <td> <?php if (isset($progressImgStr)) { ?>
+                        <img src="<?php echo $progressImgStr; ?>" alt="">
+                    <?php } ?>
+                </td>
                 <td><?php echo $html->link("Remove","#",array('onclick' => "publicDeleteDialog(".$pDeck['Deck']['id'].",\"".$pDeck['Deck']['deck_name']."\")"));?></td>            
             </tr>
 			<?php endforeach; ?>
@@ -137,7 +140,11 @@
                     $progressImgStr = $BAR_CHART_URL . $easyPercent . "," . $mediumPercent . "," . $hardPercent;
                 }
                 ?>
-                <td> <img src="<?php echo $progressImgStr;?>" alt=""></td>
+                <td>
+                    <?php if (isset($progressImgStr)) { ?>
+                        <img src="<?php echo $progressImgStr;?>" alt="" />
+                    <?php } ?>
+                </td>
                 <td><?php echo $html->link("Remove","#",array('onclick' => "userDeleteDialog(".$ucDeck['Deck']['id'].",\"".$ucDeck['Deck']['deck_name']."\")"));?></td>
                  
             </tr>

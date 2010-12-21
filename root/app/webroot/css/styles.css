@@ -186,14 +186,14 @@ div#nav_right {
 
 div#blurb {
     text-align: center;
-    padding: 50px 0 30px 0;
+    padding: 30px 0 30px 0;
     background: url("/img/blurb_bg.png") repeat-y center top;
     color: #ECEFF5;
 }
 
 #blurb h2 {
     font-family: trebuchet ms, verdana, sans-serif;
-    font-size: 3.5em;
+    font-size: 3.0em;
     text-shadow: 2px 2px 2px #000;
 }
 
@@ -206,12 +206,43 @@ div#blurb_content {
 
 div#slider {
     margin: 20px auto;
-    height: 250px;
-    width: 500px;
+    padding: 0;
+    height: 400px;
+    width: 700px;
+    position: relative;
     box-shadow: 3px 3px 4px #000;
     -moz-box-shadow: 3px 3px 4px #000;
     -webkit-box-shadow: 3px 3px 4px #000;
+    /* background: url(img/loading.gif) no-repeat 50% 50%; */
+}
 
+#slider img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+#slider a {
+    border: 0;
+    display: block;
+}
+
+.nivo-directionNav a {
+    display: block;
+    width: 30px;
+    height: 30px;
+    background:url("/img/arrows.png") no-repeat;
+    text-indent: -9999px;
+    border: 0;
+}
+
+a.nivo-nextNav {
+    background-position: -30px 0;
+    right: 15px;
+}
+
+a.nivo-prevNav {
+    left: 15px;
 }
 
 div#more {

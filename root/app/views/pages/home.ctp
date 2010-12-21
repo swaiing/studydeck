@@ -9,17 +9,19 @@
 ?>
 <div id="blurb">
 
-    <h2>Master the GRE with Studydeck</h2>
+    <h2>The Best Way to Study GRE Vocabulary Online</h2>
     <div id="slider">
-        <img src="img/slider1.jpg" title="#slide1caption" />
-        <img src="img/slider2.jpg" title="#slide2caption" />
-        <img src="img/slider3.jpg" title="#slide3caption" />
+        <img src="img/slider1_overview.png"/>
+        <img src="img/slider2_categorize.png"/>
+        <img src="img/slider3_quiz.png"/>
+        <img src="img/slider4_track.png"/>
+        <img src="img/slider5_create.png"/>
+
+        <div class="nivo-directionNav" style="display:none;">
+            <a class="nivo-prevNav">Prev</a>
+            <a class="nivo-nextNav">Next</a>
+        </div>
     </div>
-
-    <div id="slide1caption" class="nivo-html-caption">The boys of 202 Elm</div>
-    <div id="slide2caption" class="nivo-html-caption">Walter Thomas Frick</div>
-    <div id="slide3caption" class="nivo-html-caption">What a lovely couple!</div>
-
 </div>
 
 <div id="more">
@@ -35,7 +37,12 @@
     $(window).load(function() {
         $('#slider').nivoSlider({
             effect: 'random',
-            pauseTime: 5000
+            pauseTime: 7000,
+	        startSlide:0,
+            directionNav:true,
+            directionNavHide:true,
+            controlNav:false,
+            pauseOnHover:true
         });
     });
 </script>
