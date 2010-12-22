@@ -96,16 +96,15 @@
 <div id="footer_wrap">
 <div id="footer">
   <div id="footer_copyright">
-    <span class="copyright">Copyright 2010 StudyDeck. Build Version: BUILD_NUM. All rights reserved.</span>
+    <span class="copyright">Copyright 2010 StudyDeck. All rights reserved.</span>
   </div>
   <div id="footer_nav">
     <ul id="list_nav_footer">
       <li><a href="/">Home</a> | </li>
-      <li><a href="#">About</a> | </li>
-      <li><a href="#">Contact</a> | </li>
-      <li><a href="#">Help</a> | </li>
-      <li><a href="#">Terms of Use</a> | </li>
-      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="/pages/about">About</a> | </li>
+      <li><a href="/pages/contact">Contact</a> | </li>
+      <li><a href="/pages/tos">Terms</a> | </li>
+      <li><a href="/pages/privacy">Privacy Policy</a></li>
     </ul>
   </div>
 </div> <!-- end footer -->
