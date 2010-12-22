@@ -6,7 +6,7 @@ include 'sd_global.php';
 class ProductsController extends AppController {
 
 	var $name = 'Products';
-    var $scaffold;
+    //var $scaffold;
     var $uses = array('Product','Deck','MyDeck');
     var $helpers = array('Html','Javascript','Form');
     var $components = array('Auth');

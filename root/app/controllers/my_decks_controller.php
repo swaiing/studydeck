@@ -1,7 +1,7 @@
 <?php
 class MyDecksController extends AppController {
 	var $name = 'MyDecks';
-	var $scaffold;
+	//var $scaffold;
 	var $helpers = array('Javascript');
     var $components = array('Auth','RequestHandler');
 	  
