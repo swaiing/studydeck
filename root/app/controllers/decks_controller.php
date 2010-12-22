@@ -750,7 +750,7 @@ class DecksController extends AppController {
         // Call assocations
         // Binds $assocSaved, $assocCreated, $assocViewed, $assocNope
         // Deck is in dashboard (i.e. in my_decks table)
-        $this->bindAssocations($id);
+        $validAssociation = $this->bindAssocations($id);
 
         if (!$validAssociation) {
             // Redirect to dashboard
