@@ -21,24 +21,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `studydeck`.`products`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `studydeck`.`products` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `deck_id` INT NULL ,
-  `name` VARCHAR(127) NOT NULL ,
-  `price` DECIMAL NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `deck_id_p` (`deck_id` ASC) ,
-  CONSTRAINT `deck_id_p`
-    FOREIGN KEY (`deck_id` )
-    REFERENCES `studydeck`.`decks` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `studydeck`.`decks`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `studydeck`.`decks` (
@@ -50,7 +32,7 @@ CREATE  TABLE IF NOT EXISTS `studydeck`.`decks` (
   `user_id` INT NOT NULL ,
   `modified` DATETIME NOT NULL ,
   `description` VARCHAR(255) NULL DEFAULT NULL ,
-  `product_id` INT NULL ,
+  `product_id` INT NULL DEFAULT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `user_id_d` (`user_id` ASC) ,
   INDEX `product_id_d` (`product_id` ASC) ,
@@ -62,6 +44,24 @@ CREATE  TABLE IF NOT EXISTS `studydeck`.`decks` (
   CONSTRAINT `product_id_d`
     FOREIGN KEY (`product_id` )
     REFERENCES `studydeck`.`products` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `studydeck`.`products`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `studydeck`.`products` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `deck_id` INT NULL DEFAULT NULL ,
+  `name` VARCHAR(127) NOT NULL ,
+  `price` DECIMAL(10,2) NULL DEFAULT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `deck_id_p` (`deck_id` ASC) ,
+  CONSTRAINT `deck_id_p`
+    FOREIGN KEY (`deck_id` )
+    REFERENCES `studydeck`.`decks` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
