@@ -71,7 +71,7 @@
             echo "<div>Captcha input has failed!";
             echo "</div>\n"; 
         }
-    	echo $form->end('Create my account');
+    	echo $form->end('Pay with PayPal');
     	echo "</div>\n"; 
 	?>
 

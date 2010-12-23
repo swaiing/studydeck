@@ -41,6 +41,8 @@ MYSQL_EXEC="mysql -u $MYSQL_USER -p${MYSQL_PASSWORD}"
 
 TMP_DATA_SQL=/tmp/populate_data.sql
 DATA_1_SQL=$ROOTDIR/create_data.sql
+DATA_2_SQL=$ROOTDIR/top500v2_ordered.sql
+DATA_3_SQL=$ROOTDIR/latin_roots_ordered.sql
 
 
 drop_recreate() {
@@ -74,6 +76,8 @@ populate() {
     select_db="USE $MYSQL_DB;"
     echo $select_db > $TMP_DATA_SQL
     cat $DATA_1_SQL >> $TMP_DATA_SQL
+    cat $DATA_2_SQL >> $TMP_DATA_SQL
+    cat $DATA_3_SQL >> $TMP_DATA_SQL
     $MYSQL_EXEC < $TMP_DATA_SQL
 }
 

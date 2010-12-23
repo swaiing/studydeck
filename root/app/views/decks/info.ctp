@@ -122,7 +122,6 @@
     </div>
 
     <?php echo $form->end(); ?>
-    <h3>Quizzed:</h3> <?php echo $userQuizCount ?> times
 </div>
 
 <div id="bottom">
@@ -135,8 +134,6 @@
         ?>
         <li><a href="#cards_tab">Cards</a></li>
     </ul>
-
-
 
     <div id="cards_tab">
 
