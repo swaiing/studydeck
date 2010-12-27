@@ -12,9 +12,9 @@ PRD="prd"
 USERNAME=`whoami`
 HOSTNAME=`hostname`
 
-PRD_ROOT=$ROOT_DIR/../public_html
-ALPHA_ROOT=$PRD_ROOT/alpha
-SD_ROOT=$ALPHA_ROOT/studydeck
+PUBLIC_ROOT=$ROOT_DIR/../public_html
+ALPHA_ROOT=$PUBLIC_ROOT/alpha
+PRD_ROOT=$PUBLIC_ROOT/prd
 
 usage() {
     echo ""
@@ -28,19 +28,28 @@ deploy() {
     echo "----> $USERNAME@$HOSTNAME - DEPLOY"
     echo "  Starting Deploy $DATE"
 
-    echo "  Cleaning $SD_ROOT"
-    rm -rf $SD_ROOT
-
     TARGET_ENV=${1}
     PACKAGE_NAME=${2}
     PACKAGE=${STAGE}/${PACKAGE_NAME}
 
     if [ $TARGET_ENV = ${ALPHA} ]; then
+        SD_ROOT=$ALPHA_ROOT/studydeck
+
+        echo "  Cleaning $SD_ROOT"
+        rm -rf $SD_ROOT
+
         echo "  Deploying $PACKAGE to $ALPHA_ROOT"
         tar xvzf $PACKAGE -C $ALPHA_ROOT
+
     elif [ $TARGET_ENV = ${PRD} ]; then
+        SD_ROOT=$PRD_ROOT/studydeck
+
+        echo "  Cleaning $SD_ROOT"
+        rm -rf $SD_ROOT
+
         echo "  Deploying $PACKAGE to $PRD_ROOT"
         tar xvzf $PACKAGE -C $PRD_ROOT
+
     else
         echo "  Invalid target environment: $TARGET_ENV"
         exit 1
