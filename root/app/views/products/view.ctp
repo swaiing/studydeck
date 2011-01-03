@@ -12,7 +12,19 @@
 <div class="box_content">
 
 <div id="products_wrapper">
-<h1>Select a Studydeck</h1>
+
+<div id="progress_header">
+    <span class="active">Choose Studydecks</span> >
+    <span class="inactive">Confirm and Register</span> >
+    <span class="inactive">Pay with PayPal</span>
+</div>
+
+<h1>Choose a Studydeck</h1>
+<div id="intro">
+You must purchase a Studydeck in order to use our app.  Please choose one or more Studydecks from the list below.
+</div>
+
+<?php //print_r($descriptions); ?>
 
 <?php
     // Create form
@@ -24,7 +36,12 @@
         echo $form->input('postPaypal', array('id'=>'postPaypal','type'=>'hidden','label'=>false));
     }
 ?>
-<table id="products_table" border="1">
+<table id="products_table">
+<colgroup>
+    <col class="selected" />
+    <col class="name" />
+    <col class="price" />
+</colgroup>
 <tbody>
 <?php
     foreach ($allProducts as $product) {
@@ -32,8 +49,10 @@
         $id = $product['Product']['id'];
         $name = $product['Product']['name'];
         $deckId = $product['Product']['deck_id'];
+        $deckDesc = $descriptions[$deckId]['Deck']['description'];
+        $deckName = $descriptions[$deckId]['Deck']['deck_name'];
 ?>
-    <tr id="product_id_<?php echo $id; ?>">
+    <tr class="product_row" id="product_id_<?php echo $id; ?>">
         <td class="selected">
 <?php
         if (isset($productsOwned) && array_key_exists($deckId, $productsOwned) && $productsOwned[$deckId]) {
@@ -45,31 +64,36 @@
         }
 ?>
         </td>
-        <td class="name"><?php echo $name; ?></td>
+        <td class="name">
+            <span class="title"><?php echo $name; ?></span>
+            <p><?php echo $deckDesc; ?></p>
+        </td>
         <td class="price">$<?php echo $price; ?></td>
     </tr>
 <?php
     }
 ?>
-    <tr style="background-color:#cecece">
-        <td></td>
-        <td>Create your own deck</td>
-        <td>Free!</td>
+    <tr class="product_row">
+        <td class="selected"></td>
+        <td class="name">
+            <span class="title">Custom Studydecks</span>
+            <p>Create as many custom Studydecks as you want on any topics of your choosing.</p>
+        </td>
+        <td class="price">Free!</td>
     </tr>
     <tr>
-        <td></td>
-        <td>Total:</td>
-        <td>
-            <span id="total">$0</span>
-            <?php //echo $form->input('total', array('id'=>'total','type'=>'hidden','label'=>false)); ?>
+        <td class="selected"></td>
+        <td class="name"></td>
+        <td class="price">
+            <span id="total_label">total = </span>
+            <span id="total">$0.00</span>
             <?php echo $form->input('sentFromView', array('id'=>'sentFromView','type'=>'hidden','label'=>false)); ?>
         </td>
     </tr>
 </tbody>
 </table>
 
-<?php //echo $form->end('Buy Studydecks'); ?>
-<div id="submit_button">Buy Studydecks</div>
+<div id="submit_button">Purchase and Continue</div>
 </div>
 
 </div> <!-- end box_content -->

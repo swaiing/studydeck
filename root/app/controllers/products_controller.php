@@ -36,11 +36,24 @@ class ProductsController extends AppController {
         // Query products
         $products = $this->Product->find('all');
         $productDeckIdsMap = array();
+        $productDeckIdsArray = array();
         foreach ($products as $product) {
             $dId = $product['Product']['deck_id'];
             $productDeckIdsMap[$dId] = true;
+            array_push($productDeckIdsArray, $dId);
         }
         $this->set('allProducts', $products);
+
+        // Get deck descriptions
+        $descParams = array('conditions' => array('Deck.id' => $productDeckIdsArray),
+                            'fields' => array('Deck.id', 'Deck.description', 'Deck.deck_name'));
+        $descriptions = $this->Deck->find('all', $descParams);
+        $descDeckIdsMap = array();
+        foreach ($descriptions as $desc) {
+            $dId = $desc['Deck']['id'];
+            $descDeckIdsMap[$dId] = $desc;
+        }
+        $this->set('descriptions', $descDeckIdsMap);
 
         // Do not continue if NOT logged in
         if (!isset($userId)) {

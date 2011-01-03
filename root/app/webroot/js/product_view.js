@@ -15,10 +15,23 @@ function updateTotal() {
             price += parseFloat($("td.price", this).text().substr(1));
         }   
     }); 
+    var priceSet = price.toFixed(2);
+    $("span#total").text("$" + priceSet);
+    $("input#total").val(priceSet);
 
-    $("span#total").text("$" + price);
-    $("input#total").val(price);
+}
 
+// Event handler to check checkbox when row is clicked
+function setRowChecked(trObj) {
+
+    var inputBox = $("td.selected input", trObj);
+    if (!inputBox.is(':checked')) {
+        inputBox.attr('checked', true);
+    }
+    else {
+        inputBox.attr('checked', false);
+    }
+    updateTotal();
 }
 
 function submitForm() {
@@ -47,5 +60,8 @@ $(document).ready( function() {
 
     $("input.checkbox").click(function() { updateTotal(); } );
     $("div#submit_button").click(function() { submitForm(); } );
+    $("tr.product_row").each(function () {
+        $(this).click(function() { setRowChecked(this); });
+    });
 
 });

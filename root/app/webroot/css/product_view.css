@@ -11,9 +11,14 @@ div#products_wrapper {
     margin: 0 0 10px 0;
 }
 
+div#intro {
+    font-size: 1.1em;
+    margin: 10px 0;
+    width: 90%;
+}
+
 table#products_table {
-    border: 1px solid #003366;
-    width: 500px;
+    width: 90%;
     font-size: 1.5em;
     margin: 10px auto
 }
@@ -22,11 +27,57 @@ table#products_table td {
     padding: 10px;
 }
 
+table#products_table tr.product_row {
+    border-bottom: 1px solid #cecece;
+    cursor: pointer;
+}
+
+table#products_table col.selected {
+    width: 60px;
+}
+
+table#products_table col.name {}
+
+table#products_table col.price {
+    width: 170px;
+}
+
+table#products_table td.price {
+    text-align: right;
+    padding: 0 20px 0 0;
+}
+
+#products_table td.name p {
+    font-size: .75em;
+}
+#products_table td.name span.title {
+    font-size: 1em;
+}
+
+span#total_label {
+    width: 30px
+    float: left;
+    clear: left;
+    text-align: right;
+}
+
+span#total {
+    width: 70px;
+    float: right;
+    clear: right;
+    font-weight: bold;
+    color: #990000;
+}
+
 table#products_table input.checkbox {
     width: 13px;
     height: 13px;
+    padding: 0;
+    margin: 0;
     vertical-align: bottom;
     position: relative;
+    top: -5px;
+    left: 10px;
 }
 
 div.submit {
@@ -40,7 +91,7 @@ div.submit input {
 }
 
 div#submit_button {
-    width: 250px;
+    width: 300px;
     margin: 10px auto;
     padding: 10px;
     font-size: 2em;

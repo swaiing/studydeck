@@ -375,6 +375,26 @@ input[type="password"]:focus, input[type="password"]:active {
     background-color: #F9F8E4;
 }
 
+/*****  progress indicator *****/
+
+div#progress_header {
+    width: 400px;
+    margin: 0 auto 10px auto;
+    color: #cecece;
+}
+
+#progress_header span {
+    /*margin-right: 15px;*/
+}
+
+#progress_header span.active {
+    color: #000000;
+}
+
+#progress_header span.inactive {
+    color: #cecece;
+}
+
 /*****  main page rounded-shadow box *****/
 
 div.box {

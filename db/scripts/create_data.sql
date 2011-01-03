@@ -10,8 +10,8 @@ INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created
 INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("SAT Words", 1, 0, 3, "SAT prep words and definitions.", NOW());
 INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("Types of Wine", 1, 0, 3, "Different types of red and white wine.", NOW());
 -- Product decks
-INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("Studydeck Top 500", 0, 0, 1, "Top 500 Studydeck premium GRE words.", NOW());
-INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("Studydeck Latin Roots", 0, 0, 1, "Studydeck premium Latin roots.", NOW());
+INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("Studydeck Top 500", 0, 0, 1, "Top 500 Studydeck premium GRE words compiled from numerous test preparation resources.", NOW());
+INSERT INTO decks (deck_name, privacy, quiz_count, user_id, description, created) VALUES ("Studydeck Latin Roots", 0, 0, 1, "Studydeck premium Latin roots.  Contains latin words and derivatives.", NOW());
 
 -- CREATE PRODUCTS
 INSERT INTO products (deck_id, name, price) VALUES (5, "Studydeck Top 500", 9.99);
