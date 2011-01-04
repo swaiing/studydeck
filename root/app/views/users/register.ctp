@@ -11,7 +11,17 @@
 	<div id="middle_bar" class="box">
     <div class="box_content">
 
+    <div id="progress_header">
+        <span class="inactive">[Choose Studydecks]</span>
+        <hr class="divider"/>
+        <span class="active">[Confirm and Register]</span>
+        <hr class="divider"/>
+        <span class="inactive">[Pay with PayPal]</span>
+    </div>
+
     <div id="register_box" class="form_box">
+
+
     <?php
     	echo $form->create('User', array('action' => 'register'));
     ?>

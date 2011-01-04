@@ -14,9 +14,11 @@
 <div id="products_wrapper">
 
 <div id="progress_header">
-    <span class="active">Choose Studydecks</span> >
-    <span class="inactive">Confirm and Register</span> >
-    <span class="inactive">Pay with PayPal</span>
+    <span class="active">[Choose Studydecks]</span>
+    <hr class="divider"/>
+    <span class="inactive">[Confirm and Register]</span>
+    <hr class="divider"/>
+    <span class="inactive">[Pay with PayPal]</span>
 </div>
 
 <h1>Choose a Studydeck</h1>

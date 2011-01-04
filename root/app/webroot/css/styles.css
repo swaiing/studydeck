@@ -192,9 +192,11 @@ div#blurb {
 }
 
 #blurb h2 {
-    font-family: trebuchet ms, verdana, sans-serif;
-    font-size: 3.0em;
-    text-shadow: 2px 2px 2px #000;
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 3.8em;
+    color: #bfd0d7;
+    font-weight: bold;
+    text-shadow: 1px 1px 4px #000;
 }
 
 div#blurb_content {
@@ -378,21 +380,39 @@ input[type="password"]:focus, input[type="password"]:active {
 /*****  progress indicator *****/
 
 div#progress_header {
-    width: 400px;
-    margin: 0 auto 10px auto;
+    width: 420px;
+    margin: 0 auto 20px auto;
+    padding: 10px;
+    overflow: auto;
     color: #cecece;
+    border: 1px solid #b2b2b2;
 }
 
 #progress_header span {
-    /*margin-right: 15px;*/
+    float: left;
+    clear: none;
 }
 
 #progress_header span.active {
-    color: #000000;
+    color: #D93315;
 }
 
 #progress_header span.inactive {
     color: #cecece;
+}
+
+#progress_header div.divider_wrap {
+    width: 10px;
+    float: left;
+    display: inline;
+}
+
+#progress_header hr.divider {
+    float: left;
+    margin: 8px 3px 0 3px;
+    width: 30px;
+    color: #b2b2b2;
+    background-color: #b2b2b2;
 }
 
 /*****  main page rounded-shadow box *****/

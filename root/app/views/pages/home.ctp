@@ -6,6 +6,7 @@
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
     echo $javascript->link('jquery.nivo.slider.pack');
     echo $html->css('nivo-slider',null,null,false);
+    echo $html->css('http://fonts.googleapis.com/css?family=Droid+Sans',null,null,false);
 ?>
 <div id="blurb">
 
