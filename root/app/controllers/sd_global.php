@@ -75,6 +75,12 @@ class SD_Global
     public static $PAGE_TITLE_CREATE = "Studydeck | Create";
     public static $PAGE_TITLE_EDIT = "Studydeck | Edit ";
     
-    //public static $PAGE_TITLE_HELP = "Help – Studydeck | Help";
+    // Used to check Configure::read('debug') for determination of
+    // production or non-production
+    public static $SD_PRODUCTION_DEBUG = 0;
+
+    // Paypal INI keys
+    public static $PAYPAL_SUBMIT_INI_DEV = "paypal_submit_dev";
+    public static $PAYPAL_SUBMIT_INI_PRD = "paypal_submit_prd";
 }
 ?>

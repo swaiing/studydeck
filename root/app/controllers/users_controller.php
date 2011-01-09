@@ -517,13 +517,58 @@ class UsersController extends AppController {
 
     }
 
-	function paypalSubmit() {
-	 // Set user id
+	function paypalSubmit()
+    {
+        // Logging
+        $LOG_PREFIX = "[" . get_class($this) . "->" . __FUNCTION__ . "] ";
+
+        // Set user id
         $userId = $this->Auth->user('id');
-		//paypal	
-		$buttonParams = array(	"cmd"			=> "_cart",
-						"business" 		=> 'admin@studydeck.com',
-						"cert_id"		=> 'AL9EA4EHQ34TY',
+
+        // Obtained from ini file, which are different in DEV and PRD
+        $ppIniArr = parse_ini_file("paypal.ini", true);
+
+        // Log fatal error
+        if ($ppIniArr == null || count($ppIniArr) == 0) {
+            $this->log($LOG_PREFIX . "Failure parsing paypal.ini file for PayPal submission!", LOG_ERROR);
+            $this->set('error', true);
+            return;
+        }
+
+        // Read PRD or DEV values based on debug level
+        $configVals = array();
+        if (Configure::read('debug') == SD_GLOBAL::$SD_PRODUCTION_DEBUG) {
+            $configVals = $ppIniArr[SD_GLOBAL::$PAYPAL_SUBMIT_INI_PRD];
+        }
+        else {
+            $configVals = $ppIniArr[SD_GLOBAL::$PAYPAL_SUBMIT_INI_DEV];
+        }
+
+        // Read ini config values from array
+        $ppBusiness = $configVals['business'];
+        $ppCertId = $configVals['cert_id'];
+        $ppEnvUrl = $configVals['env_url'];
+        $ppPubCert = $configVals['pub_cert'];
+
+        // Sandbox DEV vals
+        /*
+        $ppBusiness = "seller_1292086026_biz@studydeck.com";
+        $ppCertId = "P3AUVEYDF6AQU";
+        $ppEnvUrl = "https://www.sandbox.paypal.com";
+        $ppPubCert = "certs/sandbox_cert.pem";
+        */
+
+        if ( !($ppBusiness && $ppCertId && $ppEnvUrl && $ppPubCert) ) {
+            $this->log($LOG_PREFIX . "Failure parsing Paypal values from ini file.  Missing value!", LOG_ERROR);
+            $this->set('error', true);
+            return;
+        }
+
+		// Paypal	
+		$buttonParams = array(
+                        "cmd"			=> "_cart",
+						"business" 		=> $ppBusiness,
+						"cert_id"		=> $ppCertId,
 						"charset"		=> "UTF-8",
 						"upload"		=> '1',
 						"currency_code"	=> 'USD',
@@ -534,24 +579,23 @@ class UsersController extends AppController {
 		$products = $this->Session->read('products');
 	
 		$count = 1;
-		foreach ($products as $product) {
-                $buttonParams = array_merge($buttonParams,
-				array("item_name_".$count => $product['Product']['name'],"item_number_".$count => $product['Product']['id'],"quantity_".$count	=> '1',	"amount_".$count => $product['Product']['price']));
-				$count++;
+		foreach ($products as $product)
+        {
+            $buttonParams = array_merge($buttonParams,
+                                        array("item_name_".$count => $product['Product']['name'], 
+                                            "item_number_".$count => $product['Product']['id'],
+                                            "quantity_".$count	=> '1',
+                                            "amount_".$count => $product['Product']['price']));
+            $count++;
          }
-	
-
-		$envURL = "https://www.paypal.com";
 
 		$buttonReturn = EWPServices::encryptButton(	$buttonParams,
 											'certs/studydeck_pubcert.pem',
 											'certs/studydeck_prvkey.pem',
 											DEFAULT_EWP_PRIVATE_KEY_PWD,
-											'certs/paypal_cert.pem',
-											$envURL,
+											$ppPubCert,
+											$ppEnvUrl,
 											'');
-
-
 
 		$button = $buttonReturn["encryptedButton"];
 		$this->set('button', $button);
@@ -559,7 +603,6 @@ class UsersController extends AppController {
 	
 	function paypalIpn() {
 		$user_id = $this->params['pass'][0];
-		
 		
 		if ($this->params['pass'][1] == 'oob3b0VKEyLY') {
 			$paypal_params = $this->params['form'];
