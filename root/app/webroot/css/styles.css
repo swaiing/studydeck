@@ -1,9 +1,13 @@
 html, body {
-    font-family: verdana, helvetica, sans-serif;
+    font-family: 'Verdana', 'helvetica', sans-serif;
     font-size: 11px;
     background-color: #ECEFF5;
     height: 100%;
     min-height: 100%;
+}
+
+html {
+    overflow: -moz-scrollbars-vertical;
 }
 
 /*****  top-level divs *****/
@@ -380,10 +384,12 @@ input[type="password"]:focus, input[type="password"]:active {
 /*****  progress indicator *****/
 
 div#progress_header {
-    width: 420px;
+    font-size: 1em;
+    width: 430px;
     margin: 0 auto 20px auto;
     padding: 10px;
     overflow: auto;
+    white-space: nowrap;
     color: #cecece;
     border: 1px solid #b2b2b2;
 }

@@ -22,14 +22,17 @@ function updateTotal() {
 }
 
 // Event handler to check checkbox when row is clicked
-function setRowChecked(trObj) {
+function setRowChecked(event) {
 
-    var inputBox = $("td.selected input", trObj);
-    if (!inputBox.is(':checked')) {
-        inputBox.attr('checked', true);
-    }
-    else {
-        inputBox.attr('checked', false);
+    if(!$(event.target).is("input.checkbox")) {
+        var trElt = $(event.target).parents("tr.product_row");
+        var inputBox = $("input.checkbox", trElt);
+        if (inputBox.is(':checked')) {
+            inputBox.attr('checked', false);
+        }
+        else {
+            inputBox.attr('checked', true);
+        }
     }
     updateTotal();
 }
@@ -58,10 +61,9 @@ function submitForm() {
 // Set event handlers
 $(document).ready( function() {
 
-    $("input.checkbox").click(function() { updateTotal(); } );
     $("div#submit_button").click(function() { submitForm(); } );
     $("tr.product_row").each(function () {
-        $(this).click(function() { setRowChecked(this); });
+        $(this).click(function(event) { setRowChecked(event); });
     });
 
 });
