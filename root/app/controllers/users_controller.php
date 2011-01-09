@@ -522,8 +522,8 @@ class UsersController extends AppController {
         $userId = $this->Auth->user('id');
 		//paypal	
 		$buttonParams = array(	"cmd"			=> "_cart",
-						"business" 		=> 'admin@studydeck.com',
-						"cert_id"		=> 'AL9EA4EHQ34TY',
+						"business" 		=> 'seller_1292086026_biz@studydeck.com',
+						"cert_id"		=> 'P3AUVEYDF6AQU',
 						"charset"		=> "UTF-8",
 						"upload"		=> '1',
 						"currency_code"	=> 'USD',
@@ -541,13 +541,13 @@ class UsersController extends AppController {
          }
 	
 
-		$envURL = "https://www.paypal.com";
+		$envURL = "https://www.sandbox.paypal.com";
 
 		$buttonReturn = EWPServices::encryptButton(	$buttonParams,
 											'certs/studydeck_pubcert.pem',
 											'certs/studydeck_prvkey.pem',
 											DEFAULT_EWP_PRIVATE_KEY_PWD,
-											'certs/paypal_cert.pem',
+											'certs/sandbox_cert.pem',
 											$envURL,
 											'');
 
