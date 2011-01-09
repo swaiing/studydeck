@@ -44,6 +44,7 @@ GROUP_OWNER=webadm
 # ----Production config
 DB_CFG=$ROOT_DIR/database.php.prd
 CORE_CFG=$ROOT_DIR/core.php.prd
+INDEX_WEBROOT_CFG=$ROOT_DIR/index.php.prd
 
 usage() {
   echo ""
@@ -74,12 +75,13 @@ build() {
 
   # Set some directory locations since BUILD_DIR has been established
   CAKE_ROOT=$BUILD_DIR/$PROJECT_BUILD
-  README=$CAKE_ROOT/Studydeck_README
+  README=$CAKE_ROOT/app/Studydeck_README
   CAKE_TMP=$CAKE_ROOT/app/tmp
   CAKE_CACHE=$CAKE_ROOT/app/tmp/cache
   CAKE_LOGS=$CAKE_ROOT/app/tmp/logs
   CAKE_SESSIONS=$CAKE_ROOT/app/tmp/sessions
   CAKE_CONFIG=$CAKE_ROOT/app/config
+  CAKE_WEBROOT=$CAKE_ROOT/app/webroot
 
   # Check if $BUILD_DIR is writeable
   if [ ! -d $BUILD_DIR ] || [ ! -w $BUILD_DIR ]; then
@@ -164,6 +166,7 @@ copy_prd_config() {
   echo "  Copying production config files"
   cp ${DB_CFG} $CAKE_CONFIG/database.php
   cp ${CORE_CFG} $CAKE_CONFIG/core.php
+  cp ${INDEX_WEBROOT_CFG} $CAKE_WEBROOT/index.php
 }
 
 build_db() {
