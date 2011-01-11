@@ -411,8 +411,10 @@ class UsersController extends AppController {
     	// Declares recaptchaFail variable for view
       	$this->set('recaptchaFailed', false);
         
+        // Sent to view with no data
         if (empty($this->data)) {
             $this->log($LOG_PREFIX . "No product form data passed to register page!");
+            $this->redirect(array('controller'=>'products', 'action' => 'view'));
         }
         else {
 
