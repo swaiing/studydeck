@@ -6,7 +6,6 @@ require_once "paypal/EWPServices.php";
 
 class UsersController extends AppController {
 	var $name = 'Users';
-	var $scaffold;
 	var $components =array('Auth','SwiftMailer','Recaptcha');
 	var $helpers = array('Html','Javascript','RelativeTime');
 	var $uses = array('User','MyDeck','Deck','Rating','TempUser','Card','Product','Payment','PurchasedProduct');
@@ -643,6 +642,10 @@ class UsersController extends AppController {
 	function payment_confirmation() {
 	
 	}
+	function not_authorized() {
+
+	}
+
 
 	//function for debuging probably should be removed eventually
 	function view() {

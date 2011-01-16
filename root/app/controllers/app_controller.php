@@ -26,6 +26,12 @@ class AppController extends Controller {
 			$this->redirect(array('controller' => 'products' ,'action' => 'view'));
 		}
 	}
+	
+	function _isAdmin() {
+		if ($this->Auth->user('role') != 'admin') {
+			$this->redirect(array('controller' => 'users' ,'action' => 'not_authorized'));
+		} 
+	}
 }
 
 ?>
