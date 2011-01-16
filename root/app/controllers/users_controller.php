@@ -572,7 +572,7 @@ class UsersController extends AppController {
 						"charset"		=> "UTF-8",
 						"upload"		=> '1',
 						"currency_code"	=> 'USD',
-						"return"		=> FULL_BASE_URL . '/users/dashboard',
+						"return"		=> FULL_BASE_URL . '/users/payment_confirmation',
 						"cancel_return"	=> FULL_BASE_URL,
 						"notify_url"	=> FULL_BASE_URL . '/users/paypalIpn/'.$userId.'/oob3b0VKEyLY');
 	
@@ -639,7 +639,10 @@ class UsersController extends AppController {
 		}
 		
 	}
-
+	
+	function payment_confirmation() {
+	
+	}
 
 	//function for debuging probably should be removed eventually
 	function view() {
