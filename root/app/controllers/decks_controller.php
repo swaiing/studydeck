@@ -23,10 +23,12 @@ class DecksController extends AppController {
         $this->Auth->authError = "You must login or register to continue";
     } 
 
+
     // Create deck method
 	function create()
     {
-        // Set page title
+        $this->_hasPurchased();
+		// Set page title
         $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_CREATE;
 
         if(!empty($this->data)) {
