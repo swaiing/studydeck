@@ -13,7 +13,6 @@
     echo $scripts_for_layout;
   ?>
   <script type="text/javascript">
-
 	  var _gaq = _gaq || [];
 	  _gaq.push(['_setAccount', 'UA-20265898-1']);
 	  _gaq.push(['_trackPageview']);
@@ -32,9 +31,7 @@
 <div id="header">
 
     <div id="site_id">
-	<a href="/">
-	    <img src="/img/sd_logo.png" alt="Studydeck"/>
-	</a>
+	<a href="/"><img src="/img/sd_logo.png" alt="Studydeck"/></a>
     </div>
 
     <div id="nav">
