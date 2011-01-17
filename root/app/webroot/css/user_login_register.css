@@ -49,24 +49,23 @@ div#login_box li.forgot_password {
 }
 
 /** register boxes **/
-div#register_box {
+div#order_confirm_box {
     font-size: 12px;
     float: left;
     clear: left;
-    width: 360px;
-    margin: 0 0 40px 0;
-    padding: 10px;
-    /*border: 1px solid #89A7D7;*/
-}
-
-div#register_priv_box {
-    font-size: 12px;
-    float: right;
-    clear: right;
     width: 300px;
     margin: 0 0 40px 0;
     padding: 10px;
-    border: 1px solid #89A7D7;
+}
+
+div#register_box {
+    font-size: 12px;
+    float: right;
+    clear: right;
+    width: 360px;
+    margin: 0 0 40px 0;
+    padding: 10px;
+    border-left: 1px solid #89A7D7;
 }
 
 table#products_table {
@@ -77,14 +76,22 @@ table#products_table {
 }
 
 table#products_table td {
-    padding: 5px;
+    padding: 10px;
 }
 
-table#products_table input.checkbox {
-    width: 13px;
-    height: 13px;
-    vertical-align: bottom;
-    position: relative;
+table#products_table thead {
+    font-weight: bold;
+}
+
+#products_table td.total_label {}
+
+#products_table td.total_val {
+    font-weight: bold;
+    color: #990000;
+}
+
+div#modify_order {
+    text-align: right;
 }
 
 /** settings boxes **/
@@ -191,15 +198,12 @@ div.form_box input {
     font-size: 1.2em;
 }
 
-div.form_box div.submit {
-    float: right;
-    clear: left;
-    padding: 0;
-    margin: 0 1em 0 0;
-}
+div.form_box div.submit {}
 
 div.form_box div.submit input {
-    height: 30px;
+    height: 40px;
+    width: 200px;
+    margin: 15px auto 0 auto;
 }
 
 /*** error messages ***/

@@ -19,15 +19,10 @@
         <span class="inactive">[Pay with PayPal]</span>
     </div>
 
-    <div id="register_box" class="form_box">
+    <div id="order_confirm_box">
 
-
-    <?php
-    	echo $form->create('User', array('action' => 'register'));
-    ?>
-        
     <h2>Order Confirmation</h2>
-    <table id="products_table" border="1" cellspacing="10">
+    <table id="products_table" border="1">
     <thead>
         <tr>
             <td>Product</td>
@@ -54,20 +49,29 @@
         }
     ?>
         <tr>
-            <td>Total</td>
-            <td>$<?php echo $total; ?>
+            <td class="total_label">Total</td>
+            <td class="total_val">$<?php echo $total; ?>
         </tr>
     </tbody>
     </table>
 
+    <?php
+        // Modify order link
+    	echo "<div id=\"modify_order\">" . $html->link('Modify Your Order', array('controller'=>'products', 'action'=>'view')) . "</div>\n";
+    ?>
+    </div>
+
+    <div id="register_box" class="form_box">
+    <?php
+    	echo $form->create('User', array('action' => 'register'));
+    ?>
+        
 	<?php
     	// Field attributes
     	$FIELD_SIZE = 30;
         $FIELD_LENGTH = 50;
 
     	echo "<h2>User Registration</h2>\n";
-
-    	//echo "<p>" . $html->link('Already have an account?', array('controller'=>'users', 'action'=>'login')) . "</p>\n";
 
     	echo "<ol>\n";
     	echo "<li>" . $form->input('User.email',array('label'=>'Email:', 'size'=>$FIELD_SIZE, 'maxLength'=>$FIELD_LENGTH)) . "</li>\n";
@@ -84,17 +88,7 @@
     	echo $form->end('Pay with PayPal');
     	echo "</div>\n"; 
 	?>
-
-<!--
-    <div id="register_priv_box">
-        <h2>Good to knows</h2>
-        <ul>
-            <li>We will not sell your personal info to third-parties.</li>
-            <li>Read our <a href="scott_write_this_plz">privacy policy.</a></li>
-            <li>We will not spam you.</li>
-        <ul>
     </div>
--->
 
 	</div> <!-- end box_content -->
 	</div> <!-- end middle_bar -->
