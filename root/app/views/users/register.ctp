@@ -19,6 +19,10 @@
         <span class="inactive">[Pay with PayPal]</span>
     </div>
 
+    <?php
+    	echo $form->create('User', array('action' => 'register'));
+    ?>
+        
     <div id="order_confirm_box">
 
     <h2>Order Confirmation</h2>
@@ -62,10 +66,6 @@
     </div>
 
     <div id="register_box" class="form_box">
-    <?php
-    	echo $form->create('User', array('action' => 'register'));
-    ?>
-        
 	<?php
     	// Field attributes
     	$FIELD_SIZE = 30;
