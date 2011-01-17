@@ -93,7 +93,7 @@
 <div id="footer_wrap">
 <div id="footer">
   <div id="footer_copyright">
-    <span class="copyright">Copyright 2010 StudyDeck. All rights reserved.</span>
+    <span class="copyright">Copyright 2011 StudyDeck. All rights reserved.</span>
   </div>
   <div id="footer_nav">
     <ul id="list_nav_footer">
