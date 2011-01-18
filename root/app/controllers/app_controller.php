@@ -5,6 +5,8 @@
 class AppController extends Controller {
 
     var $components = array('Auth');
+	var $uses = array('PurchasedProduct');
+
     
     function beforeFilter() {
     	//$this->set('lastPage',$this->Session->read('Auth.redirect'));    
@@ -14,6 +16,22 @@ class AppController extends Controller {
         // Set $activeUser to the current logged-in user
         $this->set('activeUser', $this->Auth->user('username'));
     }
+	
+	//verifies that user has purchased a deck if not redirects them to store
+	function _hasPurchased() {
+		// Set user id
+        $userId = $this->Auth->user('id');
+		//if no products purchased then redirect
+		if (!$this->PurchasedProduct->find('first', array('conditions' => array('PurchasedProduct.user_id' => $userId)))){
+			$this->redirect(array('controller' => 'products' ,'action' => 'view'));
+		}
+	}
+	
+	function _isAdmin() {
+		if ($this->Auth->user('role') != 'admin') {
+			$this->redirect(array('controller' => 'users' ,'action' => 'not_authorized'));
+		} 
+	}
 }
 
 ?>

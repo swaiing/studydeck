@@ -6,7 +6,6 @@ require_once "paypal/EWPServices.php";
 
 class UsersController extends AppController {
 	var $name = 'Users';
-	//var $scaffold;
 	var $components =array('Auth','SwiftMailer','Recaptcha');
 	var $helpers = array('Html','Javascript','RelativeTime');
 	var $uses = array('User','MyDeck','Deck','Rating','TempUser','Card','Product','Payment','PurchasedProduct');
@@ -411,8 +410,10 @@ class UsersController extends AppController {
     	// Declares recaptchaFail variable for view
       	$this->set('recaptchaFailed', false);
         
+        // Sent to view with no data
         if (empty($this->data)) {
             $this->log($LOG_PREFIX . "No product form data passed to register page!");
+            $this->redirect(array('controller'=>'products', 'action' => 'view'));
         }
         else {
 
@@ -572,7 +573,7 @@ class UsersController extends AppController {
 						"charset"		=> "UTF-8",
 						"upload"		=> '1',
 						"currency_code"	=> 'USD',
-						"return"		=> FULL_BASE_URL . '/users/dashboard',
+						"return"		=> FULL_BASE_URL . '/users/payment_confirmation',
 						"cancel_return"	=> FULL_BASE_URL,
 						"notify_url"	=> FULL_BASE_URL . '/users/paypalIpn/'.$userId.'/oob3b0VKEyLY');
 	
@@ -638,6 +639,13 @@ class UsersController extends AppController {
 			}
 		}
 		
+	}
+	
+	function payment_confirmation() {
+	
+	}
+	function not_authorized() {
+
 	}
 
 

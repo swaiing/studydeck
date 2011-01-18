@@ -16,6 +16,7 @@ CREATE  TABLE IF NOT EXISTS `studydeck`.`users` (
   `username` VARCHAR(45) NOT NULL ,
   `modified` DATETIME NOT NULL ,
   `list_of_fears` VARCHAR(255) NULL DEFAULT NULL ,
+  `role` VARCHAR(45) NOT NULL DEFAULT 'user' ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
