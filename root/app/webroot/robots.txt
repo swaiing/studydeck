@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /alpha/
+Disallow: /backup/
+Disallow: /certs/
+Disallow: /cgi-bin/
+Disallow: /files/
+Disallow: /gre_subdomain_redirect/
+Disallow: /php.ini
+Disallow: /error_log
