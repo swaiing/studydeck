@@ -59,6 +59,8 @@ deploy() {
         rm -f $PUBLIC_ROOT/css.php
         rm -f $PUBLIC_ROOT/favicon.ico
         rm -f $PUBLIC_ROOT/index.php
+        rm -f $PUBLIC_ROOT/sitemap.xml
+        rm -f $PUBLIC_ROOT/robots.txt
 
         echo " Copying files to public web root"
         WEBROOT=$SD_ROOT/app/webroot
@@ -70,6 +72,8 @@ deploy() {
         cp -p $WEBROOT/css.php $PUBLIC_ROOT/
         cp -p $WEBROOT/favicon.ico $PUBLIC_ROOT/
         cp -p $WEBROOT/index.php $PUBLIC_ROOT/
+        cp -p $WEBROOT/sitemap.xml $PUBLIC_ROOT/
+        cp -p $WEBROOT/robots.txt $PUBLIC_ROOT/
 
     else
         echo "  Invalid target environment: $TARGET_ENV"

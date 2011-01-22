@@ -82,6 +82,8 @@ build() {
   CAKE_SESSIONS=$CAKE_ROOT/app/tmp/sessions
   CAKE_CONFIG=$CAKE_ROOT/app/config
   CAKE_WEBROOT=$CAKE_ROOT/app/webroot
+  CAKE_FILES=$CAKE_ROOT/app/webroot/files
+  CAKE_CERTS=$CAKE_ROOT/app/webroot/certs
 
   # Check if $BUILD_DIR is writeable
   if [ ! -d $BUILD_DIR ] || [ ! -w $BUILD_DIR ]; then
@@ -116,6 +118,11 @@ build() {
   chmod g+rwx $CAKE_LOGS
   chmod g+rwx $CAKE_SESSIONS
 
+  # Restrict permissions on files and certs directories
+  echo "  Restricting permissions on certs/ and files/"
+  chmod 700 $CAKE_FILES
+  chmod 700 $CAKE_CERTS
+
   # Create PACKAGE_INFO file
   echo "  Creating README file"
   echo "Built Studydeck on: " > $README;
@@ -142,7 +149,7 @@ sendpkg() {
   echo ""
   echo "  $TARGET_STR sendpkg"
   echo "  Transferring package (${PKG_NAME}) to studydeck.com"
-  scp ${STAGING}/${PKG_NAME} ${HOST_USER}@${HOST_SERVER}:${HOST_STAGE_DIR}
+  scp -pr ${STAGING}/${PKG_NAME} ${HOST_USER}@${HOST_SERVER}:${HOST_STAGE_DIR}
 }
 
 unpack() {
