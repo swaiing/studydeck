@@ -9,6 +9,8 @@
   <?php
     // Include default styles
     echo $html->css('styles');
+    echo $html->css('http://fonts.googleapis.com/css?family=Allerta',null,null,false);
+
     // Include scripts and CSS from inner view
     echo $scripts_for_layout;
   ?>
@@ -22,7 +24,6 @@
 		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
-
 	</script>
   
 </head>
@@ -31,7 +32,7 @@
 <div id="header">
 
     <div id="site_id">
-	<a href="/"><img src="/img/sd_logo.png" alt="Studydeck"/></a>
+        <a href="/"><img src="/img/sd_logo.png" alt="Studydeck"/></a>
     </div>
 
     <div id="nav">
@@ -66,20 +67,17 @@
                 else {        
                     // For an anonymous user,
                     // There are links for: 'Register' | 'Login'
-                    echo "<li>" . $html->link('Get Started',array('controller'=>'products','action'=>'view')) . "</li>";
-                    echo "<li>|</li>";
-                    echo "<li>" . $html->link('Login',array('controller'=>'users','action'=>'login')) . "</li>";
+                    //echo "<li>" . $html->link('Get Started',array('controller'=>'products','action'=>'view')) . "</li>";
+                    //echo "<li>" . $html->link('Login',array('controller'=>'users','action'=>'login')) . "</li>";
+            ?>
+                    <li>ABOUT</li>
+                    <li>FEATURES</li>
+                    <li><a href="/users/login"><img id="login_button" src="/img/login_button.png" alt="Login"/></a></li>
+            <?php
                 }
             ?>
             </ul>
 
-            <?php
-                // Removed search for redesign
-                //echo $form->create("Deck", array('controller' => 'decks', 'action' => 'explore'));
-                //echo $form->input("searchQuery", array('label' => false));
-                //echo "<input title=\"Search\" type=\"submit\" class=\"submit\" value=\"\"/>";
-                //echo $form->end();
-            ?>
         </div>
         </div>
 
@@ -93,7 +91,7 @@
 <div id="footer_wrap">
 <div id="footer">
   <div id="footer_copyright">
-    <span class="copyright">Copyright 2011 StudyDeck. All rights reserved.</span>
+    <span class="copyright">Copyright 2011 Studydeck. All rights reserved.</span>
   </div>
   <div id="footer_nav">
     <ul id="list_nav_footer">

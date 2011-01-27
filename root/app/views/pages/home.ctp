@@ -8,36 +8,57 @@
     echo $html->css('nivo-slider',null,null,false);
     echo $html->css('http://fonts.googleapis.com/css?family=Droid+Sans',null,null,false);
 ?>
-<div id="blurb">
+<div id="top_stuff">
+    <div id="big_important">
 
-    <h2>The Best Way to Study GRE Vocabulary Online</h2>
-    <div id="slider">
-        <img src="img/slider1_overview.png"/>
-        <img src="img/slider2_categorize.png"/>
-        <img src="img/slider3_quiz.png"/>
-        <img src="img/slider4_track.png"/>
-        <img src="img/slider5_create.png"/>
+        <div id="boxwrap_screen">
+            <div id="slider">
+                <img src="/img/slider_quiz.png"/>
+                <img src="/img/slider_learn.png"/>
+                <img src="/img/slider_categorize.png"/>
+                <img src="/img/slider_create.png"/>
 
-        <div class="nivo-directionNav" style="display:none;">
-            <a class="nivo-prevNav">Prev</a>
-            <a class="nivo-nextNav">Next</a>
+                <div class="nivo-directionNav" style="display:none;">
+                    <a class="nivo-prevNav">Prev</a>
+                    <a class="nivo-nextNav">Next</a>
+                </div>
+            </div>
         </div>
+
+        <div id="boxwrap_text">
+            <h1>Study GRE Word Lists Online</h1>
+            <p>A studying system designed to help you learn the vocabulary necessary to get a top score on the GRE.  Flash cards with premium GRE word lists.  Dead-simple quiz and review system.</p>
+            <div id="pricing_button">
+                <a href="/products/view"><img src="/img/see_pricing.png" alt="See Pricing"/></a>
+            </div>
+        </div>
+
     </div>
 </div>
 
-<div id="more">
-    <div id="panels">
-        <div id="get_started">
-            <h3><?php echo $html->link('Get Started!', array('controller'=>'products', 'action'=>'view')); ?></h3>
-        </div>
+<div id="panels">
+    <div class="rect_box">
+        <h2>Effective Learning System</h2>
+        <p>blah blah blah</p>
+    </div>
+    <div class="rect_box">
+        <h2>Categorize by Difficulty</h2>
+        <p>blah blah blah</p>
+    </div>
+    <div class="rect_box">
+        <h2>Quiz Mode Puts You to the Real Test</h2>
+        <p>blah blah blah</p>
+    </div>
+    <div class="rect_box">
+        <h2>Create Your Own Custom Studydecks</h2>
+        <p>blah blah blah</p>
     </div>
 </div>
-<div id="more_bottom"></div>
 
 <script type="text/javascript">
     $(window).load(function() {
         $('#slider').nivoSlider({
-            effect: 'random',
+            effect: 'fade',
             pauseTime: 7000,
 	        startSlide:0,
             directionNav:true,

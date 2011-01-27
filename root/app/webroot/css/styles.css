@@ -81,8 +81,10 @@ div#nav {
     float: right;
     clear: right;
     width: 500px;
-    font-size: 1.2em;
-    margin: 30px 0 0 0;
+    font-family: 'Allerta', sans-serif;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin: 15px 0 0 0;
 }
 
 div#nav_right {
@@ -92,6 +94,7 @@ div#nav_right {
 
 div#row {
     clear: both;
+    overflow: auto;
 }
 
 div#nav_left {
@@ -104,35 +107,10 @@ div#nav_right {
     float: right;
     clear: right;
     position: relative;
-    width: 150px;
+    width: 400px;
     text-align: right;
 }
 
-/*** navigation buttons ***/
-
-/*
-#nav_left li.button {
-    float: left;
-    width: 77px;
-    height: 34px;
-    margin-right: 10px;
-    text-align: center;
-}
-
-#nav_left a {
-    display: block;   
-    height: 34px;
-    color: #fff;
-    text-decoration: none;
-    padding-top: 7px;
-}
-#nav_left a:hover {
-    display: block;   
-    color: #fff;
-    background: transparent url("/img/nav_hover.png") no-repeat;
-    text-decoration: none;
-}
-*/
 #nav_left li.button {
     float: left;
     display: block;   
@@ -153,7 +131,7 @@ div#nav_right {
 
 #nav_right li {
     display: inline;
-    margin-left: 10px;
+    margin-left: 30px;
 }
 
 #nav_right a:link, #nav_right a:visited {
@@ -165,67 +143,64 @@ div#nav_right {
     text-decoration: underline;
 }
 
-#nav_right input {
-    height: 16px;
-    width: 180px;
-    padding: 2px 4px;
-    border-style: none solid none none;
-    border-width: 0 1px 0 0;
-    border-color: #cecece;
-    display: inline-block;
-}
-
-#nav_right input.submit {
-    position: absolute;
-    display: block;
-    top: 0;
-    right: 0;
-    height: 20px;
-    width: 20px;
-    border: 0 none;
-    background: url("/img/search.png") no-repeat;
-}
+img#login_button {}
 
 /*****  middle_bar homepage *****/
 
-div#blurb {
-    text-align: center;
-    padding: 30px 0 30px 0;
-    background: url("/img/blurb_bg.png") repeat-y center top;
+div#top_stuff {
+    padding: 30px 0 20px 0;
+    background: #222222;
     color: #ECEFF5;
 }
 
-#blurb h2 {
-    font-family: 'Droid Sans', sans-serif;
-    font-size: 3.8em;
-    color: #bfd0d7;
-    font-weight: bold;
-    text-shadow: 1px 1px 4px #000;
+div#big_important {
+    width: 960px;
+    margin: 30px auto;
+    overflow: auto;
 }
 
-div#blurb_content {
-    margin: 0 auto;
-    height: 445px;
-    width: 960px;
-    background: url("/img/blurb.jpg") no-repeat;
+div#boxwrap_screen {
+    float: left;
+    width: 500px;
+}
+
+div#boxwrap_text {
+    width: 400px;
+    float: left;
+    margin-left: 20px;
+}
+
+div#boxwrap_text h1 {
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 2.5em;
+    color: #A0CE67;
+    margin: 50px 0 0 0;
+}
+
+div#boxwrap_text p {
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 1.5em;
+    letter-spacing: 0.1em;
+    line-height: 1.5em;
+    color: #ECEFF5;
+    margin: 0.5em 0;
+}
+
+div#pricing_button {
+    width: 220px;
+    height: 60px;
+    margin: 30px 70px;
+    /*
+    3dafc8
+    83d7e4
+    */
 }
 
 div#slider {
-    margin: 20px auto;
-    padding: 0;
-    height: 400px;
-    width: 700px;
-    position: relative;
-    box-shadow: 3px 3px 4px #000;
-    -moz-box-shadow: 3px 3px 4px #000;
-    -webkit-box-shadow: 3px 3px 4px #000;
-    /* background: url(img/loading.gif) no-repeat 50% 50%; */
+    float: right;
 }
 
 #slider img {
-    position: absolute;
-    top: 0;
-    left: 0;
     display: none;
 }
 #slider a {
@@ -251,57 +226,30 @@ a.nivo-prevNav {
     left: 15px;
 }
 
-div#more {
-    height: 100px;
-    width: 100%;
-    margin: 0 auto;
-    background: url("/img/more_bg.png") repeat-y center top;
-}
-
-div#more_bottom {
-    height: 45px;
-    margin: 0 auto;
-    background: url("/img/more_bg_bottom.png") no-repeat center;
-}
-
 div#panels {
-    width: 960px;
-    margin: 0 auto;
+    width: 820px;
+    margin: 20px auto;
+    overflow: auto;
 }
 
-#panels h3 a:link, #panels h3 a:visited {
-    color: #000;
-    text-decoration: none;
-}
-#panels h3 a:hover {
-    text-decoration: underline;
-}
-
-#panels h3 {
-    font-family: helvetica, verdana, sans-serif;
-    font-size: 5em;
-    margin: 0 0 5px 0;
-    text-align: center;
-}
-
-#get_started {
-    width: 300px;
-    margin: 0 auto;
-    padding: 20px 0;
-}
-
-#signup, #explore, #iphone {
-    width: 300px;
+div.rect_box {
+    width: 400px;
     float: left;
-    margin: 20px 10px 0 0;
-    padding: 0 0 0 10px;
+    margin: 0 10px 10px 0;
 }
 
-#iphone img, #signup img, #explore img {
-    float: left;
-    margin: 0 10px 0 0;
+div#panels h2 {
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 1.7em;
+    font-weight: bold;
+    color: #000000;
 }
 
+div#panels p {
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 1.5em;
+    color: #222222;
+}
 /***** generic headings *****/
 
 div#middle_bar h1 {
