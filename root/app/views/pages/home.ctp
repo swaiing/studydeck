@@ -37,21 +37,21 @@
 </div>
 
 <div id="panels">
-    <div class="rect_box">
-        <h2>Effective Learning System</h2>
-        <p>blah blah blah</p>
-    </div>
-    <div class="rect_box">
+    <div class="rect_box left_box">
         <h2>Categorize by Difficulty</h2>
-        <p>blah blah blah</p>
+        <p>Group cards into Easy, Medium and Hard, so you only study the words you don't know.</p>
     </div>
     <div class="rect_box">
-        <h2>Quiz Mode Puts You to the Real Test</h2>
-        <p>blah blah blah</p>
+        <h2>Quiz Yourself</h2>
+        <p>Test your knowledge using our simple, effective interface.</p>
+    </div>
+    <div class="rect_box left_box">
+        <h2>Track Your Progress</h2>
+        <p>Studydeck records your quiz history so you can work towards your goals.
     </div>
     <div class="rect_box">
-        <h2>Create Your Own Custom Studydecks</h2>
-        <p>blah blah blah</p>
+        <h2>Create Your Own</h2>
+        <p>Free with the purchase of any premium deck, we allow you to create as many custom Studydecks as you want on any topic.</p>
     </div>
 </div>
 

@@ -44,34 +44,29 @@
                 // For a logged in user,
                 // Dashboard | Store | Create
                 if(isset($activeUser)) {
-                    echo "<li class=\"button\">" . $html->link('Dashboard',array('controller'=>'users','action'=>'dashboard')) . "</li>";
-                    // No more explore
-                    //echo "<li class=\"button\">" . $html->link('Explore',array('controller'=>'decks','action'=>'explore')) . "</li>";
-                    echo "<li class=\"button\">" . $html->link('Store',array('controller'=>'products','action'=>'view')) . "</li>";
-                    echo "<li class=\"button\">" . $html->link('Create',array('controller'=>'decks','action'=>'create')) . "</li>";
+                    echo "<li>" . $html->link('Dashboard',array('controller'=>'users','action'=>'dashboard')) . "</li>";
+                    echo "<li>" . $html->link('Store',array('controller'=>'products','action'=>'view')) . "</li>";
+                    echo "<li>" . $html->link('Create',array('controller'=>'decks','action'=>'create')) . "</li>";
                 }
             ?>
             </ul>
         </div>
 
         <div id="nav_right">
-
+            <ul>
             <?php
                // For a logged in user,
                // The current user logged in is displayed: Hello steve | 'Logout'
                if(isset($activeUser)) {
                     echo "<li>" . $html->link("Settings",array('controller'=>'users','action'=>'account')) . "</li>";
-                    echo "<li>|</li>";
                     echo "<li>" . $html->link('Logout',array('controller'=>'users','action'=>'logout')) . "</li>";
                 }
                 else {        
                     // For an anonymous user,
-                    // There are links for: 'Register' | 'Login'
-                    //echo "<li>" . $html->link('Get Started',array('controller'=>'products','action'=>'view')) . "</li>";
-                    //echo "<li>" . $html->link('Login',array('controller'=>'users','action'=>'login')) . "</li>";
+                    // There are links for: 'About' | 'Features' | 'Login'
             ?>
-                    <li>ABOUT</li>
-                    <li>FEATURES</li>
+                    <li>About</li>
+                    <li>Features</li>
                     <li><a href="/users/login"><img id="login_button" src="/img/login_button.png" alt="Login"/></a></li>
             <?php
                 }
