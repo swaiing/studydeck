@@ -29,7 +29,7 @@
             <h1>Study GRE Word Lists Online</h1>
             <p>A studying system designed to help you learn the vocabulary necessary to get a top score on the GRE.  Flash cards with premium GRE word lists.  Dead-simple quiz and review system.</p>
             <div id="pricing_button">
-                <a href="/products/view"><img src="/img/see_pricing.png" alt="See Pricing"/></a>
+                <a href="/gre/lists"><img src="/img/see_pricing.png" alt="See Pricing"/></a>
             </div>
         </div>
 
@@ -38,19 +38,19 @@
 
 <div id="panels">
     <div class="rect_box left_box">
-        <h2>Categorize by Difficulty</h2>
+        <h2><a href="/features/categorize">Categorize by Difficulty</a></h2>
         <p>Group cards into Easy, Medium and Hard, so you only study the words you don't know.</p>
     </div>
     <div class="rect_box">
-        <h2>Quiz Yourself</h2>
+        <h2><a href="/features/quiz">Quiz Yourself</a></h2>
         <p>Test your knowledge using our simple, effective interface.</p>
     </div>
     <div class="rect_box left_box">
-        <h2>Track Your Progress</h2>
+        <h2><a href="/features/track">Track Your Progress</a></h2>
         <p>Studydeck records your quiz history so you can work towards your goals.
     </div>
     <div class="rect_box">
-        <h2>Create Your Own</h2>
+        <h2><a href="/features/create">Create Your Own</a></h2>
         <p>Free with the purchase of any premium deck, we allow you to create as many custom Studydecks as you want on any topic.</p>
     </div>
 </div>

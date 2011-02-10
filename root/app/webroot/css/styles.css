@@ -161,8 +161,8 @@ div#big_important {
 }
 
 div#boxwrap_screen {
-    float: left;
     width: 500px;
+    float: left;
 }
 
 div#boxwrap_text {

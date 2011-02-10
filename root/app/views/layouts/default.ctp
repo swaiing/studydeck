@@ -65,8 +65,8 @@
                     // For an anonymous user,
                     // There are links for: 'About' | 'Features' | 'Login'
             ?>
-                    <li>About</li>
-                    <li>Features</li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/features">Features</a></li>
                     <li><a href="/users/login"><img id="login_button" src="/img/login_button.png" alt="Login"/></a></li>
             <?php
                 }
@@ -91,10 +91,10 @@
   <div id="footer_nav">
     <ul id="list_nav_footer">
       <li><a href="/">Home</a> | </li>
-      <li><a href="/pages/about">About</a> | </li>
-      <li><a href="/pages/contact">Contact</a> | </li>
-      <li><a href="/pages/tos">Terms</a> | </li>
-      <li><a href="/pages/privacy">Privacy Policy</a></li>
+      <li><a href="/about">About</a> | </li>
+      <li><a href="/contact">Contact</a> | </li>
+      <li><a href="/tos">Terms</a> | </li>
+      <li><a href="/privacy">Privacy Policy</a></li>
     </ul>
   </div>
 </div> <!-- end footer -->

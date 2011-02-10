@@ -36,4 +36,24 @@
  * ...and connect the rest of 'Pages' controller's urls.
  */
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+/**
+ * Map /gre/lists to products/view
+ */
+	Router::connect('/gre/lists', array('controller' => 'products', 'action' => 'view'));
+/**
+ * Map /features/* to static tour pages
+ */
+	Router::connect('/features', array('controller' => 'pages', 'action' => 'display', 'basics'));
+	Router::connect('/features/tour/categorize', array('controller' => 'pages', 'action' => 'display', 'categorize'));
+	Router::connect('/features/tour/quiz', array('controller' => 'pages', 'action' => 'display', 'quiz'));
+	Router::connect('/features/tour/track', array('controller' => 'pages', 'action' => 'display', 'track'));
+	Router::connect('/features/tour/create', array('controller' => 'pages', 'action' => 'display', 'create'));
+/**
+ * Footer main links
+ */
+	Router::connect('/about', array('controller' => 'pages', 'action' => 'display', 'about'));
+	Router::connect('/contact', array('controller' => 'pages', 'action' => 'display', 'contact'));
+	Router::connect('/tos', array('controller' => 'pages', 'action' => 'display', 'tos'));
+	Router::connect('/privacy', array('controller' => 'pages', 'action' => 'display', 'privacy'));
+
 ?>
