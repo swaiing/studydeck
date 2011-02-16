@@ -3,10 +3,6 @@
  *
  */
 
-h1 {
-    font-size: 3em;
-}
-
 div#products_wrapper {
     margin: 0 0 10px 0;
 }
@@ -30,6 +26,10 @@ table#products_table td {
 table#products_table tr.product_row {
     border-bottom: 1px solid #cecece;
     cursor: pointer;
+}
+
+table#products_table tr.total_row td {
+    padding: 10px 0;
 }
 
 table#products_table col.selected {
