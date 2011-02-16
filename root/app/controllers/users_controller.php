@@ -367,7 +367,7 @@ class UsersController extends AppController {
         // Intentionally blank
 
         // Set page title
-        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_LOGIN;
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_DEFAULT;
     }
 
 	function logout() {

@@ -1,6 +1,6 @@
 <?php
     // Set default homepage title
-    $this->pageTitle = "Studydeck | The Best Way to Study GRE Vocabulary Online";
+    $this->pageTitle = "The Best Way to Study GRE Word Lists Online - Studydeck";
 
     // Javascript/CSS includes
     echo $javascript->link('http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',false);
@@ -13,10 +13,10 @@
 
         <div id="boxwrap_screen">
             <div id="slider">
-                <img src="/img/slider_quiz.png"/>
-                <img src="/img/slider_learn.png"/>
-                <img src="/img/slider_categorize.png"/>
-                <img src="/img/slider_create.png"/>
+                <a href="/features/quiz"><img src="/img/slider_quiz.png"/></a>
+                <a href="/features/track"><img src="/img/slider_learn.png"/></a>
+                <a href="/features/categorize"><img src="/img/slider_categorize.png"/></a>
+                <a href="/features/create"><img src="/img/slider_create.png"/></a>
 
                 <div class="nivo-directionNav" style="display:none;">
                     <a class="nivo-prevNav">Prev</a>

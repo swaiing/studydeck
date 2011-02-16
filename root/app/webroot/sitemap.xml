@@ -4,13 +4,26 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
 <url>
   <loc>http://www.studydeck.com/</loc>
 </url>
 <url>
-  <loc>http://www.studydeck.com/products/view</loc>
+  <loc>http://www.studydeck.com/gre/lists</loc>
+</url>
+<url>
+  <loc>http://www.studydeck.com/features</loc>
+</url>
+<url>
+  <loc>http://www.studydeck.com/features/categorize</loc>
+</url>
+<url>
+  <loc>http://www.studydeck.com/features/quiz</loc>
+</url>
+<url>
+  <loc>http://www.studydeck.com/features/track</loc>
+</url>
+<url>
+  <loc>http://www.studydeck.com/features/create</loc>
 </url>
 <url>
   <loc>http://www.studydeck.com/users/login</loc>

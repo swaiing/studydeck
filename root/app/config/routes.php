@@ -43,11 +43,11 @@
 /**
  * Map /features/* to static tour pages
  */
-	Router::connect('/features', array('controller' => 'pages', 'action' => 'display', 'basics'));
-	Router::connect('/features/tour/categorize', array('controller' => 'pages', 'action' => 'display', 'categorize'));
-	Router::connect('/features/tour/quiz', array('controller' => 'pages', 'action' => 'display', 'quiz'));
-	Router::connect('/features/tour/track', array('controller' => 'pages', 'action' => 'display', 'track'));
-	Router::connect('/features/tour/create', array('controller' => 'pages', 'action' => 'display', 'create'));
+	Router::connect('/features', array('controller' => 'pages', 'action' => 'display', 'overview'));
+	Router::connect('/features/categorize', array('controller' => 'pages', 'action' => 'display', 'categorize'));
+	Router::connect('/features/quiz', array('controller' => 'pages', 'action' => 'display', 'quiz'));
+	Router::connect('/features/track', array('controller' => 'pages', 'action' => 'display', 'track'));
+	Router::connect('/features/create', array('controller' => 'pages', 'action' => 'display', 'create'));
 /**
  * Footer main links
  */

@@ -5,6 +5,7 @@
 <head>
   <title><?php echo $title_for_layout?></title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="description" content="Studydeck is a studying system designed to help you learn the vocabulary necessary to get a top score on the GRE. Online flash cards with premium GRE word lists. Dead-simple quiz and review system." />
   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/reset/reset-min.css">
   <?php
     // Include default styles

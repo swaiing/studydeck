@@ -1,10 +1,12 @@
 #panels_tabs {
-    background-color: #83D7E4;
     border-bottom: 1px solid #222222;
     margin-bottom: 20px;
+    background-color: #3DAFC8;
+    background-image: -moz-linear-gradient(100% 100% 90deg, #3DAFC8, #83D7E4);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3DAFC8), to(#83D7E4));
 }
 
-#panels_tabs a, a:visited {
+#panels_tabs a:link, #panels_tabs a:visited {
     color: #222222;
     text-decoration: none;
     font-size: 1.5em;
@@ -28,10 +30,8 @@
     float: left;
     display: block;
     white-space: nowrap;
-    padding: 30px 40px;
+    padding: 30px 35px;
     color: #222222;
-    background-color: #83D7E4;
-    border-right: 1px solid #222222;
 }
 
 #panels_tabs li.active {
@@ -49,26 +49,37 @@
 }
 
 div#feature_wrap {
-    width: 960px;
-    margin: 0 auto 30px auto;
+    width: 900px;
+    margin: 0 auto 20px auto;
     overflow: auto;
 }
 
 div#screenshot_wrap {
-    width: 960px;
-    margin: 0 auto;
+    width: 500px;
+    float: left;
+}
+
+div#girl_studying {
+    width: 500px;
+    height: 361px;
+}
+
+div#girl_studying img {
+    width: 400px;
+    height: 266px;
+    margin: 20px 50px;
 }
 
 #feature_wrap h1 {
     font-family: 'Droid Sans', sans-serif;
     font-size: 2.5em;
     color: #A0CE67;
-    text-align: center;
 }
 
 div#text_caption {
-    width: 800px;
-    margin: 0 auto;
+    width: 380px;
+    float: left;
+    margin-top: 20px;
 }
 
 div#text_caption p {
@@ -77,6 +88,6 @@ div#text_caption p {
     letter-spacing: 0.1em;
     line-height: 1.5em;
     color: #ECEFF5;
-    margin: 0.5em 0;
+    margin: 20px 0;
 }
 

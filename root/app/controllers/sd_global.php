@@ -62,10 +62,10 @@ class SD_Global
 
     // Page titles
     // Hard-coded in /app/views/pages/home.ctp
-    //public static $PAGE_TITLE_HOME = "Studydeck | Online flashcards made simple";
+    public static $PAGE_TITLE_DEFAULT = "The Best Way to Study GRE Word Lists Online - Studydeck";
     public static $PAGE_TITLE_DASHBOARD = "Studydeck | Dashboard";
     public static $PAGE_TITLE_SETTINGS = "Studydeck | Settings";
-    public static $PAGE_TITLE_PRODUCTS = "Studydeck | Store";
+    public static $PAGE_TITLE_PRODUCTS = "The Best Way to Study GRE Word Lists Online - Studydeck";
     public static $PAGE_TITLE_EXPLORE = "Studydeck | Explore";
     public static $PAGE_TITLE_REGISTER = "Studydeck | Register";
     public static $PAGE_TITLE_LOGIN = "Studydeck | Login";

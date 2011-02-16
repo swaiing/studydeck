@@ -149,6 +149,7 @@ img#login_button {
 /*****  middle_bar homepage *****/
 
 div#top_stuff {
+    height: 400px;
     padding: 30px 0 20px 0;
     background: #222222;
     color: #ECEFF5;
@@ -238,6 +239,14 @@ div.rect_box {
     float: left;
     margin: 0 10px 10px 0;
     padding: 15px;
+}
+
+.rect_box h2 a:link, .rect_box h2 a:visited {
+    color: #204A92;
+    text-decoration: none;
+}
+.rect_box h2 a:hover {
+    text-decoration: underline;
 }
 
 div.left_box {
