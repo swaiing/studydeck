@@ -95,7 +95,10 @@
 </tbody>
 </table>
 
-<div id="submit_button">Purchase and Continue</div>
+<div id="submit_button">
+    <img src="/img/buy_now.png" alt="Buy Now"/>
+</div>
+
 </div>
 
 </div> <!-- end box_content -->

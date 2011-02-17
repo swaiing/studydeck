@@ -91,11 +91,7 @@ div.submit input {
 }
 
 div#submit_button {
-    width: 300px;
-    margin: 10px auto;
-    padding: 10px;
-    font-size: 2em;
+    width: 214px;
+    margin: 20px auto;
     cursor: pointer;
-    text-align: center;
-    border: 1px solid #003366;
 }
