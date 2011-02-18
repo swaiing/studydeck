@@ -1,6 +1,6 @@
 <!-- /app/views/pages/contact.ctp -->
 <?php
-    $this->pageTitle = "Studydeck | Contact";
+    $this->pageTitle = "The Best Way to Study GRE Word Lists Online - Studydeck";
 ?>
 
 <style type="text/css">

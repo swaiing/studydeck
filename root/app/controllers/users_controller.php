@@ -367,7 +367,7 @@ class UsersController extends AppController {
         // Intentionally blank
 
         // Set page title
-        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_LOGIN;
+        $this->pageTitle = SD_GLOBAL::$PAGE_TITLE_DEFAULT;
     }
 
 	function logout() {
@@ -631,6 +631,7 @@ class UsersController extends AppController {
 					$this->MyDeck->set(array(
 						'user_id' => $user_id,
 						'deck_id' => $product['Product']['deck_id'],
+						'type' => SD_Global::$USER_SAVED
 					));
 					$this->MyDeck->save();					
 					

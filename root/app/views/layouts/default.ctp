@@ -5,10 +5,13 @@
 <head>
   <title><?php echo $title_for_layout?></title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="description" content="Studydeck is a studying system designed to help you learn the vocabulary necessary to get a top score on the GRE. Online flash cards with premium GRE word lists. Dead-simple quiz and review system." />
   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/reset/reset-min.css">
   <?php
     // Include default styles
     echo $html->css('styles');
+    echo $html->css('http://fonts.googleapis.com/css?family=Allerta',null,null,false);
+
     // Include scripts and CSS from inner view
     echo $scripts_for_layout;
   ?>
@@ -22,7 +25,6 @@
 		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
-
 	</script>
   
 </head>
@@ -31,7 +33,7 @@
 <div id="header">
 
     <div id="site_id">
-	<a href="/"><img src="/img/sd_logo.png" alt="Studydeck"/></a>
+        <a href="/"><img src="/img/sd_logo.png" alt="Studydeck"/></a>
     </div>
 
     <div id="nav">
@@ -43,43 +45,35 @@
                 // For a logged in user,
                 // Dashboard | Store | Create
                 if(isset($activeUser)) {
-                    echo "<li class=\"button\">" . $html->link('Dashboard',array('controller'=>'users','action'=>'dashboard')) . "</li>";
-                    // No more explore
-                    //echo "<li class=\"button\">" . $html->link('Explore',array('controller'=>'decks','action'=>'explore')) . "</li>";
-                    echo "<li class=\"button\">" . $html->link('Store',array('controller'=>'products','action'=>'view')) . "</li>";
-                    echo "<li class=\"button\">" . $html->link('Create',array('controller'=>'decks','action'=>'create')) . "</li>";
+                    echo "<li>" . $html->link('Dashboard',array('controller'=>'users','action'=>'dashboard')) . "</li>";
+                    echo "<li>" . $html->link('Store',array('controller'=>'products','action'=>'view')) . "</li>";
+                    echo "<li>" . $html->link('Create',array('controller'=>'decks','action'=>'create')) . "</li>";
                 }
             ?>
             </ul>
         </div>
 
         <div id="nav_right">
-
+            <ul>
             <?php
                // For a logged in user,
                // The current user logged in is displayed: Hello steve | 'Logout'
                if(isset($activeUser)) {
                     echo "<li>" . $html->link("Settings",array('controller'=>'users','action'=>'account')) . "</li>";
-                    echo "<li>|</li>";
                     echo "<li>" . $html->link('Logout',array('controller'=>'users','action'=>'logout')) . "</li>";
                 }
                 else {        
                     // For an anonymous user,
-                    // There are links for: 'Register' | 'Login'
-                    echo "<li>" . $html->link('Get Started',array('controller'=>'products','action'=>'view')) . "</li>";
-                    echo "<li>|</li>";
-                    echo "<li>" . $html->link('Login',array('controller'=>'users','action'=>'login')) . "</li>";
+                    // There are links for: 'About' | 'Features' | 'Login'
+            ?>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/features">Features</a></li>
+                    <li><a href="/users/login"><img id="login_button" src="/img/login_button.png" alt="Login"/></a></li>
+            <?php
                 }
             ?>
             </ul>
 
-            <?php
-                // Removed search for redesign
-                //echo $form->create("Deck", array('controller' => 'decks', 'action' => 'explore'));
-                //echo $form->input("searchQuery", array('label' => false));
-                //echo "<input title=\"Search\" type=\"submit\" class=\"submit\" value=\"\"/>";
-                //echo $form->end();
-            ?>
         </div>
         </div>
 
@@ -93,15 +87,15 @@
 <div id="footer_wrap">
 <div id="footer">
   <div id="footer_copyright">
-    <span class="copyright">Copyright 2011 StudyDeck. All rights reserved.</span>
+    <span class="copyright">Copyright 2011 Studydeck. All rights reserved.</span>
   </div>
   <div id="footer_nav">
     <ul id="list_nav_footer">
       <li><a href="/">Home</a> | </li>
-      <li><a href="/pages/about">About</a> | </li>
-      <li><a href="/pages/contact">Contact</a> | </li>
-      <li><a href="/pages/tos">Terms</a> | </li>
-      <li><a href="/pages/privacy">Privacy Policy</a></li>
+      <li><a href="/about">About</a> | </li>
+      <li><a href="/contact">Contact</a> | </li>
+      <li><a href="/tos">Terms</a> | </li>
+      <li><a href="/privacy">Privacy Policy</a></li>
     </ul>
   </div>
 </div> <!-- end footer -->

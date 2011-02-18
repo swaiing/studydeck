@@ -1,6 +1,6 @@
 <!-- /app/views/pages/privacy.ctp -->
 <?php
-    $this->pageTitle = "Studydeck | Privacy Policy";
+    $this->pageTitle = "The Best Way to Study GRE Word Lists Online - Studydeck";
 ?>
 
 <style type="text/css">

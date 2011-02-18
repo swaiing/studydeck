@@ -13,6 +13,7 @@
 
 <div id="products_wrapper">
 
+<!--
 <div id="progress_header">
     <span class="active">[Choose Studydecks]</span>
     <hr class="divider"/>
@@ -20,11 +21,10 @@
     <hr class="divider"/>
     <span class="inactive">[Pay with PayPal]</span>
 </div>
+-->
 
-<h1>Choose a Studydeck</h1>
-<div id="intro">
-You must purchase a Studydeck in order to use our app.  Please choose one or more Studydecks from the list below.
-</div>
+<h1 class="products">Premium Studydecks</h1>
+<div id="intro">Choose from the following GRE word lists below.  You must choose at least one of the following Studydecks to continue. </div>
 
 <?php //print_r($descriptions); ?>
 
@@ -83,7 +83,7 @@ You must purchase a Studydeck in order to use our app.  Please choose one or mor
         </td>
         <td class="price">Free!</td>
     </tr>
-    <tr>
+    <tr class="total_row">
         <td class="selected"></td>
         <td class="name"></td>
         <td class="price">
@@ -95,7 +95,10 @@ You must purchase a Studydeck in order to use our app.  Please choose one or mor
 </tbody>
 </table>
 
-<div id="submit_button">Purchase and Continue</div>
+<div id="submit_button">
+    <img src="/img/buy_now.png" alt="Buy Now"/>
+</div>
+
 </div>
 
 </div> <!-- end box_content -->

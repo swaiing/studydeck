@@ -1,6 +1,6 @@
 <!-- app/views/pages/tos.ctp -->
 <?php
-    $this->pageTitle = "Studydeck | Terms of Service";
+    $this->pageTitle = "The Best Way to Study GRE Word Lists Online - Studydeck";
 ?>
 
 <style type="text/css">

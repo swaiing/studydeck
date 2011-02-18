@@ -3,10 +3,6 @@
  *
  */
 
-h1 {
-    font-size: 3em;
-}
-
 div#products_wrapper {
     margin: 0 0 10px 0;
 }
@@ -30,6 +26,10 @@ table#products_table td {
 table#products_table tr.product_row {
     border-bottom: 1px solid #cecece;
     cursor: pointer;
+}
+
+table#products_table tr.total_row td {
+    padding: 10px 0;
 }
 
 table#products_table col.selected {
@@ -91,11 +91,7 @@ div.submit input {
 }
 
 div#submit_button {
-    width: 300px;
-    margin: 10px auto;
-    padding: 10px;
-    font-size: 2em;
+    width: 214px;
+    margin: 20px auto;
     cursor: pointer;
-    text-align: center;
-    border: 1px solid #003366;
 }
