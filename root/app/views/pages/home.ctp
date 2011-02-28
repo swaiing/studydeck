@@ -38,20 +38,32 @@
 
 <div id="panels">
     <div class="rect_box left_box">
-        <h2><a href="/features/categorize">Categorize by Difficulty</a></h2>
+        <a href="/features/categorize">
+            <img class="panel_icon" src="/img/categorize_icon.png" alt="Categorize" />
+            <h2>Categorize by Difficulty</h2>
+        </a>
         <p>Group cards into Easy, Medium and Hard, so you only study the words you don't know.</p>
     </div>
     <div class="rect_box">
-        <h2><a href="/features/quiz">Quiz Yourself</a></h2>
-        <p>Test your knowledge using our simple, effective interface.</p>
+        <a href="/features/quiz">
+            <img class="panel_icon" src="/img/quiz_icon.png" alt="Quiz" />
+            <h2>Quiz Yourself</h2>
+        </a>
+        <p>Test your knowledge using our simple and effective interface.</p>
     </div>
     <div class="rect_box left_box">
-        <h2><a href="/features/track">Track Your Progress</a></h2>
+        <a href="/features/track">
+            <img class="panel_icon" src="/img/track_icon.png" alt="Track" />
+            <h2>Track Your Progress</h2>
+        </a>
         <p>Studydeck records your quiz history so you can work towards your goals.
     </div>
     <div class="rect_box">
-        <h2><a href="/features/create">Create Your Own</a></h2>
-        <p>Free with the purchase of any premium deck, we allow you to create as many custom Studydecks as you want on any topic.</p>
+        <a href="/features/create">
+            <img class="panel_icon" src="/img/create_icon.png" alt="Create" />
+            <h2>Create Your Own</h2>
+        </a>
+        <p>Free with the purchase of any premium deck, create as many custom Studydecks as you want on any topic.</p>
     </div>
 </div>
 

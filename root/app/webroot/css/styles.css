@@ -234,6 +234,11 @@ div#panels {
     overflow: auto;
 }
 
+#panels img.panel_icon {
+    float: left;
+    margin: 5px 10px 50px 0;
+}
+
 div.rect_box {
     width: 320px;
     float: left;
@@ -241,11 +246,11 @@ div.rect_box {
     padding: 15px;
 }
 
-.rect_box h2 a:link, .rect_box h2 a:visited {
+.rect_box a:link, .rect_box a:visited {
     color: #204A92;
     text-decoration: none;
 }
-.rect_box h2 a:hover {
+.rect_box a:hover {
     text-decoration: underline;
 }
 
@@ -257,7 +262,7 @@ div#panels h2 {
     font-family: 'Droid Sans', sans-serif;
     font-size: 1.7em;
     font-weight: bold;
-    color: #000000;
+    color: #204A92;
 }
 
 div#panels p {
