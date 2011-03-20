@@ -18,6 +18,7 @@
         <div id="text_caption">
             <h1>Create Your Own Studydeck</h1>
             <p>With the purchase of any premium deck you can create your own custom decks.  Create as many as you want on any subject.</p>
+            <p class="pricing"><a href="/gre/lists">Buy Now</a></p>
         </div>
 
     </div>

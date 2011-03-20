@@ -20,6 +20,7 @@
         <div id="text_caption">
             <h1>Overview</h1>
             <p>Studydeck is a system that uses online flash cards to help you learn the challenging vocabulary necessary for a top score on the GRE.  We offer premium word lists that are compiled from the leading test preparation sources. Our clean and simple quiz and review system is the best way to study vocabulary for the GRE.</p>
+            <p class="pricing"><a href="/gre/lists">Buy Now</a></p>
         </div>
 
     </div>

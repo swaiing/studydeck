@@ -18,6 +18,7 @@
         <div id="text_caption">
             <h1>Quiz Yourself</h1>
             <p>Our quiz mode features a simple, clean, easy to use interface that can be navigated by mouse or keyboard.</p>
+            <p class="pricing"><a href="/gre/lists">Buy Now</a></p>
         </div>
 
     </div>

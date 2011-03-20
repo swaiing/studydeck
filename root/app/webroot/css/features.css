@@ -90,4 +90,11 @@ div#text_caption p {
     color: #ECEFF5;
     margin: 20px 0;
 }
+div#text_caption p.pricing {
+    text-align: center;
+}
 
+p.pricing a:link, p.pricing a:visited {
+    color: #3DAFC8;
+    text-decoration: none;
+}
