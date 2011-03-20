@@ -18,6 +18,7 @@
         <div id="text_caption">
             <h1>Track Your Progress</h1>
             <p>Studydeck records your quiz results and categorizations so that you can track your progress.</p>
+            <p class="pricing"><a href="/gre/lists">Buy Now</a></p>
         </div>
 
     </div>

@@ -18,6 +18,7 @@
         <div id="text_caption">
             <h1>Categorize Your Words by Difficulty</h1>
             <p>Our system lets you categorize cards by difficulty so that you only study the words you need to learn.</p>
+            <p class="pricing"><a href="/gre/lists">Buy Now</a></p>
         </div>
 
     </div>

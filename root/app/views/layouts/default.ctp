@@ -95,7 +95,8 @@
       <li><a href="/about">About</a> | </li>
       <li><a href="/contact">Contact</a> | </li>
       <li><a href="/tos">Terms</a> | </li>
-      <li><a href="/privacy">Privacy Policy</a></li>
+      <li><a href="/privacy">Privacy Policy</a> | </li>
+      <li><a href="http://twitter.com/studydeck" target="_blank">Twitter</a></li>
     </ul>
   </div>
 </div> <!-- end footer -->
