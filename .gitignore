@@ -2,4 +2,3 @@
 *.log
 
 /root/app/tmp/
-/root/app/webroot/certs
