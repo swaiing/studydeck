@@ -1,0 +1,525 @@
+html, body {
+    font-family: 'Verdana', 'helvetica', sans-serif;
+    font-size: 11px;
+    background-color: #ECEFF5;
+    height: 100%;
+    min-height: 100%;
+}
+
+html {
+    overflow: -moz-scrollbars-vertical;
+}
+
+/*****  top-level divs *****/
+
+div#content {
+    background: transparent url("../img/body_bg.jpg") repeat-x;
+}
+
+div#header {
+    height: 60px;
+    width: 750px;
+    margin: 0 auto 0 auto;
+    color: #ECEFF5;
+}
+
+div#middle_wrapper_content {
+    margin: 20px 0 20px 0;
+}
+
+div#middle_bar {
+    margin: 0 auto 0 auto;
+}
+
+div#footer_wrap {
+    clear: both;
+    padding: 20px 0 20px 0;
+}
+
+div#footer {
+    margin: 0 auto;
+    width: 750px;
+    text-align: center;
+}
+
+div.left {
+  float: left;
+  clear: left;
+}
+div.right {
+  float: right;
+  clear: right;
+}
+div.clear_div {
+  clear: left;
+}
+
+/*****  header *****/
+
+div#site_id {
+    float: left;
+    clear: left;
+    width: 200px;
+    margin-top: 5px;
+}
+
+div#site_id h1 {
+    font-size: 2.1em;
+    padding-top: 15px;
+}
+
+div#site_id h1 a {
+    color: #89A7D7;
+    text-decoration: none;
+}
+
+div#site_id img {
+    width: 85%;
+}
+
+div#nav {
+    float: right;
+    clear: right;
+    width: 500px;
+    font-family: 'Allerta', sans-serif;
+    font-size: 1.3em;
+    margin: 25px 0 0 0;
+}
+
+div#row {
+    clear: both;
+    overflow: auto;
+}
+
+div#nav_left {
+    float: left;
+    clear: left;
+    text-align: left;
+}
+
+div#nav_right {
+    float: right;
+    clear: right;
+    position: relative;
+    text-align: right;
+}
+
+#nav_left li {
+    float: left;
+    display: block;   
+    height: 20px;
+    margin-right: 30px;
+}
+
+#nav_left a {
+    display: block;
+    color: #ECEFF5;
+    text-decoration: none;
+}
+#nav_left a:hover {
+    color: #3dafc8;
+    text-decoration: underline;
+}
+
+#nav_right ul {
+    display: inline-block;
+    float: right;
+    white-space: nowrap;
+}
+
+#nav_right li {
+    display: inline;
+    margin-left: 30px;
+}
+
+#nav_right a:link, #nav_right a:visited {
+    color: #ECEFF5;
+    text-decoration: none;
+}
+#nav_right a:hover {
+    color: #3dafc8;
+    text-decoration: underline;
+}
+
+img#login_button {
+    vertical-align: middle;
+    position: relative;
+}
+
+/*****  middle_bar homepage *****/
+
+div#top_stuff {
+    height: 400px;
+    padding: 30px 0 20px 0;
+    background: #222222;
+    color: #ECEFF5;
+}
+
+div#big_important {
+    width: 960px;
+    margin: 30px auto;
+    overflow: auto;
+}
+
+div#boxwrap_screen {
+    width: 500px;
+    float: left;
+}
+
+div#boxwrap_text {
+    width: 400px;
+    float: left;
+    margin-left: 20px;
+}
+
+div#boxwrap_text h1 {
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 2.5em;
+    color: #A0CE67;
+    margin: 50px 0 0 0;
+}
+
+div#boxwrap_text p {
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 1.5em;
+    letter-spacing: 0.1em;
+    line-height: 1.5em;
+    color: #ECEFF5;
+    margin: 0.5em 0;
+}
+
+div#pricing_button {
+    width: 220px;
+    height: 60px;
+    margin: 30px 70px;
+    /*
+    3dafc8
+    83d7e4
+    */
+}
+
+div#slider {
+    float: right;
+}
+
+#slider img {
+    display: none;
+}
+#slider a {
+    border: 0;
+    display: block;
+}
+
+.nivo-directionNav a {
+    display: block;
+    width: 30px;
+    height: 30px;
+    background:url("../img/arrows.png") no-repeat;
+    text-indent: -9999px;
+    border: 0;
+}
+
+a.nivo-nextNav {
+    background-position: -30px 0;
+    right: 15px;
+}
+
+a.nivo-prevNav {
+    left: 15px;
+}
+
+div#panels {
+    width: 720px;
+    margin: 20px auto;
+    overflow: auto;
+}
+
+#panels img.panel_icon {
+    float: left;
+    margin: 5px 10px 50px 0;
+}
+
+div.rect_box {
+    width: 320px;
+    float: left;
+    margin: 0 10px 10px 0;
+    padding: 15px;
+}
+
+.rect_box a:link, .rect_box a:visited {
+    color: #204A92;
+    text-decoration: none;
+}
+.rect_box a:hover {
+    text-decoration: underline;
+}
+
+div.left_box {
+    clear: left;
+}
+
+div#panels h2 {
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 1.7em;
+    font-weight: bold;
+    color: #204A92;
+}
+
+div#panels p {
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 1.5em;
+    color: #222222;
+}
+/***** generic headings *****/
+
+div#middle_bar h1 {
+    font-size: 18px; 
+    color: #003366;
+    clear: both;
+}
+
+div#middle_bar h2 {
+    font-size: 14px; 
+    color: #003366;
+    clear: both;
+}
+
+div.description {
+    font-size: 1.2em;
+    margin: 10px auto;
+}
+
+/***** generic breadcrumb ****/
+
+div.crumb {
+    position: relative;
+    width: 740px;
+    margin: 0 auto;
+    clear: both;
+    font-size: 12px;
+}
+
+div.crumb span.you_are_here {
+    font-weight: bold;
+}
+
+/***** generic table *****/
+table.deck_table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    clear: both;
+}
+
+table.deck_table th {
+    font-size: 1.2em;
+    font-weight: normal;
+    padding: 3px;
+    background: #B7C9E6;
+    color: #039;
+    border-top: 1px solid #E8E8E8;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+table.deck_table td {
+    padding: 8px;
+    color: #669;
+}
+
+table.deck_table td.center {
+    text-align: center;
+}
+
+/***** generic links *****/
+
+div#middle_wrapper_content a {
+    color: #0066CC;
+    text-decoration: none;
+}
+
+div#middle_wrapper_content  a:hover {
+    color: #DB6A00;
+    text-decoration: underline;
+}
+ 
+/***** generic form *****/
+
+input[type="text"]:focus, input[type="text"]:active,
+input[type="password"]:focus, input[type="password"]:active {
+    background-color: #F9F8E4;
+}
+
+/*****  progress indicator *****/
+
+div#progress_header {
+    font-size: 1em;
+    width: 430px;
+    margin: 0 auto 20px auto;
+    padding: 10px;
+    overflow: auto;
+    white-space: nowrap;
+    color: #cecece;
+    border: 1px solid #b2b2b2;
+}
+
+#progress_header span {
+    float: left;
+    clear: none;
+}
+
+#progress_header span.active {
+    color: #D93315;
+}
+
+#progress_header span.inactive {
+    color: #cecece;
+}
+
+#progress_header div.divider_wrap {
+    width: 10px;
+    float: left;
+    display: inline;
+}
+
+#progress_header hr.divider {
+    float: left;
+    margin: 8px 3px 0 3px;
+    width: 30px;
+    color: #b2b2b2;
+    background-color: #b2b2b2;
+}
+
+/*****  main page rounded-shadow box *****/
+
+div.box {
+    max-width: 760px;
+}
+div.box:before {
+    display: block;
+    line-height: 0;
+    background: url("../img/rs-topright.png") top right no-repeat;
+    content: url("../img/rs-topleft.png");
+}
+div.box:after {
+    display: block;
+    line-height: 0;
+    background: url("../img/rs-bottomright.png") bottom right no-repeat;
+    content: url("../img/rs-bottomleft.png");
+}
+div.box_content {
+    padding: 0 25px 0 20px;
+    background: url("../img/rs-right.png") right repeat-y;
+    overflow: auto;
+}
+
+div.sbox {
+    max-width: 440px;
+}
+div.sbox:before {
+    display: block;
+    line-height: 0;
+    background: url("../img/s-topright.png") top right no-repeat;
+    content: url("../img/s-topleft.png");
+}
+div.sbox:after {
+    display: block;
+    line-height: 0;
+    background: url("../img/s-bottomright.png") bottom right no-repeat;
+    content: url("../img/s-bottomleft.png");
+}
+div.sbox_content {
+    background: url("../img/s-right.png") right repeat-y;
+    overflow: auto;
+    padding: 0 25px 0 20px;
+}
+
+/*****  white-drop shadow box *****/
+
+.dialog {
+    position: relative;
+    margin: 0px auto;
+    min-width: 8em;
+    max-width: 760px; /* based on image dimensions */
+    z-index: 1;
+    margin-left: 10px; /* default, width of left corner */
+    margin-bottom: 0.5em; /* spacing under dialog */
+}
+
+.dialog .content,
+.dialog .t,
+.dialog .b,
+.dialog .b div {
+     background: transparent url("../img/whitebox_back.png") no-repeat top right;
+}
+
+.dialog .content {
+    position:relative;
+    zoom:1;
+    padding:0px 10px 0px 0px;
+}
+
+.dialog .t {
+    /* top+left vertical slice */
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 12px; /* top slice width */
+    margin-left: -12px;
+    height: 100%;
+    background-position: top left;
+}
+
+.dialog .b {
+    /* bottom */
+    position: relative;
+    width: 100%;
+}
+
+.dialog .b,
+.dialog .b div {
+    height: 25px; /* height of bottom cap/shade */
+    font-size: 1px;
+}
+
+.dialog .b {
+    background-position:bottom right;
+}
+
+.dialog .b div {
+    position: relative;
+    width: 12px; /* bottom corner width */
+    margin-left: -12px;
+    background-position: bottom left;
+}
+
+/*****  footer *****/
+
+div#footer_copyright {
+    margin: 0;
+    padding: 0;
+}
+
+div#footer_nav {
+    margin: 0;
+    padding: 0;
+}
+
+#footer_nav a {
+  color: #363636;
+  text-decoration: none;
+}
+
+#footer_nav a:hover {
+  color: #004D99;
+  text-decoration: underline;
+}
+
+#footer_nav ul#list_nav_footer li {
+    display: inline;
+}
+
+/** for debug table **/
+table.cake-sql-log { 
+    margin-top: 10px;
+    border-top: 1px dashed black;
+}

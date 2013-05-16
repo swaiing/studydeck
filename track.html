@@ -7,6 +7,7 @@
   <meta name="description" content="Studydeck is a studying system designed to help you learn the vocabulary necessary to get a top score on the GRE. Online flash cards with premium GRE word lists. Dead-simple quiz and review system." />
   <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/reset/reset-min.css">
   <link rel="stylesheet" type="text/css" href="css/styles.css" />
+  <link rel="stylesheet" type="text/css" href="css/features.css" />
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
   <script type="text/javascript" src="js/jquery.nivo.slider.pack.js"></script>
   <link rel="stylesheet" type="text/css" href="css/nivo-slider.css" />
@@ -55,77 +56,32 @@
 
 <!-- Render view here -->
 <div id="top_stuff">
-    <div id="big_important">
+    <div id="feature_wrap">
 
-        <div id="boxwrap_screen">
-            <div id="slider">
-                <a href="quiz.html"><img src="img/slider_quiz.png"/></a>
-                <a href="track.html"><img src="img/slider_learn.png"/></a>
-                <a href="categorize.html"><img src="img/slider_categorize.png"/></a>
-                <a href="create.html"><img src="img/slider_create.png"/></a>
-
-                <div class="nivo-directionNav" style="display:none;">
-                    <a class="nivo-prevNav">Prev</a>
-                    <a class="nivo-nextNav">Next</a>
-                </div>
-            </div>
+        <div id="screenshot_wrap">
+            <img src="img/feature_track.png" alt="Track Your Progress" />
         </div>
 
-        <div id="boxwrap_text">
-            <h1>Study GRE Word Lists Online</h1>
-            <p>A studying system designed to help you learn the vocabulary necessary to get a top score on the GRE.  Flash cards with premium GRE word lists.  Dead-simple quiz and review system.</p>
-            <div id="pricing_button">
-                <a href="#"><img src="img/see_pricing.png" alt="See Pricing"/></a>
-            </div>
+        <div id="text_caption">
+            <h1>Track Your Progress</h1>
+            <p>Studydeck records your quiz results and categorizations so that you can track your progress.</p>
+            <p class="pricing"><a href="#">Buy Now</a></p>
         </div>
 
     </div>
 </div>
 
-<div id="panels">
-    <div class="rect_box left_box">
-        <a href="categorize.html">
-            <img class="panel_icon" src="img/categorize_icon.png" alt="Categorize" />
-            <h2>Categorize by Difficulty</h2>
-        </a>
-        <p>Group cards into Easy, Medium and Hard, so you only study the words you don't know.</p>
-    </div>
-    <div class="rect_box">
-        <a href="quiz.html">
-            <img class="panel_icon" src="img/quiz_icon.png" alt="Quiz" />
-            <h2>Quiz Yourself</h2>
-        </a>
-        <p>Test your knowledge using our simple and effective interface.</p>
-    </div>
-    <div class="rect_box left_box">
-        <a href="track.html">
-            <img class="panel_icon" src="img/track_icon.png" alt="Track" />
-            <h2>Track Your Progress</h2>
-        </a>
-        <p>Studydeck records your quiz history so you can work towards your goals.
-    </div>
-    <div class="rect_box">
-        <a href="create.html">
-            <img class="panel_icon" src="img/create_icon.png" alt="Create" />
-            <h2>Create Your Own</h2>
-        </a>
-        <p>Free with the purchase of any premium deck, create as many custom Studydecks as you want on any topic.</p>
-    </div>
+
+<div id="panels_tabs">
+    <ul>
+        <li><a href="features.html">Overview</a></li>
+        <li><a href="categorize.html">Categorize</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+        <li class="active"><a href="track.html">Track</a></li>
+        <li><a href="create.html">Create</a></li>
+    </ul>
 </div>
 
-<script type="text/javascript">
-    $(window).load(function() {
-        $('#slider').nivoSlider({
-            effect: 'fade',
-            pauseTime: 7000,
-            startSlide:0,
-            directionNav:true,
-            directionNavHide:true,
-            controlNav:false,
-            pauseOnHover:true
-        });
-    });
-</script>
 
 <div id="footer_wrap">
 <div id="footer">
