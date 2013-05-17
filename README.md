@@ -8,3 +8,5 @@ Studydeck, "The Best Way to Study GRE Word Lists Online!" was initially develope
 Status
 ---------------------------------------------
 studydeck.com was officially decomissioned in May 2013.  This repository was made public for posterity.
+
+Please see the [github project page](http://swaiing.github.io/Studydeck) for static content from Studydeck.
