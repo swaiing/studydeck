@@ -1,3 +1,4 @@
 *.log
 /root/app/tmp/
 /media
+.DS_Store
